@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "composite": true
+  },
+  "files": [],
+  "references": [
+    { "path": "./packages/app/tsconfig.json" },
+    { "path": "./packages/functions/tsconfig.json" }
+  ]
+}

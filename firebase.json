@@ -1,0 +1,39 @@
+{
+  "functions": {
+    "source": "packages/functions",
+    "predeploy": ["yarn lint", "yarn build"]
+  },
+  "hosting": {
+    "public": "packages/app/build",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001,
+      "host": "0.0.0.0"
+    },
+    "firestore": {
+      "port": 5002,
+      "host": "0.0.0.0"
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "pubsub": {
+      "port": 8085
+    },
+    "ui": {
+      "enabled": true
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}
