@@ -1,0 +1,40 @@
+name: Master Build
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - uses: actions/cache@v1
+        env:
+          cache-name: cache-node_modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - run: yarn install
+      # - run: npm test -- --coverage --reporters="default" --reporters="jest-junit"
+      #   env:
+      #     CI: true
+      # - uses: codecov/codecov-action@v1
+      #   with:
+      #     flags: unittests
+      #     name: Coverage
+      #     fail_ci_if_error: true
+      - run: yarn build
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
