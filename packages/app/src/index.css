@@ -1,0 +1,13 @@
+@import-normalize;
+
+body {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body * {
+  box-sizing: inherit;
+}
