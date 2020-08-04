@@ -150,19 +150,24 @@ function Chart({
       }),
     [data, xMax]
   );
-  const valueScale = useMemo(
-    () =>
-      scaleLinear({
-        range: [yMax, 0],
-        domain: [
-          (min((data ?? []).concat(benchmark ?? []), getValue) ?? 0) *
-            (benchmark ? 0.8 : 0.95),
-          (max((data ?? []).concat(benchmark ?? []), getValue) ?? 0) * 1.1,
-        ],
-        nice: true,
-      }),
-    [benchmark, data, yMax]
-  );
+  const valueScale = useMemo(() => {
+    const minVal = min((data ?? []).concat(benchmark ?? []), getValue) ?? 0;
+    const maxVal = max((data ?? []).concat(benchmark ?? []), getValue) ?? 0;
+    const tooltipHeight = hideTooltip ? 0 : 40;
+    const totalHeight = yMax + tooltipHeight * (benchmark ? 2 : 1);
+    const paddingTop = (maxVal - minVal) * (tooltipHeight / totalHeight);
+    const paddingBottom =
+      (maxVal - minVal) * (benchmark ? tooltipHeight / totalHeight : 0);
+
+    return scaleLinear({
+      range: [yMax, 0],
+      domain: [
+        minVal - paddingBottom - (maxVal - minVal) * 0.1,
+        maxVal + paddingTop + (maxVal - minVal) * 0.1,
+      ],
+      nice: true,
+    });
+  }, [benchmark, data, hideTooltip, yMax]);
 
   // tooltip handler
   const [tooltipRef, tooltipRect] = useMeasure<HTMLDivElement>();
