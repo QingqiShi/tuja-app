@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "commit": "commit",
+    "commit": "yarn run git-cz",
     "start": "run-p dev emulate",
     "dev": "lerna run dev --parallel",
     "build": "lerna run build --parallel",
@@ -21,7 +21,8 @@
   "devDependencies": {
     "@commitlint/cli": "^9.1.1",
     "@commitlint/config-conventional": "^9.1.1",
-    "@commitlint/prompt-cli": "^9.1.1",
+    "commitizen": "^4.1.2",
+    "cz-conventional-changelog": "^3.2.0",
     "firebase": "^7.15.3",
     "firebase-tools": "^8.4.3",
     "google-auth-library": "^6.0.2",
@@ -46,5 +47,10 @@
     "src/**/*.{json,css,scss,md}": [
       "prettier --single-quote --write"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
