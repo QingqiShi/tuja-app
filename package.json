@@ -13,7 +13,7 @@
     "shell": "firebase functions:shell"
   },
   "engines": {
-    "node": "10"
+    "node": "12"
   },
   "workspaces": [
     "packages/*"

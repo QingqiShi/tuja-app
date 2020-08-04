@@ -9,7 +9,7 @@
   },
   "main": "lib/index.js",
   "engines": {
-    "node": "10"
+    "node": "12"
   },
   "dependencies": {
     "@google-cloud/pubsub": "^2.2.0",
