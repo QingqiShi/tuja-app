@@ -80,12 +80,17 @@ const bisectDate = bisector<{ date: Date }, Date>((d, x) => {
   if (current.isBefore(x, 'date')) return -1;
   if (current.isSame(x, 'date')) return 0;
   return 1;
-}).right;
+}).left;
 
 function getHistoryPoint(history: History[], date: Date) {
   if (!history.length) return null;
-  const index = bisectDate(history, date) - 1;
-  return history[index];
+  const index = bisectDate(history, date);
+  if (index >= 0 && index < history.length) {
+    return history[index];
+  } else if (index >= history.length) {
+    return history[history.length - 1];
+  }
+  return history[0];
 }
 
 function getHoldingsValue(
@@ -190,6 +195,7 @@ export function getPortfolioPerformance(
   const { activities, currency } = portfolio;
 
   if (!activities.length) return null;
+  console.log('calculate performance', activities, stocksData);
 
   const history = aggregateActivities(
     portfolio.activities,
