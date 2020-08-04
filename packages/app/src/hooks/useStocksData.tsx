@@ -1,4 +1,10 @@
-import React, { createContext, useState, useCallback, useContext } from 'react';
+import React, {
+  createContext,
+  useState,
+  useCallback,
+  useContext,
+  useEffect,
+} from 'react';
 import {
   StocksData,
   fetchStockInfo,
@@ -17,14 +23,26 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate] = useState(currentDate);
   const [stocksData, setStocksData] = useState<StocksData>({});
+  const [tickersToFetch, setTickersToFetch] = useState<string[]>([]);
 
   const addTickers = useCallback(
     async (tickers: string[]) => {
-      const tickersToAdd = tickers.filter((ticker) => !(ticker in stocksData));
+      const tickersToAdd = tickers
+        .filter((ticker) => !(ticker in stocksData))
+        .filter((ticker) => !tickersToFetch.includes(ticker));
       if (!tickersToAdd.length || !startDate) return;
 
-      await Promise.all(
-        tickersToAdd.map(async (ticker) => {
+      setTickersToFetch(tickers);
+    },
+    [startDate, stocksData, tickersToFetch]
+  );
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (!startDate) return;
+      const tickers = [...tickersToFetch];
+      return Promise.all(
+        tickers.map(async (ticker) => {
           setStocksData((current) => ({ ...current, [ticker]: {} }));
           const [info, series] = await Promise.all([
             fetchStockInfo(ticker),
@@ -36,12 +54,15 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
               ...current,
               [ticker]: { info, series },
             }));
+            setTickersToFetch((current) =>
+              current.filter((ticker) => !tickers.includes(ticker))
+            );
           }
         })
       );
-    },
-    [endDate, startDate, stocksData]
-  );
+    };
+    fetch();
+  }, [endDate, startDate, tickersToFetch]);
 
   return (
     <StocksDataContext.Provider
