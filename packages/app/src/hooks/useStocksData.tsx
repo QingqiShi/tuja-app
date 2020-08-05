@@ -39,8 +39,9 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
 
   useEffect(() => {
     const fetch = async () => {
-      if (!startDate) return;
+      if (!startDate || !tickersToFetch.length) return;
       const tickers = [...tickersToFetch];
+      setTickersToFetch([]);
       return Promise.all(
         tickers.map(async (ticker) => {
           setStocksData((current) => ({ ...current, [ticker]: {} }));
@@ -54,9 +55,6 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
               ...current,
               [ticker]: { info, series },
             }));
-            setTickersToFetch((current) =>
-              current.filter((ticker) => !tickers.includes(ticker))
-            );
           }
         })
       );

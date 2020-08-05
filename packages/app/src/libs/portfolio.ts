@@ -195,7 +195,6 @@ export function getPortfolioPerformance(
   const { activities, currency } = portfolio;
 
   if (!activities.length) return null;
-  console.log('calculate performance', activities, stocksData);
 
   const history = aggregateActivities(
     portfolio.activities,

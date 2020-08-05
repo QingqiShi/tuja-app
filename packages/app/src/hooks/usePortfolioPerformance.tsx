@@ -39,7 +39,8 @@ export function PortfolioPerformanceProvider({
 
   // Set start date for getting stocks data
   useEffect(() => {
-    if (shouldLoad) setStartDate(startDate);
+    if (!shouldLoad) return;
+    setStartDate(startDate);
   }, [setStartDate, shouldLoad, startDate]);
 
   // Get stocks data for tickers
