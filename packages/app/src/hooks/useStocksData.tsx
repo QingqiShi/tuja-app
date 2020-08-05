@@ -10,9 +10,10 @@ import {
   fetchStockInfo,
   fetchStocksHistory,
 } from 'libs/stocksClient';
+import dayjs from 'dayjs';
+import useStartDate from 'hooks/useStartDate';
 
 export const StocksDataContext = createContext({
-  setStartDate: (_date: Date) => {},
   addTickers: async (_tickers: string[]) => {},
   stocksData: {} as StocksData,
 });
@@ -20,7 +21,7 @@ export const StocksDataContext = createContext({
 const currentDate = new Date();
 
 export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
-  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [startDate] = useStartDate();
   const [endDate] = useState(currentDate);
   const [stocksData, setStocksData] = useState<StocksData>({});
   const [tickersToFetch, setTickersToFetch] = useState<string[]>([]);
@@ -28,11 +29,20 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
   const addTickers = useCallback(
     async (tickers: string[]) => {
       const tickersToAdd = tickers
-        .filter((ticker) => !(ticker in stocksData))
+        .filter(
+          (ticker) =>
+            !(ticker in stocksData) ||
+            (startDate &&
+              stocksData[ticker].series?.data &&
+              !dayjs(stocksData[ticker].series?.data[0][0]).isSameOrBefore(
+                startDate,
+                'year'
+              ))
+        )
         .filter((ticker) => !tickersToFetch.includes(ticker));
-      if (!tickersToAdd.length || !startDate) return;
 
-      setTickersToFetch(tickers);
+      if (!tickersToAdd.length || !startDate) return;
+      setTickersToFetch((current) => [...current, ...tickersToAdd]);
     },
     [startDate, stocksData, tickersToFetch]
   );
@@ -42,6 +52,7 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
       if (!startDate || !tickersToFetch.length) return;
       const tickers = [...tickersToFetch];
       setTickersToFetch([]);
+
       return Promise.all(
         tickers.map(async (ticker) => {
           setStocksData((current) => ({ ...current, [ticker]: {} }));
@@ -63,9 +74,7 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
   }, [endDate, startDate, tickersToFetch]);
 
   return (
-    <StocksDataContext.Provider
-      value={{ stocksData, addTickers, setStartDate }}
-    >
+    <StocksDataContext.Provider value={{ stocksData, addTickers }}>
       {children}
     </StocksDataContext.Provider>
   );

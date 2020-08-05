@@ -65,6 +65,32 @@ const Returns = styled(Card)`
 
 const Values = styled(Card)`
   grid-area: values;
+  position: relative;
+`;
+
+const GraphRange = styled.div`
+  margin: ${theme.spacings('s')} 0;
+
+  @media (${theme.breakpoints.minTablet}) {
+    display: block;
+    position: absolute;
+    margin: 0;
+    font-size: 1.25rem;
+    height: 1.1em;
+    display: flex;
+    align-items: center;
+    right: ${theme.spacings('s')};
+    top: ${theme.spacings('m')};
+
+    > div {
+      font-size: 1rem;
+    }
+  }
+
+  @media (${theme.breakpoints.minLaptop}) {
+    right: ${theme.spacings('m')};
+    top: ${theme.spacings('m')};
+  }
 `;
 
 interface DashboardLayoutProps {
@@ -72,6 +98,7 @@ interface DashboardLayoutProps {
   values: React.ReactNode;
   gains: React.ReactNode;
   returns: React.ReactNode;
+  datePeriod: React.ReactNode;
 }
 
 function DashboardLayout({
@@ -79,15 +106,15 @@ function DashboardLayout({
   values,
   gains,
   returns,
+  datePeriod,
 }: DashboardLayoutProps) {
   return (
     <LayoutGrid>
       <Overview>{overview}</Overview>
       <Values>
-        <Type scale="h6" noMargin>
-          Portfolio Value
-        </Type>
-        {values}
+        <Type scale="h6">Portfolio Value</Type>
+        <GraphRange>{datePeriod}</GraphRange>
+        <CardMedia>{values}</CardMedia>
       </Values>
       <Gains>
         <Type scale="h6">Gains</Type>

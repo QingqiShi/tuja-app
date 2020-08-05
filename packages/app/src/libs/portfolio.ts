@@ -84,7 +84,7 @@ const bisectDate = bisector<{ date: Date }, Date>((d, x) => {
 
 function getHistoryPoint(history: History[], date: Date) {
   if (!history.length) return null;
-  const index = bisectDate(history, date);
+  const index = bisectDate(history, date) - 1;
   if (index >= 0 && index < history.length) {
     return history[index];
   } else if (index >= history.length) {
