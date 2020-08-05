@@ -85,10 +85,13 @@ const bisectDate = bisector<{ date: Date }, Date>((d, x) => {
 function getHistoryPoint(history: History[], date: Date) {
   if (!history.length) return null;
   const index = bisectDate(history, date) - 1;
-  if (index >= 0 && index < history.length) {
-    return history[index];
-  } else if (index >= history.length) {
+  if (
+    index >= history.length ||
+    dayjs(date).isSame(history[history.length - 1].date, 'date')
+  ) {
     return history[history.length - 1];
+  } else if (index >= 0 && index < history.length) {
+    return history[index];
   }
   return history[0];
 }
