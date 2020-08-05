@@ -1,4 +1,5 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import Type from 'components/Type';
@@ -6,6 +7,7 @@ import EditableTitle from 'components/EditableTitle';
 import Pie from 'components/Pie';
 import { updatePortfolioName } from 'libs/portfolio';
 import { formatCurrency } from 'libs/stocksClient';
+import useStartDate from 'hooks/useStartDate';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
 import { theme, getTheme } from 'theme';
@@ -66,6 +68,7 @@ interface PortfolioOverviewProps {
 function PortfolioOverview({ className, editable }: PortfolioOverviewProps) {
   const { portfolio } = usePortfolio();
   const { portfolioPerformance } = usePortfolioPerformance();
+  const [startDate] = useStartDate();
 
   const pieData = portfolioPerformance
     ? Object.keys(portfolioPerformance.holdings)
@@ -113,7 +116,16 @@ function PortfolioOverview({ className, editable }: PortfolioOverviewProps) {
             />
           </div>
         </PieContainer>
+
         <Split>
+          {startDate && (
+            <div>
+              <Label>Since</Label>
+              <Type scale="body1" noMargin>
+                {dayjs(startDate).format('YYYY-MM-DD')}
+              </Type>
+            </div>
+          )}
           <div>
             <Label>Gain</Label>
             <Type scale="body1" noMargin>

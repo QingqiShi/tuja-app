@@ -17,7 +17,7 @@ const LayoutGrid = styled.div`
   grid-gap: ${theme.spacings('s')};
 
   @media (${theme.breakpoints.minTablet}) {
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: 260px 1fr;
     grid-template-rows: 1fr 1fr 500px;
     grid-template-areas:
       'overview gains'
