@@ -40,9 +40,12 @@ function PortfolioDashboard() {
   ];
 
   const [selectedPeriod, setSelectedPeriod] = useState(
-    periodButtons[2]
-      ? periodButtons[2].value
-      : periodButtons[periodButtons.length - 1].value
+    (startDate &&
+      periodButtons.find((button) => button.value.isSame(startDate, 'date'))
+        ?.value) ??
+      (periodButtons[2]
+        ? periodButtons[2].value
+        : periodButtons[periodButtons.length - 1].value)
   );
 
   useEffect(() => {
