@@ -9,6 +9,7 @@ import { StocksDataProvider } from 'hooks/useStocksData';
 import { PortfolioProvider } from 'hooks/usePortfolio';
 import { PortfolioPerformanceProvider } from 'hooks/usePortfolioPerformance';
 import { StocksListProvider } from 'hooks/useStocksList';
+import { StartDateProvider } from 'hooks/useStartDate';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -36,21 +37,23 @@ function App() {
   return (
     <StocksListProvider>
       <PortfolioProvider>
-        <StocksDataProvider>
-          <PortfolioPerformanceProvider>
-            <ThemeProvider theme={{ mode: isDark ? 'dark' : 'light' }}>
-              <GlobalStyle />
-              <Switch>
-                <Route path="/" exact>
-                  <Home />
-                </Route>
-                <Route>
-                  <AppShell />
-                </Route>
-              </Switch>
-            </ThemeProvider>
-          </PortfolioPerformanceProvider>
-        </StocksDataProvider>
+        <StartDateProvider>
+          <StocksDataProvider>
+            <PortfolioPerformanceProvider>
+              <ThemeProvider theme={{ mode: isDark ? 'dark' : 'light' }}>
+                <GlobalStyle />
+                <Switch>
+                  <Route path="/" exact>
+                    <Home />
+                  </Route>
+                  <Route>
+                    <AppShell />
+                  </Route>
+                </Switch>
+              </ThemeProvider>
+            </PortfolioPerformanceProvider>
+          </StocksDataProvider>
+        </StartDateProvider>
       </PortfolioProvider>
     </StocksListProvider>
   );

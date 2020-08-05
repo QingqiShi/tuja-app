@@ -17,5 +17,6 @@ export const Demo = () => (
     values={<div></div>}
     gains={<div></div>}
     returns={<div></div>}
+    datePeriod={null}
   />
 );

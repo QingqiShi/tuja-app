@@ -1,28 +1,11 @@
 import React, { createContext, useMemo, useEffect, useContext } from 'react';
-import dayjs from 'dayjs';
 import { getRequiredCurrencies } from 'libs/stocksClient';
-import {
-  getPortfolioPerformance,
-  Portfolio,
-  PortfolioPerformance,
-} from 'libs/portfolio';
+import { getPortfolioPerformance, PortfolioPerformance } from 'libs/portfolio';
 import useStocksData from 'hooks/useStocksData';
 import usePortfolio from 'hooks/usePortfolio';
+import useStartDate from 'hooks/useStartDate';
 
 const endDate = new Date();
-
-function useStartDate(portfolio: Portfolio | null) {
-  const startDate = useMemo(
-    () =>
-      portfolio?.activities
-        ? dayjs(portfolio.activities[0]?.date ?? new Date())
-            .subtract(1, 'day')
-            .toDate()
-        : dayjs(endDate).subtract(1, 'day').toDate(),
-    [portfolio]
-  );
-  return startDate;
-}
 
 export const PortfolioPerformanceContext = createContext({
   portfolioPerformance: null as PortfolioPerformance | null,
@@ -34,14 +17,8 @@ export function PortfolioPerformanceProvider({
   const { portfolio } = usePortfolio();
   const shouldLoad = !!portfolio;
 
-  const startDate = useStartDate(portfolio);
-  const { stocksData, addTickers, setStartDate } = useStocksData();
-
-  // Set start date for getting stocks data
-  useEffect(() => {
-    if (!shouldLoad) return;
-    setStartDate(startDate);
-  }, [setStartDate, shouldLoad, startDate]);
+  const [startDate] = useStartDate();
+  const { stocksData, addTickers } = useStocksData();
 
   // Get stocks data for tickers
   const tickers = portfolio?.tickers;
@@ -72,6 +49,7 @@ export function PortfolioPerformanceProvider({
     () =>
       stocksData &&
       portfolio &&
+      startDate &&
       !portfolio?.tickers.some((ticker) => !stocksData[ticker]?.series) &&
       !requiredCurrencies?.some((currency) => !stocksData[currency]?.series)
         ? getPortfolioPerformance(portfolio, startDate, endDate, stocksData)

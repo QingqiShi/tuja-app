@@ -171,6 +171,7 @@ function Chart({
 
   // tooltip handler
   const [tooltipRef, tooltipRect] = useMeasure<HTMLDivElement>();
+  const [benchTooltipRef, benchTooltipRect] = useMeasure<HTMLDivElement>();
   const tooltipDateRef = useRef(new Date());
   const [tooltipProps, set] = useSpring(() => ({
     x: 0,
@@ -502,13 +503,13 @@ function Chart({
       )}
       {!hideTooltip && benchmark && (
         <AnimatedTooltipContainer
-          ref={tooltipRef}
+          ref={benchTooltipRef}
           left={margin.left}
           bottom={margin.bottom + 1}
           style={{
             transform: 'translateX(-50%)',
             x: tooltipProps.x.to((xVal) => {
-              const r = tooltipRect.width / 2;
+              const r = benchTooltipRect.width / 2;
               if (xVal > xMax - r - 5) {
                 return xMax - r - 5;
               }

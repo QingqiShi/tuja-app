@@ -55,9 +55,6 @@ class TimeSeries {
   async handleDbData(data: { [date: string]: number }, from?: Date, to?: Date) {
     this.data = [];
     Object.keys(data).forEach((date) => {
-      const dateObj = new Date(date);
-      if (from && dateObj < from) return;
-      if (to && dateObj > to) return;
       this.data.push([new Date(date), data[date]]);
     });
 
