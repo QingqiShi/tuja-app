@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@react-spring/web": "^9.0.0-rc.3",
-    "@vx/vx": "^0.0.197",
+    "@vx/vx": "^0.0.198",
     "body-scroll-lock": "^3.0.3",
     "d3-array": "^2.4.0",
     "dayjs": "^1.8.29",
