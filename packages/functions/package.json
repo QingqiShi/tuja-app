@@ -17,7 +17,7 @@
     "firebase-admin": "^8.12.1",
     "firebase-functions": "^3.7.0",
     "node-fetch": "^2.6.0",
-    "puppeteer": "^4.0.0"
+    "puppeteer": "^5.2.1"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.18",
