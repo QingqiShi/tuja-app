@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components/macro';
 import Type from 'components/Type';
 import ActivitiesList from 'components/ActivitiesList';
@@ -37,14 +38,22 @@ function Activities() {
 
   if (!portfolio?.activities.length) {
     return (
-      <NoActivityBanner>
-        <Card>No activity found</Card>
-      </NoActivityBanner>
+      <>
+        <Helmet>
+          <title>Activities | Tuja App</title>
+        </Helmet>
+        <NoActivityBanner>
+          <Card>No activity found</Card>
+        </NoActivityBanner>
+      </>
     );
   }
 
   return (
     <Container>
+      <Helmet>
+        <title>Activities | Tuja App</title>
+      </Helmet>
       <TitleRow>
         <Type scale="h3">Activities</Type>
       </TitleRow>

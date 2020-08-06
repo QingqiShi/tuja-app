@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components/macro';
 import HistoricDataUploader from 'adminWidgets/HistoricDataUploader';
 import TickerChecker from 'adminWidgets/TickerChecker';
@@ -17,13 +18,16 @@ const Container = styled(Center)`
   place-items: stretch;
 `;
 
-function Home() {
+function Admin() {
   return (
     <Container>
+      <Helmet>
+        <title>Admin | Tuja App</title>
+      </Helmet>
       <TickerChecker />
       <HistoricDataUploader />
     </Container>
   );
 }
 
-export default Home;
+export default Admin;

@@ -42,7 +42,7 @@
   },
   "lint-staged": {
     "packages/*/src/**/*.{js,ts,tsx}": [
-      "eslint --ext js,ts,tsx src --fix",
+      "eslint --ext js,ts,tsx --fix",
       "prettier --single-quote --write"
     ],
     "packages/*/src/**/*.{json,css,scss,md}": [

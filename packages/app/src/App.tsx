@@ -10,6 +10,7 @@ import { PortfolioProvider } from 'hooks/usePortfolio';
 import { PortfolioPerformanceProvider } from 'hooks/usePortfolioPerformance';
 import { StocksListProvider } from 'hooks/useStocksList';
 import { StartDateProvider } from 'hooks/useStartDate';
+import { AuthProvider } from 'hooks/useAuth';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -35,27 +36,29 @@ function App() {
   const isDark = useMedia('(prefers-color-scheme: dark)');
 
   return (
-    <StocksListProvider>
-      <PortfolioProvider>
-        <StartDateProvider>
-          <StocksDataProvider>
-            <PortfolioPerformanceProvider>
-              <ThemeProvider theme={{ mode: isDark ? 'dark' : 'light' }}>
-                <GlobalStyle />
-                <Switch>
-                  <Route path="/" exact>
-                    <Home />
-                  </Route>
-                  <Route>
-                    <AppShell />
-                  </Route>
-                </Switch>
-              </ThemeProvider>
-            </PortfolioPerformanceProvider>
-          </StocksDataProvider>
-        </StartDateProvider>
-      </PortfolioProvider>
-    </StocksListProvider>
+    <AuthProvider>
+      <StocksListProvider>
+        <PortfolioProvider>
+          <StartDateProvider>
+            <StocksDataProvider>
+              <PortfolioPerformanceProvider>
+                <ThemeProvider theme={{ mode: isDark ? 'dark' : 'light' }}>
+                  <GlobalStyle />
+                  <Switch>
+                    <Route path="/" exact>
+                      <Home />
+                    </Route>
+                    <Route>
+                      <AppShell />
+                    </Route>
+                  </Switch>
+                </ThemeProvider>
+              </PortfolioPerformanceProvider>
+            </StocksDataProvider>
+          </StartDateProvider>
+        </PortfolioProvider>
+      </StocksListProvider>
+    </AuthProvider>
   );
 }
 

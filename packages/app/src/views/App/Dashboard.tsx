@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components/macro';
 import Type from 'components/Type';
 import Button from 'components/Button';
@@ -41,6 +42,9 @@ function Dashboard({ onSignIn, isDemo }: DashboardProps) {
   if (isDemo) {
     return (
       <Container>
+        <Helmet>
+          <title>Demo Dashboard | Tuja App</title>
+        </Helmet>
         <TitleRow>
           <Type scale="h3">Dashboard</Type>
           <Button variant="shout" onClick={onSignIn}>
@@ -54,6 +58,9 @@ function Dashboard({ onSignIn, isDemo }: DashboardProps) {
 
   return (
     <Container>
+      <Helmet>
+        <title>Dashboard | Tuja App</title>
+      </Helmet>
       {state === 'SIGNED_IN' && currentUser && !portfolio && (
         <CreatePortfolio
           onCreate={(name, currency) =>
