@@ -1,10 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Center, FullHeight } from 'commonStyledComponents';
 
 function Home() {
   return (
     <FullHeight>
+      <Helmet>
+        <title>Tuja App | Porfolio Tracker</title>
+      </Helmet>
       <Center>
         <div>
           <p>

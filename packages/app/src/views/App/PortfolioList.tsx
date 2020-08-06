@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components/macro';
 import InvestmentsTable from 'components/InvestmentsTable';
 import AutoInvest from 'components/AutoInvest';
@@ -42,14 +43,22 @@ function PortfolioList() {
 
   if (!portfolio || !portfolioPerformance) {
     return (
-      <NoInvestmentBanner>
-        <Card>No investments found in your portfolio</Card>
-      </NoInvestmentBanner>
+      <>
+        <Helmet>
+          <title>Portfolio | Tuja App</title>
+        </Helmet>
+        <NoInvestmentBanner>
+          <Card>No investments found in your portfolio</Card>
+        </NoInvestmentBanner>
+      </>
     );
   }
 
   return (
     <Container>
+      <Helmet>
+        <title>Portfolio | Tuja App</title>
+      </Helmet>
       <TitleRow>
         <Type scale="h3">Portfolio</Type>
       </TitleRow>

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/functions';
@@ -10,7 +11,6 @@ import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import './index.css';
 import App from './App';
-import { AuthProvider } from 'hooks/useAuth';
 import * as serviceWorker from './serviceWorker';
 
 firebase.initializeApp({
@@ -35,11 +35,11 @@ dayjs.extend(isSameOrBefore);
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
+    <HelmetProvider>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </AuthProvider>
+    </HelmetProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
