@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
+import { analytics } from 'firebase/app';
 import Button from './Button';
 import ActivityDepositForm from './ActivityDepositForm';
 import ActivityTradeForm from './ActivityTradeForm';
@@ -32,11 +33,10 @@ export interface ActivityFormProps {
 type FormType = 'Buy' | 'Sell' | 'Deposit' | 'Dividend';
 
 interface ActivityFormsProps {
-  editActivityIndex?: number;
   onClose?: () => void;
 }
 
-function ActivityForms({ editActivityIndex, onClose }: ActivityFormsProps) {
+function ActivityForms({ onClose }: ActivityFormsProps) {
   const { portfolio } = usePortfolio();
   const currency = portfolio?.currency ?? 'GBP';
 
@@ -45,6 +45,9 @@ function ActivityForms({ editActivityIndex, onClose }: ActivityFormsProps) {
   const handleSubmit = async (activity: Activity) => {
     if (portfolio?.id) {
       addPortfolioActivity(portfolio?.id, activity);
+
+      // Analytics
+      analytics().logEvent('create_activity', { type: activity.type });
     }
   };
 

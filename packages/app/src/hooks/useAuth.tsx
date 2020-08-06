@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { auth } from 'firebase/app';
+import { auth, analytics } from 'firebase/app';
 
 const STORAGE_KEY = 'pendingSignInEmail';
 
@@ -51,6 +51,11 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
       setCurrentUser(user);
       const idTokenResult = await user?.getIdTokenResult();
       setIsAdmin(!!idTokenResult?.claims.admin);
+
+      // Analytics
+      if (user) {
+        analytics().setUserId(user.uid);
+      }
     });
   }, [receivedState]);
 
@@ -58,9 +63,15 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
     if (isEmailLink && pendingEmail) {
       auth()
         .signInWithEmailLink(pendingEmail, window.location.href)
-        .then(() => {
+        .then((result) => {
           window.localStorage.removeItem(STORAGE_KEY);
           window.location.search = '';
+
+          // Analytics
+          if (result.additionalUserInfo?.isNewUser) {
+            analytics().logEvent('sign_up', { method: 'email_link' });
+          }
+          analytics().logEvent('login', { method: 'email_link' });
         });
     }
   }, [isEmailLink, pendingEmail]);
@@ -82,6 +93,9 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
       });
       window.localStorage.setItem(STORAGE_KEY, email);
       setPendingEmail(email);
+
+      // Analytics
+      analytics().logEvent('send_sign_in_link');
     } catch (e) {
       console.error(e);
     }

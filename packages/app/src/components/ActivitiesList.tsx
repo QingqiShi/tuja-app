@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import dayjs from 'dayjs';
+import { analytics } from 'firebase/app';
 import Backdrop from './Backdrop';
 import Type from './Type';
 import ActivityDepositForm from './ActivityDepositForm';
@@ -67,19 +68,28 @@ function ActivitiesList() {
 
   const updateActivity = portfolio.activities[updateIndex];
 
-  const handleUpdateActivity = (updatedActivity: Activity) =>
-    updatePortfolioActivities(
+  const handleUpdateActivity = async (updatedActivity: Activity) => {
+    await updatePortfolioActivities(
       portfolio.id,
       portfolio.activities.map((activity, i) =>
         i === updateIndex ? updatedActivity : activity
       )
     );
 
-  const handleDeleteActivity = () =>
-    updatePortfolioActivities(
+    // Analytics
+    analytics().logEvent('update_activity', { type: updatedActivity.type });
+  };
+
+  const handleDeleteActivity = async () => {
+    const deletedActivity = portfolio.activities[updateIndex];
+    await updatePortfolioActivities(
       portfolio.id,
       portfolio.activities.filter((_, i) => i !== updateIndex)
     );
+
+    // Analytics
+    analytics().logEvent('delete_activity', { type: deletedActivity?.type });
+  };
 
   return (
     <div>
