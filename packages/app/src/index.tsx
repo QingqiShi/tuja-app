@@ -27,6 +27,7 @@ firebase.initializeApp({
 if (window.location.hostname === 'localhost') {
   firebase.firestore().settings({ host: 'localhost:5002', ssl: false });
   firebase.functions().useFunctionsEmulator('http://localhost:5001');
+  firebase.analytics().setAnalyticsCollectionEnabled(false);
 } else {
   firebase.analytics();
 }
