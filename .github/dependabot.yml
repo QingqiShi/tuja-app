@@ -4,8 +4,18 @@ updates:
     directory: '/'
     schedule:
       interval: 'daily'
+    time: "15:00"
+    assignees:
+      - 'QingqiShi'
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
 
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'daily'
+    time: "15:00"
+    assignees:
+      - 'QingqiShi'
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
