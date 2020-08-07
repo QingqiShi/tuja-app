@@ -8,6 +8,7 @@ import React, {
   useCallback,
 } from 'react';
 import { auth, analytics } from 'firebase/app';
+import { logEvent } from 'libs/analytics';
 
 const STORAGE_KEY = 'pendingSignInEmail';
 
@@ -69,9 +70,9 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
 
           // Analytics
           if (result.additionalUserInfo?.isNewUser) {
-            analytics().logEvent('sign_up', { method: 'email_link' });
+            logEvent('sign_up', { method: 'email_link' });
           }
-          analytics().logEvent('login', { method: 'email_link' });
+          logEvent('login', { method: 'email_link' });
         });
     }
   }, [isEmailLink, pendingEmail]);
@@ -95,7 +96,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
       setPendingEmail(email);
 
       // Analytics
-      analytics().logEvent('send_sign_in_link');
+      logEvent('send_sign_in_link');
     } catch (e) {
       console.error(e);
     }

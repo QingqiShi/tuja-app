@@ -1,8 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { analytics } from 'firebase/app';
 import useAuth from 'hooks/useAuth';
 import { createPortfolio } from 'libs/portfolio';
+import { logEvent } from 'libs/analytics';
 import CreatePortfolio from 'components/CreatePortfolio';
 
 function Create() {
@@ -18,7 +18,7 @@ function Create() {
           createPortfolio(name, currency, currentUser?.uid ?? '');
 
           // Analytics
-          analytics().logEvent('create_portfolio', { currency });
+          logEvent('create_portfolio', { currency });
         }}
       />
     </>
