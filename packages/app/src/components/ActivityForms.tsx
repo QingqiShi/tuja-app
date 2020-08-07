@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-import { analytics } from 'firebase/app';
 import Button from './Button';
 import ActivityDepositForm from './ActivityDepositForm';
 import ActivityTradeForm from './ActivityTradeForm';
 import ActivityDividendForm from './ActivityDividendForm';
 import { Activity, addPortfolioActivity } from 'libs/portfolio';
+import { logEvent } from 'libs/analytics';
 import usePortfolio from 'hooks/usePortfolio';
 import { theme } from 'theme';
 
@@ -47,7 +47,7 @@ function ActivityForms({ onClose }: ActivityFormsProps) {
       addPortfolioActivity(portfolio?.id, activity);
 
       // Analytics
-      analytics().logEvent('create_activity', { type: activity.type });
+      logEvent('create_activity', { type: activity.type });
     }
   };
 

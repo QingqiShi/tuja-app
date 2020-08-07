@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import dayjs from 'dayjs';
-import { analytics } from 'firebase/app';
 import Backdrop from './Backdrop';
 import Type from './Type';
 import ActivityDepositForm from './ActivityDepositForm';
@@ -10,6 +9,7 @@ import ActivityDividendForm from './ActivityDividendForm';
 import ActivityTradeForm from './ActivityTradeForm';
 import { Card } from 'commonStyledComponents';
 import { formatCurrency } from 'libs/stocksClient';
+import { logEvent } from 'libs/analytics';
 import { updatePortfolioActivities, Activity } from 'libs/portfolio';
 import usePortfolio from 'hooks/usePortfolio';
 import useBodyScrollLock from 'hooks/useBodyScrollLock';
@@ -77,7 +77,7 @@ function ActivitiesList() {
     );
 
     // Analytics
-    analytics().logEvent('update_activity', { type: updatedActivity.type });
+    logEvent('update_activity', { type: updatedActivity.type });
   };
 
   const handleDeleteActivity = async () => {
@@ -88,7 +88,7 @@ function ActivitiesList() {
     );
 
     // Analytics
-    analytics().logEvent('delete_activity', { type: deletedActivity?.type });
+    logEvent('delete_activity', { type: deletedActivity?.type });
   };
 
   return (
