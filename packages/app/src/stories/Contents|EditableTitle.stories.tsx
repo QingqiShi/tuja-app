@@ -2,10 +2,12 @@ import React from 'react';
 import { action } from '@storybook/addon-actions';
 import EditableTitle from 'components/EditableTitle';
 
-export default {
+const EditableTitleStories = {
   title: 'Contents|EditableTitle',
   component: EditableTitle,
 };
+
+export default EditableTitleStories;
 
 export const Demo = () => (
   <EditableTitle

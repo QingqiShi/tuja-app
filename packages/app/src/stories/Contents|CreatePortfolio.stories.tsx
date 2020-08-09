@@ -1,9 +1,11 @@
 import React from 'react';
 import CreatePortfolio from 'components/CreatePortfolio';
 
-export default {
+const CreatePortfolioStories = {
   title: 'Contents|CreatePortfolio',
   component: CreatePortfolio,
 };
+
+export default CreatePortfolioStories;
 
 export const Demo = () => <CreatePortfolio />;

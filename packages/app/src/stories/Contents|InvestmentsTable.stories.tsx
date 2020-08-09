@@ -2,11 +2,13 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import InvestmentsTable from 'components/InvestmentsTable';
 
-export default {
+const InvestmentsTableStories = {
   title: 'Contents|InvestmentsTable',
   component: InvestmentsTable,
   decorators: [withKnobs],
 };
+
+export default InvestmentsTableStories;
 
 export const Demo = () => (
   <div style={{ textAlign: 'left' }}>

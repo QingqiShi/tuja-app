@@ -2,10 +2,12 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import Type from 'components/Type';
 
-export default {
+const TypeStories = {
   title: 'Display|Type',
   component: Type,
 };
+
+export default TypeStories;
 
 const Container = styled.div`
   max-width: 500px;
