@@ -4,10 +4,12 @@ import { FaUserCircle } from 'react-icons/fa';
 import { RiSendPlane2Line, RiHomeLine } from 'react-icons/ri';
 import Button from 'components/Button';
 
-export default {
+const ButtonStories = {
   title: 'Inputs|Button',
   component: Button,
 };
+
+export default ButtonStories;
 
 export const Buttons = () => (
   <>

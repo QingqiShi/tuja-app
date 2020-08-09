@@ -4,11 +4,13 @@ import { action } from '@storybook/addon-actions';
 import SignIn from 'components/SignIn';
 import { AuthContext } from 'hooks/useAuth';
 
-export default {
+const SignInStories = {
   title: 'Contents|SignIn',
   component: SignIn,
   decorators: [withKnobs],
 };
+
+export default SignInStories;
 
 const getAuth = () => ({
   signIn: async (email: string) => action('sign in')(email),

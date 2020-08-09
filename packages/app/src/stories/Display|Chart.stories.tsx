@@ -9,11 +9,13 @@ const Container = styled.div`
   height: 70vh;
 `;
 
-export default {
+const ChartStories = {
   title: 'Display|Chart',
   component: Chart,
-  decorators: [withKnobs],
+  decorators: [withKnobs, (storyFn: any) => <Container>{storyFn()}</Container>],
 };
+
+export default ChartStories;
 
 const stock = appleStock
   .slice(0, 360)
@@ -24,23 +26,15 @@ const benchmark = appleStock
   .map((d, i) => [stock[i][0], d.close] as const);
 
 export const Demo = () => (
-  <Container>
-    <Chart
-      data={stock}
-      hideAxis={boolean('Hide axis', false)}
-      hideTooltip={boolean('Hide tooltip', false)}
-    />
-  </Container>
+  <Chart
+    data={stock}
+    hideAxis={boolean('Hide axis', false)}
+    hideTooltip={boolean('Hide tooltip', false)}
+  />
 );
 
 export const HideAxisAndTooltip = () => (
-  <Container>
-    <Chart data={stock} hideAxis hideTooltip />
-  </Container>
+  <Chart data={stock} hideAxis hideTooltip />
 );
 
-export const Benchmark = () => (
-  <Container>
-    <Chart data={stock} benchmark={benchmark} />
-  </Container>
-);
+export const Benchmark = () => <Chart data={stock} benchmark={benchmark} />;

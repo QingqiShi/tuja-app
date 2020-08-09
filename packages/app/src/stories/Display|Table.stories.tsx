@@ -1,10 +1,12 @@
 import React from 'react';
 import Table, { TableRow, TableCell, TableHeader } from 'components/Table';
 
-export default {
+const TableStories = {
   title: 'Display|Table',
   component: Table,
 };
+
+export default TableStories;
 
 export const Demo = () => (
   <Table>

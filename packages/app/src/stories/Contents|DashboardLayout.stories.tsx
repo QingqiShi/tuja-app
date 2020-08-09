@@ -6,10 +6,12 @@ const MockOverview = styled.div`
   min-height: 250px;
 `;
 
-export default {
+const DashboardLayoutStories = {
   title: 'Contents|DashboardLayout',
   component: DashboardLayout,
 };
+
+export default DashboardLayoutStories;
 
 export const Demo = () => (
   <DashboardLayout

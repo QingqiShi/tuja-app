@@ -1,10 +1,12 @@
 import React from 'react';
 import ButtonGroup from 'components/ButtonGroup';
 
-export default {
+const ButtonGroupStories = {
   title: 'Inputs|ButtonGroup',
   component: ButtonGroup,
 };
+
+export default ButtonGroupStories;
 
 export const Demo = () => (
   <ButtonGroup
