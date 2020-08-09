@@ -1,37 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextInput from './TextInput';
 import { formatCurrency, parseCurrency } from 'libs/stocksClient';
 
-interface CurrencyInputProps
-  extends Omit<React.ComponentProps<typeof TextInput>, 'value' | 'onChange'> {
+type BaseProps = Omit<
+  React.ComponentProps<typeof TextInput>,
+  'value' | 'onChange'
+>;
+
+interface CurrencyInputProps extends BaseProps {
   currency: string;
-  value: number;
-  onChange: (num: number) => void;
+  value?: number;
+  onChange?: (num: number) => void;
 }
 
 function CurrencyInput({
   currency,
   value,
   onChange,
+  onBlur,
+  onFocus,
   ...props
 }: CurrencyInputProps) {
-  const [inputValue, setInputValue] = useState(formatCurrency(currency, value));
+  const [isFocused, setIsFocused] = useState(false);
+  const [internalVal, setInternalVal] = useState(value ?? 0);
+  const [inputValue, setInputValue] = useState(
+    formatCurrency(currency, value ?? internalVal)
+  );
+
+  useEffect(() => {
+    if (!isFocused) {
+      const formatted = formatCurrency(currency, value ?? internalVal);
+      if (formatted !== inputValue) {
+        console.log('setinputvalue');
+        setInputValue(formatted);
+      }
+    }
+  }, [currency, inputValue, internalVal, isFocused, value]);
 
   return (
     <TextInput
+      {...props}
       value={inputValue}
       onChange={(e) => {
         setInputValue(e.target.value);
+        const parsed = parseCurrency(currency, e.target.value);
+        if (!isNaN(parsed)) {
+          if (!value) {
+            setInternalVal(parsed);
+          }
+          if (onChange) {
+            onChange(parsed);
+          }
+        }
       }}
-      onBlur={() => {
+      onFocus={(e) => {
+        setIsFocused(true);
+        if (onFocus) {
+          onFocus(e);
+        }
+      }}
+      onBlur={(e) => {
+        setIsFocused(false);
         const parsed = parseCurrency(currency, inputValue || '0');
         if (!isNaN(parsed)) {
-          onChange(parsed);
+          setInputValue(formatCurrency(currency, parsed));
+        } else {
+          setInputValue(formatCurrency(currency, value ?? internalVal));
         }
-        setInputValue(formatCurrency(currency, parsed));
+        if (onBlur) {
+          onBlur(e);
+        }
       }}
       inputMode="decimal"
-      {...props}
     />
   );
 }

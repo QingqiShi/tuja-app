@@ -8,11 +8,13 @@ const Container = styled.div`
   width: 300px;
 `;
 
-export default {
+const FileInputStories = {
   title: 'Inputs|FileInput',
   component: FileInput,
   decorators: [withKnobs, (storyFn: any) => <Container>{storyFn()}</Container>],
 };
+
+export default FileInputStories;
 
 export const Demo = () => (
   <FileInput
