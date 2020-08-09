@@ -7,11 +7,13 @@ const Container = styled.div`
   width: 300px;
 `;
 
-export default {
+const TextInputStories = {
   title: 'Inputs|TextInput',
   component: TextInput,
   decorators: [withKnobs, (storyFn: any) => <Container>{storyFn()}</Container>],
 };
+
+export default TextInputStories;
 
 export const Demo = () => (
   <TextInput

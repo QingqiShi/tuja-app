@@ -1,15 +1,23 @@
 import React from 'react';
-import { withKnobs, select, boolean, text } from '@storybook/addon-knobs';
+import styled from 'styled-components/macro';
 import { action } from '@storybook/addon-actions';
+import { withKnobs, boolean, text } from '@storybook/addon-knobs';
 import Select from 'components/Select';
 
-export default {
+const Container = styled.div`
+  width: 300px;
+`;
+
+const SelectStories = {
   title: 'Inputs|Select',
   component: Select,
+  decorators: [withKnobs, (storyFn: any) => <Container>{storyFn()}</Container>],
 };
 
+export default SelectStories;
+
 const options = [
-  { label: 'Select', value: '' },
+  { label: 'Select...', value: '' },
   { label: 'Apple', value: 'apple' },
   { label: 'Orange', value: 'orange' },
 ];

@@ -108,7 +108,7 @@ function ActivityTradeForm({
         }
       }}
     >
-      <DateInput value={date} onChange={setDate} required />
+      <DateInput label="Date" defaultValue={date} onChange={setDate} required />
       <Label>{mode === 'buy' ? 'Buys' : 'Sells'}*</Label>
       <InvestmentsContainer>
         <AddInvestment>

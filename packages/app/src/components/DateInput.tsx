@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import dayjs from 'dayjs';
 import TextInput from './TextInput';
 
@@ -12,37 +12,61 @@ function checkDateSupported() {
 const isDateSupported = checkDateSupported();
 
 interface DateInputProps
-  extends Omit<React.ComponentProps<'input'>, 'value' | 'onChange' | 'ref'> {
-  value?: Date;
+  extends Omit<
+    React.ComponentProps<typeof TextInput>,
+    'value' | 'defaultValue' | 'onChange' | 'ref'
+  > {
+  defaultValue?: Date;
   onChange?: (newDate: Date) => void;
 }
 
-function DateInput({ value, onChange, ...props }: DateInputProps) {
+function DateInput(
+  { label, defaultValue, onChange, onBlur, ...props }: DateInputProps,
+  ref: React.Ref<HTMLInputElement>
+) {
+  const [internalDate, setInternalDate] = useState(defaultValue ?? new Date());
   const [val, setVal] = useState(
-    value ? dayjs(value).format('YYYY-MM-DD') : ''
+    defaultValue ?? internalDate
+      ? dayjs(defaultValue ?? internalDate).format('YYYY-MM-DD')
+      : ''
   );
+
+  const extendedLabel = label
+    ? `${label}${!isDateSupported ? ' (yyyy/mm/dd)' : ''}`
+    : undefined;
+
   return (
     <TextInput
       {...props}
       type="date"
-      label={`Date${!isDateSupported ? ' (yyyy/mm/dd)' : ''}`}
       placeholder="yyyy/mm/dd"
+      max="9999-12-31"
+      label={extendedLabel}
       value={val}
       onChange={(e) => {
         setVal(e.target.value);
         const parsed = dayjs(e.target.value, 'YYYY-MM-DD');
-        if (onChange && parsed.isValid()) {
-          onChange(parsed.toDate());
+        if (parsed.isValid()) {
+          setInternalDate(parsed.toDate());
+          if (onChange) {
+            onChange(parsed.toDate());
+          }
         }
       }}
-      onBlur={() => {
+      onBlur={(e) => {
         const parsed = dayjs(val, 'YYYY-MM-DD');
-        if (!parsed.isValid() && value) {
-          setVal(dayjs(value).format('YYYY-MM-DD'));
+        if (!parsed.isValid()) {
+          setVal(dayjs(parsed).format('YYYY-MM-DD'));
+        } else {
+          setVal(dayjs(internalDate).format('YYYY-MM-DD'));
+        }
+        if (onBlur) {
+          onBlur(e);
         }
       }}
+      ref={ref}
     />
   );
 }
 
-export default DateInput;
+export default forwardRef(DateInput);

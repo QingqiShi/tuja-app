@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { RiArrowDownSLine } from 'react-icons/ri';
@@ -108,17 +108,13 @@ interface SelectProps extends Omit<React.ComponentProps<'select'>, 'ref'> {
   helperText?: string;
 }
 
-function Select({
-  options,
-  label,
-  helperText,
-  required,
-  disabled,
-  ...props
-}: SelectProps) {
+function Select(
+  { options, label, helperText, required, disabled, ...props }: SelectProps,
+  ref: React.Ref<HTMLSelectElement>
+) {
   const select = (
     <SelectContainer>
-      <SelectBase required={required} disabled={disabled} {...props}>
+      <SelectBase required={required} disabled={disabled} {...props} ref={ref}>
         {options.map((option, i) => (
           <option
             value={option.value}
@@ -151,4 +147,4 @@ function Select({
   return select;
 }
 
-export default Select;
+export default forwardRef(Select);
