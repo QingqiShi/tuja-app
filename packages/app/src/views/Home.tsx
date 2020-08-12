@@ -7,7 +7,7 @@ function Home() {
   return (
     <FullHeight>
       <Helmet>
-        <title>Tuja App | Porfolio Tracker</title>
+        <title>Tuja App | Portfolio Tracker</title>
       </Helmet>
       <Center>
         <div>
