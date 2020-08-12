@@ -1,11 +1,9 @@
 import React from 'react';
-import { withKnobs } from '@storybook/addon-knobs';
 import InvestmentsTable from 'components/InvestmentsTable';
 
 const InvestmentsTableStories = {
-  title: 'Contents|InvestmentsTable',
+  title: 'Contents/InvestmentsTable',
   component: InvestmentsTable,
-  decorators: [withKnobs],
 };
 
 export default InvestmentsTableStories;

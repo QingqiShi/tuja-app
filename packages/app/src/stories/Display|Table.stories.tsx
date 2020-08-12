@@ -2,7 +2,7 @@ import React from 'react';
 import Table, { TableRow, TableCell, TableHeader } from 'components/Table';
 
 const TableStories = {
-  title: 'Display|Table',
+  title: 'Display/Table',
   component: Table,
 };
 

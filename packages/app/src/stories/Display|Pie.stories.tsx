@@ -8,15 +8,16 @@ const Container = styled.div`
 `;
 
 const PieStories = {
-  title: 'Display|Pie',
+  title: 'Display/Pie',
   component: Pie,
   decorators: [(storyFn: any) => <Container>{storyFn()}</Container>],
 };
 
 export default PieStories;
 
-export const Demo = () => (
+export const Demo = (args: any) => (
   <Pie
+    {...args}
     data={[
       { label: 'A', percentage: 0.4 },
       { label: 'B', percentage: 0.3 },
@@ -25,7 +26,9 @@ export const Demo = () => (
       { label: 'F', percentage: 0.025 },
       { label: 'G', percentage: 0.025 },
     ]}
-    primaryText="£1,234.56"
-    secondaryText="Total Value"
   />
 );
+Demo.args = {
+  primaryText: '£1,234.56',
+  secondaryText: 'Total Value',
+};

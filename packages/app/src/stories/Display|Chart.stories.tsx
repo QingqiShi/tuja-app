@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import { withKnobs, boolean } from '@storybook/addon-knobs';
 import appleStock from '@vx/mock-data/lib/mocks/appleStock';
 import Chart from 'components/Chart';
 
@@ -10,9 +9,14 @@ const Container = styled.div`
 `;
 
 const ChartStories = {
-  title: 'Display|Chart',
+  title: 'Display/Chart',
   component: Chart,
-  decorators: [withKnobs, (storyFn: any) => <Container>{storyFn()}</Container>],
+  decorators: [(storyFn: any) => <Container>{storyFn()}</Container>],
+  argTypes: {
+    currency: {
+      control: { type: 'inline-radio', options: ['GBP', 'USD'] },
+    },
+  },
 };
 
 export default ChartStories;
@@ -25,13 +29,13 @@ const benchmark = appleStock
   .slice(360, 720)
   .map((d, i) => [stock[i][0], d.close] as const);
 
-export const Demo = () => (
-  <Chart
-    data={stock}
-    hideAxis={boolean('Hide axis', false)}
-    hideTooltip={boolean('Hide tooltip', false)}
-  />
-);
+export const Demo = (args: any) => <Chart {...args} data={stock} />;
+Demo.args = {
+  hideAxis: false,
+  hideTooltip: false,
+  formatPercentage: false,
+  currency: 'GBP',
+};
 
 export const HideAxisAndTooltip = () => (
   <Chart data={stock} hideAxis hideTooltip />

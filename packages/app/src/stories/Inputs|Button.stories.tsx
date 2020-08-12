@@ -5,7 +5,7 @@ import { RiSendPlane2Line, RiHomeLine } from 'react-icons/ri';
 import Button from 'components/Button';
 
 const ButtonStories = {
-  title: 'Inputs|Button',
+  title: 'Inputs/Button',
   component: Button,
 };
 

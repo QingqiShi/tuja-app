@@ -7,7 +7,7 @@ const MockOverview = styled.div`
 `;
 
 const DashboardLayoutStories = {
-  title: 'Contents|DashboardLayout',
+  title: 'Contents/DashboardLayout',
   component: DashboardLayout,
 };
 

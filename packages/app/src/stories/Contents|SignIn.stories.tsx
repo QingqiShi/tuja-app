@@ -1,13 +1,11 @@
 import React from 'react';
-import { withKnobs, select } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import SignIn from 'components/SignIn';
 import { AuthContext } from 'hooks/useAuth';
 
 const SignInStories = {
-  title: 'Contents|SignIn',
+  title: 'Contents/SignIn',
   component: SignIn,
-  decorators: [withKnobs],
 };
 
 export default SignInStories;
@@ -21,26 +19,33 @@ const getAuth = () => ({
   isAdmin: false,
 });
 
-export const Demo = () => (
+export const Demo = ({ state }: any) => (
   <AuthContext.Provider
     value={{
       ...getAuth(),
-      state: select(
-        'Sign in state',
-        {
-          SignedOut: 'SIGNED_OUT',
-          SignedIn: 'SIGNED_IN',
-          EmailSent: 'EMAIL_SENT',
-          ConfirmEmail: 'CONFIRM_EMAIL',
-          SigningIn: 'SIGNING_IN',
-        },
-        'SIGNED_OUT'
-      ),
+      state,
     }}
   >
     <SignIn />
   </AuthContext.Provider>
 );
+Demo.args = {
+  state: 'SIGNED_OUT',
+};
+Demo.argTypes = {
+  state: {
+    control: {
+      type: 'radio',
+      options: [
+        'SIGNED_OUT',
+        'SIGNED_IN',
+        'EMAIL_SENT',
+        'CONFIRM_EMAIL',
+        'SIGNING_IN',
+      ],
+    },
+  },
+};
 
 export const SignedOut = () => (
   <AuthContext.Provider value={{ ...getAuth(), state: 'SIGNED_OUT' }}>

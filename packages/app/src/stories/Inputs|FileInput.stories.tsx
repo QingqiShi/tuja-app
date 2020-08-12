@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { action } from '@storybook/addon-actions';
-import { withKnobs, text } from '@storybook/addon-knobs';
 import FileInput from 'components/FileInput';
 
 const Container = styled.div`
@@ -9,21 +8,21 @@ const Container = styled.div`
 `;
 
 const FileInputStories = {
-  title: 'Inputs|FileInput',
+  title: 'Inputs/FileInput',
   component: FileInput,
-  decorators: [withKnobs, (storyFn: any) => <Container>{storyFn()}</Container>],
+  decorators: [(storyFn: any) => <Container>{storyFn()}</Container>],
 };
 
 export default FileInputStories;
 
-export const Demo = () => (
-  <FileInput
-    label={text('Label', 'Historic data')}
-    helperText={text('Helper text', 'Only accepts .csv files')}
-    onFile={action('onFile')}
-    accept={text('Accept', '.csv')}
-  />
+export const Demo = (args: any) => (
+  <FileInput onFile={action('onFile')} {...args} />
 );
+Demo.args = {
+  label: 'Historic data',
+  helperText: 'Only accepts .csv files',
+  accept: '.csv',
+};
 
 export const WithLabel = () => <FileInput label="Upload your life" />;
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { action } from '@storybook/addon-actions';
-import { withKnobs, text, number } from '@storybook/addon-knobs';
 import CurrencyInput from 'components/CurrencyInput';
 
 const Container = styled.div`
@@ -9,24 +8,29 @@ const Container = styled.div`
 `;
 
 const CurrencyInputStories = {
-  title: 'Inputs|CurrencyInput',
+  title: 'Inputs/CurrencyInput',
   component: CurrencyInput,
-  decorators: [withKnobs, (storyFn: any) => <Container>{storyFn()}</Container>],
+  decorators: [(storyFn: any) => <Container>{storyFn()}</Container>],
+  argTypes: {
+    currency: {
+      control: { type: 'inline-radio', options: ['GBP', 'USD'] },
+    },
+  },
 };
 
 export default CurrencyInputStories;
 
-export const Demo = () => (
-  <CurrencyInput
-    label="Amount"
-    currency={text('Currency', 'GBP')}
-    onChange={action('onChange')}
-  />
+export const Demo = (args: any) => (
+  <CurrencyInput {...args} onChange={action('onChange')} />
 );
+Demo.args = {
+  currency: 'GBP',
+  label: 'Amount',
+};
 
-export const ExternalValue = () => (
-  <CurrencyInput
-    value={number('value', 12345)}
-    currency={text('Currency', 'GBP')}
-  />
-);
+export const ExternalValue = (args: any) => <CurrencyInput {...args} />;
+
+ExternalValue.args = {
+  currency: 'GBP',
+  value: 12345,
+};

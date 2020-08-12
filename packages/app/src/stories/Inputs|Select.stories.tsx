@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { action } from '@storybook/addon-actions';
-import { withKnobs, boolean, text } from '@storybook/addon-knobs';
 import Select from 'components/Select';
 
 const Container = styled.div`
@@ -9,9 +8,9 @@ const Container = styled.div`
 `;
 
 const SelectStories = {
-  title: 'Inputs|Select',
+  title: 'Inputs/Select',
   component: Select,
-  decorators: [withKnobs, (storyFn: any) => <Container>{storyFn()}</Container>],
+  decorators: [(storyFn: any) => <Container>{storyFn()}</Container>],
 };
 
 export default SelectStories;
@@ -22,17 +21,14 @@ const options = [
   { label: 'Orange', value: 'orange' },
 ];
 
-export const Demo = () => (
-  <Select
-    onChange={action('select-change')}
-    label={text('Label', 'Fruits') || undefined}
-    helperText={
-      text('Helper Text', 'Select your favourite fruit.') || undefined
-    }
-    required={boolean('Required', true)}
-    options={options}
-  />
+export const Demo = (args: any) => (
+  <Select onChange={action('select-change')} options={options} {...args} />
 );
+Demo.args = {
+  label: 'Fruits',
+  helperText: 'Select your favourite fruit.',
+  required: false,
+};
 
 export const WithLabel = () => (
   <Select label="Fruits" options={options} onChange={action('select-change')} />

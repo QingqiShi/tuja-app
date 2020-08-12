@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import Type from 'components/Type';
 
 const TypeStories = {
-  title: 'Display|Type',
+  title: 'Display/Type',
   component: Type,
 };
 

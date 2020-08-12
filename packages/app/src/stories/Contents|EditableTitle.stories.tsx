@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import EditableTitle from 'components/EditableTitle';
 
 const EditableTitleStories = {
-  title: 'Contents|EditableTitle',
+  title: 'Contents/EditableTitle',
   component: EditableTitle,
 };
 

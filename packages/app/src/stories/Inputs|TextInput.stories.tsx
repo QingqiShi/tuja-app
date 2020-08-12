@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import { withKnobs, select, boolean, text } from '@storybook/addon-knobs';
 import TextInput from 'components/TextInput';
 
 const Container = styled.div`
@@ -8,25 +7,26 @@ const Container = styled.div`
 `;
 
 const TextInputStories = {
-  title: 'Inputs|TextInput',
+  title: 'Inputs/TextInput',
   component: TextInput,
-  decorators: [withKnobs, (storyFn: any) => <Container>{storyFn()}</Container>],
+  decorators: [(storyFn: any) => <Container>{storyFn()}</Container>],
+  argTypes: {
+    type: {
+      control: { type: 'select', options: ['email', 'password'] },
+    },
+  },
 };
 
 export default TextInputStories;
 
-export const Demo = () => (
-  <TextInput
-    label={text('Label', 'Email') || undefined}
-    placeholder={text('Placeholder', 'hi@example.com') || undefined}
-    helperText={
-      text('Helper Text', 'We will never share your email address.') ||
-      undefined
-    }
-    type={select('Type', { Email: 'email', Password: 'password' }, 'email')}
-    required={boolean('Required', false)}
-  />
-);
+export const Demo = (args: any) => <TextInput {...args} />;
+Demo.args = {
+  label: 'Email',
+  placeholder: 'hi@example.com',
+  helperText: 'We will never share your email address.',
+  type: 'email',
+  required: false,
+};
 
 export const WithPlaceholder = () => <TextInput placeholder="Email" />;
 
