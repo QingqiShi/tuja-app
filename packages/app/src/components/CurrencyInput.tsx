@@ -31,7 +31,6 @@ function CurrencyInput({
     if (!isFocused) {
       const formatted = formatCurrency(currency, value ?? internalVal);
       if (formatted !== inputValue) {
-        console.log('setinputvalue');
         setInputValue(formatted);
       }
     }

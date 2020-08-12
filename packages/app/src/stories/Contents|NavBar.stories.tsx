@@ -9,7 +9,7 @@ const Container = styled.div`
 `;
 
 const NavBarStories = {
-  title: 'Contents|NavBar',
+  title: 'Contents/NavBar',
   component: NavBar,
   decorators: [(storyFn: any) => <Container>{storyFn()}</Container>],
 };

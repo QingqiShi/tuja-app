@@ -2,7 +2,7 @@ import React from 'react';
 import CreatePortfolio from 'components/CreatePortfolio';
 
 const CreatePortfolioStories = {
-  title: 'Contents|CreatePortfolio',
+  title: 'Contents/CreatePortfolio',
   component: CreatePortfolio,
 };
 

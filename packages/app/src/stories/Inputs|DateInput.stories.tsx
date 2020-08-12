@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { action } from '@storybook/addon-actions';
-import { withKnobs, boolean, text } from '@storybook/addon-knobs';
 import DateInput from 'components/DateInput';
 
 const Container = styled.div`
@@ -9,21 +8,18 @@ const Container = styled.div`
 `;
 
 const DateInputStories = {
-  title: 'Inputs|DateInput',
+  title: 'Inputs/DateInput',
   component: DateInput,
-  decorators: [withKnobs, (storyFn: any) => <Container>{storyFn()}</Container>],
+  decorators: [(storyFn: any) => <Container>{storyFn()}</Container>],
 };
 
 export default DateInputStories;
 
-export const Demo = () => (
-  <DateInput
-    onChange={action('onChange')}
-    label={text('Label', 'Date')}
-    helperText={text(
-      'Helper Text',
-      'Select a date using the native date picker.'
-    )}
-    required={boolean('Required', true)}
-  />
+export const Demo = (args: any) => (
+  <DateInput {...args} onChange={action('onChange')} />
 );
+Demo.args = {
+  label: 'Date',
+  helperText: 'Select a date using the native date picker.',
+  required: true,
+};
