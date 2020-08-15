@@ -14,6 +14,7 @@ import InvestmentsTable from 'components/InvestmentsTable';
 import ActivityTradeForm from 'components/ActivityTradeForm';
 import ActivityDepositForm from 'components/ActivityDepositForm';
 import ActivityDividendForm from 'components/ActivityDividendForm';
+import AutoInvest from 'components/AutoInvest';
 import { Card, CardMedia } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
@@ -250,12 +251,18 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                 )}
               </CardMedia>
             </ChartCard>
-            <InvestmentsTable
-              currency={portfolio.currency}
-              portfolioPerformance={
-                portfolioPerformance ?? ({ holdings: {} } as any)
-              }
-            />
+            {portfolioPerformance && (
+              <InvestmentsTable
+                currency={portfolio.currency}
+                portfolioPerformance={portfolioPerformance}
+              />
+            )}
+            {portfolioPerformance && (
+              <Card>
+                <Type scale="h5">Auto Invest</Type>
+                <AutoInvest portfolioPerformance={portfolioPerformance} />
+              </Card>
+            )}
           </div>
         }
       />
