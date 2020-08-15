@@ -15,7 +15,7 @@ const Container = styled.div`
 
 interface EditableTitleProps {
   value: string;
-  onChange: (newVal: string) => Promise<void>;
+  onChange?: (newVal: string) => Promise<void>;
   scale?: React.ComponentProps<typeof Type>['scale'];
 }
 
@@ -24,8 +24,10 @@ function EditableTitle({ value, onChange, scale = 'h3' }: EditableTitleProps) {
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState(value);
 
+  console.log(onChange);
+
   return (
-    <Type scale={scale}>
+    <Type scale={scale} noMargin>
       <Container>
         <span>
           {showInput ? (
@@ -37,7 +39,7 @@ function EditableTitle({ value, onChange, scale = 'h3' }: EditableTitleProps) {
             value
           )}
         </span>
-        {showInput ? (
+        {showInput && onChange && (
           <>
             <Button
               variant="shout"
@@ -56,7 +58,8 @@ function EditableTitle({ value, onChange, scale = 'h3' }: EditableTitleProps) {
               disabled={loading}
             />
           </>
-        ) : (
+        )}
+        {!showInput && onChange && (
           <Button icon={<RiEditLine />} onClick={() => setShowInput(true)} />
         )}
       </Container>

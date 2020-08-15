@@ -7,7 +7,6 @@ import { FaUserCircle } from 'react-icons/fa';
 import {
   RiLogoutBoxRLine,
   RiAdminLine,
-  RiDashboardLine,
   RiPieChartLine,
   RiFileListLine,
 } from 'react-icons/ri';
@@ -107,9 +106,6 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
         <>
           {portfolio && (
             <>
-              <NavButton icon={<RiDashboardLine />} to="/dashboard">
-                Dashboard
-              </NavButton>
               <NavButton icon={<RiPieChartLine />} to="/portfolio">
                 Portfolio
               </NavButton>
