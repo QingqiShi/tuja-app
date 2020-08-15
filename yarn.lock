@@ -3321,18 +3321,18 @@
     regenerator-runtime "^0.13.3"
     ts-dedent "^1.1.1"
 
-"@storybook/addon-storysource@^6.0.5":
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-storysource/-/addon-storysource-6.0.5.tgz#2293b7021515173b394a7482ae4848ff71d25c6a"
-  integrity sha512-efr/l9tGS5/yqL5MklGHjN4kB28T6Ogk//R5b2mpismJ6dyv0sgT72dVL0Brnc8JBp5iPKvYr+UFUwNzLCspUQ==
+"@storybook/addon-storysource@^6.0.10":
+  version "6.0.10"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-storysource/-/addon-storysource-6.0.10.tgz#a2b911d9593d0a80f4a68fa55c13a3bdafea7bcd"
+  integrity sha512-cya53ksfSPyR0OWz/gojYLGZu9RcmkXm7QXKpWRWyaMFbogjCwI8V0OWENYZRau4hI+9TAqM1Unoqse7iV+gxg==
   dependencies:
-    "@storybook/addons" "6.0.5"
-    "@storybook/api" "6.0.5"
-    "@storybook/client-logger" "6.0.5"
-    "@storybook/components" "6.0.5"
-    "@storybook/router" "6.0.5"
-    "@storybook/source-loader" "6.0.5"
-    "@storybook/theming" "6.0.5"
+    "@storybook/addons" "6.0.10"
+    "@storybook/api" "6.0.10"
+    "@storybook/client-logger" "6.0.10"
+    "@storybook/components" "6.0.10"
+    "@storybook/router" "6.0.10"
+    "@storybook/source-loader" "6.0.10"
+    "@storybook/theming" "6.0.10"
     core-js "^3.0.1"
     estraverse "^4.2.0"
     loader-utils "^2.0.0"
@@ -4202,22 +4202,6 @@
   dependencies:
     "@storybook/addons" "6.0.10"
     "@storybook/client-logger" "6.0.10"
-    "@storybook/csf" "0.0.1"
-    core-js "^3.0.1"
-    estraverse "^4.2.0"
-    global "^4.3.2"
-    loader-utils "^2.0.0"
-    lodash "^4.17.15"
-    prettier "^2.0.5"
-    regenerator-runtime "^0.13.3"
-
-"@storybook/source-loader@6.0.5":
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/@storybook/source-loader/-/source-loader-6.0.5.tgz#55409a2fba3ecc6c420acbba27739ec499ec9b77"
-  integrity sha512-SyY5O2sHn1QibZx9tEmkDfPl39ATUQfqH4hfYsBW/29ExYClOw88HiAbCE2gE4zao+gHGY8fgeSGIRhsVh/+bw==
-  dependencies:
-    "@storybook/addons" "6.0.5"
-    "@storybook/client-logger" "6.0.5"
     "@storybook/csf" "0.0.1"
     core-js "^3.0.1"
     estraverse "^4.2.0"
