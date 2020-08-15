@@ -15,10 +15,8 @@ export default DashboardLayoutStories;
 
 export const Demo = () => (
   <DashboardLayout
-    overview={<MockOverview />}
-    values={<div></div>}
-    gains={<div></div>}
-    returns={<div></div>}
-    datePeriod={null}
+    top={<MockOverview />}
+    side={<div></div>}
+    main={<div></div>}
   />
 );

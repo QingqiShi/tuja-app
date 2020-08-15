@@ -18,6 +18,7 @@ import UpdateAlias from 'components/UpdateAlias';
 import UpdateAllocation from 'components/UpdateAllocation';
 import Select from 'components/Select';
 import { Card, CardMedia } from 'commonStyledComponents';
+import useAuth from 'hooks/useAuth';
 import { theme, getTheme } from 'theme';
 
 const InvestmentCard = styled(Card)`
@@ -106,7 +107,6 @@ const ActionsContainer = styled.div`
 
 const SortByContainer = styled.div`
   @media (${theme.breakpoints.minTablet}) {
-    margin-top: -3.5rem;
     display: flex;
     justify-content: flex-end;
 
@@ -135,10 +135,12 @@ interface InvestmentsTableProps {
 }
 
 function InvestmentsTable({
-  portfolioPerformance: { value, holdings, remainingCash },
+  portfolioPerformance: { value, holdings },
   currency,
 }: InvestmentsTableProps) {
+  const { state } = useAuth();
   const { portfolio } = usePortfolio();
+
   const [showMore, setShowMore] = useState(-1);
   const [showAlias, setShowAlias] = useState(false);
   const [showAllocation, setShowAllocation] = useState(false);
@@ -304,7 +306,7 @@ function InvestmentsTable({
               </DataRow>
             )}
 
-            {showMore === i && (
+            {state === 'SIGNED_IN' && showMore === i && (
               <ActionsContainer>
                 <Button
                   variant="primary"

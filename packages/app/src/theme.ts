@@ -72,7 +72,7 @@ export const theme = {
   },
   fontFamily: "'Inter', sans-serif",
   breakpoints: {
-    minTablet: 'min-width: 518px',
+    minTablet: 'min-width: 706px',
     minLaptop: 'min-width: 1025px',
     minDesktop: 'min-width: 1441px',
   },

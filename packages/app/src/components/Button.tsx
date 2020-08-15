@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components/macro';
 import { transparentize, lighten } from 'polished';
 import { theme, getTheme } from 'theme';
 
-type ButtonVariant = 'primary' | 'shout';
+type ButtonVariant = 'primary' | 'shout' | 'outline';
 
 interface ButtonBaseProps
   extends Partial<Pick<React.ComponentProps<typeof Link>, 'to'>> {
@@ -93,6 +93,23 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
 
           &:focus {
             border: 2px solid transparent;
+            box-shadow: 0 0 ${theme.spacings('s')} 0
+              ${getTheme(theme.colors.callToAction, (color) =>
+                lighten(0.15, color)
+              )};
+          }
+        `;
+      case 'outline':
+        return css`
+          border: 2px solid ${theme.colors.callToAction};
+          color: ${theme.colors.callToActionText};
+
+          &:hover {
+            border: 2px solid ${theme.colors.callToActionText};
+          }
+
+          &:focus {
+            border: 2px solid ${theme.colors.callToAction};
             box-shadow: 0 0 ${theme.spacings('s')} 0
               ${getTheme(theme.colors.callToAction, (color) =>
                 lighten(0.15, color)

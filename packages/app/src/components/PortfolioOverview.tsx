@@ -1,15 +1,14 @@
 import React from 'react';
-import dayjs from 'dayjs';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
+import dayjs from 'dayjs';
 import Type from 'components/Type';
 import EditableTitle from 'components/EditableTitle';
-import Pie from 'components/Pie';
 import { updatePortfolioName } from 'libs/portfolio';
 import { formatCurrency } from 'libs/stocksClient';
-import useStartDate from 'hooks/useStartDate';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
+import useStartDate from 'hooks/useStartDate';
 import { theme, getTheme } from 'theme';
 
 const Container = styled.div`
@@ -29,62 +28,86 @@ const Label = styled(Type).attrs((props) => ({
     transparentize(0.5, color)
   )};
   margin-top: ${theme.spacings('s')};
+  padding-right: ${theme.spacings('s')};
+  letter-spacing: ${theme.fonts.ctaSpacing};
+  text-transform: uppercase;
+`;
+
+const Value = styled(Type).attrs((props) => ({
+  ...props,
+  noMargin: true,
+  scale: 'h6',
+}))`
+  font-weight: 400;
 `;
 
 const Split = styled.div`
-  display: flex;
+  margin-bottom: ${theme.spacings('m')};
+
   > * {
-    flex-grow: 1;
+    margin-bottom: ${theme.spacings('s')};
   }
-  > :not(:last-child) {
-    padding-right: ${theme.spacings('s')};
+
+  > :not(:first-child) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    > :first-child {
+      min-width: 50%;
+    }
+  }
+
+  @media (${theme.breakpoints.minTablet}) {
+    display: flex;
+    flex-wrap: wrap;
+    > * {
+      flex-grow: 1;
+    }
+    > :not(:last-child) {
+      margin-right: ${theme.spacings('s')};
+    }
+    > :not(:first-child) {
+      display: block;
+      > :first-child {
+        min-width: auto;
+      }
+    }
+    > :first-child {
+      width: 100%;
+      flex-grow: 0;
+      margin-right: 0;
+    }
+  }
+  @media (${theme.breakpoints.minLaptop}) {
+    > :first-child {
+      width: auto;
+      min-width: 20rem;
+      margin-right: ${theme.spacings('s')};
+    }
+  }
+  @media (${theme.breakpoints.minDesktop}) {
+    > * {
+      flex-grow: 0;
+      min-width: auto;
+    }
+    > :not(:last-child):not(:first-child) {
+      margin-right: ${theme.spacings('l')};
+    }
   }
 `;
 
-const PieContainer = styled.div`
-  width: 100%;
-  max-width: 300px;
-  position: relative;
-  margin: ${theme.spacings('s')} auto;
-
-  &:after {
-    content: '';
-    display: block;
-    padding-bottom: 100%;
-  }
-
-  > div {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-  }
-`;
+const formatDate = (d: Date) => dayjs(d).format('YYYY-MM-DD ddd');
 
 interface PortfolioOverviewProps {
+  isDemo?: boolean;
   className?: string;
-  editable?: boolean;
 }
 
-function PortfolioOverview({ className, editable }: PortfolioOverviewProps) {
+function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
   const { portfolio } = usePortfolio();
   const { portfolioPerformance } = usePortfolioPerformance();
   const [startDate] = useStartDate();
-
-  const pieData = portfolioPerformance
-    ? Object.keys(portfolioPerformance.holdings)
-        .map((ticker) => ({
-          label: ticker,
-          percentage:
-            portfolioPerformance.holdings[ticker].value /
-            portfolioPerformance.value,
-        }))
-        .concat({
-          label: 'Cash',
-          percentage:
-            portfolioPerformance.remainingCash / portfolioPerformance.value,
-        })
-        .sort((a, b) => b.percentage - a.percentage)
-    : [];
 
   if (!portfolio) {
     return null;
@@ -92,57 +115,38 @@ function PortfolioOverview({ className, editable }: PortfolioOverviewProps) {
 
   return (
     <Container className={className}>
-      <div>
-        {editable ? (
+      <Split>
+        <div>
+          <Label>Portfolio Name</Label>
           <EditableTitle
             scale="h5"
             value={portfolio.name ?? 'My Investments'}
-            onChange={async (newName) =>
-              updatePortfolioName(portfolio.id, newName)
+            onChange={
+              !isDemo
+                ? async (newName) => updatePortfolioName(portfolio.id, newName)
+                : undefined
             }
           />
-        ) : (
-          <Type scale="h5">{portfolio.name ?? 'My Investments'}</Type>
-        )}
-        <PieContainer>
-          <div>
-            <Pie
-              data={pieData}
-              primaryText={formatCurrency(
-                portfolio.currency,
-                portfolioPerformance?.value ?? 0
-              )}
-              secondaryText="Portfolio Value"
-            />
-          </div>
-        </PieContainer>
-
-        <Split>
-          {startDate && (
-            <div>
-              <Label>Since</Label>
-              <Type scale="body1" noMargin>
-                {dayjs(startDate).format('YYYY-MM-DD')}
-              </Type>
-            </div>
-          )}
-          <div>
-            <Label>Gain</Label>
-            <Type scale="body1" noMargin>
-              {formatCurrency(
-                portfolio.currency,
-                portfolioPerformance?.gain ?? 0
-              )}
-            </Type>
-          </div>
-          <div>
-            <Label>Return</Label>
-            <Type scale="body1" noMargin>
-              {((portfolioPerformance?.roi ?? 0) * 100).toFixed(2)}%
-            </Type>
-          </div>
-        </Split>
-      </div>
+        </div>
+        <div>
+          <Label>Performance Since</Label>
+          <Value>{startDate && formatDate(startDate)}</Value>
+        </div>
+        <div>
+          <Label>Gain</Label>
+          <Value>
+            {(portfolioPerformance?.gain ?? 0) > 0 ? '+' : ''}
+            {formatCurrency(
+              portfolio.currency,
+              portfolioPerformance?.gain ?? 0
+            )}
+          </Value>
+        </div>
+        <div>
+          <Label>Return</Label>
+          <Value>{((portfolioPerformance?.roi ?? 0) * 100).toFixed(2)}%</Value>
+        </div>
+      </Split>
     </Container>
   );
 }
