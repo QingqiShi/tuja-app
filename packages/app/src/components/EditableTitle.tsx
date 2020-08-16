@@ -24,8 +24,6 @@ function EditableTitle({ value, onChange, scale = 'h3' }: EditableTitleProps) {
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState(value);
 
-  console.log(onChange);
-
   return (
     <Type scale={scale} noMargin>
       <Container>
