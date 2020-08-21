@@ -145,7 +145,7 @@ function Chart({
   const dateScale = useMemo(
     () =>
       scaleTime({
-        range: [0, xMax],
+        range: [0, xMax - 1],
         domain: extent(data ?? [], getDate) as [Date, Date],
       }),
     [data, xMax]
@@ -265,7 +265,7 @@ function Chart({
       if (
         d2 &&
         getDate(d2) &&
-        x0.valueOf() - getDate(d).valueOf() >
+        x0.valueOf() - getDate(d).valueOf() >=
           getDate(d2).valueOf() - x0.valueOf()
       ) {
         d = d2;
