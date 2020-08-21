@@ -252,13 +252,23 @@ function Chart({
       const index = bisectDate(data, x0, 1);
       const d0 = data[index - 1];
       const d1 = data[index];
+      const d2 = data[index + 1];
       let d = d0;
-      if (d1 && getDate(d1)) {
-        d =
-          x0.valueOf() - getDate(d0).valueOf() >
+      if (
+        d1 &&
+        getDate(d1) &&
+        x0.valueOf() - getDate(d).valueOf() >
           getDate(d1).valueOf() - x0.valueOf()
-            ? d1
-            : d0;
+      ) {
+        d = d1;
+      }
+      if (
+        d2 &&
+        getDate(d2) &&
+        x0.valueOf() - getDate(d).valueOf() >
+          getDate(d2).valueOf() - x0.valueOf()
+      ) {
+        d = d2;
       }
       if (!d) return 0;
       if (syncTooltip) {
