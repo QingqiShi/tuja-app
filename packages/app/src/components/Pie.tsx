@@ -48,7 +48,7 @@ function Pie({ className, data, primaryText, secondaryText }: PieProps) {
   const donutThickness = Math.min(innerWidth, innerHeight) / 15;
 
   // Colors
-  const getColor = useColors(data?.map(({ label }) => label) ?? []);
+  const getColor = useColors();
   const styledTheme = useTheme();
   const textColor = theme.colors.textOnBackground({ theme: styledTheme });
 
