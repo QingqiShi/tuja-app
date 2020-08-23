@@ -10,7 +10,7 @@ import ButtonGroup from 'components/ButtonGroup';
 import Type from 'components/Type';
 import Button from 'components/Button';
 import Backdrop from 'components/Backdrop';
-import InvestmentsTable from 'components/InvestmentsTable';
+import InvestmentsList from 'components/InvestmentsList';
 import ActivityTradeForm from 'components/ActivityTradeForm';
 import ActivityDepositForm from 'components/ActivityDepositForm';
 import ActivityDividendForm from 'components/ActivityDividendForm';
@@ -252,17 +252,15 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
               </CardMedia>
             </ChartCard>
             {portfolioPerformance && (
-              <InvestmentsTable
-                currency={portfolio.currency}
-                portfolioPerformance={portfolioPerformance}
-              />
+              <InvestmentsList portfolioPerformance={portfolioPerformance} />
             )}
-            {portfolioPerformance && (
-              <Card>
-                <Type scale="h5">Auto Invest</Type>
-                <AutoInvest portfolioPerformance={portfolioPerformance} />
-              </Card>
-            )}
+            {portfolioPerformance &&
+              !!Object.keys(portfolio.targetAllocations ?? {}).length && (
+                <Card>
+                  <Type scale="h5">Auto Invest</Type>
+                  <AutoInvest portfolioPerformance={portfolioPerformance} />
+                </Card>
+              )}
           </div>
         }
       />
