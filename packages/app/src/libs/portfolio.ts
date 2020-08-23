@@ -82,6 +82,9 @@ const bisectDate = bisector<{ date: Date }, Date>((d, x) => {
   return 1;
 }).left;
 
+const fixQuantity = (quantity: number) =>
+  Math.round(quantity * 100000000) / 100000000;
+
 function getHistoryPoint(history: History[], date: Date) {
   if (!history.length) return null;
   const index = bisectDate(history, date) - 1;
@@ -266,7 +269,7 @@ export function getPortfolioPerformance(
   const holdings: PortfolioPerformance['holdings'] = {};
   Object.keys(lastHistory.holdings).forEach((ticker) => {
     const info = stocksData[ticker]?.info;
-    const quantity = lastHistory.holdings[ticker];
+    const quantity = fixQuantity(lastHistory.holdings[ticker]);
     const value =
       exchangeCurrency(
         info?.quote ?? 0,
