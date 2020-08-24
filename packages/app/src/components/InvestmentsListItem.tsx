@@ -5,8 +5,11 @@ import { transparentize } from 'polished';
 import { PortfolioPerformance } from 'libs/portfolio';
 import { formatCurrency } from 'libs/stocksClient';
 import usePortfolio from 'hooks/usePortfolio';
+import useStocksData from 'hooks/useStocksData';
+import useStartDate from 'hooks/useStartDate';
 import Type from 'components/Type';
 import Button from 'components/Button';
+import Chart from 'components/Chart';
 import { Card } from 'commonStyledComponents';
 import useAuth from 'hooks/useAuth';
 import { theme, getTheme } from 'theme';
@@ -139,7 +142,7 @@ interface InvestmentsListItemProps {
   portfolioValue: number;
   showDetails?: boolean;
   color?: string;
-  mode?: 'GAIN' | 'VALUE' | 'ALLOCATION' | 'TODAY';
+  mode?: 'GAIN' | 'VALUE' | 'ALLOCATION' | 'TODAY' | 'CHART';
   onToggle?: () => void;
   onSetAlias?: () => void;
   onSetAllocation?: () => void;
@@ -158,6 +161,8 @@ function InvestmentsListItem({
 }: InvestmentsListItemProps) {
   const { state } = useAuth();
   const { portfolio } = usePortfolio();
+  const { stocksData } = useStocksData();
+  const [startDate] = useStartDate();
 
   if (!portfolio || portfolioValue === 0) {
     return null;
@@ -182,9 +187,10 @@ function InvestmentsListItem({
             <Type scale="h6">{aliases[ticker] ?? info?.name}</Type>
             <Type scale="body1">{ticker}</Type>
           </TitleContainer>
+
           {mode === 'GAIN' && (
             <PriceContainer>
-              <Type scale="h5">
+              <Type scale="h6">
                 {gain >= 0 && '+'}
                 {formatCurrency(currency, gain)}
               </Type>
@@ -196,7 +202,7 @@ function InvestmentsListItem({
           )}
           {mode === 'VALUE' && (
             <PriceContainer>
-              <Type scale="h5">{formatCurrency(currency, value)}</Type>
+              <Type scale="h6">{formatCurrency(currency, value)}</Type>
               <Type scale="body1">
                 {quantity} × {info && formatCurrency(info.currency, info.quote)}
               </Type>
@@ -204,7 +210,7 @@ function InvestmentsListItem({
           )}
           {mode === 'ALLOCATION' && (
             <PriceContainer>
-              <Type scale="h5">
+              <Type scale="h6">
                 {((value / portfolioValue) * 100).toFixed(1)}%
               </Type>
               <Type scale="body1">
@@ -214,7 +220,7 @@ function InvestmentsListItem({
           )}
           {mode === 'TODAY' && (
             <PriceContainer>
-              <Type scale="h5">
+              <Type scale="h6">
                 {dayChangePercentage >= 0 ? '+' : ''}
                 {(dayChangePercentage * 100).toFixed(2)}%
               </Type>
@@ -222,6 +228,17 @@ function InvestmentsListItem({
                 {dayChange >= 0 && '+'}
                 {info && formatCurrency(info.currency, dayChange)}
               </Type>
+            </PriceContainer>
+          )}
+          {mode === 'CHART' && (
+            <PriceContainer>
+              <Chart
+                data={stocksData[ticker].series?.data.filter(
+                  (dp) => startDate && dp[0] >= startDate
+                )}
+                hideTooltip
+                hideAxis
+              />
             </PriceContainer>
           )}
         </TopRow>
