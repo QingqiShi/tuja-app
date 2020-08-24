@@ -47,8 +47,8 @@ function InvestmentsList({
   const [showAllocation, setShowAllocation] = useState(false);
   const [currentTicker, setCurrentTicker] = useState('');
   const [sortBy, setSortBy] = useState<
-    'GAIN' | 'VALUE' | 'ALLOCATION' | 'TODAY'
-  >('GAIN');
+    'GAIN' | 'VALUE' | 'ALLOCATION' | 'TODAY' | 'CHART'
+  >('CHART');
 
   const aliasRef = useBodyScrollLock(showAlias);
   const allocationRef = useBodyScrollLock(showAllocation);
@@ -79,6 +79,7 @@ function InvestmentsList({
         <Select
           label="Sort by"
           options={[
+            { label: 'Chart', value: 'CHART' },
             { label: 'Gain', value: 'GAIN' },
             { label: 'Current value', value: 'VALUE' },
             { label: 'Allocation', value: 'ALLOCATION' },
