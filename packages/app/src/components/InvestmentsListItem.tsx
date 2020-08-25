@@ -18,6 +18,7 @@ const InvestmentContainer = styled.div`
   position: relative;
   transition: transform 0.2s;
   cursor: pointer;
+  margin-bottom: ${theme.spacings('xs')};
 
   &:hover > div:last-child {
     transform: translateY(-${theme.spacings('xs')});
@@ -35,7 +36,7 @@ interface DetailsCardProps {
   color?: string;
 }
 const DetailsCard = styled(Card)<DetailsCardProps>`
-  margin-bottom: ${theme.spacings('s')};
+  margin-bottom: -${theme.spacings('xs')};
   transform: translateY(
       calc(-${theme.spacings('xs')} - ${theme.spacings('xs')})
     )
