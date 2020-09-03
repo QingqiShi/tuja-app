@@ -31,7 +31,7 @@ const bisectDate = bisector<[Date, number], Date>((d, x) => {
   if (current.isBefore(x, 'date')) return -1;
   if (current.isSame(x, 'date')) return 0;
   return 1;
-}).left;
+}).right;
 
 class TimeSeries {
   data: [Date, number][] = [];
@@ -83,7 +83,7 @@ class TimeSeries {
   get(date: Date) {
     if (!this.data.length) return 0;
 
-    const index = bisectDate(this.data, date);
+    const index = bisectDate(this.data, date) - 1;
     if (index >= 0 && index < this.data.length) {
       return this.data[index][1];
     } else if (index >= this.data.length) {

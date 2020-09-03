@@ -80,7 +80,7 @@ const bisectDate = bisector<{ date: Date }, Date>((d, x) => {
   if (current.isBefore(x, 'date')) return -1;
   if (current.isSame(x, 'date')) return 0;
   return 1;
-}).left;
+}).right;
 
 const fixQuantity = (quantity: number) =>
   Math.round(quantity * 100000000) / 100000000;
