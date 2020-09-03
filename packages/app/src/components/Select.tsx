@@ -81,6 +81,7 @@ const SelectBase = styled.select`
 
   option {
     font-size: 1rem;
+    color: initial;
   }
 `;
 
