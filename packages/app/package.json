@@ -14,7 +14,7 @@
   "dependencies": {
     "@react-spring/web": "^9.0.0-rc.3",
     "@vx/vx": "^0.0.198",
-    "body-scroll-lock": "^3.0.3",
+    "body-scroll-lock": "^3.1.3",
     "d3-array": "^2.7.1",
     "dayjs": "^1.8.34",
     "escape-string-regexp": "^4.0.0",
