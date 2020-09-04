@@ -21,7 +21,7 @@
   "devDependencies": {
     "@types/cheerio": "^0.22.18",
     "@types/node-fetch": "^2.5.7",
-    "firebase-functions-test": "^0.2.0",
+    "firebase-functions-test": "^0.2.2",
     "tslint": "^6.1.3"
   }
 }
