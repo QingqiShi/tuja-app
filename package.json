@@ -10,6 +10,7 @@
     "build": "lerna run build --parallel",
     "lint": "lerna run lint --parallel",
     "emulate": "firebase emulators:start --only firestore,pubsub,functions --import=testData",
+    "emulator:export": "firebase emulators:export ./testData",
     "shell": "firebase functions:shell"
   },
   "engines": {
