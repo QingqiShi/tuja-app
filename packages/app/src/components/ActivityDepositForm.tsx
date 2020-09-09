@@ -3,8 +3,8 @@ import { RiHandCoinLine, RiDeleteBinLine } from 'react-icons/ri';
 import DateInput from './DateInput';
 import CurrencyInput from './CurrencyInput';
 import Button from './Button';
-import type { ActivityFormProps } from './ActivityForms';
 import { ActionsContainer } from 'commonStyledComponents';
+import type { ActivityFormProps } from 'libs/activities';
 
 function ActivityDepositForm({
   currency,
