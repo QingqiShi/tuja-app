@@ -14,6 +14,7 @@ import InvestmentsList from 'components/InvestmentsList';
 import ActivityTradeForm from 'components/ActivityTradeForm';
 import ActivityDepositForm from 'components/ActivityDepositForm';
 import ActivityDividendForm from 'components/ActivityDividendForm';
+import ActivityStockDividendForm from 'components/ActivityStockDividendForm';
 import AutoInvest from 'components/AutoInvest';
 import { Card, CardMedia } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
@@ -21,7 +22,8 @@ import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
 import useStocksList from 'hooks/useStocksList';
 import useStartDate from 'hooks/useStartDate';
 import useBodyScrollLock from 'hooks/useBodyScrollLock';
-import { addPortfolioActivity, Activity } from 'libs/portfolio';
+import { addPortfolioActivity } from 'libs/portfolio';
+import { Activity } from 'libs/activities';
 import { logEvent } from 'libs/analytics';
 import { theme } from 'theme';
 
@@ -46,7 +48,18 @@ const ActionsContainer = styled.div`
 
   > button:last-child:not(:first-child) {
     flex-grow: 0;
+  }
+
+  > button:last-child {
     margin-right: 0;
+  }
+`;
+
+const WideAction = styled.div`
+  width: 100%;
+
+  > * {
+    width: 100%;
   }
 `;
 
@@ -137,6 +150,8 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
   const sellModalRef = useBodyScrollLock(showSellModal);
   const [showDividendModal, setShowDividendModal] = useState(false);
   const dividendModalRef = useBodyScrollLock(showDividendModal);
+  const [showStockDividendModal, setShowStockDividendModal] = useState(false);
+  const stockDividendModalRef = useBodyScrollLock(showStockDividendModal);
 
   const handleSubmit = async (activity: Activity) => {
     if (portfolio?.id) {
@@ -174,36 +189,54 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
             <PortfolioPieCard />
             {!isDemo && (
               <ActionsContainer>
-                <Button variant="shout" onClick={() => setShowBuyModal(true)}>
-                  Buy
-                </Button>
+                {portfolio.activities.length > 0 && (
+                  <Button variant="shout" onClick={() => setShowBuyModal(true)}>
+                    Buy
+                  </Button>
+                )}
                 <Button
-                  variant="outline"
+                  variant={
+                    portfolio.activities.length > 0 ? 'outline' : 'shout'
+                  }
                   onClick={() => setShowDepositModal(true)}
                 >
                   Deposit
                 </Button>
-                {showMoreActions && (
+                {portfolio.activities.length > 1 && (
+                  <Button
+                    variant="primary"
+                    onClick={() => setShowMoreActions((val) => !val)}
+                    icon={showMoreActions ? <RiSubtractLine /> : <RiMoreLine />}
+                  />
+                )}
+                {showMoreActions && portfolio.activities.length > 1 && (
                   <>
-                    <Button
-                      variant="primary"
-                      onClick={() => setShowSellModal(true)}
-                    >
-                      Sell
-                    </Button>
-                    <Button
-                      variant="primary"
-                      onClick={() => setShowDividendModal(true)}
-                    >
-                      Dividend
-                    </Button>
+                    <WideAction>
+                      <Button
+                        variant="primary"
+                        onClick={() => setShowSellModal(true)}
+                      >
+                        Sell
+                      </Button>
+                    </WideAction>
+                    <WideAction>
+                      <Button
+                        variant="primary"
+                        onClick={() => setShowDividendModal(true)}
+                      >
+                        Cash Dividend
+                      </Button>
+                    </WideAction>
+                    <WideAction>
+                      <Button
+                        variant="primary"
+                        onClick={() => setShowStockDividendModal(true)}
+                      >
+                        Stock Dividend
+                      </Button>
+                    </WideAction>
                   </>
                 )}
-                <Button
-                  variant="primary"
-                  onClick={() => setShowMoreActions((val) => !val)}
-                  icon={showMoreActions ? <RiSubtractLine /> : <RiMoreLine />}
-                />
               </ActionsContainer>
             )}
             {isDemo && onSignIn && (
@@ -312,10 +345,24 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
         <Backdrop onClick={() => setShowDividendModal(false)}>
           <Card ref={dividendModalRef}>
             <ModalContainer>
-              <Type scale="h5">Dividend</Type>
+              <Type scale="h5">Cash Dividend</Type>
               <ActivityDividendForm
                 currency={portfolio.currency}
                 onClose={() => setShowDividendModal(false)}
+                onSubmit={handleSubmit}
+              />
+            </ModalContainer>
+          </Card>
+        </Backdrop>
+      )}
+      {showStockDividendModal && (
+        <Backdrop onClick={() => setShowStockDividendModal(false)}>
+          <Card ref={stockDividendModalRef}>
+            <ModalContainer>
+              <Type scale="h5">Stock Dividend</Type>
+              <ActivityStockDividendForm
+                currency={portfolio.currency}
+                onClose={() => setShowStockDividendModal(false)}
                 onSubmit={handleSubmit}
               />
             </ModalContainer>

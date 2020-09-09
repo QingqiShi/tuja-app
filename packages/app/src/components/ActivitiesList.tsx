@@ -6,11 +6,13 @@ import Backdrop from './Backdrop';
 import Type from './Type';
 import ActivityDepositForm from './ActivityDepositForm';
 import ActivityDividendForm from './ActivityDividendForm';
+import ActivityStockDividendForm from './ActivityStockDividendForm';
 import ActivityTradeForm from './ActivityTradeForm';
 import { Card } from 'commonStyledComponents';
 import { formatCurrency } from 'libs/stocksClient';
 import { logEvent } from 'libs/analytics';
-import { updatePortfolioActivities, Activity } from 'libs/portfolio';
+import { updatePortfolioActivities } from 'libs/portfolio';
+import { Activity } from 'libs/activities';
 import usePortfolio from 'hooks/usePortfolio';
 import useBodyScrollLock from 'hooks/useBodyScrollLock';
 import { theme, getTheme } from 'theme';
@@ -133,13 +135,36 @@ function ActivitiesList() {
                 <HistoryLabel>
                   {dayjs(activity.date).format('YYYY-MM-DD')}
                 </HistoryLabel>
-                <HistoryValue>Dividend</HistoryValue>
+                <HistoryValue>Cash Dividend</HistoryValue>
               </div>
               <div>
                 <HistoryLabel>Amount</HistoryLabel>
                 <HistoryValue>
                   {formatCurrency(portfolio.currency, activity.amount)}
                 </HistoryValue>
+              </div>
+            </ActivityCard>
+          );
+        }
+
+        if (activity.type === 'StockDividend') {
+          return (
+            <ActivityCard
+              key={`activity-${i}`}
+              onClick={() => {
+                setUpdateIndex(i);
+                setShowUpdateActivity(true);
+              }}
+            >
+              <div>
+                <HistoryLabel>
+                  {dayjs(activity.date).format('YYYY-MM-DD')}
+                </HistoryLabel>
+                <HistoryValue>Stock Dividend</HistoryValue>
+              </div>
+              <div>
+                <HistoryLabel>Amount</HistoryLabel>
+                <HistoryValue>{activity.units}</HistoryValue>
               </div>
             </ActivityCard>
           );
@@ -191,8 +216,20 @@ function ActivitiesList() {
             )}
             {updateActivity?.type === 'Dividend' && (
               <UpdateActivityContainer>
-                <Type scale="h5">Dividend</Type>
+                <Type scale="h5">Cash Dividend</Type>
                 <ActivityDividendForm
+                  currency={portfolio.currency}
+                  initialActivity={updateActivity}
+                  onClose={() => setShowUpdateActivity(false)}
+                  onSubmit={handleUpdateActivity}
+                  onDelete={handleDeleteActivity}
+                />
+              </UpdateActivityContainer>
+            )}
+            {updateActivity?.type === 'StockDividend' && (
+              <UpdateActivityContainer>
+                <Type scale="h5">Stock Dividend</Type>
+                <ActivityStockDividendForm
                   currency={portfolio.currency}
                   initialActivity={updateActivity}
                   onClose={() => setShowUpdateActivity(false)}

@@ -3,30 +3,9 @@ import { bisector } from 'd3-array';
 import { firestore } from 'firebase/app';
 import TimeSeries from './timeSeries';
 import { StocksData, StockInfo, exchangeCurrency } from './stocksClient';
+import { Activity } from './activities';
 
 const PORTFOLIO_DATE_FORMAT = 'YYYY-MM-DD';
-
-interface DepositActivity {
-  date: Date;
-  type: 'Deposit';
-  amount: number;
-}
-
-interface TradeActivity {
-  date: Date;
-  type: 'Trade';
-  trades: { ticker: string; units: number }[];
-  cost: number;
-}
-
-interface DividendActivity {
-  date: Date;
-  type: 'Dividend';
-  ticker: string;
-  amount: number;
-}
-
-export type Activity = DepositActivity | TradeActivity | DividendActivity;
 
 interface History {
   date: Date;
@@ -152,6 +131,20 @@ export function aggregateActivities(
         currentAggregate.dividend += activity.amount;
         currentAggregate.cash += activity.amount;
         break;
+      case 'StockDividend':
+        const previousUnits = currentAggregate.holdings[activity.ticker] ?? 0;
+        const newUnits = previousUnits + activity.units;
+        currentAggregate.holdings[activity.ticker] = newUnits;
+
+        if (newUnits > 0) {
+          const previousAvgPrice =
+            currentAggregate.avgPrices[activity.ticker] ?? 0;
+          currentAggregate.avgPrices[activity.ticker] =
+            (previousUnits * previousAvgPrice) / newUnits;
+        } else {
+          currentAggregate.avgPrices[activity.ticker] = 0;
+        }
+        break;
       case 'Trade':
         currentAggregate.cash -= activity.cost;
         activity.trades.forEach((trade) => {
@@ -270,6 +263,7 @@ export function getPortfolioPerformance(
   Object.keys(lastHistory.holdings).forEach((ticker) => {
     const info = stocksData[ticker]?.info;
     const quantity = fixQuantity(lastHistory.holdings[ticker]);
+    console.log(ticker, info?.quote, quantity);
     const value =
       exchangeCurrency(
         info?.quote ?? 0,
@@ -469,6 +463,12 @@ export const examplePortfolio: Portfolio = {
       type: 'Trade',
       trades: [{ ticker: 'VUSA.L', units: 50 }],
       cost: 2237,
+    },
+    {
+      date: new Date('2020-08-31'),
+      type: 'StockDividend',
+      ticker: 'AAPL',
+      units: 30,
     },
   ],
 };

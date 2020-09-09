@@ -7,11 +7,11 @@ import CurrencyInput from './CurrencyInput';
 import Select from './Select';
 import Button from './Button';
 import TextInput from './TextInput';
-import type { ActivityFormProps } from './ActivityForms';
 import { ActionsContainer, Field, Label } from 'commonStyledComponents';
 import useStocksList from 'hooks/useStocksList';
 import { theme, getTheme } from 'theme';
 import Type from './Type';
+import type { ActivityFormProps } from 'libs/activities';
 
 const InvestmentsContainer = styled.div`
   border-radius: ${theme.spacings('xs')};

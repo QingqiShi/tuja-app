@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import DateInput from './DateInput';
-import CurrencyInput from './CurrencyInput';
 import Select from './Select';
 import Button from './Button';
+import TextInput from './TextInput';
 import { ActionsContainer, Field, Label } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
 import type { ActivityFormProps } from 'libs/activities';
 
-function ActivityDividendForm({
+function ActivityStockDividendForm({
   currency,
   initialActivity,
   onClose,
@@ -19,10 +19,19 @@ function ActivityDividendForm({
   const { portfolio } = usePortfolio();
   const [date, setDate] = useState<Date>(initialActivity?.date ?? new Date());
   const [ticker, setTicker] = useState(
-    (initialActivity?.type === 'Dividend' ? initialActivity.ticker : null) ?? ''
+    (initialActivity?.type === 'StockDividend'
+      ? initialActivity.ticker
+      : null) ?? ''
   );
-  const [amount, setAmount] = useState(
-    (initialActivity?.type === 'Dividend' ? initialActivity.amount : null) ?? 0
+  const [units, setUnits] = useState(
+    (initialActivity?.type === 'StockDividend'
+      ? initialActivity.units
+      : null) ?? 0
+  );
+  const [unitsRaw, setUnitsRaw] = useState(
+    (initialActivity?.type === 'StockDividend'
+      ? initialActivity.units?.toString()
+      : null) ?? '0'
   );
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +49,7 @@ function ActivityDividendForm({
 
         try {
           if (onSubmit) {
-            await onSubmit({ type: 'Dividend', date, ticker, amount });
+            await onSubmit({ type: 'StockDividend', date, ticker, units });
           }
           setLoading(false);
           if (onClose) {
@@ -67,18 +76,29 @@ function ActivityDividendForm({
           required
         />
       </Field>
-      <CurrencyInput
-        label="Amount Received"
-        value={amount}
-        onChange={setAmount}
-        currency={currency}
-        required
+      <TextInput
+        label="Number of Shares Received"
+        value={unitsRaw}
+        onChange={(e) => {
+          const val = e.target.value;
+          setUnitsRaw(val);
+        }}
+        onBlur={() => {
+          const val = parseFloat(unitsRaw);
+          if (!isNaN(val)) {
+            setUnits(val);
+            setUnitsRaw(val.toString());
+          } else {
+            setUnitsRaw(units.toString());
+          }
+        }}
+        inputMode="decimal"
       />
       <ActionsContainer>
         <Button
           variant="shout"
           startIcon={<GiReceiveMoney />}
-          disabled={!date || !ticker || !amount || loading}
+          disabled={!date || !ticker || !units || loading}
         >
           Dividend
         </Button>
@@ -111,4 +131,4 @@ function ActivityDividendForm({
   );
 }
 
-export default ActivityDividendForm;
+export default ActivityStockDividendForm;
