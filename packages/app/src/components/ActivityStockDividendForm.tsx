@@ -82,12 +82,16 @@ function ActivityStockDividendForm({
         onChange={(e) => {
           const val = e.target.value;
           setUnitsRaw(val);
+
+          const parsed = parseFloat(unitsRaw);
+          if (!isNaN(parsed)) {
+            setUnits(parsed);
+          }
         }}
         onBlur={() => {
-          const val = parseFloat(unitsRaw);
-          if (!isNaN(val)) {
-            setUnits(val);
-            setUnitsRaw(val.toString());
+          const parsed = parseFloat(unitsRaw);
+          if (!isNaN(parsed)) {
+            setUnitsRaw(parsed.toString());
           } else {
             setUnitsRaw(units.toString());
           }
