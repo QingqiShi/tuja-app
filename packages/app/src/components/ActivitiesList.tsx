@@ -138,6 +138,10 @@ function ActivitiesList() {
                 <HistoryValue>Cash Dividend</HistoryValue>
               </div>
               <div>
+                <HistoryLabel>From</HistoryLabel>
+                <HistoryValue>{activity.ticker}</HistoryValue>
+              </div>
+              <div>
                 <HistoryLabel>Amount</HistoryLabel>
                 <HistoryValue>
                   {formatCurrency(portfolio.currency, activity.amount)}
@@ -163,7 +167,11 @@ function ActivitiesList() {
                 <HistoryValue>Stock Dividend</HistoryValue>
               </div>
               <div>
-                <HistoryLabel>Amount</HistoryLabel>
+                <HistoryLabel>From</HistoryLabel>
+                <HistoryValue>{activity.ticker}</HistoryValue>
+              </div>
+              <div>
+                <HistoryLabel>Units</HistoryLabel>
                 <HistoryValue>{activity.units}</HistoryValue>
               </div>
             </ActivityCard>
