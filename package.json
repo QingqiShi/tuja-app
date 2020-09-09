@@ -24,7 +24,7 @@
     "commitizen": "^4.2.1",
     "cz-conventional-changelog": "^3.3.0",
     "firebase": "^7.19.1",
-    "firebase-tools": "^8.9.2",
+    "firebase-tools": "^8.10.0",
     "google-auth-library": "^6.0.2",
     "google-gax": "^2.7.0",
     "husky": "^4.2.5",
