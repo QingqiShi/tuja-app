@@ -134,8 +134,9 @@ function ActivityTradeForm({
                 value={quantityToAddRaw}
                 onChange={(e) => {
                   const val = e.target.value;
-                  const parsed = parseFloat(val);
                   setQuantityToAddRaw(val);
+
+                  const parsed = parseFloat(val);
                   if (!isNaN(parsed)) {
                     setQuantityToAdd(parsed);
                   }
@@ -192,13 +193,16 @@ function ActivityTradeForm({
               value={raw ?? '0'}
               onChange={(e) => {
                 const val = e.target.value;
-                setTickers((current) =>
-                  current.map((investment) =>
-                    investment.ticker === ticker
-                      ? { ticker, units, raw: val }
-                      : investment
-                  )
-                );
+                const parsed = parseFloat(val);
+                if (!isNaN(parsed)) {
+                  setTickers((current) =>
+                    current.map((investment) =>
+                      investment.ticker === ticker
+                        ? { ticker, units: parsed, raw: val }
+                        : investment
+                    )
+                  );
+                }
               }}
               onBlur={() => {
                 const val = parseFloat(raw);
