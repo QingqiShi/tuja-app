@@ -16,7 +16,7 @@
     "cheerio": "^1.0.0-rc.3",
     "firebase-admin": "^9.1.1",
     "firebase-functions": "^3.11.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.18",
