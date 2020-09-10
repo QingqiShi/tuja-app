@@ -101,7 +101,7 @@ const bisectDate = bisector<DataPoint, Date>((d, x) => {
   if (current.isSame(x, 'date')) return 0;
   return 1;
 }).left;
-const formatDate = (d: Date) => dayjs(d).format('YYYY-MM-DD');
+const axisDateFormat = 'YYYY-MM-DD';
 const formatTooltipDate = (d: Date) => dayjs(d).format('YYYY-MM-DD ddd');
 
 interface ChartProps {
@@ -154,13 +154,13 @@ function Chart({
     const minVal = min((data ?? []).concat(benchmark ?? []), getValue) ?? 0;
     const maxVal = max((data ?? []).concat(benchmark ?? []), getValue) ?? 0;
     const tooltipHeight = hideTooltip ? 0 : 40;
-    const totalHeight = yMax + tooltipHeight * (benchmark ? 2 : 1);
+    const totalHeight = yMax + tooltipHeight * (benchmark ? 2 : 1) || 1;
     const paddingTop = (maxVal - minVal) * (tooltipHeight / totalHeight);
     const paddingBottom =
       (maxVal - minVal) * (benchmark ? tooltipHeight / totalHeight : 0);
 
     return scaleLinear({
-      range: [yMax, 0],
+      range: [yMax || 10, 0],
       domain: [
         minVal - paddingBottom - (maxVal - minVal) * 0.1,
         maxVal + paddingTop + (maxVal - minVal) * 0.1,
@@ -347,7 +347,7 @@ function Chart({
             toOpacity={0}
           />
           {!hideAxis && (
-            <GridRows<number>
+            <GridRows
               scale={valueScale}
               width={xMax}
               stroke={colors.gridLine}
@@ -394,11 +394,14 @@ function Chart({
                 <AxisLeft
                   scale={valueScale}
                   numTicks={5}
-                  tickFormat={(v: number) => {
+                  tickFormat={(v) => {
+                    const value = typeof v === 'number' ? v : v.valueOf();
                     if (formatPercentage) {
-                      return `${(v * 100).toFixed(0)}%`;
+                      return `${(value * 100).toFixed(0)}%`;
                     }
-                    return v >= 100 || v <= -100 ? v.toFixed(0) : v.toFixed(2);
+                    return value >= 100 || value <= -100
+                      ? value.toFixed(0)
+                      : value.toFixed(2);
                   }}
                   stroke={colors.gridLine}
                   tickStroke={colors.gridLine}
@@ -409,7 +412,11 @@ function Chart({
                 <AxisBottom
                   top={yMax}
                   scale={dateScale}
-                  tickFormat={formatDate}
+                  tickFormat={(d) =>
+                    dayjs(d instanceof Date ? d : d.valueOf()).format(
+                      axisDateFormat
+                    )
+                  }
                   tickValues={
                     bottomTickValues.length ? bottomTickValues : undefined
                   }

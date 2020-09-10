@@ -263,7 +263,6 @@ export function getPortfolioPerformance(
   Object.keys(lastHistory.holdings).forEach((ticker) => {
     const info = stocksData[ticker]?.info;
     const quantity = fixQuantity(lastHistory.holdings[ticker]);
-    console.log(ticker, info?.quote, quantity);
     const value =
       exchangeCurrency(
         info?.quote ?? 0,
