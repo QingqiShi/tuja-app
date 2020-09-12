@@ -12,3 +12,8 @@ export {
   addToStocksList,
   removeFromStocksList,
 } from './functions/aggregateStocks';
+export {
+  searchStocks,
+  stockLivePrice,
+  stockHistory,
+} from './functions/stocksData';
