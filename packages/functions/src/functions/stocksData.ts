@@ -66,7 +66,7 @@ export const stockHistory = functions.https.onCall(async (data) => {
   return result;
 });
 
-export const getTickersNames = functions.https.onCall(async (data) => {
+export const getStocksInfo = functions.https.onCall(async (data) => {
   const { tickers } = data;
   if (!Array.isArray(tickers)) {
     throw new functions.https.HttpsError(
