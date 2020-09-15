@@ -185,7 +185,7 @@ function InvestmentsListItem({
       <InvestmentCard>
         <TopRow>
           <TitleContainer>
-            <Type scale="h6">{aliases[ticker] ?? info?.name}</Type>
+            <Type scale="h6">{aliases[ticker] ?? info?.Name}</Type>
             <Type scale="body1">{ticker}</Type>
           </TitleContainer>
 
@@ -205,7 +205,7 @@ function InvestmentsListItem({
             <PriceContainer>
               <Type scale="h6">{formatCurrency(currency, value)}</Type>
               <Type scale="body1">
-                {quantity} × {info && formatCurrency(info.currency, info.quote)}
+                {quantity} × {info && formatCurrency(info.Currency, info.Quote)}
               </Type>
             </PriceContainer>
           )}
@@ -227,14 +227,14 @@ function InvestmentsListItem({
               </Type>
               <Type scale="body1">
                 {dayChange >= 0 && '+'}
-                {info && formatCurrency(info.currency, dayChange)}
+                {info && formatCurrency(info.Currency, dayChange)}
               </Type>
             </PriceContainer>
           )}
           {mode === 'CHART' && (
             <PriceContainer>
               <Chart
-                data={stocksData[ticker].series?.data.filter(
+                data={stocksData[ticker].adjustedSeries?.data.filter(
                   (dp) => startDate && dp[0] >= startDate
                 )}
                 hideTooltip
@@ -275,7 +275,7 @@ function InvestmentsListItem({
           <div>
             <Label>Current price</Label>
             <Type scale="body1">
-              {info && formatCurrency(info.currency, info.quote)}
+              {info && formatCurrency(info.Currency, info.Quote)}
             </Type>
           </div>
           <div>

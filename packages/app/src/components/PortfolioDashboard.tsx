@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { RiMoreLine, RiSubtractLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
@@ -126,20 +126,13 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
     { label: 'All', value: activitiesStartDate },
   ];
 
-  const [selectedPeriod, setSelectedPeriod] = useState(
+  const selectedPeriod =
     (startDate &&
       periodButtons.find((button) => button.value.isSame(startDate, 'date'))
         ?.value) ??
-      (periodButtons[2]
-        ? periodButtons[2].value
-        : periodButtons[periodButtons.length - 1].value)
-  );
-
-  useEffect(() => {
-    if (!startDate || !selectedPeriod.isSame(startDate, 'date')) {
-      setStartDate(selectedPeriod.toDate());
-    }
-  }, [selectedPeriod, setStartDate, startDate]);
+    (periodButtons[2]
+      ? periodButtons[2].value
+      : periodButtons[periodButtons.length - 1].value);
 
   // Activity modals
   const [showBuyModal, setShowBuyModal] = useState(false);
@@ -179,7 +172,11 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
               <ButtonGroup
                 buttons={periodButtons}
                 value={selectedPeriod}
-                onChange={setSelectedPeriod}
+                onChange={(period) => {
+                  if (startDate && !period.isSame(startDate, 'date')) {
+                    setStartDate(period.toDate());
+                  }
+                }}
               />
             </DatePeriodContainer>
           </>
