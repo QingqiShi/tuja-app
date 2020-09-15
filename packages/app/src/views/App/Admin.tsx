@@ -3,7 +3,10 @@ import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components/macro';
 import HistoricDataUploader from 'adminWidgets/HistoricDataUploader';
 import TickerChecker from 'adminWidgets/TickerChecker';
-import { Center } from 'commonStyledComponents';
+import Button from 'components/Button';
+import usePortfolio from 'hooks/usePortfolio';
+import { migratePortfolio } from 'libs/portfolio';
+import { Center, Card } from 'commonStyledComponents';
 import { theme } from 'theme';
 
 const Container = styled(Center)`
@@ -19,6 +22,7 @@ const Container = styled(Center)`
 `;
 
 function Admin() {
+  const { portfolio } = usePortfolio();
   return (
     <Container>
       <Helmet>
@@ -26,6 +30,16 @@ function Admin() {
       </Helmet>
       <TickerChecker />
       <HistoricDataUploader />
+      {portfolio && (
+        <Card>
+          <Button
+            onClick={() => migratePortfolio(portfolio.id)}
+            variant="shout"
+          >
+            Migrate
+          </Button>
+        </Card>
+      )}
     </Container>
   );
 }

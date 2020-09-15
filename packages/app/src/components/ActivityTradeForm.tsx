@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDebounce } from 'react-use';
 import { RiAddLine, RiDeleteBinLine } from 'react-icons/ri';
+import { functions } from 'firebase/app';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import DateInput from './DateInput';
 import CurrencyInput from './CurrencyInput';
-import Select from './Select';
 import Button from './Button';
 import TextInput from './TextInput';
-import { ActionsContainer, Field, Label } from 'commonStyledComponents';
+import {
+  ActionsContainer,
+  Field,
+  Label,
+  Card,
+  CardMedia,
+} from 'commonStyledComponents';
 import useStocksList from 'hooks/useStocksList';
 import { theme, getTheme } from 'theme';
 import Type from './Type';
@@ -41,6 +48,41 @@ const AddInvestment = styled.div`
     ${getTheme(theme.colors.textOnBackground, (color) =>
       transparentize(0.9, color)
     )};
+`;
+
+const SearchContainer = styled.div`
+  position: relative;
+`;
+
+const SearchSuggestions = styled(Card)`
+  position: absolute;
+  top: 5rem;
+  width: 100%;
+  max-height: 10rem;
+  overflow: auto;
+  z-index: 10;
+
+  button {
+    margin: 0;
+  }
+`;
+
+const SearchSuggestionItem = styled.button`
+  cursor: pointer;
+  background: transparent;
+  text-align: left;
+  border: none;
+  font-family: ${theme.fontFamily};
+  font-size: ${theme.fonts.ctaSize};
+  line-height: ${theme.fonts.ctaHeight};
+  letter-spacing: ${theme.fonts.ctaSpacing};
+  color: ${theme.colors.textOnBackground};
+  padding: ${theme.spacings('s')};
+
+  &:hover {
+    background-color: ${theme.colors.callToAction};
+    color: ${theme.colors.textOnCallToAction};
+  }
 `;
 
 interface ActivityTradeFormProps extends ActivityFormProps {
@@ -82,6 +124,34 @@ function ActivityTradeForm({
     value: ticker,
   }));
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  useDebounce(
+    () => {
+      setDebouncedSearchQuery(searchQuery);
+    },
+    500,
+    [searchQuery]
+  );
+
+  const [searchSuggestions, setSearchSuggestions] = useState<
+    { Code: string; Exchange: string; Name: string }[]
+  >([]);
+  useEffect(() => {
+    const fetch = async () => {
+      const searchStocks = functions().httpsCallable('searchStocks');
+      const result = await searchStocks({ query: debouncedSearchQuery });
+      setSearchSuggestions(result.data);
+    };
+
+    if (debouncedSearchQuery) {
+      fetch();
+    } else {
+      setSearchSuggestions([]);
+    }
+  }, [debouncedSearchQuery]);
+
   return (
     <form
       onSubmit={async (e) => {
@@ -113,46 +183,79 @@ function ActivityTradeForm({
       <InvestmentsContainer>
         <AddInvestment>
           <InvestmentRow>
-            <Select
-              label="Investment"
-              options={[
-                {
-                  label: 'Select...',
-                  value: '',
-                },
-                ...availableStocks.filter(
-                  (stock) =>
-                    !tickers.find(({ ticker }) => ticker === stock.value)
-                ),
-              ]}
-              value={tickerToAdd}
-              onChange={(e) => setTickerToAdd(e.target.value)}
-            />
-            <div>
-              <TextInput
-                label="Quantity"
-                value={quantityToAddRaw}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setQuantityToAddRaw(val);
+            {!tickerToAdd && (
+              <SearchContainer>
+                <TextInput
+                  label="Investment Symbol"
+                  placeholder="e.g. AAPL"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setSearchFocused(true)}
+                />
+                {searchFocused && !!searchSuggestions.length && (
+                  <SearchSuggestions>
+                    <CardMedia>
+                      {searchSuggestions.map((suggestion) => (
+                        <SearchSuggestionItem
+                          key={`${suggestion.Code}.${suggestion.Exchange}`}
+                          onClick={() => {
+                            setTickerToAdd(
+                              `${suggestion.Code}.${suggestion.Exchange}`
+                            );
+                            setSearchFocused(false);
+                            setSearchQuery('');
+                          }}
+                          type="button"
+                        >
+                          <span>
+                            {suggestion.Code}.{suggestion.Exchange}
+                          </span>
+                          <span> - </span>
+                          <span>{suggestion.Name}</span>
+                        </SearchSuggestionItem>
+                      ))}
+                    </CardMedia>
+                  </SearchSuggestions>
+                )}
+              </SearchContainer>
+            )}
 
-                  const parsed = parseFloat(val);
-                  if (!isNaN(parsed)) {
-                    setQuantityToAdd(parsed);
-                  }
-                }}
-                onBlur={() => {
-                  const val = parseFloat(quantityToAddRaw);
-                  if (!isNaN(val)) {
-                    setQuantityToAdd(val);
-                    setQuantityToAddRaw(val.toString());
-                  } else {
-                    setQuantityToAddRaw(quantityToAdd.toString());
-                  }
-                }}
-                inputMode="decimal"
-              />
-            </div>
+            {tickerToAdd && (
+              <div onClick={() => setTickerToAdd('')}>
+                <TextInput
+                  label="Investment Symbol"
+                  value={tickerToAdd}
+                  disabled
+                />
+              </div>
+            )}
+            {tickerToAdd && (
+              <div>
+                <TextInput
+                  label="Quantity"
+                  value={quantityToAddRaw}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setQuantityToAddRaw(val);
+
+                    const parsed = parseFloat(val);
+                    if (!isNaN(parsed)) {
+                      setQuantityToAdd(parsed);
+                    }
+                  }}
+                  onBlur={() => {
+                    const val = parseFloat(quantityToAddRaw);
+                    if (!isNaN(val)) {
+                      setQuantityToAdd(val);
+                      setQuantityToAddRaw(val.toString());
+                    } else {
+                      setQuantityToAddRaw(quantityToAdd.toString());
+                    }
+                  }}
+                  inputMode="decimal"
+                />
+              </div>
+            )}
             <Field>
               <Button
                 variant="primary"

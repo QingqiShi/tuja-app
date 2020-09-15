@@ -3,7 +3,7 @@ import React, {
   useState,
   useCallback,
   useContext,
-  useEffect,
+  useRef,
 } from 'react';
 import {
   StocksData,
@@ -11,67 +11,77 @@ import {
   fetchStocksHistory,
 } from 'libs/stocksClient';
 import dayjs from 'dayjs';
-import useStartDate from 'hooks/useStartDate';
 
 export const StocksDataContext = createContext({
-  addTickers: async (_tickers: string[]) => {},
+  addTickers: async (_tickers: string[], startDate: Date | null) => {},
   stocksData: {} as StocksData,
 });
 
 const currentDate = new Date();
 
 export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
-  const [startDate] = useStartDate();
   const [endDate] = useState(currentDate);
   const [stocksData, setStocksData] = useState<StocksData>({});
-  const [tickersToFetch, setTickersToFetch] = useState<string[]>([]);
+
+  const fetchingTickers = useRef<string[]>([]);
 
   const addTickers = useCallback(
-    async (tickers: string[]) => {
-      const tickersToAdd = tickers
-        .filter(
-          (ticker) =>
-            !(ticker in stocksData) ||
-            (startDate &&
-              stocksData[ticker].series?.data &&
-              !dayjs(stocksData[ticker].series?.data[0][0]).isSameOrBefore(
-                startDate,
-                'year'
-              ))
-        )
-        .filter((ticker) => !tickersToFetch.includes(ticker));
+    async (tickers: string[], startDate: Date | null) => {
+      if (!startDate) return;
 
-      if (!tickersToAdd.length || !startDate) return;
-      setTickersToFetch((current) => [...current, ...tickersToAdd]);
-    },
-    [startDate, stocksData, tickersToFetch]
-  );
+      const promises = tickers
+        .filter((ticker) => !fetchingTickers.current.includes(ticker))
+        .map(async (ticker) => {
+          fetchingTickers.current.push(ticker);
 
-  useEffect(() => {
-    const fetch = async () => {
-      if (!startDate || !tickersToFetch.length) return;
-      const tickers = [...tickersToFetch];
-      setTickersToFetch([]);
-
-      return Promise.all(
-        tickers.map(async (ticker) => {
-          setStocksData((current) => ({ ...current, [ticker]: {} }));
-          const [info, series] = await Promise.all([
+          const [info, { closeSeries, adjustedSeries }] = await Promise.all([
             fetchStockInfo(ticker),
             fetchStocksHistory(ticker, startDate, endDate),
           ]);
 
-          if (info && series.data.length) {
-            setStocksData((current) => ({
-              ...current,
-              [ticker]: { info, series },
-            }));
+          if (info && closeSeries && adjustedSeries) {
+            // Add current quote to the end of price series
+            const seriesEndDate =
+              closeSeries.data?.[closeSeries.data.length - 1]?.[0];
+            if (dayjs(info?.QuoteDate).diff(seriesEndDate, 'day') >= 1) {
+              closeSeries.data.push([info.QuoteDate, info.Quote]);
+              adjustedSeries.data.push([info.QuoteDate, info.Quote]);
+            }
           }
-        })
+
+          return { ticker, info, closeSeries, adjustedSeries };
+        });
+
+      const results = await Promise.all(promises);
+
+      const dataToAdd = results.filter(
+        ({ info, closeSeries }) => info && closeSeries.data.length
       );
-    };
-    fetch();
-  }, [endDate, startDate, tickersToFetch]);
+      if (dataToAdd.length) {
+        setStocksData((current) =>
+          dataToAdd.reduce(
+            (newData, { ticker, info, closeSeries, adjustedSeries }) => ({
+              ...newData,
+              [ticker]: { info: info as any, closeSeries, adjustedSeries },
+            }),
+            { ...current }
+          )
+        );
+      }
+      results.forEach(({ ticker, info, closeSeries, adjustedSeries }) => {
+        if (info && closeSeries.data.length) {
+        }
+      });
+
+      results.forEach(({ ticker }) => {
+        fetchingTickers.current.splice(
+          fetchingTickers.current.indexOf(ticker),
+          1
+        );
+      });
+    },
+    [endDate]
+  );
 
   return (
     <StocksDataContext.Provider value={{ stocksData, addTickers }}>

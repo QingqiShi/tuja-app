@@ -89,8 +89,8 @@ function getHoldingsValue(
     if (!stock) return value;
 
     const price = exchangeCurrency(
-      stock.series?.get(date) ?? 0,
-      stock.info?.currency ?? currency,
+      stock.closeSeries?.get(date) ?? 0,
+      stock.info?.Currency ?? currency,
       currency,
       date,
       stocksData
@@ -155,8 +155,8 @@ export function aggregateActivities(
             const previousAvgPrice =
               currentAggregate.avgPrices[trade.ticker] ?? 0;
             const currentPrice = exchangeCurrency(
-              stocksData[trade.ticker].series?.get(activity.date) ?? 0,
-              stocksData[trade.ticker].info?.currency ?? baseCurrency,
+              stocksData[trade.ticker].closeSeries?.get(activity.date) ?? 0,
+              stocksData[trade.ticker].info?.Currency ?? baseCurrency,
               baseCurrency,
               activity.date,
               stocksData
@@ -265,13 +265,13 @@ export function getPortfolioPerformance(
     const quantity = fixQuantity(lastHistory.holdings[ticker]);
     const value =
       exchangeCurrency(
-        info?.quote ?? 0,
-        info?.currency ?? currency,
+        info?.Quote ?? 0,
+        info?.Currency ?? currency,
         currency,
         endDate,
         stocksData
       ) * quantity;
-    const dayChange = (info?.quote ?? 0) - (info?.prevClose ?? 0);
+    const dayChange = (info?.Quote ?? 0) - (info?.PrevClose ?? 0);
     const cost = (lastHistory.avgPrices[ticker] ?? 0) * quantity;
     const gain = value - cost;
 
@@ -282,7 +282,7 @@ export function getPortfolioPerformance(
       gain,
       roi: gain / cost,
       dayChange,
-      dayChangePercentage: info?.prevClose ? dayChange / info.prevClose : 0,
+      dayChangePercentage: info?.PrevClose ? dayChange / info.PrevClose : 0,
     };
   });
 
@@ -399,6 +399,76 @@ export function updateHoldingAllocation(
   });
 }
 
+function migrateTicker(oldTicker: string) {
+  const [code, exchange] = oldTicker.split('.');
+  if (!exchange) {
+    return `${code}.US`;
+  } else if (exchange === 'L') {
+    return `${code}.LSE`;
+  }
+  return oldTicker;
+}
+
+export function migratePortfolio(id: string) {
+  const db = firestore();
+  const docRef = db.collection(`/portfolios`).doc(id);
+  return db.runTransaction(async (t) => {
+    const doc = await t.get(docRef);
+    const portfolio = dbToPortfolio(doc.data());
+
+    const migrated = {
+      ...portfolio,
+      tickers: portfolio.tickers.map(migrateTicker),
+      aliases: Object.keys(portfolio.aliases).reduce(
+        (newAliases, ticker) => ({
+          ...newAliases,
+          [migrateTicker(ticker)]: portfolio.aliases[ticker],
+        }),
+        {}
+      ),
+
+      activities: portfolio.activities.map((activity) => {
+        if (activity.type === 'Trade') {
+          return {
+            ...activity,
+            trades: activity.trades.map((trade) => ({
+              ...trade,
+              ticker: migrateTicker(trade.ticker),
+            })),
+          };
+        } else if (activity.type === 'Dividend') {
+          return {
+            ...activity,
+            ticker: migrateTicker(activity.ticker),
+          };
+        } else if (activity.type === 'StockDividend') {
+          return {
+            ...activity,
+            ticker: migrateTicker(activity.ticker),
+          };
+        }
+        return activity;
+      }),
+    };
+
+    if (portfolio.targetAllocations) {
+      migrated['targetAllocations'] = Object.keys(
+        portfolio.targetAllocations
+      ).reduce(
+        (newTargets, ticker) => ({
+          ...newTargets,
+          [migrateTicker(ticker)]: portfolio.targetAllocations?.[ticker],
+        }),
+        {}
+      );
+    }
+
+    console.log(migrated);
+
+    t.update(docRef, portfolioToDb(migrated));
+  });
+}
+
 function dbToPortfolio(data: any): Portfolio {
   return {
     ...data,
@@ -441,32 +511,36 @@ export const examplePortfolio: Portfolio = {
   user: 'demo',
   name: 'Example Portfolio',
   currency: 'GBP',
-  tickers: ['AAPL', 'SGLN.L', 'VUSA.L'],
-  aliases: { AAPL: 'Apple', 'SGLN.L': 'Gold ETC', 'VUSA.L': 'S&P 500 ETF' },
+  tickers: ['AAPL.US', 'SGLN.LSE', 'VUSA.LSE'],
+  aliases: {
+    'AAPL.US': 'Apple',
+    'SGLN.LSE': 'Gold ETC',
+    'VUSA.LSE': 'S&P 500 ETF',
+  },
   activities: [
     { date: new Date('2019-07-01'), type: 'Deposit', amount: 5000 },
     {
       date: new Date('2019-07-01'),
       type: 'Trade',
-      trades: [{ ticker: 'AAPL', units: 10 }],
+      trades: [{ ticker: 'AAPL.US', units: 10 }],
       cost: 1587.7,
     },
     {
       date: new Date('2019-07-01'),
       type: 'Trade',
-      trades: [{ ticker: 'SGLN.L', units: 50 }],
+      trades: [{ ticker: 'SGLN.LSE', units: 50 }],
       cost: 1077.5,
     },
     {
       date: new Date('2019-07-01'),
       type: 'Trade',
-      trades: [{ ticker: 'VUSA.L', units: 50 }],
+      trades: [{ ticker: 'VUSA.LSE', units: 50 }],
       cost: 2237,
     },
     {
       date: new Date('2020-08-31'),
       type: 'StockDividend',
-      ticker: 'AAPL',
+      ticker: 'AAPL.US',
       units: 30,
     },
   ],

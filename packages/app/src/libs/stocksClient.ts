@@ -1,48 +1,83 @@
-import { firestore } from 'firebase/app';
+import { firestore, functions } from 'firebase/app';
+import dayjs from 'dayjs';
 import escapeRegexp from 'escape-string-regexp';
 import TimeSeries from './timeSeries';
 
 export interface StockInfo {
-  name: string;
-  currency: string;
-  quote: number;
-  timestamp: number;
-  yield?: number;
-  open?: number;
-  prevClose?: number;
-  volumn?: number;
-  expenseRatio?: number;
+  Code: string;
+  Country: string;
+  Currency: string;
+  Exchange: string;
+  Name: string;
+  Quote: number;
+  QuoteDate: Date;
+  PrevClose: number;
+  Type?: string;
 }
 
 export interface StocksData {
-  [ticker: string]: { series?: TimeSeries; info?: StockInfo };
+  [ticker: string]: {
+    closeSeries?: TimeSeries;
+    adjustedSeries?: TimeSeries;
+    info?: StockInfo;
+  };
 }
 
 type SupportedBaseCurrency = 'GBP' | 'USD';
 
 export async function fetchStocksHistory(ticker: string, from: Date, to: Date) {
-  const result = new TimeSeries();
-  const fromYear = from.getFullYear();
-  const toYear = to.getFullYear();
+  const formattedFrom = dayjs(from).format('YYYY-MM-DD');
+  const formattedTo = dayjs(to).format('YYYY-MM-DD');
+  const stockHistory = functions().httpsCallable('stockHistory');
 
-  let temp: { [date: string]: number } = {};
-  for (let year = fromYear; year <= toYear; year++) {
-    const doc = await firestore()
-      .doc(`/stocks/${ticker}/history/${year}`)
-      .get();
-    if (doc.exists) {
-      temp = { ...temp, ...(doc.data() as any) };
-    }
-  }
+  const result = await stockHistory({
+    ticker,
+    from: formattedFrom,
+    to: formattedTo,
+  });
 
-  result.handleDbData(temp, from, to);
-  return result;
+  const closeSeries = new TimeSeries();
+  const adjustedSeries = new TimeSeries();
+
+  closeSeries.handleData(
+    result.data.map(({ date, close }: { date: string; close: number }) => [
+      date,
+      close,
+    ])
+  );
+  adjustedSeries.handleData(
+    result.data.map(
+      ({ date, adjusted_close }: { date: string; adjusted_close: number }) => [
+        date,
+        adjusted_close,
+      ]
+    )
+  );
+
+  return { closeSeries, adjustedSeries };
 }
 
 export async function fetchStockInfo(ticker: string) {
-  const doc = await firestore().doc(`/stocks/${ticker}`).get();
-  if (doc.exists) {
-    return doc.data() as StockInfo;
+  const searchStocks = functions().httpsCallable('searchStocks');
+  const stockLivePrice = functions().httpsCallable('stockLivePrice');
+
+  const [symbol, exchange] = ticker.split('.');
+  const [searchResult, livePriceResult] = await Promise.all([
+    searchStocks({ query: symbol }),
+    stockLivePrice({ ticker }),
+  ]);
+  if (searchResult.data.length && livePriceResult.data) {
+    return (
+      ({
+        ...searchResult.data.find(
+          ({ Code, Exchange }: { [key: string]: string }) =>
+            Code === symbol && Exchange === exchange
+        ),
+        Quote: livePriceResult.data.close,
+        QuoteDate: new Date(livePriceResult.data.timestamp * 1000),
+        PrevClose: livePriceResult.data.previousClose,
+      } as StockInfo) ?? null
+    );
   }
   return null;
 }
@@ -60,7 +95,7 @@ export async function fetchStocksList() {
 const currencyNormalisation: {
   [currency: string]: { normalise: (x: number) => number; target: string };
 } = {
-  GBp: {
+  GBX: {
     normalise: (x: number) => x / 100,
     target: 'GBP',
   },
@@ -68,10 +103,10 @@ const currencyNormalisation: {
 
 const currencyPairs: { [currency: string]: { [currency: string]: string } } = {
   GBP: {
-    USD: 'GBPUSD=X',
+    USD: 'GBPUSD.FOREX',
   },
   USD: {
-    GBP: 'GBPUSD=X',
+    GBP: 'GBPUSD.FOREX',
   },
 };
 
@@ -83,9 +118,9 @@ export function getRequiredCurrencies(
     new Set(
       stockInfos
         .map((info) =>
-          info.currency in currencyNormalisation
-            ? currencyNormalisation[info.currency].target
-            : info.currency
+          info.Currency in currencyNormalisation
+            ? currencyNormalisation[info.Currency].target
+            : info.Currency
         )
         .filter((currency) => currency !== baseCurrency)
         .map((currency) => currencyPairs[baseCurrency][currency])
@@ -99,7 +134,7 @@ export function exchangeCurrency(
   stockCurrency: string,
   baseCurrency: string,
   date: Date,
-  stocksData: { [currency: string]: { series?: TimeSeries } }
+  stocksData: { [currency: string]: { closeSeries?: TimeSeries } }
 ) {
   const normalisedValue =
     stockCurrency in currencyNormalisation
@@ -115,10 +150,10 @@ export function exchangeCurrency(
   }
 
   if (baseCurrency === 'GBP' && normalisedCurrency === 'USD') {
-    return value / (stocksData['GBPUSD=X']?.series?.get(date) ?? 1);
+    return value / (stocksData['GBPUSD.FOREX']?.closeSeries?.get(date) ?? 1);
   }
   if (baseCurrency === 'USD' && normalisedCurrency === 'GBP') {
-    return value * (stocksData['GBPUSD=X']?.series?.get(date) ?? 1);
+    return value * (stocksData['GBPUSD.FOREX']?.closeSeries?.get(date) ?? 1);
   }
   return value;
 }
@@ -153,4 +188,34 @@ export function parseCurrency(currency: string, source: string) {
     .trim();
 
   return parseFloat(raw);
+}
+
+export function shouldFetchData(
+  ticker: string,
+  stocksData: StocksData,
+  startDate?: Date | null
+) {
+  if (!startDate) return false;
+
+  // Start date or the next trading date if it's on a weekend
+  let startDateTradingDay = dayjs(startDate);
+  if (startDateTradingDay.day() === 6) {
+    // Saturday
+    startDateTradingDay = startDateTradingDay.add(2, 'day');
+  } else if (startDateTradingDay.day() === 0) {
+    // Sunday
+    startDateTradingDay = startDateTradingDay.add(1, 'day');
+  }
+
+  return (
+    !(ticker in stocksData) ||
+    !stocksData[ticker].info ||
+    !stocksData[ticker].adjustedSeries ||
+    !stocksData[ticker].closeSeries ||
+    !stocksData[ticker].adjustedSeries?.data.length ||
+    startDateTradingDay.isBefore(
+      stocksData[ticker].adjustedSeries?.data[0][0] as Date,
+      'day'
+    )
+  );
 }

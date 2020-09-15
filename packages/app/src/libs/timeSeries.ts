@@ -61,6 +61,19 @@ class TimeSeries {
     this.data = [...this.data].sort((a, b) => a[0].getTime() - b[0].getTime());
   }
 
+  handleData(data: [string, number][]) {
+    this.data = [];
+
+    data.forEach(([date, val]) => {
+      const parsedDate = dayjs(date, 'YYYY-MM-DD');
+      if (parsedDate.isValid()) {
+        this.data.push([parsedDate.toDate(), val]);
+      }
+    });
+
+    this.data = [...this.data].sort((a, b) => a[0].getTime() - b[0].getTime());
+  }
+
   aggregateYear() {
     const result: {
       [year: string]: { [date: string]: number };

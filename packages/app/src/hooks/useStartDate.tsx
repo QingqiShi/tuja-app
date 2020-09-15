@@ -31,7 +31,7 @@ export function StartDateProvider({ children }: React.PropsWithChildren<{}>) {
           : portfolioStartDate
       );
     }
-  });
+  }, [portfolio?.activities, startDateState]);
 
   return (
     <StartDateContext.Provider value={startDateState}>

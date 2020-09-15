@@ -1,5 +1,5 @@
 import React, { createContext, useMemo, useEffect, useContext } from 'react';
-import { getRequiredCurrencies } from 'libs/stocksClient';
+import { getRequiredCurrencies, shouldFetchData } from 'libs/stocksClient';
 import { getPortfolioPerformance, PortfolioPerformance } from 'libs/portfolio';
 import useStocksData from 'hooks/useStocksData';
 import usePortfolio from 'hooks/usePortfolio';
@@ -14,35 +14,37 @@ export const PortfolioPerformanceContext = createContext({
 export function PortfolioPerformanceProvider({
   children,
 }: React.PropsWithChildren<{}>) {
-  const { portfolio } = usePortfolio();
-  const shouldLoad = !!portfolio;
-
   const [startDate] = useStartDate();
+  const { portfolio } = usePortfolio();
   const { stocksData, addTickers } = useStocksData();
 
+  const shouldLoad = !!portfolio;
+
   // Get stocks data for tickers
-  const tickers = portfolio?.tickers;
+  const missingTickers = portfolio?.tickers.filter((ticker) =>
+    shouldFetchData(ticker, stocksData, startDate)
+  );
   useEffect(() => {
-    if (!shouldLoad || !tickers?.length) return;
-    addTickers(tickers);
-  }, [addTickers, shouldLoad, tickers]);
+    if (!shouldLoad || !missingTickers?.length) return;
+    addTickers(missingTickers, startDate);
+  }, [addTickers, missingTickers, shouldLoad, startDate]);
 
   // Get required currencies and fetch historic data
   const requiredCurrencies = useMemo(
     () =>
       portfolio &&
       getRequiredCurrencies(
-        (portfolio?.currency as 'GBP' | 'USD') ?? 'GBP',
+        (portfolio?.currency as any) ?? 'GBP',
         Object.keys(stocksData)
           .map((ticker) => stocksData[ticker].info)
           .filter(<T extends {}>(x: T | undefined): x is T => !!x)
-      ),
-    [portfolio, stocksData]
+      ).filter((symbol) => shouldFetchData(symbol, stocksData, startDate)),
+    [portfolio, startDate, stocksData]
   );
   useEffect(() => {
-    if (!shouldLoad || !requiredCurrencies) return;
-    addTickers(requiredCurrencies);
-  }, [addTickers, requiredCurrencies, shouldLoad]);
+    if (!shouldLoad || !requiredCurrencies?.length) return;
+    addTickers(requiredCurrencies, startDate);
+  }, [addTickers, requiredCurrencies, shouldLoad, startDate]);
 
   // Calculate portfolio performance!
   const portfolioPerformance = useMemo(
@@ -50,8 +52,10 @@ export function PortfolioPerformanceProvider({
       stocksData &&
       portfolio &&
       startDate &&
-      !portfolio?.tickers.some((ticker) => !stocksData[ticker]?.series) &&
-      !requiredCurrencies?.some((currency) => !stocksData[currency]?.series)
+      !portfolio?.tickers.some((ticker) => !stocksData[ticker]?.closeSeries) &&
+      !requiredCurrencies?.some(
+        (currency) => !stocksData[currency]?.closeSeries
+      )
         ? getPortfolioPerformance(portfolio, startDate, endDate, stocksData)
         : null,
     [portfolio, requiredCurrencies, startDate, stocksData]
