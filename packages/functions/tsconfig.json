@@ -8,7 +8,8 @@
     "strict": true,
     "target": "es2017",
     "rootDir": "src",
-    "types": ["react", "jest"]
+    "types": ["react", "jest"],
+    "lib": ["esnext"]
   },
   "compileOnSave": true,
   "include": ["src"]

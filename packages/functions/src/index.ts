@@ -16,4 +16,5 @@ export {
   searchStocks,
   stockLivePrice,
   stockHistory,
+  getStocksInfo,
 } from './functions/stocksData';
