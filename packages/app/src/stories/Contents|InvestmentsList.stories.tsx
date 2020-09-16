@@ -29,14 +29,17 @@ export const Demo = () => (
           holdings: {
             'AAPL.US': {
               info: {
+                Ticker: 'AAPL.US',
                 Code: 'AAPL',
                 Name: 'Apple Inc.',
                 Country: 'USA',
-                Exchange: 'US',
+                Exchange: 'NASDAQ',
                 Currency: 'USD',
                 Quote: 383.68,
                 PrevClose: 382.73,
                 QuoteDate: new Date(),
+                Change: 1,
+                ChangePercent: 0.5,
               },
               quantity: 1,
               value: 303.97,
@@ -47,6 +50,7 @@ export const Demo = () => (
             },
             'VUKE.LSE': {
               info: {
+                Ticker: 'VUKE.LSE',
                 Code: 'VUKE',
                 Name: 'Vanguard FTSE 100 UCITS ETF',
                 Country: 'UK',
@@ -55,6 +59,8 @@ export const Demo = () => (
                 Quote: 26.89,
                 PrevClose: 26.66,
                 QuoteDate: new Date(),
+                Change: 1,
+                ChangePercent: 0.5,
               },
               quantity: 47,
               value: 1263.83,

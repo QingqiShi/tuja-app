@@ -26,23 +26,24 @@ export function PortfolioPerformanceProvider({
   );
   useEffect(() => {
     if (!shouldLoad || !missingTickers?.length) return;
+    console.log('missingTickers', missingTickers);
     addTickers(missingTickers, startDate);
   }, [addTickers, missingTickers, shouldLoad, startDate]);
 
   // Get required currencies and fetch historic data
-  const requiredCurrencies = useMemo(
-    () =>
-      portfolio &&
-      getRequiredCurrencies(
-        (portfolio?.currency as any) ?? 'GBP',
-        Object.keys(stocksData)
-          .map((ticker) => stocksData[ticker].info)
-          .filter(<T extends {}>(x: T | undefined): x is T => !!x)
-      ).filter((symbol) => shouldFetchData(symbol, stocksData, startDate)),
-    [portfolio, startDate, stocksData]
-  );
+  const requiredCurrencies =
+    portfolio &&
+    getRequiredCurrencies(
+      (portfolio?.currency as any) ?? 'GBP',
+      Object.keys(stocksData)
+        .map((ticker) => stocksData[ticker].info)
+        .filter(<T extends {}>(x: T | undefined): x is T => !!x)
+    )
+      .filter((symbol) => shouldFetchData(symbol, stocksData, startDate))
+      .filter((symbol) => !missingTickers?.includes(symbol));
   useEffect(() => {
     if (!shouldLoad || !requiredCurrencies?.length) return;
+    console.log('requiredCurrencies', requiredCurrencies);
     addTickers(requiredCurrencies, startDate);
   }, [addTickers, requiredCurrencies, shouldLoad, startDate]);
 

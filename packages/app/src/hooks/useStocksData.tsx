@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import {
   StocksData,
-  fetchStockInfo,
+  fetchStocksInfo,
   fetchStocksHistory,
 } from 'libs/stocksClient';
 import dayjs from 'dayjs';
@@ -27,32 +27,46 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
 
   const addTickers = useCallback(
     async (tickers: string[], startDate: Date | null) => {
-      if (!startDate) return;
+      if (!startDate || fetchingTickers.current.length) return;
 
-      const promises = tickers
-        .filter((ticker) => !fetchingTickers.current.includes(ticker))
-        .map(async (ticker) => {
-          fetchingTickers.current.push(ticker);
+      tickers.forEach((ticker) => fetchingTickers.current.push(ticker));
 
-          const [info, { closeSeries, adjustedSeries }] = await Promise.all([
-            fetchStockInfo(ticker),
-            fetchStocksHistory(ticker, startDate, endDate),
-          ]);
+      console.log('fetch info', tickers);
+      const stocksInfo = await fetchStocksInfo(tickers);
 
-          if (info && closeSeries && adjustedSeries) {
-            // Add current quote to the end of price series
-            const seriesEndDate =
-              closeSeries.data?.[closeSeries.data.length - 1]?.[0];
-            if (dayjs(info?.QuoteDate).diff(seriesEndDate, 'day') >= 1) {
-              closeSeries.data.push([info.QuoteDate, info.Quote]);
-              adjustedSeries.data.push([info.QuoteDate, info.Quote]);
-            }
+      const promises = tickers.map(async (ticker) => {
+        console.log('fetch history', ticker);
+        const { closeSeries, adjustedSeries } = await fetchStocksHistory(
+          ticker,
+          startDate,
+          endDate
+        );
+        const info = stocksInfo.find(({ Ticker }) => Ticker === ticker);
+
+        if (info && closeSeries && adjustedSeries) {
+          // Add current quote to the end of price series
+          const seriesEndDate =
+            closeSeries.data?.[closeSeries.data.length - 1]?.[0];
+          if (
+            info.Quote &&
+            dayjs(info.QuoteDate).diff(seriesEndDate, 'day') >= 1
+          ) {
+            closeSeries.data.push([info.QuoteDate, info.Quote]);
+            adjustedSeries.data.push([info.QuoteDate, info.Quote]);
           }
+        }
 
-          return { ticker, info, closeSeries, adjustedSeries };
-        });
+        return { ticker, info, closeSeries, adjustedSeries };
+      });
 
       const results = await Promise.all(promises);
+
+      results.forEach(({ ticker }) => {
+        fetchingTickers.current.splice(
+          fetchingTickers.current.indexOf(ticker),
+          1
+        );
+      });
 
       const dataToAdd = results.filter(
         ({ info, closeSeries }) => info && closeSeries.data.length
@@ -68,17 +82,6 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
           )
         );
       }
-      results.forEach(({ ticker, info, closeSeries, adjustedSeries }) => {
-        if (info && closeSeries.data.length) {
-        }
-      });
-
-      results.forEach(({ ticker }) => {
-        fetchingTickers.current.splice(
-          fetchingTickers.current.indexOf(ticker),
-          1
-        );
-      });
     },
     [endDate]
   );
