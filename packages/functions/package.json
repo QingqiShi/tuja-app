@@ -16,10 +16,12 @@
     "cheerio": "^1.0.0-rc.3",
     "firebase-admin": "^9.1.1",
     "firebase-functions": "^3.11.0",
+    "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.18",
+    "@types/node-cache": "^4.2.5",
     "@types/node-fetch": "^2.5.7",
     "firebase-functions-test": "^0.2.2",
     "tslint": "^6.1.3"
