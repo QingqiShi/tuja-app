@@ -4,6 +4,7 @@ import escapeRegexp from 'escape-string-regexp';
 import TimeSeries from './timeSeries';
 
 export interface StockInfo {
+  Ticker: string;
   Code: string;
   Country: string;
   Currency: string;
@@ -12,6 +13,8 @@ export interface StockInfo {
   Quote: number;
   QuoteDate: Date;
   PrevClose: number;
+  Change: number;
+  ChangePercent: number;
   Type?: string;
 }
 
@@ -57,29 +60,14 @@ export async function fetchStocksHistory(ticker: string, from: Date, to: Date) {
   return { closeSeries, adjustedSeries };
 }
 
-export async function fetchStockInfo(ticker: string) {
-  const searchStocks = functions().httpsCallable('searchStocks');
-  const stockLivePrice = functions().httpsCallable('stockLivePrice');
+export async function fetchStocksInfo(tickers: string[]) {
+  const getStocksInfo = functions().httpsCallable('getStocksInfo');
 
-  const [symbol, exchange] = ticker.split('.');
-  const [searchResult, livePriceResult] = await Promise.all([
-    searchStocks({ query: symbol }),
-    stockLivePrice({ ticker }),
-  ]);
-  if (searchResult.data.length && livePriceResult.data) {
-    return (
-      ({
-        ...searchResult.data.find(
-          ({ Code, Exchange }: { [key: string]: string }) =>
-            Code === symbol && Exchange === exchange
-        ),
-        Quote: livePriceResult.data.close,
-        QuoteDate: new Date(livePriceResult.data.timestamp * 1000),
-        PrevClose: livePriceResult.data.previousClose,
-      } as StockInfo) ?? null
-    );
-  }
-  return null;
+  const result = await getStocksInfo({ tickers });
+  return result.data.map((info: any) => ({
+    ...info,
+    QuoteDate: new Date(info.QuoteTimestamp * 1000),
+  })) as StockInfo[];
 }
 
 export async function fetchStocksList() {
@@ -213,9 +201,11 @@ export function shouldFetchData(
     !stocksData[ticker].adjustedSeries ||
     !stocksData[ticker].closeSeries ||
     !stocksData[ticker].adjustedSeries?.data.length ||
-    startDateTradingDay.isBefore(
-      stocksData[ticker].adjustedSeries?.data[0][0] as Date,
-      'day'
-    )
+    Math.abs(
+      startDateTradingDay.diff(
+        stocksData[ticker].adjustedSeries?.data[0][0] as Date,
+        'day'
+      )
+    ) > 2
   );
 }
