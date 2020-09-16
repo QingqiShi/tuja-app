@@ -106,10 +106,16 @@ async function fetchExchangeTickers(exchange: string) {
   const response = await fetch(
     `https://eodhistoricaldata.com/api/exchange-symbol-list/${exchange}?fmt=json&api_token=${getToken()}`
   );
-  const result = await response.json();
-  exchangeTickersCache.set(exchange, result);
+  const result: any[] = await response.json();
 
-  return result;
+  // Convert it to a map for fast random access
+  const map: any = {};
+  result.forEach((detail) => {
+    map[detail.Code] = detail;
+  });
+
+  exchangeTickersCache.set(exchange, map);
+  return map;
 }
 
 export const getStocksInfo = functions.https.onCall(async (data) => {
@@ -153,10 +159,7 @@ export const getStocksInfo = functions.https.onCall(async (data) => {
         )
       : stockLivePricesResult;
 
-    const detail = exchangeTickersResults[exchangeIndex].find(
-      ({ Code, Exchange }: { Code: string; Exchange: string }) =>
-        symbol === Code
-    );
+    const detail = exchangeTickersResults[exchangeIndex][symbol];
 
     return {
       Ticker: ticker,
