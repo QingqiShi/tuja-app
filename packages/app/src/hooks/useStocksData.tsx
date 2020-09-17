@@ -53,8 +53,17 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
             endDate
           );
           const info = stocksInfo.find(({ Ticker }) => Ticker === ticker);
+          const lastDataPoint = adjustedSeries.data.length
+            ? adjustedSeries.data[adjustedSeries.data.length - 1]
+            : undefined;
+          const livePrice = lastDataPoint && {
+            code: ticker,
+            date: lastDataPoint[0],
+            close: lastDataPoint[1],
+            previousClose: lastDataPoint[1],
+          };
 
-          return { ticker, info, closeSeries, adjustedSeries };
+          return { ticker, info, closeSeries, adjustedSeries, livePrice };
         })
       );
 
@@ -64,9 +73,9 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
       if (dataToAdd.length) {
         setStocksData((current) =>
           dataToAdd.reduce(
-            (newData, { ticker, info, closeSeries, adjustedSeries }) => ({
+            (newData, { ticker, ...data }) => ({
               ...newData,
-              [ticker]: { info: info as any, closeSeries, adjustedSeries },
+              [ticker]: data,
             }),
             current
           )

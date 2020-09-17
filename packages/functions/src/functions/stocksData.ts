@@ -142,33 +142,37 @@ async function fetchExchangeTickers(exchange: string) {
   return map;
 }
 
-export const stocksInfo = functions.https.onCall(async (data) => {
-  const { tickers } = data;
-  if (!Array.isArray(tickers)) {
-    throw new functions.https.HttpsError(
-      'invalid-argument',
-      'You need to provide an array of tickers'
+export const stocksInfo = functions
+  .runWith({ memory: '512MB' })
+  .https.onCall(async (data) => {
+    const { tickers } = data;
+    if (!Array.isArray(tickers)) {
+      throw new functions.https.HttpsError(
+        'invalid-argument',
+        'You need to provide an array of tickers'
+      );
+    }
+
+    functions.logger.log('tickers', { tickers });
+
+    const exchanges = [
+      ...new Set(tickers.map((ticker) => ticker.split('.')[1])),
+    ];
+
+    const exchangeTickersMaps = await Promise.all(
+      exchanges.map((exchange) => fetchExchangeTickers(exchange))
     );
-  }
+    const exchangeMap: {
+      [exchange: string]: typeof exchangeTickersMaps[0];
+    } = exchanges.reduce(
+      (map, exchange, i) => ({ ...map, [exchange]: exchangeTickersMaps[i] }),
+      {}
+    );
 
-  functions.logger.log('tickers', { tickers });
+    const results = tickers.map((ticker) => {
+      const [symbol, exchange] = ticker.split('.');
+      return { Ticker: ticker, ...exchangeMap[exchange][symbol] };
+    });
 
-  const exchanges = [...new Set(tickers.map((ticker) => ticker.split('.')[1]))];
-
-  const exchangeTickersMaps = await Promise.all(
-    exchanges.map((exchange) => fetchExchangeTickers(exchange))
-  );
-  const exchangeMap: {
-    [exchange: string]: typeof exchangeTickersMaps[0];
-  } = exchanges.reduce(
-    (map, exchange, i) => ({ ...map, [exchange]: exchangeTickersMaps[i] }),
-    {}
-  );
-
-  const results = tickers.map((ticker) => {
-    const [symbol, exchange] = ticker.split('.');
-    return { Ticker: ticker, ...exchangeMap[exchange][symbol] };
+    return results;
   });
-
-  return results;
-});

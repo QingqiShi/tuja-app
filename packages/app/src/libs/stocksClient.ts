@@ -14,17 +14,17 @@ export interface StockInfo {
 }
 
 export interface StockLivePrice {
-  code: string;
-  timestamp: number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-  previousClose: number;
-  change: number;
-  change_p: number;
   date: Date;
+  code: string;
+  close: number;
+  previousClose: number;
+  timestamp?: number;
+  open?: number;
+  high?: number;
+  low?: number;
+  volume?: number;
+  change?: number;
+  change_p?: number;
 }
 
 export interface StocksData {
