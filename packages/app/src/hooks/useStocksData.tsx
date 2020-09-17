@@ -14,6 +14,7 @@ import {
   getRequiredCurrencies,
 } from 'libs/stocksClient';
 import usePortfolio from './usePortfolio';
+import useLoadingState from './useLoadingState';
 
 export const StocksDataContext = createContext({
   addTickers: async (_tickers: string[], startDate: Date | null) => {},
@@ -24,6 +25,7 @@ const currentDate = new Date();
 
 export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
   const { portfolio } = usePortfolio();
+  const [, setLoadingState] = useLoadingState();
   const [endDate] = useState(currentDate);
   const [stocksData, setStocksData] = useState<StocksData>({});
 
@@ -34,6 +36,7 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
       if (!startDate || fetchingTickers.current.length) return;
 
       tickers.forEach((ticker) => fetchingTickers.current.push(ticker));
+      setLoadingState(true);
 
       console.log('fetch info', tickers);
       const stocksInfo = await fetchStocksInfo(tickers);
@@ -132,8 +135,9 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
           1
         );
       });
+      setLoadingState(false);
     },
-    [endDate, portfolio?.currency]
+    [endDate, portfolio?.currency, setLoadingState]
   );
 
   return (
