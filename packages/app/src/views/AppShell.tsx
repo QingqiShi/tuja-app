@@ -3,7 +3,6 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import Portfolio from 'views/App/Portfolio';
 import Activities from 'views/App/Activities';
-import Admin from 'views/App/Admin';
 import Create from 'views/App/Create';
 import NavBar from 'components/NavBar';
 import useAuth from 'hooks/useAuth';
@@ -54,9 +53,6 @@ function AppShell() {
           </Route>
           <Route path="/activities">
             <Activities />
-          </Route>
-          <Route path="/admin">
-            <Admin />
           </Route>
           <Route>
             <Redirect to="/portfolio" />
