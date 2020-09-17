@@ -143,7 +143,7 @@ async function fetchExchangeTickers(exchange: string) {
 }
 
 export const stocksInfo = functions
-  .runWith({ memory: '512MB' })
+  .runWith({ memory: '1GB' })
   .https.onCall(async (data) => {
     const { tickers } = data;
     if (!Array.isArray(tickers)) {
