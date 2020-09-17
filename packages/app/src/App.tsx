@@ -8,7 +8,6 @@ import AppShell from 'views/AppShell';
 import { StocksDataProvider } from 'hooks/useStocksData';
 import { PortfolioProvider } from 'hooks/usePortfolio';
 import { PortfolioPerformanceProvider } from 'hooks/usePortfolioPerformance';
-import { StocksListProvider } from 'hooks/useStocksList';
 import { StartDateProvider } from 'hooks/useStartDate';
 import { AuthProvider } from 'hooks/useAuth';
 
@@ -37,27 +36,25 @@ function App() {
 
   return (
     <AuthProvider>
-      <StocksListProvider>
-        <PortfolioProvider>
-          <StartDateProvider>
-            <StocksDataProvider>
-              <PortfolioPerformanceProvider>
-                <ThemeProvider theme={{ mode: isDark ? 'dark' : 'light' }}>
-                  <GlobalStyle />
-                  <Switch>
-                    <Route path="/" exact>
-                      <Home />
-                    </Route>
-                    <Route>
-                      <AppShell />
-                    </Route>
-                  </Switch>
-                </ThemeProvider>
-              </PortfolioPerformanceProvider>
-            </StocksDataProvider>
-          </StartDateProvider>
-        </PortfolioProvider>
-      </StocksListProvider>
+      <PortfolioProvider>
+        <StartDateProvider>
+          <StocksDataProvider>
+            <PortfolioPerformanceProvider>
+              <ThemeProvider theme={{ mode: isDark ? 'dark' : 'light' }}>
+                <GlobalStyle />
+                <Switch>
+                  <Route path="/" exact>
+                    <Home />
+                  </Route>
+                  <Route>
+                    <AppShell />
+                  </Route>
+                </Switch>
+              </ThemeProvider>
+            </PortfolioPerformanceProvider>
+          </StocksDataProvider>
+        </StartDateProvider>
+      </PortfolioProvider>
     </AuthProvider>
   );
 }
