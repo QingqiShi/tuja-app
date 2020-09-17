@@ -6,7 +6,6 @@ import { transparentize } from 'polished';
 import { FaUserCircle } from 'react-icons/fa';
 import {
   RiLogoutBoxRLine,
-  RiAdminLine,
   RiPieChartLine,
   RiFileListLine,
 } from 'react-icons/ri';
@@ -82,7 +81,7 @@ interface NavBarProps {
 }
 
 function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
-  const { state, signOut, isAdmin } = useAuth();
+  const { state, signOut } = useAuth();
   const { portfolio } = usePortfolio();
 
   const [internalShow, setInternalShow] = useState(false);
@@ -117,7 +116,6 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
 
           <Spacer />
 
-          {isAdmin && <Button to="/admin" icon={<RiAdminLine />} />}
           <Button onClick={signOut} icon={<RiLogoutBoxRLine />} />
         </>
       ) : (
