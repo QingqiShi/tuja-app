@@ -15,7 +15,7 @@ import {
   Card,
   CardMedia,
 } from 'commonStyledComponents';
-import useStocksList from 'hooks/useStocksList';
+import useStocksData from 'hooks/useStocksData';
 import { theme, getTheme } from 'theme';
 import Type from './Type';
 import type { ActivityFormProps } from 'libs/activities';
@@ -97,7 +97,7 @@ function ActivityTradeForm({
   onSubmit,
   onDelete,
 }: ActivityTradeFormProps) {
-  const { stocksList } = useStocksList();
+  const { stocksData } = useStocksData();
   const [date, setDate] = useState<Date>(initialActivity?.date ?? new Date());
   const [tickerToAdd, setTickerToAdd] = useState('');
   const [quantityToAdd, setQuantityToAdd] = useState(0);
@@ -118,11 +118,6 @@ function ActivityTradeForm({
   );
 
   const [loading, setLoading] = useState(false);
-
-  const availableStocks = stocksList.map((ticker) => ({
-    label: ticker,
-    value: ticker,
-  }));
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
@@ -290,8 +285,7 @@ function ActivityTradeForm({
           <InvestmentRow key={`investment-${ticker}`}>
             <TextInput
               label={
-                availableStocks.find(({ value }) => value === ticker)?.label ??
-                `${ticker}`
+                `${ticker} - ${stocksData[ticker].info?.Name}` ?? `${ticker}`
               }
               value={raw ?? '0'}
               onChange={(e) => {

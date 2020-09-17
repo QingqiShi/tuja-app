@@ -1,4 +1,4 @@
-import { firestore, functions } from 'firebase/app';
+import { functions } from 'firebase/app';
 import dayjs from 'dayjs';
 import escapeRegexp from 'escape-string-regexp';
 import TimeSeries from './timeSeries';
@@ -85,16 +85,6 @@ export async function fetchStockLivePrice(ticker: string) {
     ...result.data,
     date: new Date(result.data.timestamp * 1000),
   } as StockLivePrice;
-}
-
-export async function fetchStocksList() {
-  const doc = await firestore().collection(`/aggregation`).doc('stocks').get();
-  const stocksList = doc.data()?.tickers as string[] | undefined;
-  return (
-    stocksList?.filter(
-      (ticker) => !ticker.startsWith('^') && !ticker.endsWith('=X')
-    ) ?? []
-  );
 }
 
 const currencyNormalisation: {

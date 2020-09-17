@@ -19,7 +19,6 @@ import AutoInvest from 'components/AutoInvest';
 import { Card, CardMedia } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
-import useStocksList from 'hooks/useStocksList';
 import useStartDate from 'hooks/useStartDate';
 import useBodyScrollLock from 'hooks/useBodyScrollLock';
 import { addPortfolioActivity } from 'libs/portfolio';
@@ -108,7 +107,6 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
   const [startDate, setStartDate] = useStartDate();
   const { portfolio } = usePortfolio();
   const { portfolioPerformance } = usePortfolioPerformance();
-  const { stocksList } = useStocksList();
 
   // Chart type selection
   const [selectedChart, setSelectedChart] = useState('value');
@@ -158,7 +156,7 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
   // Show more actions
   const [showMoreActions, setShowMoreActions] = useState(false);
 
-  if (!stocksList || !portfolio) {
+  if (!portfolio) {
     return null;
   }
 
