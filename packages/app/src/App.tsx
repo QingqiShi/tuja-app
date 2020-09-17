@@ -5,11 +5,13 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components/macro';
 import { theme } from 'theme';
 import Home from 'views/Home';
 import AppShell from 'views/AppShell';
+import GlobalLoader from 'components/GlobalLoader';
 import { StocksDataProvider } from 'hooks/useStocksData';
 import { PortfolioProvider } from 'hooks/usePortfolio';
 import { PortfolioPerformanceProvider } from 'hooks/usePortfolioPerformance';
 import { StartDateProvider } from 'hooks/useStartDate';
 import { AuthProvider } from 'hooks/useAuth';
+import { LoadingStateProvider } from 'hooks/useLoadingState';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -38,21 +40,24 @@ function App() {
     <AuthProvider>
       <PortfolioProvider>
         <StartDateProvider>
-          <StocksDataProvider>
-            <PortfolioPerformanceProvider>
-              <ThemeProvider theme={{ mode: isDark ? 'dark' : 'light' }}>
-                <GlobalStyle />
-                <Switch>
-                  <Route path="/" exact>
-                    <Home />
-                  </Route>
-                  <Route>
-                    <AppShell />
-                  </Route>
-                </Switch>
-              </ThemeProvider>
-            </PortfolioPerformanceProvider>
-          </StocksDataProvider>
+          <LoadingStateProvider>
+            <StocksDataProvider>
+              <PortfolioPerformanceProvider>
+                <ThemeProvider theme={{ mode: isDark ? 'dark' : 'light' }}>
+                  <GlobalStyle />
+                  <GlobalLoader />
+                  <Switch>
+                    <Route path="/" exact>
+                      <Home />
+                    </Route>
+                    <Route>
+                      <AppShell />
+                    </Route>
+                  </Switch>
+                </ThemeProvider>
+              </PortfolioPerformanceProvider>
+            </StocksDataProvider>
+          </LoadingStateProvider>
         </StartDateProvider>
       </PortfolioProvider>
     </AuthProvider>
