@@ -2,7 +2,12 @@ import dayjs from 'dayjs';
 import { bisector } from 'd3-array';
 import { firestore } from 'firebase/app';
 import TimeSeries from './timeSeries';
-import { StocksData, StockInfo, exchangeCurrency } from './stocksClient';
+import {
+  StocksData,
+  StockInfo,
+  exchangeCurrency,
+  StockLivePrice,
+} from './stocksClient';
 import { Activity } from './activities';
 
 const PORTFOLIO_DATE_FORMAT = 'YYYY-MM-DD';
@@ -38,6 +43,7 @@ export interface PortfolioPerformance {
   holdings: {
     [ticker: string]: {
       info?: StockInfo;
+      livePrice?: StockLivePrice;
       quantity: number;
       value: number;
       gain: number;
@@ -262,27 +268,31 @@ export function getPortfolioPerformance(
   const holdings: PortfolioPerformance['holdings'] = {};
   Object.keys(lastHistory.holdings).forEach((ticker) => {
     const info = stocksData[ticker]?.info;
+    const livePrice = stocksData[ticker]?.livePrice;
     const quantity = fixQuantity(lastHistory.holdings[ticker]);
     const value =
       exchangeCurrency(
-        info?.Quote ?? 0,
+        livePrice?.close ?? 0,
         info?.Currency ?? currency,
         currency,
         endDate,
         stocksData
       ) * quantity;
-    const dayChange = (info?.Quote ?? 0) - (info?.PrevClose ?? 0);
+    const dayChange = (livePrice?.close ?? 0) - (livePrice?.previousClose ?? 0);
     const cost = (lastHistory.avgPrices[ticker] ?? 0) * quantity;
     const gain = value - cost;
 
     holdings[ticker] = {
       info,
+      livePrice,
       quantity,
       value,
       gain,
       roi: gain / cost,
       dayChange,
-      dayChangePercentage: info?.PrevClose ? dayChange / info.PrevClose : 0,
+      dayChangePercentage: livePrice?.previousClose
+        ? dayChange / livePrice.previousClose
+        : 0,
     };
   });
 

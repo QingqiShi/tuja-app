@@ -6,16 +6,25 @@ import TimeSeries from './timeSeries';
 export interface StockInfo {
   Ticker: string;
   Code: string;
-  Country: string;
-  Currency: string;
-  Exchange: string;
   Name: string;
-  Quote: number;
-  QuoteDate: Date;
-  PrevClose: number;
-  Change: number;
-  ChangePercent: number;
+  Country: string;
+  Exchange: string;
+  Currency: string;
   Type?: string;
+}
+
+export interface StockLivePrice {
+  code: string;
+  timestamp: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  previousClose: number;
+  change: number;
+  change_p: number;
+  date: Date;
 }
 
 export interface StocksData {
@@ -23,6 +32,7 @@ export interface StocksData {
     closeSeries?: TimeSeries;
     adjustedSeries?: TimeSeries;
     info?: StockInfo;
+    livePrice?: StockLivePrice;
   };
 }
 
@@ -61,13 +71,20 @@ export async function fetchStocksHistory(ticker: string, from: Date, to: Date) {
 }
 
 export async function fetchStocksInfo(tickers: string[]) {
-  const getStocksInfo = functions().httpsCallable('getStocksInfo');
+  const stocksInfo = functions().httpsCallable('stocksInfo');
 
-  const result = await getStocksInfo({ tickers });
-  return result.data.map((info: any) => ({
-    ...info,
-    QuoteDate: new Date(info.QuoteTimestamp * 1000),
-  })) as StockInfo[];
+  const result = await stocksInfo({ tickers });
+  return result.data as StockInfo[];
+}
+
+export async function fetchStockLivePrice(ticker: string) {
+  const stockLivePrice = functions().httpsCallable('stockLivePrice');
+
+  const result = await stockLivePrice({ ticker });
+  return {
+    ...result.data,
+    date: new Date(result.data.timestamp * 1000),
+  } as StockLivePrice;
 }
 
 export async function fetchStocksList() {
@@ -197,15 +214,12 @@ export function shouldFetchData(
 
   return (
     !(ticker in stocksData) ||
-    !stocksData[ticker].info ||
     !stocksData[ticker].adjustedSeries ||
     !stocksData[ticker].closeSeries ||
     !stocksData[ticker].adjustedSeries?.data.length ||
-    Math.abs(
-      startDateTradingDay.diff(
-        stocksData[ticker].adjustedSeries?.data[0][0] as Date,
-        'day'
-      )
-    ) > 2
+    startDateTradingDay.diff(
+      stocksData[ticker].adjustedSeries?.data[0][0] as Date,
+      'day'
+    ) < -2
   );
 }

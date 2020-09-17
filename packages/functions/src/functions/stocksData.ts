@@ -1,9 +1,13 @@
 import * as functions from 'firebase-functions';
 import fetch from 'node-fetch';
+import NodeCache from 'node-cache';
 
-import NodeCache = require('node-cache');
-
+// Get EodHistoricalData API token from firebase config
 const getToken = () => functions.config().eodhistoricaldata.token;
+
+/* =====
+Searching
+*/
 
 const searchStocksCache = new NodeCache();
 
@@ -16,23 +20,27 @@ export const searchStocks = functions.https.onCall(async (data) => {
     );
   }
 
-  console.log('searchStocks', query);
+  functions.logger.log('query', { query });
 
   const cache = searchStocksCache.get(query);
   if (cache) {
-    console.log(`searchStocksCache hit for ${query}`);
+    functions.logger.log('cache hit', { key: query });
     return cache;
   }
 
-  console.log(`searchStocksCache miss for ${query}, fetching`);
+  functions.logger.log('cache miss', { key: query });
   const response = await fetch(
     `https://eodhistoricaldata.com/api/search/${query}?api_token=${getToken()}`
   );
   const result = await response.json();
-  searchStocksCache.set(query, result);
 
+  searchStocksCache.set(query, result);
   return result;
 });
+
+/* =====
+Stock live price
+*/
 
 export const stockLivePrice = functions.https.onCall(async (data) => {
   const { ticker } = data;
@@ -43,6 +51,8 @@ export const stockLivePrice = functions.https.onCall(async (data) => {
     );
   }
 
+  functions.logger.log('ticker', { ticker });
+
   const response = await fetch(
     `https://eodhistoricaldata.com/api/real-time/${ticker}?fmt=json&api_token=${getToken()}`
   );
@@ -51,7 +61,11 @@ export const stockLivePrice = functions.https.onCall(async (data) => {
   return result;
 });
 
-const stockHistoryCache = new NodeCache({ stdTTL: 43200 });
+/* =====
+Historical data
+*/
+
+const stockHistoryCache = new NodeCache();
 
 export const stockHistory = functions.https.onCall(async (data) => {
   const { ticker, from, to } = data;
@@ -74,42 +88,52 @@ export const stockHistory = functions.https.onCall(async (data) => {
     );
   }
 
-  console.log('stockHistory', ticker, from, to);
+  functions.logger.log('ticker', { ticker });
 
   const cacheKey = `${ticker}-${from}-${to}`;
   const cache = stockHistoryCache.get(cacheKey);
   if (cache) {
-    console.log(`stockHistoryCache hit for ${cacheKey}`);
+    functions.logger.log('cache hit', { key: cacheKey });
     return cache;
   }
 
-  console.log(`stockHistoryCache miss for ${cacheKey}, fetching`);
+  functions.logger.log('cache miss', { key: cacheKey });
   const response = await fetch(
     `https://eodhistoricaldata.com/api/eod/${ticker}?from=${from}&to=${to}&fmt=json&api_token=${getToken()}`
   );
   const result = await response.json();
-  stockHistoryCache.set(cacheKey, result);
 
+  stockHistoryCache.set(cacheKey, result);
   return result;
 });
 
-const exchangeTickersCache = new NodeCache({ stdTTL: 43200 });
+/* =====
+Stock info
+*/
+
+// Cache exchange tickers for 1 day
+const exchangeTickersCache = new NodeCache({ stdTTL: 86400 });
+
+interface ExchangeMap {
+  [ticker: string]: { Code: string };
+}
 
 async function fetchExchangeTickers(exchange: string) {
   const cache = exchangeTickersCache.get(exchange);
   if (cache) {
-    console.log(`exchangeTickersCache hit for ${exchange}`);
-    return cache;
+    functions.logger.log('cache hit', { key: exchange });
+    return cache as ExchangeMap;
   }
 
-  console.log(`exchangeTickersCache miss for ${exchange}, fetching`);
+  functions.logger.log('cache miss', { key: exchange });
   const response = await fetch(
     `https://eodhistoricaldata.com/api/exchange-symbol-list/${exchange}?fmt=json&api_token=${getToken()}`
   );
-  const result: any[] = await response.json();
+
+  const result = (await response.json()) as { Code: string }[];
 
   // Convert it to a map for fast random access
-  const map: any = {};
+  const map: ExchangeMap = {};
   result.forEach((detail) => {
     map[detail.Code] = detail;
   });
@@ -118,7 +142,7 @@ async function fetchExchangeTickers(exchange: string) {
   return map;
 }
 
-export const getStocksInfo = functions.https.onCall(async (data) => {
+export const stocksInfo = functions.https.onCall(async (data) => {
   const { tickers } = data;
   if (!Array.isArray(tickers)) {
     throw new functions.https.HttpsError(
@@ -127,49 +151,23 @@ export const getStocksInfo = functions.https.onCall(async (data) => {
     );
   }
 
-  console.log('getStocksInfo', tickers);
+  functions.logger.log('tickers', { tickers });
 
-  const [firstTicker, ...restTickers] = tickers;
   const exchanges = [...new Set(tickers.map((ticker) => ticker.split('.')[1]))];
 
-  const stockLivePrices = (async () =>
-    fetch(
-      `https://eodhistoricaldata.com/api/real-time/${firstTicker}?${
-        restTickers.length ? `s=${restTickers.join(',')}&` : ''
-      }fmt=json&api_token=${getToken()}`
-    ))();
-  const exchangeTickers = Promise.all(
+  const exchangeTickersMaps = await Promise.all(
     exchanges.map((exchange) => fetchExchangeTickers(exchange))
   );
-
-  // Wait for all api calls to finish
-  const [stockLivePricesResponse, exchangeTickersResults] = await Promise.all([
-    stockLivePrices,
-    exchangeTickers,
-  ]);
-
-  const stockLivePricesResult = await stockLivePricesResponse.json();
+  const exchangeMap: {
+    [exchange: string]: typeof exchangeTickersMaps[0];
+  } = exchanges.reduce(
+    (map, exchange, i) => ({ ...map, [exchange]: exchangeTickersMaps[i] }),
+    {}
+  );
 
   const results = tickers.map((ticker) => {
     const [symbol, exchange] = ticker.split('.');
-    const exchangeIndex = exchanges.indexOf(exchange);
-    const livePrice = Array.isArray(stockLivePricesResult)
-      ? stockLivePricesResult.find(
-          ({ code }: { code: string }) => code === ticker
-        )
-      : stockLivePricesResult;
-
-    const detail = exchangeTickersResults[exchangeIndex][symbol];
-
-    return {
-      Ticker: ticker,
-      ...detail,
-      Quote: livePrice.close,
-      QuoteTimestamp: livePrice.timestamp,
-      PrevClose: livePrice.previousClose,
-      Change: livePrice.change,
-      ChangePercent: livePrice.change_p,
-    };
+    return { Ticker: ticker, ...exchangeMap[exchange][symbol] };
   });
 
   return results;
