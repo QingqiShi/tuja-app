@@ -72,13 +72,13 @@ const Button = styled.button<{ isActive?: boolean }>`
     `}
 `;
 
-interface ButtonGroup {
+interface ButtonGroupProps {
   buttons: { label: string; value: any }[];
   value?: any;
   onChange?: (value: any) => void;
 }
 
-function ButtonGroup({ buttons, value, onChange }: ButtonGroup) {
+function ButtonGroup({ buttons, value, onChange }: ButtonGroupProps) {
   const [internalValue, setInternalValue] = useState(buttons[0]?.value ?? '');
 
   return (
