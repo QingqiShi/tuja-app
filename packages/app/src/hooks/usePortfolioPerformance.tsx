@@ -1,5 +1,5 @@
 import React, { createContext, useMemo, useEffect, useContext } from 'react';
-import { getRequiredCurrencies, shouldFetchData } from 'libs/stocksClient';
+import { shouldFetchData } from 'libs/stocksClient';
 import { getPortfolioPerformance, PortfolioPerformance } from 'libs/portfolio';
 import useStocksData from 'hooks/useStocksData';
 import usePortfolio from 'hooks/usePortfolio';
@@ -30,36 +30,16 @@ export function PortfolioPerformanceProvider({
     addTickers(missingTickers, startDate);
   }, [addTickers, missingTickers, shouldLoad, startDate]);
 
-  // Get required currencies and fetch historic data
-  const requiredCurrencies =
-    portfolio &&
-    getRequiredCurrencies(
-      (portfolio?.currency as any) ?? 'GBP',
-      Object.keys(stocksData)
-        .map((ticker) => stocksData[ticker].info)
-        .filter(<T extends {}>(x: T | undefined): x is T => !!x)
-    )
-      .filter((symbol) => shouldFetchData(symbol, stocksData, startDate))
-      .filter((symbol) => !missingTickers?.includes(symbol));
-  useEffect(() => {
-    if (!shouldLoad || !requiredCurrencies?.length) return;
-    console.log('requiredCurrencies', requiredCurrencies);
-    addTickers(requiredCurrencies, startDate);
-  }, [addTickers, requiredCurrencies, shouldLoad, startDate]);
-
   // Calculate portfolio performance!
   const portfolioPerformance = useMemo(
     () =>
       stocksData &&
       portfolio &&
       startDate &&
-      !portfolio?.tickers.some((ticker) => !stocksData[ticker]?.closeSeries) &&
-      !requiredCurrencies?.some(
-        (currency) => !stocksData[currency]?.closeSeries
-      )
+      !portfolio?.tickers.some((ticker) => !stocksData[ticker]?.closeSeries)
         ? getPortfolioPerformance(portfolio, startDate, endDate, stocksData)
         : null,
-    [portfolio, requiredCurrencies, startDate, stocksData]
+    [portfolio, startDate, stocksData]
   );
 
   return (

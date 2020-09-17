@@ -172,6 +172,7 @@ function InvestmentsListItem({
   const { currency, aliases, targetAllocations } = portfolio;
   const {
     info,
+    livePrice,
     gain,
     roi,
     quantity,
@@ -205,7 +206,10 @@ function InvestmentsListItem({
             <PriceContainer>
               <Type scale="h6">{formatCurrency(currency, value)}</Type>
               <Type scale="body1">
-                {quantity} × {info && formatCurrency(info.Currency, info.Quote)}
+                {quantity} ×{' '}
+                {info &&
+                  livePrice &&
+                  formatCurrency(info.Currency, livePrice.close)}
               </Type>
             </PriceContainer>
           )}
@@ -275,7 +279,9 @@ function InvestmentsListItem({
           <div>
             <Label>Current price</Label>
             <Type scale="body1">
-              {info && formatCurrency(info.Currency, info.Quote)}
+              {info &&
+                livePrice &&
+                formatCurrency(info.Currency, livePrice.close)}
             </Type>
           </div>
           <div>
