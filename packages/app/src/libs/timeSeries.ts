@@ -36,6 +36,12 @@ const bisectDate = bisector<[Date, number], Date>((d, x) => {
 class TimeSeries {
   data: [Date, number][] = [];
 
+  constructor(obj?: { data: [Date, number][] }) {
+    if (obj?.data) {
+      this.data = obj.data;
+    }
+  }
+
   async handleCsvFile(file: File | null) {
     if (!file) {
       this.data = [];
@@ -72,6 +78,14 @@ class TimeSeries {
     });
 
     this.data = [...this.data].sort((a, b) => a[0].getTime() - b[0].getTime());
+  }
+
+  mergeWith(series: TimeSeries) {
+    const merged = new TimeSeries();
+    merged.data = [...this.data, ...series.data].sort(
+      (a, b) => a[0].getTime() - b[0].getTime()
+    );
+    return merged;
   }
 
   aggregateYear() {

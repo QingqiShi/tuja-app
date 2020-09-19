@@ -192,18 +192,68 @@ export function parseCurrency(currency: string, source: string) {
 export function shouldFetchData(
   ticker: string,
   stocksData: StocksData,
-  startDate?: Date | null
+  startDate?: Date | null,
+  endDate?: Date | null
 ) {
-  if (!startDate) return false;
+  if (!startDate || !endDate) return false;
 
   return (
     !(ticker in stocksData) ||
     !stocksData[ticker].closeSeries ||
     !stocksData[ticker].adjustedSeries?.data.length ||
     !stocksData[ticker].seriesRange?.startDate ||
-    !dayjs(startDate).isSame(
-      stocksData[ticker].seriesRange?.startDate as Date,
+    !stocksData[ticker].seriesRange?.endDate ||
+    !dayjs(stocksData[ticker].seriesRange?.startDate).isSameOrBefore(
+      startDate,
+      'day'
+    ) ||
+    !dayjs(endDate).isSameOrBefore(
+      stocksData[ticker].seriesRange?.endDate as Date,
       'day'
     )
   );
+}
+
+export function resolveMissingStocksHistory(
+  tickers: string[],
+  stocksData: StocksData,
+  startDate: Date,
+  endDate: Date
+) {
+  return tickers.flatMap((ticker) => {
+    const existingData = stocksData[ticker];
+
+    if (
+      !existingData ||
+      !existingData.seriesRange ||
+      !existingData.adjustedSeries ||
+      !existingData.closeSeries
+    ) {
+      return { ticker, startDate, endDate };
+    }
+
+    const missingData = [];
+
+    if (dayjs(startDate).isBefore(existingData.seriesRange.startDate, 'date')) {
+      missingData.push({
+        ticker,
+        startDate,
+        endDate: dayjs(existingData.seriesRange.startDate)
+          .subtract(1, 'day')
+          .toDate(),
+      });
+    }
+
+    if (dayjs(endDate).isAfter(existingData.seriesRange.endDate, 'date')) {
+      missingData.push({
+        ticker,
+        startDate: dayjs(existingData.seriesRange.endDate)
+          .add(1, 'day')
+          .toDate(),
+        endDate,
+      });
+    }
+
+    return missingData;
+  });
 }

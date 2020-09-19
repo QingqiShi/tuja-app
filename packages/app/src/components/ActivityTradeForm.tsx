@@ -285,7 +285,9 @@ function ActivityTradeForm({
           <InvestmentRow key={`investment-${ticker}`}>
             <TextInput
               label={
-                `${ticker} - ${stocksData[ticker].info?.Name}` ?? `${ticker}`
+                stocksData[ticker]?.info?.Name
+                  ? `${ticker} - ${stocksData[ticker]?.info?.Name}`
+                  : `${ticker}`
               }
               value={raw ?? '0'}
               onChange={(e) => {
