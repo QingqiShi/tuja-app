@@ -4,14 +4,17 @@ import React, {
   useCallback,
   useContext,
   useRef,
+  useEffect,
 } from 'react';
 import dayjs from 'dayjs';
+import { IDBPDatabase, DBSchema, openDB } from 'idb';
 import {
   StocksData,
   fetchStocksInfo,
   fetchStocksHistory,
   fetchStockLivePrice,
   getRequiredCurrencies,
+  StockInfo,
 } from 'libs/stocksClient';
 import usePortfolio from './usePortfolio';
 import useLoadingState from './useLoadingState';
@@ -23,23 +26,76 @@ export const StocksDataContext = createContext({
 
 const currentDate = new Date();
 
+interface MyDB extends DBSchema {
+  stocksInfo: {
+    key: string;
+    value: StockInfo;
+  };
+}
+
 export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
   const { portfolio } = usePortfolio();
   const [, setLoadingState] = useLoadingState();
   const [endDate] = useState(currentDate);
   const [stocksData, setStocksData] = useState<StocksData>({});
+  const [db, setDB] = useState<IDBPDatabase<MyDB> | null>(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      setDB(
+        await openDB<MyDB>('stocksData', 1, {
+          upgrade(upgradeDB, oldVersion, newVersion, transaction) {
+            if (oldVersion < 1) {
+              upgradeDB.createObjectStore('stocksInfo', {
+                keyPath: 'Ticker',
+              });
+            }
+          },
+        })
+      );
+    };
+    fetch();
+  }, []);
 
   const fetchingTickers = useRef<string[]>([]);
 
   const addTickers = useCallback(
     async (tickers: string[], startDate: Date | null) => {
-      if (!startDate || fetchingTickers.current.length) return;
+      if (!startDate || fetchingTickers.current.length || !db) return;
 
+      // Start loading state so other calls to addTickers are not executed
       tickers.forEach((ticker) => fetchingTickers.current.push(ticker));
       setLoadingState(true);
 
-      console.log('fetch info', tickers);
-      const stocksInfo = await fetchStocksInfo(tickers);
+      // Retrieve stocks info from idb
+      const getStocksInfoTx = db.transaction('stocksInfo');
+      const stocksInfo = (
+        await Promise.all(
+          tickers.map((ticker) =>
+            getStocksInfoTx.objectStore('stocksInfo').get(ticker)
+          )
+        )
+      ).filter(<T extends {}>(x: T | undefined): x is T => !!x);
+      await getStocksInfoTx.done;
+
+      // Fetch remaining tickers
+      const tickersNeedInfo = tickers.filter(
+        (ticker) => !stocksInfo.find((info) => info.Ticker === ticker)
+      );
+      if (tickersNeedInfo.length) {
+        console.log('fetch info', tickersNeedInfo);
+        const fetchedStocksInfo = await fetchStocksInfo(tickersNeedInfo);
+
+        // Store into idb for future use
+        const putStocksInfoTx = db.transaction('stocksInfo', 'readwrite');
+        await Promise.all(
+          fetchedStocksInfo.map((info) => {
+            stocksInfo.push(info);
+            return putStocksInfoTx.objectStore('stocksInfo').add(info);
+          })
+        );
+        await putStocksInfoTx.done;
+      }
 
       const requiredCurrencies = getRequiredCurrencies(
         (portfolio?.currency as any) ?? 'GBP',
@@ -137,7 +193,7 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
       });
       setLoadingState(false);
     },
-    [endDate, portfolio?.currency, setLoadingState]
+    [db, endDate, portfolio?.currency, setLoadingState]
   );
 
   return (
