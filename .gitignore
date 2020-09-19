@@ -66,3 +66,6 @@ node_modules/
 
 # Firebase functions config
 .runtimeconfig.json
+
+# VSCode config
+.vscode/
