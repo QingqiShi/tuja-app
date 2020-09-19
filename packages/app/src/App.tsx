@@ -38,10 +38,10 @@ function App() {
 
   return (
     <AuthProvider>
-      <PortfolioProvider>
+      <LoadingStateProvider>
         <StartDateProvider>
-          <LoadingStateProvider>
-            <StocksDataProvider>
+          <StocksDataProvider>
+            <PortfolioProvider>
               <PortfolioPerformanceProvider>
                 <ThemeProvider theme={{ mode: isDark ? 'dark' : 'light' }}>
                   <GlobalStyle />
@@ -56,10 +56,10 @@ function App() {
                   </Switch>
                 </ThemeProvider>
               </PortfolioPerformanceProvider>
-            </StocksDataProvider>
-          </LoadingStateProvider>
+            </PortfolioProvider>
+          </StocksDataProvider>
         </StartDateProvider>
-      </PortfolioProvider>
+      </LoadingStateProvider>
     </AuthProvider>
   );
 }

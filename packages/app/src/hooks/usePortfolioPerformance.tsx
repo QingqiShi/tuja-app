@@ -1,5 +1,4 @@
-import React, { createContext, useMemo, useEffect, useContext } from 'react';
-import { shouldFetchData } from 'libs/stocksClient';
+import React, { createContext, useMemo, useContext } from 'react';
 import { getPortfolioPerformance, PortfolioPerformance } from 'libs/portfolio';
 import useStocksData from 'hooks/useStocksData';
 import usePortfolio from 'hooks/usePortfolio';
@@ -16,19 +15,7 @@ export function PortfolioPerformanceProvider({
 }: React.PropsWithChildren<{}>) {
   const [startDate] = useStartDate();
   const { portfolio } = usePortfolio();
-  const { stocksData, addTickers } = useStocksData();
-
-  const shouldLoad = !!portfolio;
-
-  // Get stocks data for tickers
-  const missingTickers = portfolio?.tickers.filter((ticker) =>
-    shouldFetchData(ticker, stocksData, startDate)
-  );
-  useEffect(() => {
-    if (!shouldLoad || !missingTickers?.length) return;
-    console.log('missingTickers', missingTickers);
-    addTickers(missingTickers, startDate);
-  }, [addTickers, missingTickers, shouldLoad, startDate]);
+  const { stocksData } = useStocksData();
 
   // Calculate portfolio performance!
   const portfolioPerformance = useMemo(

@@ -14,73 +14,196 @@ import {
   fetchStocksHistory,
   fetchStockLivePrice,
   getRequiredCurrencies,
+  resolveMissingStocksHistory,
+  shouldFetchData,
   StockInfo,
 } from 'libs/stocksClient';
-import usePortfolio from './usePortfolio';
 import useLoadingState from './useLoadingState';
+import TimeSeries from 'libs/timeSeries';
 
 export const StocksDataContext = createContext({
-  addTickers: async (_tickers: string[], startDate: Date | null) => {},
+  addTickers: async (
+    _tickers: string[],
+    _startDate: Date | null,
+    _baseCurrency: string
+  ) => {},
   stocksData: {} as StocksData,
 });
 
 const currentDate = new Date();
 
-interface MyDB extends DBSchema {
+interface DBSchemaV2 extends DBSchema {
   stocksInfo: {
     key: string;
     value: StockInfo;
   };
+  stocksHistory: {
+    key: string;
+    value: {
+      ticker: string;
+      close: TimeSeries;
+      adjusted: TimeSeries;
+      range: { startDate: Date; endDate: Date };
+    };
+  };
 }
 
 export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
-  const { portfolio } = usePortfolio();
   const [, setLoadingState] = useLoadingState();
   const [endDate] = useState(currentDate);
   const [stocksData, setStocksData] = useState<StocksData>({});
-  const [db, setDB] = useState<IDBPDatabase<MyDB> | null>(null);
+  const [db, setDB] = useState<IDBPDatabase<DBSchemaV2> | null>(null);
+  const fetchingTickers = useRef(false);
 
+  // Initialise IndexedDB cache
   useEffect(() => {
     const fetch = async () => {
       setDB(
-        await openDB<MyDB>('stocksData', 1, {
-          upgrade(upgradeDB, oldVersion, newVersion, transaction) {
+        await openDB<DBSchemaV2>('stocksData', 2, {
+          upgrade(upgradeDB, oldVersion) {
             if (oldVersion < 1) {
               upgradeDB.createObjectStore('stocksInfo', {
                 keyPath: 'Ticker',
+              });
+            }
+            if (oldVersion < 2) {
+              upgradeDB.createObjectStore('stocksHistory', {
+                keyPath: 'ticker',
               });
             }
           },
         })
       );
     };
-    fetch();
+    try {
+      fetchingTickers.current = true;
+      setLoadingState(true);
+      fetch();
+    } catch (e) {
+      console.error(e);
+      fetchingTickers.current = false;
+      setLoadingState(false);
+    }
+  }, [setLoadingState]);
+
+  // Callback for fetching current live prices
+  const getLivePrices = useCallback(async (tickers: string[]) => {
+    const livePrices = (
+      await Promise.all(
+        tickers.map((ticker) => {
+          console.log('fetch live price', ticker);
+          return fetchStockLivePrice(ticker);
+        })
+      )
+    ).filter((livePrice) => livePrice?.code);
+    if (livePrices.length) {
+      setStocksData((current) =>
+        livePrices
+          .filter((livePrice) => current[livePrice.code])
+          .reduce((newData, livePrice) => {
+            const currentData = current[livePrice.code];
+            if (
+              currentData.closeSeries?.data.length &&
+              currentData.adjustedSeries?.data.length
+            ) {
+              const seriesEndDate =
+                currentData.closeSeries.data?.[
+                  currentData.closeSeries.data.length - 1
+                ]?.[0];
+              if (
+                livePrice.close &&
+                dayjs(livePrice.date).diff(seriesEndDate, 'day') >= 1
+              ) {
+                currentData.closeSeries.data.push([
+                  livePrice.date,
+                  livePrice.close,
+                ]);
+                currentData.adjustedSeries.data.push([
+                  livePrice.date,
+                  livePrice.close,
+                ]);
+              }
+            }
+            return {
+              ...newData,
+              [livePrice.code]: { ...currentData, livePrice },
+            };
+          }, current)
+      );
+    }
   }, []);
 
-  const fetchingTickers = useRef<string[]>([]);
+  // Load IndexedDB data
+  useEffect(() => {
+    const fetch = async () => {
+      if (!db) return;
 
+      // Stocks info from idb
+      const tx = db.transaction(['stocksInfo', 'stocksHistory']);
+      const stocksInfo = await tx.objectStore('stocksInfo').getAll();
+      const stocksHistory = await tx.objectStore('stocksHistory').getAll();
+      await tx.done;
+
+      const newStocksData: StocksData = {};
+
+      stocksInfo.forEach((info) => {
+        newStocksData[info.Ticker] = { info };
+      });
+      stocksHistory.forEach((history) => {
+        const lastDataPoint = history.adjusted.data.length
+          ? history.adjusted.data[history.adjusted.data.length - 1]
+          : undefined;
+        const livePrice = lastDataPoint && {
+          code: history.ticker,
+          date: lastDataPoint[0],
+          close: lastDataPoint[1],
+          previousClose: lastDataPoint[1],
+        };
+
+        newStocksData[history.ticker] = {
+          ...newStocksData[history.ticker],
+          seriesRange: history.range,
+          closeSeries: new TimeSeries(history.close),
+          adjustedSeries: new TimeSeries(history.adjusted),
+          livePrice,
+        };
+      });
+
+      setStocksData(newStocksData);
+
+      await getLivePrices(Object.keys(newStocksData));
+
+      fetchingTickers.current = false;
+      setLoadingState(false);
+    };
+    try {
+      fetch();
+    } catch (e) {
+      console.error(e);
+      fetchingTickers.current = false;
+      setLoadingState(false);
+    }
+  }, [db, getLivePrices, setLoadingState]);
+
+  // Callback for fetching extra data
   const addTickers = useCallback(
-    async (tickers: string[], startDate: Date | null) => {
-      if (!startDate || fetchingTickers.current.length || !db) return;
+    async (tickers: string[], startDate: Date | null, baseCurrency: string) => {
+      if (!startDate || fetchingTickers.current || !db) return;
+
+      const shouldFetch = tickers.some((ticker) =>
+        shouldFetchData(ticker, stocksData, startDate, endDate)
+      );
+      if (!shouldFetch) return;
 
       // Start loading state so other calls to addTickers are not executed
-      tickers.forEach((ticker) => fetchingTickers.current.push(ticker));
+      fetchingTickers.current = true;
       setLoadingState(true);
 
-      // Retrieve stocks info from idb
-      const getStocksInfoTx = db.transaction('stocksInfo');
-      const stocksInfo = (
-        await Promise.all(
-          tickers.map((ticker) =>
-            getStocksInfoTx.objectStore('stocksInfo').get(ticker)
-          )
-        )
-      ).filter(<T extends {}>(x: T | undefined): x is T => !!x);
-      await getStocksInfoTx.done;
+      const newStocksData: StocksData = { ...stocksData };
 
-      // Fetch remaining tickers
+      // Fetch stocksInfo
       const tickersNeedInfo = tickers.filter(
-        (ticker) => !stocksInfo.find((info) => info.Ticker === ticker)
+        (ticker) => !stocksData[ticker]?.info
       );
       if (tickersNeedInfo.length) {
         console.log('fetch info', tickersNeedInfo);
@@ -90,117 +213,90 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
         const putStocksInfoTx = db.transaction('stocksInfo', 'readwrite');
         await Promise.all(
           fetchedStocksInfo.map((info) => {
-            stocksInfo.push(info);
+            newStocksData[info.Ticker] = { ...stocksData[info.Ticker], info };
             return putStocksInfoTx.objectStore('stocksInfo').add(info);
           })
         );
         await putStocksInfoTx.done;
       }
 
+      // Use stocks info to get a list of required Forex pairs
       const requiredCurrencies = getRequiredCurrencies(
-        (portfolio?.currency as any) ?? 'GBP',
-        stocksInfo
+        (baseCurrency as any) ?? 'GBP',
+        Object.keys(newStocksData)
+          .map((ticker) => newStocksData[ticker].info as StockInfo)
+          .filter((x) => !!x)
       );
       console.log('required currencies', requiredCurrencies);
 
+      // Fetch stocksHistory
+      const allTickers = [...tickers, ...requiredCurrencies];
+      const missingHistory = resolveMissingStocksHistory(
+        allTickers,
+        stocksData,
+        startDate,
+        endDate
+      );
       const results = await Promise.all(
-        [...tickers, ...requiredCurrencies].map(async (ticker) => {
-          console.log('fetch history', ticker);
-          const { closeSeries, adjustedSeries } = await fetchStocksHistory(
-            ticker,
-            startDate,
-            endDate
+        missingHistory.map(async (fetchInfo) => {
+          console.log(
+            'fetch history',
+            fetchInfo.ticker,
+            fetchInfo.startDate.toLocaleDateString(),
+            fetchInfo.endDate.toLocaleDateString()
           );
-          const info = stocksInfo.find(({ Ticker }) => Ticker === ticker);
-          const lastDataPoint = adjustedSeries.data.length
-            ? adjustedSeries.data[adjustedSeries.data.length - 1]
-            : undefined;
-          const livePrice = lastDataPoint && {
-            code: ticker,
-            date: lastDataPoint[0],
-            close: lastDataPoint[1],
-            previousClose: lastDataPoint[1],
-          };
-
-          return {
-            ticker,
-            info,
-            closeSeries,
-            adjustedSeries,
-            livePrice,
-            seriesRange: { startDate, endDate },
-          };
+          const history = await fetchStocksHistory(
+            fetchInfo.ticker,
+            fetchInfo.startDate,
+            fetchInfo.endDate
+          );
+          return { ...history, ...fetchInfo };
         })
       );
 
-      const dataToAdd = results.filter(
-        ({ closeSeries }) => closeSeries.data.length
-      );
-      if (dataToAdd.length) {
-        setStocksData((current) =>
-          dataToAdd.reduce(
-            (newData, { ticker, ...data }) => ({
-              ...newData,
-              [ticker]: data,
-            }),
-            current
-          )
-        );
-      }
+      // Process the fetch results
+      const putStocksHistoryTx = db.transaction('stocksHistory', 'readwrite');
+      results.forEach((result) => {
+        // Save to newStocksData
+        const current = newStocksData[result.ticker] ?? {};
+        current.closeSeries = current?.closeSeries
+          ? current.closeSeries.mergeWith(result.closeSeries)
+          : result.closeSeries;
+        current.adjustedSeries = current?.adjustedSeries
+          ? current.adjustedSeries.mergeWith(result.adjustedSeries)
+          : result.adjustedSeries;
+        current.seriesRange = {
+          startDate,
+          endDate,
+        };
+        newStocksData[result.ticker] = current;
 
-      const livePrices = (
-        await Promise.all(
-          [...tickers, ...requiredCurrencies].map((ticker) => {
-            console.log('fetch live price', ticker);
-            return fetchStockLivePrice(ticker);
-          })
-        )
-      ).filter((livePrice) => livePrice?.code);
-      if (livePrices.length) {
-        setStocksData((current) =>
-          livePrices
-            .filter((livePrice) => current[livePrice.code])
-            .reduce((newData, livePrice) => {
-              const currentData = current[livePrice.code];
-              if (
-                currentData.closeSeries?.data.length &&
-                currentData.adjustedSeries?.data.length
-              ) {
-                const seriesEndDate =
-                  currentData.closeSeries.data?.[
-                    currentData.closeSeries.data.length - 1
-                  ]?.[0];
-                if (
-                  livePrice.close &&
-                  dayjs(livePrice.date).diff(seriesEndDate, 'day') >= 1
-                ) {
-                  currentData.closeSeries.data.push([
-                    livePrice.date,
-                    livePrice.close,
-                  ]);
-                  currentData.adjustedSeries.data.push([
-                    livePrice.date,
-                    livePrice.close,
-                  ]);
-                }
-              }
-              return {
-                ...newData,
-                [livePrice.code]: { ...currentData, livePrice },
-              };
-            }, current)
-        );
-      }
-
-      results.forEach(({ ticker }) => {
-        fetchingTickers.current.splice(
-          fetchingTickers.current.indexOf(ticker),
-          1
-        );
+        // Push to idb
+        putStocksHistoryTx.objectStore('stocksHistory').put({
+          ticker: result.ticker,
+          close: current.closeSeries,
+          adjusted: current.adjustedSeries,
+          range: current.seriesRange,
+        });
       });
+      await putStocksHistoryTx.done;
+
+      // Commit new stocks data to update the ui
+      if (Object.keys(newStocksData).length) {
+        setStocksData(newStocksData);
+      }
+
+      const tickersNeedLivePrice = [...tickers, ...requiredCurrencies].filter(
+        (ticker) => !newStocksData[ticker]?.livePrice
+      );
+      if (tickersNeedInfo.length) {
+        await getLivePrices(tickersNeedLivePrice);
+      }
+
+      fetchingTickers.current = false;
       setLoadingState(false);
     },
-    [db, endDate, portfolio?.currency, setLoadingState]
+    [db, endDate, getLivePrices, setLoadingState, stocksData]
   );
 
   return (
