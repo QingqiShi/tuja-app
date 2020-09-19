@@ -29,10 +29,14 @@ export interface StockLivePrice {
 
 export interface StocksData {
   [ticker: string]: {
-    closeSeries?: TimeSeries;
-    adjustedSeries?: TimeSeries;
     info?: StockInfo;
     livePrice?: StockLivePrice;
+    closeSeries?: TimeSeries;
+    adjustedSeries?: TimeSeries;
+    seriesRange?: {
+      startDate: Date;
+      endDate: Date;
+    };
   };
 }
 
@@ -192,24 +196,14 @@ export function shouldFetchData(
 ) {
   if (!startDate) return false;
 
-  // Start date or the next trading date if it's on a weekend
-  let startDateTradingDay = dayjs(startDate);
-  if (startDateTradingDay.day() === 6) {
-    // Saturday
-    startDateTradingDay = startDateTradingDay.add(2, 'day');
-  } else if (startDateTradingDay.day() === 0) {
-    // Sunday
-    startDateTradingDay = startDateTradingDay.add(1, 'day');
-  }
-
   return (
     !(ticker in stocksData) ||
-    !stocksData[ticker].adjustedSeries ||
     !stocksData[ticker].closeSeries ||
     !stocksData[ticker].adjustedSeries?.data.length ||
-    startDateTradingDay.diff(
-      stocksData[ticker].adjustedSeries?.data[0][0] as Date,
+    !stocksData[ticker].seriesRange?.startDate ||
+    !dayjs(startDate).isSame(
+      stocksData[ticker].seriesRange?.startDate as Date,
       'day'
-    ) < -2
+    )
   );
 }

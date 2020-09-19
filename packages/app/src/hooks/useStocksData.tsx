@@ -122,7 +122,14 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
             previousClose: lastDataPoint[1],
           };
 
-          return { ticker, info, closeSeries, adjustedSeries, livePrice };
+          return {
+            ticker,
+            info,
+            closeSeries,
+            adjustedSeries,
+            livePrice,
+            seriesRange: { startDate, endDate },
+          };
         })
       );
 
