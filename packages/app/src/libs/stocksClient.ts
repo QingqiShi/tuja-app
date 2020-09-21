@@ -203,11 +203,11 @@ export function shouldFetchData(
     !stocksData[ticker].adjustedSeries?.data.length ||
     !stocksData[ticker].seriesRange?.startDate ||
     !stocksData[ticker].seriesRange?.endDate ||
-    !dayjs(stocksData[ticker].seriesRange?.startDate).isSameOrBefore(
+    dayjs(stocksData[ticker].seriesRange?.startDate).isAfter(
       startDate,
       'day'
     ) ||
-    !dayjs(endDate).isSameOrBefore(
+    dayjs(endDate).isAfter(
       stocksData[ticker].seriesRange?.endDate as Date,
       'day'
     )
