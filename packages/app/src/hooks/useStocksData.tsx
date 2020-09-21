@@ -30,8 +30,6 @@ export const StocksDataContext = createContext({
   stocksData: {} as StocksData,
 });
 
-const currentDate = new Date();
-
 interface DBSchemaV2 extends DBSchema {
   stocksInfo: {
     key: string;
@@ -50,7 +48,6 @@ interface DBSchemaV2 extends DBSchema {
 
 export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
   const [, setLoadingState] = useLoadingState();
-  const [endDate] = useState(currentDate);
   const [stocksData, setStocksData] = useState<StocksData>({});
   const [db, setDB] = useState<IDBPDatabase<DBSchemaV2> | null>(null);
   const fetchingTickers = useRef(false);
@@ -190,8 +187,11 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
     async (tickers: string[], startDate: Date | null, baseCurrency: string) => {
       if (!startDate || fetchingTickers.current || !db) return;
 
+      const currentDay = dayjs(dayjs().format('YYYY-MM-DD'), 'YYYY-MM-DD');
+      const historyEndDate = currentDay.subtract(1, 'day').toDate();
+
       const shouldFetch = tickers.some((ticker) =>
-        shouldFetchData(ticker, stocksData, startDate, endDate)
+        shouldFetchData(ticker, stocksData, startDate, historyEndDate)
       );
       if (!shouldFetch) return;
 
@@ -235,7 +235,7 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
         allTickers,
         stocksData,
         startDate,
-        endDate
+        historyEndDate
       );
       const results = await Promise.all(
         missingHistory.map(async (fetchInfo) => {
@@ -267,7 +267,7 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
           : result.adjustedSeries;
         current.seriesRange = {
           startDate,
-          endDate,
+          endDate: historyEndDate,
         };
         newStocksData[result.ticker] = current;
 
@@ -296,7 +296,7 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
       fetchingTickers.current = false;
       setLoadingState(false);
     },
-    [db, endDate, getLivePrices, setLoadingState, stocksData]
+    [db, getLivePrices, setLoadingState, stocksData]
   );
 
   return (
