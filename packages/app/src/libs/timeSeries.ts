@@ -32,7 +32,24 @@ class TimeSeries {
 
   mergeWith(series: TimeSeries) {
     const merged = new TimeSeries();
-    merged.data = [...this.data, ...series.data].sort(
+
+    if (!series.data.length) {
+      merged.data = this.data;
+      return merged;
+    }
+
+    const seriesDateRange = {
+      start: dayjs(series.data[0][0]),
+      end: dayjs(series.data[series.data.length - 1][0]),
+    };
+
+    const filteredData = this.data.filter(
+      (dataPoint) =>
+        seriesDateRange.start.isAfter(dataPoint[0], 'day') ||
+        seriesDateRange.end.isBefore(dataPoint[0], 'day')
+    );
+
+    merged.data = [...filteredData, ...series.data].sort(
       (a, b) => a[0].getTime() - b[0].getTime()
     );
     return merged;
@@ -49,6 +66,21 @@ class TimeSeries {
     }
     return this.data[0][1];
   }
+}
+
+/**
+ * Validate time series data by checking if there are duplicated entries
+ */
+export function validateSeries(series: [Date, number][]) {
+  const dateSet = new Set();
+  for (const [date] of series) {
+    const time = date.getTime();
+    if (dateSet.has(time)) {
+      return false;
+    }
+    dateSet.add(time);
+  }
+  return true;
 }
 
 export default TimeSeries;

@@ -19,7 +19,7 @@ import {
   StockInfo,
 } from 'libs/stocksClient';
 import useLoadingState from './useLoadingState';
-import TimeSeries from 'libs/timeSeries';
+import TimeSeries, { validateSeries } from 'libs/timeSeries';
 
 export const StocksDataContext = createContext({
   addTickers: async (
@@ -135,7 +135,7 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
     const fetch = async () => {
       if (!db) return;
 
-      // Stocks info from idb
+      // Stocks info and history from idb
       const tx = db.transaction(['stocksInfo', 'stocksHistory']);
       const stocksInfo = await tx.objectStore('stocksInfo').getAll();
       const stocksHistory = await tx.objectStore('stocksHistory').getAll();
@@ -146,25 +146,52 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
       stocksInfo.forEach((info) => {
         newStocksData[info.Ticker] = { info };
       });
-      stocksHistory.forEach((history) => {
-        const lastDataPoint = history.adjusted.data.length
-          ? history.adjusted.data[history.adjusted.data.length - 1]
-          : undefined;
-        const livePrice = lastDataPoint && {
-          code: history.ticker,
-          date: lastDataPoint[0],
-          close: lastDataPoint[1],
-          previousClose: lastDataPoint[1],
-        };
 
-        newStocksData[history.ticker] = {
-          ...newStocksData[history.ticker],
-          seriesRange: history.range,
-          closeSeries: new TimeSeries(history.close),
-          adjustedSeries: new TimeSeries(history.adjusted),
-          livePrice,
-        };
-      });
+      // Validate history
+      const invalidTickers = stocksHistory
+        .filter(
+          (history) =>
+            !validateSeries(history.close.data) ||
+            !validateSeries(history.adjusted.data)
+        )
+        .map((history) => history.ticker);
+
+      // Remove invalid data from idb
+      if (invalidTickers.length) {
+        console.log('removing invalid history', invalidTickers);
+        const deleteStocksHistoryTx = db.transaction(
+          'stocksHistory',
+          'readwrite'
+        );
+        await Promise.all(
+          invalidTickers.map((ticker) =>
+            deleteStocksHistoryTx.objectStore('stocksHistory').delete(ticker)
+          )
+        );
+        await deleteStocksHistoryTx.done;
+      }
+
+      stocksHistory
+        .filter((history) => !invalidTickers.includes(history.ticker))
+        .forEach((history) => {
+          const lastDataPoint = history.adjusted.data.length
+            ? history.adjusted.data[history.adjusted.data.length - 1]
+            : undefined;
+          const livePrice = lastDataPoint && {
+            code: history.ticker,
+            date: lastDataPoint[0],
+            close: lastDataPoint[1],
+            previousClose: lastDataPoint[1],
+          };
+
+          newStocksData[history.ticker] = {
+            ...newStocksData[history.ticker],
+            seriesRange: history.range,
+            closeSeries: new TimeSeries(history.close),
+            adjustedSeries: new TimeSeries(history.adjusted),
+            livePrice,
+          };
+        });
 
       setStocksData(newStocksData);
 
