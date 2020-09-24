@@ -15,7 +15,7 @@
     "@react-spring/web": "^9.0.0-rc.3",
     "@vx/vx": "^0.0.199",
     "body-scroll-lock": "^3.1.5",
-    "d3-array": "^2.7.1",
+    "d3-array": "^2.8.0",
     "dayjs": "^1.8.36",
     "escape-string-regexp": "^4.0.0",
     "idb": "^5.0.6",
