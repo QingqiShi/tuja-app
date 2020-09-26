@@ -27,7 +27,7 @@
     "firebase": "^7.21.1",
     "firebase-tools": "^8.11.0",
     "google-auth-library": "^6.1.0",
-    "google-gax": "^2.8.0",
+    "google-gax": "^2.9.0",
     "husky": "^4.3.0",
     "lerna": "^3.21.0",
     "lint-staged": "^10.4.0",
