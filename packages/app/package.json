@@ -16,7 +16,7 @@
     "@vx/vx": "^0.0.199",
     "body-scroll-lock": "^3.1.5",
     "d3-array": "^2.8.0",
-    "dayjs": "^1.8.36",
+    "dayjs": "^1.9.1",
     "escape-string-regexp": "^4.0.0",
     "idb": "^5.0.6",
     "polished": "^3.6.7",
