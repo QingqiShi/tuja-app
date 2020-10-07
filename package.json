@@ -24,7 +24,7 @@
     "@commitlint/config-conventional": "^11.0.0",
     "commitizen": "^4.2.1",
     "cz-conventional-changelog": "^3.3.0",
-    "firebase": "^7.21.1",
+    "firebase": "^7.22.1",
     "firebase-tools": "^8.11.2",
     "google-auth-library": "^6.1.0",
     "google-gax": "^2.9.0",
