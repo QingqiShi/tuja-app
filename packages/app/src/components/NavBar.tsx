@@ -8,6 +8,7 @@ import {
   RiLogoutBoxRLine,
   RiPieChartLine,
   RiFileListLine,
+  RiMenuAddLine,
 } from 'react-icons/ri';
 import { theme, getTheme } from 'theme';
 import useAuth from 'hooks/useAuth';
@@ -116,6 +117,7 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
 
           <Spacer />
 
+          <Button icon={<RiMenuAddLine />} to="/create-portfolio" />
           <Button onClick={signOut} icon={<RiLogoutBoxRLine />} />
         </>
       ) : (

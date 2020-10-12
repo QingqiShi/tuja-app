@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { RiEditLine, RiCheckLine, RiCloseLine } from 'react-icons/ri';
-import Type from './Type';
 import Button from './Button';
 import TextInput from './TextInput';
 
@@ -14,18 +13,21 @@ const Container = styled.div`
 `;
 
 interface EditableTitleProps {
-  value: string;
   onChange?: (newVal: string) => Promise<void>;
-  scale?: React.ComponentProps<typeof Type>['scale'];
+  defaultValue?: string;
 }
 
-function EditableTitle({ value, onChange, scale = 'h3' }: EditableTitleProps) {
+function EditableTitle({
+  children,
+  defaultValue,
+  onChange,
+}: React.PropsWithChildren<EditableTitleProps>) {
   const [showInput, setShowInput] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [inputValue, setInputValue] = useState(value);
+  const [inputValue, setInputValue] = useState(defaultValue || '');
 
   return (
-    <Type scale={scale} noMargin>
+    <div>
       <Container>
         <span>
           {showInput ? (
@@ -34,7 +36,7 @@ function EditableTitle({ value, onChange, scale = 'h3' }: EditableTitleProps) {
               onChange={(e) => setInputValue(e.target.value)}
             />
           ) : (
-            value
+            children
           )}
         </span>
         {showInput && onChange && (
@@ -61,7 +63,7 @@ function EditableTitle({ value, onChange, scale = 'h3' }: EditableTitleProps) {
           <Button icon={<RiEditLine />} onClick={() => setShowInput(true)} />
         )}
       </Container>
-    </Type>
+    </div>
   );
 }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import useAuth from 'hooks/useAuth';
 import { createPortfolio } from 'libs/portfolio';
@@ -7,6 +8,7 @@ import CreatePortfolio from 'components/CreatePortfolio';
 
 function Create() {
   const { currentUser } = useAuth();
+  const history = useHistory();
 
   return (
     <>
@@ -19,6 +21,8 @@ function Create() {
 
           // Analytics
           logEvent('create_portfolio', { currency });
+
+          history.push('/portfolio');
         }}
       />
     </>

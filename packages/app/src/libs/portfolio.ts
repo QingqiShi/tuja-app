@@ -325,7 +325,7 @@ export function createPortfolio(name: string, currency: string, uid: string) {
 
 export function watchPortfolio(
   { uid }: { uid: string },
-  onSnap: (data: Portfolio | null) => void
+  onSnap: (data: Portfolio[]) => void
 ) {
   const collectionRef = firestore()
     .collection(`/portfolios`)
@@ -333,11 +333,10 @@ export function watchPortfolio(
   return collectionRef.onSnapshot((collection) => {
     const docs = collection.docs;
     if (collection.empty || docs.length <= 0) {
-      onSnap(null);
+      onSnap([]);
       return;
     }
-    const data = docs[0].data();
-    onSnap(dbToPortfolio(data));
+    onSnap(docs.map((doc) => dbToPortfolio(doc.data())));
   });
 }
 
@@ -475,7 +474,7 @@ export const examplePortfolio: Portfolio = {
       date: new Date('2019-07-01'),
       type: 'Trade',
       trades: [{ ticker: 'VUSA.LSE', units: 50 }],
-      cost: 2237,
+      cost: 22.37,
     },
     {
       date: new Date('2020-08-31'),

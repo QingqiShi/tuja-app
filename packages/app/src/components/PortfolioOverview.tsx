@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import dayjs from 'dayjs';
 import Type from 'components/Type';
+import Select from 'components/Select';
 import EditableTitle from 'components/EditableTitle';
 import { updatePortfolioName } from 'libs/portfolio';
 import { formatCurrency } from 'libs/stocksClient';
@@ -105,7 +106,7 @@ interface PortfolioOverviewProps {
 }
 
 function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
-  const { portfolio } = usePortfolio();
+  const { portfolio, portfolios, handleChangePortfolio } = usePortfolio();
   const { portfolioPerformance } = usePortfolioPerformance();
   const [startDate] = useStartDate();
 
@@ -119,14 +120,28 @@ function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
         <div>
           <Label>Portfolio Name</Label>
           <EditableTitle
-            scale="h5"
-            value={portfolio.name ?? 'My Investments'}
+            defaultValue={portfolio.name ?? 'My Investments'}
             onChange={
               !isDemo
                 ? async (newName) => updatePortfolioName(portfolio.id, newName)
                 : undefined
             }
-          />
+          >
+            {(isDemo || portfolios.length === 1) && (
+              <Type scale="h5" noMargin>
+                {portfolio.name}
+              </Type>
+            )}
+            {!isDemo && portfolios.length > 1 && (
+              <Select
+                options={portfolios.map((p, i) => ({
+                  label: p.name,
+                  value: `${i}`,
+                }))}
+                onChange={(e) => handleChangePortfolio(Number(e.target.value))}
+              />
+            )}
+          </EditableTitle>
         </div>
         <div>
           <Label>Performance Since</Label>
