@@ -36,5 +36,5 @@ export interface ActivityFormProps {
   initialActivity?: Activity;
   onClose?: () => void;
   onSubmit?: (activity: Activity) => Promise<void>;
-  onDelete?: () => void;
+  onDelete?: () => Promise<void>;
 }

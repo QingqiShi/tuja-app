@@ -16,6 +16,7 @@ import {
   CardMedia,
 } from 'commonStyledComponents';
 import useStocksData from 'hooks/useStocksData';
+import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
 import { theme, getTheme } from 'theme';
 import Type from './Type';
 import type { ActivityFormProps } from 'libs/activities';
@@ -98,6 +99,7 @@ function ActivityTradeForm({
   onDelete,
 }: ActivityTradeFormProps) {
   const { stocksData } = useStocksData();
+  const { portfolioPerformance } = usePortfolioPerformance();
   const [date, setDate] = useState<Date>(initialActivity?.date ?? new Date());
   const [tickerToAdd, setTickerToAdd] = useState('');
   const [quantityToAdd, setQuantityToAdd] = useState(0);
@@ -105,6 +107,7 @@ function ActivityTradeForm({
   const [cost, setCost] = useState(
     (initialActivity?.type === 'Trade' ? initialActivity.cost : null) ?? 0
   );
+  const [remainingCash, setRemainingCash] = useState(0);
   const [tickers, setTickers] = useState<
     { ticker: string; units: number; raw: string }[]
   >(
@@ -254,6 +257,7 @@ function ActivityTradeForm({
             <Field>
               <Button
                 variant="primary"
+                type="button"
                 startIcon={<RiAddLine />}
                 disabled={!tickerToAdd || !quantityToAdd}
                 onClick={() => {
@@ -328,6 +332,7 @@ function ActivityTradeForm({
             <Field>
               <Button
                 icon={<RiDeleteBinLine />}
+                type="button"
                 onClick={() =>
                   setTickers((current) =>
                     current.filter(
@@ -348,10 +353,37 @@ function ActivityTradeForm({
         currency={currency}
         required
       />
+
+      <InvestmentsContainer>
+        <InvestmentRow>
+          <CurrencyInput
+            label="Calculate cost (enter remaining cash)"
+            value={remainingCash}
+            onChange={setRemainingCash}
+            currency={currency}
+          />
+          <Field>
+            <Button
+              type="button"
+              disabled={!remainingCash}
+              onClick={() => {
+                setCost(
+                  (portfolioPerformance?.remainingCash ?? 0) - remainingCash
+                );
+                setRemainingCash(0);
+              }}
+            >
+              Calculate
+            </Button>
+          </Field>
+        </InvestmentRow>
+      </InvestmentsContainer>
+
       <ActionsContainer>
         <Button
           variant="shout"
-          disabled={!date || !tickers.length || !cost || loading}
+          disabled={!date || !tickers.length || loading}
+          type="submit"
         >
           {mode === 'buy' ? 'Buy' : 'Sell'}
         </Button>
