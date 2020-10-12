@@ -4066,10 +4066,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/d3-array@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-2.0.0.tgz#a0d63a296a2d8435a9ec59393dcac746c6174a96"
-  integrity sha512-rGqfPVowNDTszSFvwoZIXvrPG7s/qKzm9piCRIH6xwTTRu7pPZ3ootULFnPkTt74B6i5lN0FpLQL24qGOw1uZA==
+"@types/d3-array@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-2.1.0.tgz#b09b07db2a28dd91bea3ae8cbab3750f23ff2285"
+  integrity sha512-MvRcQBuKPhCW42th3Fb3qX8SVIYKPKkS8eCZmWKLzb49yh8BuevX729WQ//uRlHWZLMkj94fvA7Ulf5cum0gUA==
 
 "@types/d3-color@*":
   version "1.2.2"
