@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import CurrencyInput from 'components/CurrencyInput';
 import { Table, TableRow, TableHeader, TableCell } from 'components/Table';
@@ -28,12 +28,12 @@ function AutoInvest({ portfolioPerformance }: AutoInvestProps) {
   const holdings = portfolioPerformance.holdings;
   const allocationTickers = Object.keys(targetAllocations ?? {});
 
-  const [cash, setCash] = useState(portfolioPerformance.remainingCash ?? 0);
+  const portfolioCash = portfolioPerformance.remainingCash ?? 0;
+  const [cash, setCash] = useState(portfolioCash);
 
   const stageOneCalcs = allocationTickers.map((ticker) => {
     const value = holdings[ticker]?.value ?? 0;
-    const holdingsValue =
-      portfolioPerformance.value - portfolioPerformance.remainingCash;
+    const holdingsValue = portfolioPerformance.value - portfolioCash;
     const targetAllocation = targetAllocations?.[ticker] ?? 0;
     const allocation = value / (holdingsValue + cash);
     const underWeightValue =
@@ -53,6 +53,10 @@ function AutoInvest({ portfolioPerformance }: AutoInvestProps) {
     (total, { underWeightValue }) => total + underWeightValue,
     0
   );
+
+  useEffect(() => {
+    setCash(portfolioCash);
+  }, [portfolioCash]);
 
   return portfolio && targetAllocations ? (
     <div>
