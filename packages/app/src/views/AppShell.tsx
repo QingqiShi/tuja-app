@@ -54,6 +54,9 @@ function AppShell() {
           <Route path="/activities">
             <Activities />
           </Route>
+          <Route path="/create-portfolio">
+            <Create />
+          </Route>
           <Route>
             <Redirect to="/portfolio" />
           </Route>

@@ -11,7 +11,7 @@ export default EditableTitleStories;
 
 export const Demo = () => (
   <EditableTitle
-    value="My Portfolio"
+    defaultValue="My Portfolio"
     onChange={async () => action('title-changed')()}
   />
 );

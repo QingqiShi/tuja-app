@@ -30,6 +30,8 @@ export const Demo = (args: any) => (
     value={{
       portfolio: { currency: 'GBP', aliases: {} } as any,
       loaded: true,
+      portfolios: [],
+      handleChangePortfolio: () => {},
     }}
   >
     <InvestmentsListItem {...args} onToggle={action('onToggle')} />

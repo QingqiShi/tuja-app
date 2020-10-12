@@ -13,6 +13,8 @@ export const Demo = () => (
   <PortfolioContext.Provider
     value={{
       portfolio: { currency: 'GBP', aliases: {} } as any,
+      portfolios: [],
+      handleChangePortfolio: () => {},
       loaded: true,
     }}
   >

@@ -46,6 +46,8 @@ export function PortfolioPerformanceProvider({
       const payload = e.data;
       if (payload) {
         setPortfolioPerformance(payload);
+      } else {
+        setPortfolioPerformance(null);
       }
     };
     portfolioWorker.addEventListener('message', handler);
