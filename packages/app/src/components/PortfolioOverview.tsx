@@ -134,6 +134,7 @@ function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
             )}
             {!isDemo && portfolios.length > 1 && (
               <Select
+                defaultValue={`${portfolios.indexOf(portfolio)}`}
                 options={portfolios.map((p, i) => ({
                   label: p.name,
                   value: `${i}`,
