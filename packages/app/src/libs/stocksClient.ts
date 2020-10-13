@@ -103,6 +103,7 @@ const currencyNormalisation: {
 const currencyPairs: { [currency: string]: { [currency: string]: string } } = {
   GBP: {
     USD: 'GBPUSD.FOREX',
+    EUR: 'GBPEUR.FOREX',
   },
   USD: {
     GBP: 'GBPUSD.FOREX',
@@ -150,6 +151,9 @@ export function exchangeCurrency(
 
   if (baseCurrency === 'GBP' && normalisedCurrency === 'USD') {
     return value / (stocksData['GBPUSD.FOREX']?.closeSeries?.get(date) ?? 1);
+  }
+  if (baseCurrency === 'GBP' && normalisedCurrency === 'EUR') {
+    return value / (stocksData['GBPEUR.FOREX']?.closeSeries?.get(date) ?? 1);
   }
   if (baseCurrency === 'USD' && normalisedCurrency === 'GBP') {
     return value * (stocksData['GBPUSD.FOREX']?.closeSeries?.get(date) ?? 1);
