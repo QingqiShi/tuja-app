@@ -2,6 +2,7 @@
 import PortfolioWorker from 'worker-loader!workers/portfolio.worker';
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { PortfolioPerformance } from 'libs/portfolio';
+import TimeSeries from 'libs/timeSeries';
 import useStocksData from 'hooks/useStocksData';
 import usePortfolio from 'hooks/usePortfolio';
 import useStartDate from 'hooks/useStartDate';
@@ -45,7 +46,13 @@ export function PortfolioPerformanceProvider({
     const handler = (e: MessageEvent) => {
       const payload = e.data;
       if (payload) {
-        setPortfolioPerformance(payload);
+        setPortfolioPerformance({
+          ...payload,
+          valueSeries: new TimeSeries(payload.valueSeries),
+          cashFlowSeries: new TimeSeries(payload.cashFlowSeries),
+          gainSeries: new TimeSeries(payload.gainSeries),
+          twrrSeries: new TimeSeries(payload.twrrSeries),
+        });
       } else {
         setPortfolioPerformance(null);
       }

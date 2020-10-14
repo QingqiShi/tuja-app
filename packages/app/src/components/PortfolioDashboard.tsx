@@ -256,8 +256,8 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
               <CardMedia>
                 {selectedChart === 'value' && (
                   <Chart
-                    data={portfolioPerformance?.series.valueSeries.data ?? []}
-                    benchmark={portfolioPerformance?.series.deposits.data ?? []}
+                    data={portfolioPerformance?.valueSeries.data ?? []}
+                    benchmark={portfolioPerformance?.cashFlowSeries.data ?? []}
                     currency={portfolio.currency}
                     benchmarkLabel="Cost"
                     hideAxis
@@ -265,14 +265,14 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                 )}
                 {selectedChart === 'gains' && (
                   <Chart
-                    data={portfolioPerformance?.series.gains.data ?? []}
+                    data={portfolioPerformance?.gainSeries.data ?? []}
                     currency={portfolio.currency}
                     hideAxis
                   />
                 )}
                 {selectedChart === 'returns' && (
                   <Chart
-                    data={portfolioPerformance?.series.returns.data ?? []}
+                    data={portfolioPerformance?.twrrSeries.data ?? []}
                     formatPercentage
                     hideAxis
                   />

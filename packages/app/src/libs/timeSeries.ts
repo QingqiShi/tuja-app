@@ -66,6 +66,11 @@ class TimeSeries {
     }
     return this.data[0][1];
   }
+
+  getLast() {
+    if (!this.data.length) return 0;
+    return this.data[this.data.length - 1][1];
+  }
 }
 
 /**

@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 import CurrencyInput from 'components/CurrencyInput';
 import { Table, TableRow, TableHeader, TableCell } from 'components/Table';
 import usePortfolio from 'hooks/usePortfolio';
+import useStocksData from 'hooks/useStocksData';
 import { PortfolioPerformance } from 'libs/portfolio';
 import { formatCurrency } from 'libs/stocksClient';
 import { CardMedia } from 'commonStyledComponents';
@@ -23,17 +24,17 @@ interface AutoInvestProps {
 
 function AutoInvest({ portfolioPerformance }: AutoInvestProps) {
   const { portfolio } = usePortfolio();
+  const { stocksData } = useStocksData();
 
   const targetAllocations = portfolio?.targetAllocations;
   const holdings = portfolioPerformance.holdings;
   const allocationTickers = Object.keys(targetAllocations ?? {});
 
-  const portfolioCash = portfolioPerformance.remainingCash ?? 0;
-  const [cash, setCash] = useState(portfolioCash);
+  const [cash, setCash] = useState(portfolioPerformance.cash ?? 0);
 
   const stageOneCalcs = allocationTickers.map((ticker) => {
     const value = holdings[ticker]?.value ?? 0;
-    const holdingsValue = portfolioPerformance.value - portfolioCash;
+    const holdingsValue = portfolioPerformance.totalHoldingsValue;
     const targetAllocation = targetAllocations?.[ticker] ?? 0;
     const allocation = value / (holdingsValue + cash);
     const underWeightValue =
@@ -55,8 +56,8 @@ function AutoInvest({ portfolioPerformance }: AutoInvestProps) {
   );
 
   useEffect(() => {
-    setCash(portfolioCash);
-  }, [portfolioCash]);
+    setCash(portfolioPerformance.cash);
+  }, [portfolioPerformance.cash]);
 
   return portfolio && targetAllocations ? (
     <div>
@@ -90,7 +91,7 @@ function AutoInvest({ portfolioPerformance }: AutoInvestProps) {
                     <TableCell
                       secondary={
                         portfolio.aliases[ticker] ??
-                        portfolioPerformance.holdings[ticker]?.info?.Name ??
+                        stocksData[ticker].info?.Name ??
                         ticker
                       }
                     >

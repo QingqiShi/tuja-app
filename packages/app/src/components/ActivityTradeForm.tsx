@@ -367,9 +367,7 @@ function ActivityTradeForm({
               type="button"
               disabled={!remainingCash}
               onClick={() => {
-                setCost(
-                  (portfolioPerformance?.remainingCash ?? 0) - remainingCash
-                );
+                setCost((portfolioPerformance?.cash ?? 0) - remainingCash);
                 setRemainingCash(0);
               }}
             >

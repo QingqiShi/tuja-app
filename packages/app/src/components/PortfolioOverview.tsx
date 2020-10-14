@@ -114,6 +114,8 @@ function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
     return null;
   }
 
+  const gain = portfolioPerformance?.gainSeries.getLast() ?? 0;
+
   return (
     <Container className={className}>
       <Split>
@@ -151,16 +153,18 @@ function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
         <div>
           <Label>Gain</Label>
           <Value>
-            {(portfolioPerformance?.gain ?? 0) > 0 ? '+' : ''}
-            {formatCurrency(
-              portfolio.currency,
-              portfolioPerformance?.gain ?? 0
-            )}
+            {(gain ?? 0) > 0 ? '+' : ''}
+            {formatCurrency(portfolio.currency, gain ?? 0)}
           </Value>
         </div>
         <div>
           <Label>Return</Label>
-          <Value>{((portfolioPerformance?.roi ?? 0) * 100).toFixed(2)}%</Value>
+          <Value>
+            {((portfolioPerformance?.twrrSeries.getLast() ?? 0) * 100).toFixed(
+              2
+            )}
+            %
+          </Value>
         </div>
       </Split>
     </Container>
