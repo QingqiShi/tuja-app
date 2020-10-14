@@ -49,18 +49,21 @@ function PortfolioPieCard(_props: PortfolioPieCardProps) {
   const { portfolio } = usePortfolio();
   const { portfolioPerformance } = usePortfolioPerformance();
 
+  const portfolioValue = portfolioPerformance?.valueSeries.getLast() ?? 0;
+
   const pieData = portfolioPerformance
     ? Object.keys(portfolioPerformance.holdings)
         .map((ticker) => ({
           label: ticker,
-          percentage:
-            portfolioPerformance.holdings[ticker].value /
-            portfolioPerformance.value,
+          percentage: portfolioValue
+            ? portfolioPerformance.holdings[ticker].value / portfolioValue
+            : 0,
         }))
         .concat({
           label: 'Cash',
-          percentage:
-            portfolioPerformance.remainingCash / portfolioPerformance.value,
+          percentage: portfolioValue
+            ? portfolioPerformance.cash / portfolioValue
+            : 0,
         })
         .sort((a, b) => b.percentage - a.percentage)
     : [];
@@ -76,10 +79,7 @@ function PortfolioPieCard(_props: PortfolioPieCardProps) {
           <div>
             <Pie
               data={pieData}
-              primaryText={formatCurrency(
-                portfolio.currency,
-                portfolioPerformance?.value ?? 0
-              )}
+              primaryText={formatCurrency(portfolio.currency, portfolioValue)}
               secondaryText="Portfolio Value"
             />
           </div>

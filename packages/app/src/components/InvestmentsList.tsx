@@ -9,6 +9,7 @@ import InvestmentsListItem from 'components/InvestmentsListItem';
 import Select from 'components/Select';
 import { Card } from 'commonStyledComponents';
 import useColors from 'hooks/useColors';
+import useStocksData from 'hooks/useStocksData';
 import { theme } from 'theme';
 
 const SortByContainer = styled.div`
@@ -40,7 +41,7 @@ interface InvestmentsListProps {
 }
 
 function InvestmentsList({
-  portfolioPerformance: { value, holdings },
+  portfolioPerformance: { valueSeries, holdings },
 }: InvestmentsListProps) {
   const [showMore, setShowMore] = useState('');
   const [showAlias, setShowAlias] = useState(false);
@@ -53,7 +54,10 @@ function InvestmentsList({
   const aliasRef = useBodyScrollLock(showAlias);
   const allocationRef = useBodyScrollLock(showAllocation);
 
+  const { stocksData } = useStocksData();
   const getColor = useColors();
+
+  const value = valueSeries.getLast();
 
   const sortedHoldings = [...Object.keys(holdings)]
     .sort((a, b) => {
@@ -64,14 +68,15 @@ function InvestmentsList({
           return holdings[b].value / value - holdings[a].value / value;
         case 'TODAY':
           return (
-            holdings[b].dayChangePercentage - holdings[a].dayChangePercentage
+            (stocksData[b].livePrice?.change_p ?? 0) -
+            (stocksData[a].livePrice?.change_p ?? 0)
           );
         case 'GAIN':
         default:
           return holdings[b].gain - holdings[a].gain;
       }
     })
-    .filter((ticker) => !!holdings[ticker].quantity);
+    .filter((ticker) => !!holdings[ticker].units);
 
   return (
     <>

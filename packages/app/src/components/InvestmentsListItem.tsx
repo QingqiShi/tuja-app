@@ -170,23 +170,15 @@ function InvestmentsListItem({
   }
 
   const { currency, aliases, targetAllocations } = portfolio;
-  const {
-    info,
-    livePrice,
-    gain,
-    roi,
-    quantity,
-    value,
-    dayChange,
-    dayChangePercentage,
-  } = holdingPerformance;
+  const { value, gain, units, returns } = holdingPerformance;
+  const { info, livePrice } = stocksData[ticker];
 
   return (
     <InvestmentContainer onClick={onToggle}>
       <InvestmentCard>
         <TopRow>
           <TitleContainer>
-            <Type scale="h6">{aliases[ticker] ?? info?.Name}</Type>
+            <Type scale="h6">{aliases[ticker] ?? info?.Name ?? ticker}</Type>
             <Type scale="body1">{ticker}</Type>
           </TitleContainer>
 
@@ -197,8 +189,8 @@ function InvestmentsListItem({
                 {formatCurrency(currency, gain)}
               </Type>
               <Type scale="body1">
-                {roi >= 0 && '+'}
-                {(roi * 100).toFixed(2)}%
+                {returns >= 0 && '+'}
+                {(returns * 100).toFixed(2)}%
               </Type>
             </PriceContainer>
           )}
@@ -206,7 +198,7 @@ function InvestmentsListItem({
             <PriceContainer>
               <Type scale="h6">{formatCurrency(currency, value)}</Type>
               <Type scale="body1">
-                {quantity} ×{' '}
+                {units} ×{' '}
                 {info &&
                   livePrice &&
                   formatCurrency(info.Currency, livePrice.close)}
@@ -226,12 +218,12 @@ function InvestmentsListItem({
           {mode === 'TODAY' && (
             <PriceContainer>
               <Type scale="h6">
-                {dayChangePercentage >= 0 ? '+' : ''}
-                {(dayChangePercentage * 100).toFixed(2)}%
+                {(livePrice?.change_p ?? 0) >= 0 ? '+' : ''}
+                {(livePrice?.change_p ?? 0).toFixed(2)}%
               </Type>
               <Type scale="body1">
-                {dayChange >= 0 && '+'}
-                {info && formatCurrency(info.Currency, dayChange)}
+                {(livePrice?.change ?? 0) >= 0 && '+'}
+                {info && formatCurrency(info.Currency, livePrice?.change ?? 0)}
               </Type>
             </PriceContainer>
           )}
@@ -266,7 +258,7 @@ function InvestmentsListItem({
           </div>
           <div>
             <Label>Return</Label>
-            <Type scale="body1">{(roi * 100).toFixed(2)}%</Type>
+            <Type scale="body1">{(returns * 100).toFixed(2)}%</Type>
           </div>
           <div>
             <Label>Current Value</Label>
@@ -274,7 +266,7 @@ function InvestmentsListItem({
           </div>
           <div>
             <Label>No. units</Label>
-            <Type scale="body1">{quantity}</Type>
+            <Type scale="body1">{units}</Type>
           </div>
           <div>
             <Label>Current price</Label>
@@ -287,14 +279,14 @@ function InvestmentsListItem({
           <div>
             <Label>Est. cost per unit</Label>
             <Type scale="body1">
-              {formatCurrency(currency, (value - gain) / quantity)}
+              {formatCurrency(currency, (value - gain) / units)}
             </Type>
           </div>
           <div>
             <Label>Today's change</Label>
             <Type scale="body1">
-              {dayChangePercentage >= 0 ? '+' : ''}
-              {(dayChangePercentage * 100).toFixed(2)}%
+              {(livePrice?.change_p ?? 0) >= 0 ? '+' : ''}
+              {(livePrice?.change_p ?? 0).toFixed(2)}%
             </Type>
           </div>
           <div>
