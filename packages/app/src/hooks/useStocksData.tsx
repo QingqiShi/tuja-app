@@ -248,13 +248,17 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
       }
 
       // Use stocks info to get a list of required Forex pairs
-      const requiredCurrencies = Object.keys(newStocksData)
-        .map((ticker) => newStocksData[ticker].info as StockInfo)
-        .filter((x) => !!x)
-        .map((info) =>
-          getForexPair(info.Currency, (baseCurrency as any) ?? 'GBP')
+      const requiredCurrencies = Array.from(
+        new Set(
+          Object.keys(newStocksData)
+            .map((ticker) => newStocksData[ticker].info as StockInfo)
+            .filter((x) => !!x)
+            .map((info) =>
+              getForexPair(info.Currency, (baseCurrency as any) ?? 'GBP')
+            )
+            .filter(<T extends {}>(x: T | null): x is T => !!x)
         )
-        .filter(<T extends {}>(x: T | null): x is T => !!x);
+      );
       console.log('required currencies', requiredCurrencies);
 
       // Fetch stocksHistory
