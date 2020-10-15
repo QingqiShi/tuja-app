@@ -6,7 +6,7 @@ import Type from 'components/Type';
 import Select from 'components/Select';
 import EditableTitle from 'components/EditableTitle';
 import { updatePortfolioName } from 'libs/portfolio';
-import { formatCurrency } from 'libs/stocksClient';
+import { formatCurrency } from 'libs/forex';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
 import useStartDate from 'hooks/useStartDate';

@@ -9,7 +9,7 @@ import ActivityDividendForm from './ActivityDividendForm';
 import ActivityStockDividendForm from './ActivityStockDividendForm';
 import ActivityTradeForm from './ActivityTradeForm';
 import { Card } from 'commonStyledComponents';
-import { formatCurrency } from 'libs/stocksClient';
+import { formatCurrency } from 'libs/forex';
 import { logEvent } from 'libs/analytics';
 import { updatePortfolioActivities } from 'libs/portfolio';
 import { Activity } from 'libs/activities';

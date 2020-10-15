@@ -5,7 +5,7 @@ import { Table, TableRow, TableHeader, TableCell } from 'components/Table';
 import usePortfolio from 'hooks/usePortfolio';
 import useStocksData from 'hooks/useStocksData';
 import { PortfolioPerformance } from 'libs/portfolio';
-import { formatCurrency } from 'libs/stocksClient';
+import { formatCurrency } from 'libs/forex';
 import { CardMedia } from 'commonStyledComponents';
 import { theme } from 'theme';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import Pie from 'components/Pie';
 import { Card, CardMedia } from 'commonStyledComponents';
-import { formatCurrency } from 'libs/stocksClient';
+import { formatCurrency } from 'libs/forex';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
 import { theme } from 'theme';

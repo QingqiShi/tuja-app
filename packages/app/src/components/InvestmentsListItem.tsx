@@ -3,7 +3,7 @@ import { RiEdit2Line, RiPercentLine } from 'react-icons/ri';
 import styled, { css } from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { PortfolioPerformance } from 'libs/portfolio';
-import { formatCurrency } from 'libs/stocksClient';
+import { formatCurrency } from 'libs/forex';
 import usePortfolio from 'hooks/usePortfolio';
 import useStocksData from 'hooks/useStocksData';
 import useStartDate from 'hooks/useStartDate';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TextInput from './TextInput';
-import { formatCurrency, parseCurrency } from 'libs/stocksClient';
+import { formatCurrency, parseCurrency } from 'libs/forex';
 
 type BaseProps = Omit<
   React.ComponentProps<typeof TextInput>,

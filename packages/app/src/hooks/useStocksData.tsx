@@ -13,11 +13,11 @@ import {
   fetchStocksInfo,
   fetchStocksHistory,
   fetchStockLivePrice,
-  getRequiredCurrencies,
   resolveMissingStocksHistory,
   shouldFetchData,
   StockInfo,
 } from 'libs/stocksClient';
+import { getForexPair } from 'libs/forex';
 import useLoadingState from './useLoadingState';
 import TimeSeries, { validateSeries } from 'libs/timeSeries';
 
@@ -248,12 +248,13 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
       }
 
       // Use stocks info to get a list of required Forex pairs
-      const requiredCurrencies = getRequiredCurrencies(
-        (baseCurrency as any) ?? 'GBP',
-        Object.keys(newStocksData)
-          .map((ticker) => newStocksData[ticker].info as StockInfo)
-          .filter((x) => !!x)
-      );
+      const requiredCurrencies = Object.keys(newStocksData)
+        .map((ticker) => newStocksData[ticker].info as StockInfo)
+        .filter((x) => !!x)
+        .map((info) =>
+          getForexPair(info.Currency, (baseCurrency as any) ?? 'GBP')
+        )
+        .filter(<T extends {}>(x: T | null): x is T => !!x);
       console.log('required currencies', requiredCurrencies);
 
       // Fetch stocksHistory
