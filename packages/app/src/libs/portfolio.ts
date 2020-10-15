@@ -199,7 +199,7 @@ export const examplePortfolio: Portfolio = {
       date: new Date('2019-07-01'),
       type: 'Trade',
       trades: [{ ticker: 'VUSA.LSE', units: 50 }],
-      cost: 22.37,
+      cost: 2237,
     },
     {
       date: new Date('2020-08-31'),
