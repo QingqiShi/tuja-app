@@ -46,38 +46,45 @@ export function collectHoldingsCost(
 ) {
   const newUnits: { [ticker: string]: number } = {};
   const newCosts: { [ticker: string]: number } = { ...costs };
-  const processTicker = (ticker: string, units: number) => {
+  const setUnits = (ticker: string, units: number) => {
     if (!(ticker in newUnits)) {
       newUnits[ticker] = 0;
     }
     newUnits[ticker] += units;
   };
   // Trades
-  Object.keys(item.trades).forEach((ticker) =>
-    processTicker(ticker, item.trades[ticker])
-  );
-  // Stock dividend
-  Object.keys(item.stockDividend).forEach((ticker) =>
-    processTicker(ticker, item.stockDividend[ticker])
-  );
-  // Calculate new costs
-  Object.keys(newUnits).forEach((ticker) => {
+  Object.keys(item.trades).forEach((ticker) => {
     const stock = stocksData[ticker];
     if (!stock) return;
-    const price = exchangeCurrency(
-      stock.closeSeries?.get(item.date) ?? 0,
-      stock.info?.Currency ?? baseCurrency,
-      baseCurrency,
-      item.date,
-      stocksData
-    );
+
+    setUnits(ticker, item.trades[ticker]);
+
+    const price =
+      Object.keys(item.trades).length === 1
+        ? item.totalTradeCost
+        : exchangeCurrency(
+            stock.closeSeries?.get(item.date) ?? 0,
+            stock.info?.Currency ?? baseCurrency,
+            baseCurrency,
+            item.date,
+            stocksData
+          );
     const units = newUnits[ticker];
     const currentCost = costs[ticker] ?? 0;
     const currentUnits = numShares[ticker] ?? 0;
     newCosts[ticker] =
       (currentCost * currentUnits + price * units) / (currentUnits + units);
   });
+  // Stock dividend
+  Object.keys(item.stockDividend).forEach((ticker) => {
+    const currentCost = newCosts[ticker] ?? costs[ticker] ?? 0;
+    const currentUnits = numShares[ticker] ?? 0 + newUnits[ticker] ?? 0;
 
+    setUnits(ticker, item.stockDividend[ticker]);
+    newCosts[ticker] =
+      (currentCost * currentUnits) /
+      (currentUnits + item.stockDividend[ticker]);
+  });
   return newCosts;
 }
 

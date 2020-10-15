@@ -15,7 +15,7 @@ import { max, min, extent, bisector } from 'd3-array';
 import dayjs from 'dayjs';
 import { theme, getTheme } from 'theme';
 import type { TooltipSync } from 'hooks/useTooltipSync';
-import { formatCurrency } from 'libs/stocksClient';
+import { formatCurrency } from 'libs/forex';
 
 const Container = styled.div`
   width: 100%;
