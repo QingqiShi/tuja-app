@@ -114,7 +114,9 @@ function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
     return null;
   }
 
-  const gain = portfolioPerformance?.gainSeries.getLast() ?? 0;
+  const gain =
+    (portfolioPerformance?.gainSeries.getLast() ?? 0) -
+    (portfolioPerformance?.gainSeries.data[0]?.[1] ?? 0);
 
   return (
     <Container className={className}>
