@@ -7,6 +7,7 @@ import 'firebase/firestore';
 import 'firebase/functions';
 import 'firebase/auth';
 import 'firebase/analytics';
+import 'firebase/performance';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import './index.css';
@@ -30,6 +31,7 @@ if (window.location.hostname === 'localhost') {
   firebase.analytics().setAnalyticsCollectionEnabled(false);
 } else {
   firebase.analytics();
+  firebase.performance();
 }
 
 dayjs.extend(isSameOrBefore);
