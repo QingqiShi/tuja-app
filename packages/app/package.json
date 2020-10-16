@@ -19,7 +19,7 @@
     "dayjs": "^1.9.3",
     "escape-string-regexp": "^4.0.0",
     "idb": "^5.0.7",
-    "polished": "^4.0.2",
+    "polished": "^4.0.3",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-helmet-async": "^1.0.7",
