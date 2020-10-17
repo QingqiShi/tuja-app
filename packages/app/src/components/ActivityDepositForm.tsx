@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { RiHandCoinLine, RiDeleteBinLine } from 'react-icons/ri';
+import { v4 as uuid } from 'uuid';
 import DateInput from './DateInput';
 import CurrencyInput from './CurrencyInput';
 import Button from './Button';
@@ -25,7 +26,12 @@ function ActivityDepositForm({
         setLoading(true);
         try {
           if (onSubmit) {
-            await onSubmit({ type: 'Deposit', date, amount });
+            await onSubmit({
+              id: initialActivity?.id ?? uuid(),
+              type: 'Deposit',
+              date,
+              amount,
+            });
           }
           setLoading(false);
           if (onClose) {

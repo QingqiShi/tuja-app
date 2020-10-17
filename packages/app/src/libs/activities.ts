@@ -1,25 +1,26 @@
-interface DepositActivity {
+interface BaseActivity {
+  id: string;
   date: Date;
+}
+
+interface DepositActivity extends BaseActivity {
   type: 'Deposit';
   amount: number;
 }
 
-interface TradeActivity {
-  date: Date;
+interface TradeActivity extends BaseActivity {
   type: 'Trade';
   trades: { ticker: string; units: number }[];
   cost: number;
 }
 
-interface DividendActivity {
-  date: Date;
+interface DividendActivity extends BaseActivity {
   type: 'Dividend';
   ticker: string;
   amount: number;
 }
 
-interface StockDividendActivity {
-  date: Date;
+interface StockDividendActivity extends BaseActivity {
   type: 'StockDividend';
   ticker: string;
   units: number;

@@ -100,7 +100,7 @@ function ActivitiesList() {
         if (activity.type === 'Deposit') {
           return (
             <ActivityCard
-              key={`activity-${i}`}
+              key={`activity-${activity.id}`}
               onClick={() => {
                 setUpdateIndex(i);
                 setShowUpdateActivity(true);

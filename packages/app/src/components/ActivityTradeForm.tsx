@@ -4,6 +4,7 @@ import { RiAddLine, RiDeleteBinLine } from 'react-icons/ri';
 import { functions } from 'firebase/app';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
+import { v4 as uuid } from 'uuid';
 import DateInput from './DateInput';
 import CurrencyInput from './CurrencyInput';
 import Button from './Button';
@@ -19,7 +20,7 @@ import useStocksData from 'hooks/useStocksData';
 import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
 import { theme, getTheme } from 'theme';
 import Type from './Type';
-import type { ActivityFormProps } from 'libs/activities';
+import type { Activity, ActivityFormProps } from 'libs/activities';
 
 const InvestmentsContainer = styled.div`
   border-radius: ${theme.spacings('xs')};
@@ -86,6 +87,12 @@ const SearchSuggestionItem = styled.button`
   }
 `;
 
+const getInitialCost = (activity?: Activity) => {
+  if (activity?.type !== 'Trade') return 0;
+  if (activity.cost < 0) return activity.cost * -1;
+  return activity.cost;
+};
+
 interface ActivityTradeFormProps extends ActivityFormProps {
   mode: 'buy' | 'sell';
 }
@@ -104,9 +111,7 @@ function ActivityTradeForm({
   const [tickerToAdd, setTickerToAdd] = useState('');
   const [quantityToAdd, setQuantityToAdd] = useState(0);
   const [quantityToAddRaw, setQuantityToAddRaw] = useState('0');
-  const [cost, setCost] = useState(
-    (initialActivity?.type === 'Trade' ? initialActivity.cost : null) ?? 0
-  );
+  const [cost, setCost] = useState(getInitialCost(initialActivity));
   const [remainingCash, setRemainingCash] = useState(0);
   const [tickers, setTickers] = useState<
     { ticker: string; units: number; raw: string }[]
@@ -158,6 +163,7 @@ function ActivityTradeForm({
         try {
           if (onSubmit) {
             await onSubmit({
+              id: initialActivity?.id ?? uuid(),
               type: 'Trade',
               date,
               trades: tickers.map(({ ticker, units }) => ({
@@ -367,7 +373,11 @@ function ActivityTradeForm({
               type="button"
               disabled={!remainingCash}
               onClick={() => {
-                setCost((portfolioPerformance?.cash ?? 0) - remainingCash);
+                setCost(
+                  mode === 'buy'
+                    ? (portfolioPerformance?.cash ?? 0) - remainingCash
+                    : remainingCash - (portfolioPerformance?.cash ?? 0)
+                );
                 setRemainingCash(0);
               }}
             >

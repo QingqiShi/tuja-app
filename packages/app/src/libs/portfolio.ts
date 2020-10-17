@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { v4 as uuid } from 'uuid';
 import { firestore } from 'firebase/app';
 import TimeSeries from './timeSeries';
 import { Activity } from './activities';
@@ -61,7 +62,15 @@ export function watchPortfolio(
       onSnap([]);
       return;
     }
-    onSnap(docs.map((doc) => dbToPortfolio(doc.data())));
+    const portfolios = docs
+      .map((doc) => dbToPortfolio(doc.data()))
+      .map((portfolio) => ({
+        ...portfolio,
+        activities: portfolio.activities.map((activity) =>
+          activity.id ? activity : { ...activity, id: uuid() }
+        ),
+      }));
+    onSnap(portfolios);
   });
 }
 
@@ -182,26 +191,30 @@ export const examplePortfolio: Portfolio = {
     'VUSA.LSE': 'S&P 500 ETF',
   },
   activities: [
-    { date: new Date('2019-07-01'), type: 'Deposit', amount: 5000 },
+    { id: '1', date: new Date('2019-07-01'), type: 'Deposit', amount: 5000 },
     {
+      id: '2',
       date: new Date('2019-07-01'),
       type: 'Trade',
       trades: [{ ticker: 'AAPL.US', units: 10 }],
       cost: 1587.7,
     },
     {
+      id: '3',
       date: new Date('2019-07-01'),
       type: 'Trade',
       trades: [{ ticker: 'SGLN.LSE', units: 50 }],
       cost: 1077.5,
     },
     {
+      id: '4',
       date: new Date('2019-07-01'),
       type: 'Trade',
       trades: [{ ticker: 'VUSA.LSE', units: 50 }],
       cost: 2237,
     },
     {
+      id: '5',
       date: new Date('2020-08-31'),
       type: 'StockDividend',
       ticker: 'AAPL.US',
