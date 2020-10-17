@@ -27,7 +27,8 @@
     "react-is": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-use": "^15.3.4",
-    "styled-components": "^5.2.0"
+    "styled-components": "^5.2.0",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.1",
@@ -48,6 +49,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.6",
     "@types/styled-components": "^5.1.4",
+    "@types/uuid": "^8.3.0",
     "babel-loader": "^8.1.0",
     "react-scripts": "next",
     "storybook-addon-styled-component-theme": "^1.3.0",

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { RiDeleteBinLine } from 'react-icons/ri';
+import { v4 as uuid } from 'uuid';
 import DateInput from './DateInput';
 import Select from './Select';
 import Button from './Button';
@@ -10,7 +11,6 @@ import usePortfolio from 'hooks/usePortfolio';
 import type { ActivityFormProps } from 'libs/activities';
 
 function ActivityStockDividendForm({
-  currency,
   initialActivity,
   onClose,
   onSubmit,
@@ -49,7 +49,13 @@ function ActivityStockDividendForm({
 
         try {
           if (onSubmit) {
-            await onSubmit({ type: 'StockDividend', date, ticker, units });
+            await onSubmit({
+              id: initialActivity?.id ?? uuid(),
+              type: 'StockDividend',
+              date,
+              ticker,
+              units,
+            });
           }
           setLoading(false);
           if (onClose) {
