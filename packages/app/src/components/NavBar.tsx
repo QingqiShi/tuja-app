@@ -10,10 +10,10 @@ import {
   RiFileListLine,
   RiMenuAddLine,
 } from 'react-icons/ri';
+import { Button } from '@tuja/components';
 import { theme, getTheme } from 'theme';
 import useAuth from 'hooks/useAuth';
 import usePortfolio from 'hooks/usePortfolio';
-import Button from './Button';
 import SignIn from './SignIn';
 
 const Nav = styled.nav`
