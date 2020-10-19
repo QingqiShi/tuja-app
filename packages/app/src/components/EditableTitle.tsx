@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { RiEditLine, RiCheckLine, RiCloseLine } from 'react-icons/ri';
-import Button from './Button';
+import { Button } from '@tuja/components';
 import TextInput from './TextInput';
 
 const Container = styled.div`
