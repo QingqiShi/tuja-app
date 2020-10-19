@@ -1,7 +1,11 @@
 {
-  "name": "@portfolio-mango/functions",
+  "name": "@tuja/functions",
   "version": "0.0.0",
   "private": true,
+  "description": "Backend functions code for Tuja app",
+  "author": "Qingqi Shi <qingqishi@live.com>",
+  "homepage": "https://github.com/QingqiShi/tuja-app#readme",
+  "license": "MIT",
   "scripts": {
     "dev": "yarn build -w --preserveWatchOutput",
     "build": "tsc",
