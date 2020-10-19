@@ -2,8 +2,8 @@ import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { RiDragDropLine, RiCloseLine, RiFileLine } from 'react-icons/ri';
+import { Button } from '@tuja/components';
 import { theme, getTheme } from 'theme';
-import Button from './Button';
 import Type from './Type';
 
 const Container = styled.div`

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { RiBriefcaseLine, RiAddLine } from 'react-icons/ri';
+import { Button } from '@tuja/components';
 import { Center } from 'commonStyledComponents';
 import Type from 'components/Type';
-import Button from 'components/Button';
 import Select from 'components/Select';
 import TextInput from 'components/TextInput';
 import { theme } from 'theme';

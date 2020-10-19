@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { RiHandCoinLine, RiDeleteBinLine } from 'react-icons/ri';
 import { v4 as uuid } from 'uuid';
+import { Button } from '@tuja/components';
 import DateInput from './DateInput';
 import CurrencyInput from './CurrencyInput';
-import Button from './Button';
 import { ActionsContainer } from 'commonStyledComponents';
 import type { ActivityFormProps } from 'libs/activities';
 
