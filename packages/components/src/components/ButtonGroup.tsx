@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
-import { theme, getTheme } from 'theme';
+import { theme, getTheme } from '../theme';
 
 const Container = styled.div`
   display: inline-flex;
@@ -72,20 +72,20 @@ const Button = styled.button<{ isActive?: boolean }>`
     `}
 `;
 
-interface ButtonGroupProps {
-  buttons: { label: string; value: any }[];
-  value?: any;
-  onChange?: (value: any) => void;
+interface ButtonGroupProps<T> {
+  buttons: { label: string; value: T }[];
+  value?: T;
+  onChange?: (value: T) => void;
 }
 
-function ButtonGroup({ buttons, value, onChange }: ButtonGroupProps) {
-  const [internalValue, setInternalValue] = useState(buttons[0]?.value ?? '');
+function ButtonGroup<T>({ buttons, value, onChange }: ButtonGroupProps<T>) {
+  const [internalValue, setInternalValue] = useState(buttons[0]?.value);
 
   return (
     <Container>
       {buttons.map((button) => (
         <Button
-          key={button.value}
+          key={button.label}
           isActive={(value ?? internalValue) === button.value}
           onClick={() => (onChange ?? setInternalValue)(button.value)}
           tabIndex={(value ?? internalValue) === button.value ? -1 : undefined}
