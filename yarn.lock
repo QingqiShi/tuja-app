@@ -4118,10 +4118,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/d3-array@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-2.2.0.tgz#c02943ab387ad4cac0a7cba5e764554220faa107"
-  integrity sha512-mtGpI5bDyjqVvDh21RIJjg3jl9JbxT1JSgmshssohtZotlmLH2FLjkONWhNDZjs4vCa0lShBmOBkGL/iCtxM5Q==
+"@types/d3-array@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-2.3.0.tgz#50e7d7d84aa1f8d7645a4397b7d3a287194f5a38"
+  integrity sha512-eBQLBDq0bcXW9K14ktZDL/oeTzhS7BIoyEb0ZQb7gq4kTI/nZD+OISrpmxFll9LIXp7gOmYk+yPPoxt3GeXtQg==
 
 "@types/d3-color@*":
   version "1.2.2"
