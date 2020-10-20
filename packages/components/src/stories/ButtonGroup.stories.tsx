@@ -1,8 +1,9 @@
 import React from 'react';
+import { Story, Meta } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import ButtonGroup from 'components/ButtonGroup';
+import ButtonGroup from '../components/ButtonGroup';
 
-const ButtonGroupStories = {
+export default {
   title: 'Inputs/ButtonGroup',
   component: ButtonGroup,
   argTypes: {
@@ -10,14 +11,14 @@ const ButtonGroupStories = {
       control: { type: 'text' },
     },
   },
-};
+} as Meta;
 
-export default ButtonGroupStories;
-
-export const Demo = (args: any) => (
-  <ButtonGroup {...args} onChange={action('onChange')} />
+const Template: Story<React.ComponentProps<typeof ButtonGroup>> = (args) => (
+  <ButtonGroup {...args} />
 );
-Demo.args = {
+
+export const Default = Template.bind({});
+Default.args = {
   value: '3M',
   buttons: [
     { label: '1W', value: '1W' },
