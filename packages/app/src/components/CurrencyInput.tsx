@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import TextInput from './TextInput';
+import { TextInput } from '@tuja/components';
 import { formatCurrency, parseCurrency } from 'libs/forex';
 
 type BaseProps = Omit<

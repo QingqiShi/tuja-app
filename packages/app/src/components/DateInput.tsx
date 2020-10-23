@@ -1,6 +1,6 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
-import TextInput from './TextInput';
+import { TextInput } from '@tuja/components';
 
 function checkDateSupported() {
   var input = document.createElement('input');
@@ -20,10 +20,13 @@ interface DateInputProps
   onChange?: (newDate: Date) => void;
 }
 
-function DateInput(
-  { label, defaultValue, onChange, onBlur, ...props }: DateInputProps,
-  ref: React.Ref<HTMLInputElement>
-) {
+function DateInput({
+  label,
+  defaultValue,
+  onChange,
+  onBlur,
+  ...props
+}: DateInputProps) {
   const [internalDate, setInternalDate] = useState(defaultValue ?? new Date());
   const [val, setVal] = useState(
     defaultValue ?? internalDate
@@ -64,9 +67,8 @@ function DateInput(
           onBlur(e);
         }
       }}
-      ref={ref}
     />
   );
 }
 
-export default forwardRef(DateInput);
+export default DateInput;

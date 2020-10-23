@@ -13,7 +13,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react",
-    "baseUrl": "src",
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "outDir": "build",

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { RiEditLine, RiCheckLine, RiCloseLine } from 'react-icons/ri';
-import { Button } from '@tuja/components';
-import TextInput from './TextInput';
+import { Button, TextInput } from '@tuja/components';
 
 const Container = styled.div`
   display: flex;

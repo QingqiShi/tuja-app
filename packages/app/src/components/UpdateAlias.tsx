@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { RiCheckLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
-import { Button } from '@tuja/components';
-import TextInput from './TextInput';
+import { Button, TextInput } from '@tuja/components';
 import { updateHoldingAlias } from 'libs/portfolio';
 import usePortfolio from 'hooks/usePortfolio';
 import { theme } from 'theme';

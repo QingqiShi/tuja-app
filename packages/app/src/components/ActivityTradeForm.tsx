@@ -5,10 +5,9 @@ import { functions } from 'firebase/app';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { v4 as uuid } from 'uuid';
-import { Button } from '@tuja/components';
+import { Button, TextInput } from '@tuja/components';
 import DateInput from './DateInput';
 import CurrencyInput from './CurrencyInput';
-import TextInput from './TextInput';
 import {
   ActionsContainer,
   Field,
