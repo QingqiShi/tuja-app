@@ -60,7 +60,7 @@ export const theme = {
     ctaHeight: '1.2em',
     ctaWeight: 600,
     ctaSpacing: '0.028em',
-    inputSize: '1.2rem',
+    inputSize: '1.1rem',
     inputHeight: '1em',
     inputWeight: 400,
     labelSize: '0.9rem',

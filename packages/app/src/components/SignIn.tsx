@@ -2,11 +2,10 @@ import React, { forwardRef, useState, useMemo } from 'react';
 import styled from 'styled-components/macro';
 import { RiMailSendLine } from 'react-icons/ri';
 import { FaMagic, FaRegQuestionCircle } from 'react-icons/fa';
-import { Button } from '@tuja/components';
+import { Button, TextInput } from '@tuja/components';
 import { theme } from 'theme';
 import useAuth from 'hooks/useAuth';
 import { Center } from 'commonStyledComponents';
-import TextInput from './TextInput';
 import Type from './Type';
 
 const Container = styled.div`

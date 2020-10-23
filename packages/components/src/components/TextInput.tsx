@@ -1,7 +1,7 @@
-import React, { forwardRef } from 'react';
-import styled, { css } from 'styled-components/macro';
+import React from 'react';
+import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
-import { theme, getTheme } from 'theme';
+import { theme, getTheme } from '../theme';
 
 const InputBase = styled.input.attrs((props) => ({
   ...props,
@@ -19,7 +19,7 @@ const InputBase = styled.input.attrs((props) => ({
     ${getTheme(theme.colors.textOnBackground, (color) =>
       transparentize(0.9, color)
     )};
-  height: calc(${theme.spacings('s')} * 2 + ${theme.fonts.inputHeight} + 4px);
+  /* height: calc(${theme.spacings('s')} * 2 + ${theme.fonts.inputHeight} + 4px); */
   color: ${theme.colors.textOnBackground};
   background-color: transparent;
   transition: all 0.2s;
@@ -106,10 +106,14 @@ interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   endIcon?: React.ReactNode;
 }
 
-function TextInput(
-  { label, required, helperText, endIcon, ...rest }: TextInputProps,
-  ref: React.Ref<HTMLInputElement>
-) {
+function TextInput({
+  label,
+  required,
+  helperText,
+  endIcon,
+  ...rest
+}: TextInputProps) {
+  console.log(label);
   if (label || helperText) {
     return (
       <Label>
@@ -120,7 +124,7 @@ function TextInput(
           </LabelLine>
         )}
         <InputContainer>
-          <InputBase required={required} {...rest} ref={ref} />
+          <InputBase required={required} {...rest} />
           {endIcon}
         </InputContainer>
         {helperText && <HelperText>{helperText}</HelperText>}
@@ -130,10 +134,10 @@ function TextInput(
 
   return (
     <InputContainer>
-      <InputBase ref={ref} {...rest} />
+      <InputBase {...rest} />
       {endIcon}
     </InputContainer>
   );
 }
 
-export default forwardRef(TextInput);
+export default TextInput;

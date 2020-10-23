@@ -7,8 +7,8 @@
     "commit": "yarn run git-cz",
     "start": "run-p dev emulate",
     "dev": "lerna run dev --parallel",
-    "build": "lerna run build --parallel",
-    "lint": "lerna run lint --parallel",
+    "build": "lerna run build",
+    "lint": "lerna run lint",
     "emulate": "firebase emulators:start --only firestore,pubsub,functions --import=testData",
     "emulator:export": "firebase emulators:export ./testData",
     "shell": "firebase functions:shell"
