@@ -26,8 +26,6 @@
     "cz-conventional-changelog": "^3.3.0",
     "firebase": "^7.24.0",
     "firebase-tools": "^8.12.1",
-    "google-auth-library": "^6.1.2",
-    "google-gax": "^2.9.0",
     "husky": "^4.3.0",
     "lerna": "^3.21.0",
     "lint-staged": "^10.4.2",
