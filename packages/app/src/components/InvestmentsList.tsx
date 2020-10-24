@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-import { PortfolioPerformance } from 'libs/portfolio';
-import useBodyScrollLock from 'hooks/useBodyScrollLock';
+import { Select } from '@tuja/components';
 import Backdrop from 'components/Backdrop';
 import UpdateAlias from 'components/UpdateAlias';
 import UpdateAllocation from 'components/UpdateAllocation';
 import InvestmentsListItem from 'components/InvestmentsListItem';
-import Select from 'components/Select';
-import { Card } from 'commonStyledComponents';
+import { PortfolioPerformance } from 'libs/portfolio';
+import useBodyScrollLock from 'hooks/useBodyScrollLock';
 import useColors from 'hooks/useColors';
 import useStocksData from 'hooks/useStocksData';
+import { Card } from 'commonStyledComponents';
 import { theme } from 'theme';
 
 const SortByContainer = styled.div`

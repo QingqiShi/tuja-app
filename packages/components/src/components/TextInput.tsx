@@ -13,17 +13,17 @@ const InputBase = styled.input.attrs((props) => ({
   font-size: ${theme.fonts.inputSize};
   line-height: ${theme.fonts.inputHeight};
   font-weight: ${theme.fonts.inputWeight};
-  padding: ${theme.spacings('s')};
   border-radius: ${theme.spacings('xs')};
   border: 2px solid
     ${getTheme(theme.colors.textOnBackground, (color) =>
       transparentize(0.9, color)
     )};
-  /* height: calc(${theme.spacings('s')} * 2 + ${theme.fonts.inputHeight} + 4px); */
   color: ${theme.colors.textOnBackground};
+  padding: 0.8em 1em;
   background-color: transparent;
   transition: all 0.2s;
   width: 100%;
+  appearance: none;
 
   &::placeholder {
     color: ${getTheme(theme.colors.textOnBackground, (color) =>

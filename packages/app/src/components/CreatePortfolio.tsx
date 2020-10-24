@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { RiBriefcaseLine, RiAddLine } from 'react-icons/ri';
-import { Button, TextInput } from '@tuja/components';
+import { Button, Select, TextInput } from '@tuja/components';
 import { Center } from 'commonStyledComponents';
 import Type from 'components/Type';
-import Select from 'components/Select';
 import { theme } from 'theme';
 
 const LargeIcon = styled.div`
