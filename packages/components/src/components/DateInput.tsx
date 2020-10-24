@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
-import { TextInput } from '@tuja/components';
+import TextInput from './TextInput';
 
 function checkDateSupported() {
   var input = document.createElement('input');
@@ -10,6 +10,8 @@ function checkDateSupported() {
   return input.value !== value;
 }
 const isDateSupported = checkDateSupported();
+
+const DATE_FORMAT = 'YYYY-MM-DD';
 
 interface DateInputProps
   extends Omit<
@@ -30,12 +32,12 @@ function DateInput({
   const [internalDate, setInternalDate] = useState(defaultValue ?? new Date());
   const [val, setVal] = useState(
     defaultValue ?? internalDate
-      ? dayjs(defaultValue ?? internalDate).format('YYYY-MM-DD')
+      ? dayjs(defaultValue ?? internalDate).format(DATE_FORMAT)
       : ''
   );
 
   const extendedLabel = label
-    ? `${label}${!isDateSupported ? ' (yyyy/mm/dd)' : ''}`
+    ? `${label}${!isDateSupported ? ` (${DATE_FORMAT})` : ''}`
     : undefined;
 
   return (
@@ -48,7 +50,7 @@ function DateInput({
       value={val}
       onChange={(e) => {
         setVal(e.target.value);
-        const parsed = dayjs(e.target.value, 'YYYY-MM-DD');
+        const parsed = dayjs(e.target.value, DATE_FORMAT);
         if (parsed.isValid()) {
           setInternalDate(parsed.toDate());
           if (onChange) {
@@ -57,11 +59,11 @@ function DateInput({
         }
       }}
       onBlur={(e) => {
-        const parsed = dayjs(val, 'YYYY-MM-DD');
+        const parsed = dayjs(val, DATE_FORMAT);
         if (!parsed.isValid()) {
-          setVal(dayjs(parsed).format('YYYY-MM-DD'));
+          setVal(dayjs(parsed).format(DATE_FORMAT));
         } else {
-          setVal(dayjs(internalDate).format('YYYY-MM-DD'));
+          setVal(dayjs(internalDate).format(DATE_FORMAT));
         }
         if (onBlur) {
           onBlur(e);
