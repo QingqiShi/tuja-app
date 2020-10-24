@@ -52,13 +52,25 @@ const InputBase = styled.input.attrs((props) => ({
     border-color: ${theme.colors.error};
   }
 
+  ::-webkit-calendar-picker-indicator {
+    font-size: 0.9em;
+    line-height: 0.9em;
+    padding: 0;
+    margin: 0;
+  }
+
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+    margin: 0;
+  }
+
   ${({ theme }) =>
     theme.mode === 'dark' &&
     css`
       ::-webkit-calendar-picker-indicator {
         filter: invert(1);
       }
-    `}
+    `};
 `;
 
 const Label = styled.label`
