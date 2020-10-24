@@ -61,7 +61,7 @@ export const theme = {
     ctaWeight: 600,
     ctaSpacing: '0.028em',
     inputSize: '1.1rem',
-    inputHeight: '1em',
+    inputHeight: '1.3em',
     inputWeight: 400,
     labelSize: '0.9rem',
     labelHeight: '1.2em',

@@ -2,7 +2,7 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import { FaUserCircle } from 'react-icons/fa';
 import { RiSendPlane2Line, RiHomeLine } from 'react-icons/ri';
-import Button from '../components/Button';
+import Button from '../../components/Button';
 
 export default {
   title: 'Inputs/Button',

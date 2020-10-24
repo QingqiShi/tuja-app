@@ -1,8 +1,8 @@
 import React, { forwardRef } from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 import { RiArrowDownSLine } from 'react-icons/ri';
-import { theme, getTheme } from 'theme';
+import { theme, getTheme } from '../theme';
 
 const Label = styled.label`
   display: block;
@@ -43,15 +43,13 @@ const SelectBase = styled.select`
   font-size: ${theme.fonts.inputSize};
   line-height: ${theme.fonts.inputHeight};
   font-weight: ${theme.fonts.inputWeight};
-  padding: 0 calc(${theme.spacings('s')} * 2 + ${theme.fonts.inputHeight} + 6px)
-    0 ${theme.spacings('s')};
   border-radius: ${theme.spacings('xs')};
   border: 2px solid
     ${getTheme(theme.colors.textOnBackground, (color) =>
       transparentize(0.9, color)
     )};
-  height: calc(${theme.spacings('s')} * 2 + ${theme.fonts.inputHeight} + 4px);
   color: ${theme.colors.textOnBackground};
+  padding: 0.8em 1em;
   background-color: transparent;
   transition: all 0.2s;
   width: 100%;
