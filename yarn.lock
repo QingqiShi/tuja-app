@@ -10149,10 +10149,10 @@ firebase-functions@^3.11.0:
     express "^4.17.1"
     lodash "^4.17.14"
 
-firebase-tools@^8.12.1:
-  version "8.12.1"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-8.12.1.tgz#360b291cbe26545231764ab1f8fbd265ee8c48d3"
-  integrity sha512-nNXtLdlVTjBz5PEMMmInhEp23mBD5NRJ791j2BONTFwd+KH8dXBopAhLuSkRtGp8XNDSNcRwjaNPCoLYE5RoZg==
+firebase-tools@^8.13.1:
+  version "8.13.1"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-8.13.1.tgz#28320153f640f76bfa14bff7c98cd3cea92dffec"
+  integrity sha512-4Yw3ipwidHfa8suUKxOsykgeegOuyBaNJ9DEEbxK9gChXx788Mt4bQm+I+d8F7QqdeDIf9UFOxMZ+Dn1GepCgQ==
   dependencies:
     "@google-cloud/pubsub" "^1.7.0"
     JSONStream "^1.2.1"
@@ -20307,12 +20307,7 @@ uuid@^3.0.0, uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2, uuid@^3.4.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^8.0.0, uuid@^8.3.0:
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.0.tgz#ab738085ca22dc9a8c92725e459b1d507df5d6ea"
-  integrity sha512-fX6Z5o4m6XsXBdli9g7DtWgAx+osMsRRZFKma1mIUsLCz6vRvv+pz5VNbyu9UEDzpMWulZfvpgb/cmDXVulYFQ==
-
-uuid@^8.3.1:
+uuid@^8.0.0, uuid@^8.3.0, uuid@^8.3.1:
   version "8.3.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.1.tgz#2ba2e6ca000da60fce5a196954ab241131e05a31"
   integrity sha512-FOmRr+FmWEIG8uhZv6C2bTgEVXsHk08kE7mPlrBbEe+c3r9pjceVPgupIfNIhc4yx55H69OXANrUaSuu9eInKg==
