@@ -28,7 +28,7 @@
     "@types/node": "12",
     "@types/node-cache": "^4.2.5",
     "@types/node-fetch": "^2.5.7",
-    "firebase-functions-test": "^0.2.2",
+    "firebase-functions-test": "^0.2.3",
     "tslint": "^6.1.3"
   }
 }
