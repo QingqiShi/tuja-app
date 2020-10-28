@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { auth, analytics } from 'firebase/app';
+import firebase from 'firebase/app';
 import { logEvent } from 'libs/analytics';
 
 const STORAGE_KEY = 'pendingSignInEmail';
@@ -34,7 +34,7 @@ export const AuthContext = createContext({
 
 export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
   const isEmailLink = useMemo(
-    () => auth().isSignInWithEmailLink(window.location.href),
+    () => firebase.auth().isSignInWithEmailLink(window.location.href),
     []
   );
   const [pendingEmail, setPendingEmail] = useState(initialPendingEmail ?? '');
@@ -45,7 +45,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    return auth().onAuthStateChanged(async (user) => {
+    return firebase.auth().onAuthStateChanged(async (user) => {
       if (!receivedState.current) {
         receivedState.current = true;
       }
@@ -55,14 +55,15 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
 
       // Analytics
       if (user) {
-        analytics().setUserId(user.uid);
+        firebase.analytics().setUserId(user.uid);
       }
     });
   }, [receivedState]);
 
   useEffect(() => {
     if (isEmailLink && pendingEmail) {
-      auth()
+      firebase
+        .auth()
         .signInWithEmailLink(pendingEmail, window.location.href)
         .then((result) => {
           window.localStorage.removeItem(STORAGE_KEY);
@@ -88,7 +89,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
 
   const signIn = useCallback(async (email: string) => {
     try {
-      await auth().sendSignInLinkToEmail(email, {
+      await firebase.auth().sendSignInLinkToEmail(email, {
         url: window.location.href,
         handleCodeInApp: true,
       });
@@ -102,7 +103,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
     }
   }, []);
 
-  const signOut = useCallback(() => auth().signOut(), []);
+  const signOut = useCallback(() => firebase.auth().signOut(), []);
 
   const confirmEmail = useCallback(
     (email: string) => setPendingEmail(email),

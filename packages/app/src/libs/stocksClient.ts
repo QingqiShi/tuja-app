@@ -1,4 +1,4 @@
-import { functions } from 'firebase/app';
+import firebase from 'firebase/app';
 import dayjs from 'dayjs';
 import TimeSeries from './timeSeries';
 
@@ -42,7 +42,7 @@ export interface StocksData {
 export async function fetchStocksHistory(ticker: string, from: Date, to: Date) {
   const formattedFrom = dayjs(from).format('YYYY-MM-DD');
   const formattedTo = dayjs(to).format('YYYY-MM-DD');
-  const stockHistory = functions().httpsCallable('stockHistory');
+  const stockHistory = firebase.functions().httpsCallable('stockHistory');
 
   const result = await stockHistory({
     ticker,
@@ -72,14 +72,14 @@ export async function fetchStocksHistory(ticker: string, from: Date, to: Date) {
 }
 
 export async function fetchStocksInfo(tickers: string[]) {
-  const stocksInfo = functions().httpsCallable('stocksInfo');
+  const stocksInfo = firebase.functions().httpsCallable('stocksInfo');
 
   const result = await stocksInfo({ tickers });
   return result.data as StockInfo[];
 }
 
 export async function fetchStockLivePrice(ticker: string) {
-  const stockLivePrice = functions().httpsCallable('stockLivePrice');
+  const stockLivePrice = firebase.functions().httpsCallable('stockLivePrice');
 
   const result = await stockLivePrice({ ticker });
   return {

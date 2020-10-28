@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { v4 as uuid } from 'uuid';
-import { firestore } from 'firebase/app';
+import firebase from 'firebase/app';
 import TimeSeries from './timeSeries';
 import { Activity } from './activities';
 
@@ -36,7 +36,7 @@ export interface PortfolioPerformance {
 }
 
 export function createPortfolio(name: string, currency: string, uid: string) {
-  const collectionRef = firestore().collection(`/portfolios`);
+  const collectionRef = firebase.firestore().collection(`/portfolios`);
   const docRef = collectionRef.doc();
   return docRef.set({
     id: docRef.id,
@@ -53,7 +53,8 @@ export function watchPortfolio(
   { uid }: { uid: string },
   onSnap: (data: Portfolio[]) => void
 ) {
-  const collectionRef = firestore()
+  const collectionRef = firebase
+    .firestore()
     .collection(`/portfolios`)
     .where('user', '==', uid);
   return collectionRef.onSnapshot((collection) => {
@@ -75,12 +76,12 @@ export function watchPortfolio(
 }
 
 export function updatePortfolioName(id: string, name: string) {
-  const docRef = firestore().collection(`/portfolios`).doc(id);
+  const docRef = firebase.firestore().collection(`/portfolios`).doc(id);
   return docRef.update({ name });
 }
 
 export function addPortfolioActivity(id: string, activity: Activity) {
-  const db = firestore();
+  const db = firebase.firestore();
   const docRef = db.collection(`/portfolios`).doc(id);
   return db.runTransaction(async (t) => {
     const doc = await t.get(docRef);
@@ -96,7 +97,7 @@ export function addPortfolioActivity(id: string, activity: Activity) {
 }
 
 export function updatePortfolioActivities(id: string, activities: Activity[]) {
-  const db = firestore();
+  const db = firebase.firestore();
   const docRef = db.collection(`/portfolios`).doc(id);
   return db.runTransaction(async (t) => {
     const doc = await t.get(docRef);
@@ -112,7 +113,7 @@ export function updatePortfolioActivities(id: string, activities: Activity[]) {
 }
 
 export function updateHoldingAlias(id: string, ticker: string, alias: string) {
-  const db = firestore();
+  const db = firebase.firestore();
   const docRef = db.collection(`/portfolios`).doc(id);
   return db.runTransaction(async (t) => {
     const doc = await t.get(docRef);
@@ -128,7 +129,7 @@ export function updateHoldingAllocation(
   ticker: string,
   allocation: number
 ) {
-  const db = firestore();
+  const db = firebase.firestore();
   const docRef = db.collection(`/portfolios`).doc(id);
   return db.runTransaction(async (t) => {
     const doc = await t.get(docRef);
