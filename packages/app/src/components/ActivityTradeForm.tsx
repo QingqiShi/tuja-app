@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounce } from 'react-use';
 import { RiAddLine, RiDeleteBinLine } from 'react-icons/ri';
-import { functions } from 'firebase/app';
+import firebase from 'firebase/app';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { v4 as uuid } from 'uuid';
@@ -141,7 +141,7 @@ function ActivityTradeForm({
   >([]);
   useEffect(() => {
     const fetch = async () => {
-      const searchStocks = functions().httpsCallable('searchStocks');
+      const searchStocks = firebase.functions().httpsCallable('searchStocks');
       const result = await searchStocks({ query: debouncedSearchQuery });
       setSearchSuggestions(result.data);
     };
