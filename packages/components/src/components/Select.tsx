@@ -107,13 +107,17 @@ interface SelectProps extends Omit<React.ComponentProps<'select'>, 'ref'> {
   helperText?: string;
 }
 
-function Select(
-  { options, label, helperText, required, disabled, ...props }: SelectProps,
-  ref: React.Ref<HTMLSelectElement>
-) {
+function Select({
+  options,
+  label,
+  helperText,
+  required,
+  disabled,
+  ...props
+}: SelectProps) {
   const select = (
     <SelectContainer>
-      <SelectBase required={required} disabled={disabled} {...props} ref={ref}>
+      <SelectBase required={required} disabled={disabled} {...props}>
         {options.map((option, i) => (
           <option
             value={option.value}
@@ -146,4 +150,4 @@ function Select(
   return select;
 }
 
-export default forwardRef(Select);
+export default Select;
