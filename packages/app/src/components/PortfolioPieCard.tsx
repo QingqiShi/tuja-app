@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import Pie from 'components/Pie';
+import { Pie } from '@tuja/components';
 import { Card, CardMedia } from 'commonStyledComponents';
 import { formatCurrency } from 'libs/forex';
 import usePortfolio from 'hooks/usePortfolio';
+import useColors from 'hooks/useColors';
 import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
 import { theme } from 'theme';
 
@@ -51,6 +52,7 @@ function PortfolioPieCard(_props: PortfolioPieCardProps) {
 
   const portfolioValue = portfolioPerformance?.valueSeries.getLast() ?? 0;
 
+  const getColor = useColors();
   const pieData = portfolioPerformance
     ? Object.keys(portfolioPerformance.holdings)
         .map((ticker) => ({
@@ -58,12 +60,14 @@ function PortfolioPieCard(_props: PortfolioPieCardProps) {
           percentage: portfolioValue
             ? portfolioPerformance.holdings[ticker].value / portfolioValue
             : 0,
+          color: getColor(ticker),
         }))
         .concat({
           label: 'Cash',
           percentage: portfolioValue
             ? portfolioPerformance.cash / portfolioValue
             : 0,
+          color: getColor('Cash'),
         })
         .sort((a, b) => b.percentage - a.percentage)
     : [];

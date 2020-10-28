@@ -125,7 +125,6 @@ function TextInput({
   endIcon,
   ...rest
 }: TextInputProps) {
-  console.log(label);
   if (label || helperText) {
     return (
       <Label>

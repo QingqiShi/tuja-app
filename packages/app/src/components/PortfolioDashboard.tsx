@@ -2,8 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { RiMoreLine, RiSubtractLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
-import { Button, ButtonGroup } from '@tuja/components';
-import Chart from 'components/Chart';
+import { Button, ButtonGroup, Chart } from '@tuja/components';
 import DashboardLayout from 'components/DashboardLayout';
 import PortfolioOverview from 'components/PortfolioOverview';
 import PortfolioPieCard from 'components/PortfolioPieCard';
@@ -23,6 +22,7 @@ import useBodyScrollLock from 'hooks/useBodyScrollLock';
 import { addPortfolioActivity } from 'libs/portfolio';
 import { Activity } from 'libs/activities';
 import { logEvent } from 'libs/analytics';
+import { formatCurrency } from 'libs/forex';
 import { theme } from 'theme';
 
 const DatePeriodContainer = styled.div`
@@ -257,7 +257,9 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                   <Chart
                     data={portfolioPerformance?.valueSeries.data ?? []}
                     benchmark={portfolioPerformance?.cashFlowSeries.data ?? []}
-                    currency={portfolio.currency}
+                    formatValue={(val) =>
+                      formatCurrency(portfolio.currency, val)
+                    }
                     benchmarkLabel="Cost"
                     hideAxis
                   />
@@ -265,14 +267,16 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                 {selectedChart === 'gains' && (
                   <Chart
                     data={portfolioPerformance?.gainSeries.data ?? []}
-                    currency={portfolio.currency}
+                    formatValue={(val) =>
+                      formatCurrency(portfolio.currency, val)
+                    }
                     hideAxis
                   />
                 )}
                 {selectedChart === 'returns' && (
                   <Chart
                     data={portfolioPerformance?.twrrSeries.data ?? []}
-                    formatPercentage
+                    formatValue={(val) => `${(val * 100).toFixed(1)}%`}
                     hideAxis
                   />
                 )}

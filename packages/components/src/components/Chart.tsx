@@ -1,21 +1,19 @@
-import React, { useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useMemo, useCallback, useRef } from 'react';
 import { useMeasure } from 'react-use';
 import { useSpring, animated } from '@react-spring/web';
-import styled, { useTheme, css } from 'styled-components/macro';
+import styled, { useTheme, css } from 'styled-components';
 import { transparentize } from 'polished';
-import { LinearGradient } from '@vx/gradient';
-import { AreaClosed, LinePath, Bar } from '@vx/shape';
-import { scaleTime, scaleLinear } from '@vx/scale';
-import { curveMonotoneX } from '@vx/curve';
-import { AxisLeft, AxisBottom } from '@vx/axis';
-import { GridRows } from '@vx/grid';
-import { Group } from '@vx/group';
-import { localPoint } from '@vx/event';
+import { LinearGradient } from '@visx/gradient';
+import { AreaClosed, LinePath, Bar } from '@visx/shape';
+import { scaleTime, scaleLinear } from '@visx/scale';
+import { curveMonotoneX } from '@visx/curve';
+import { AxisLeft, AxisBottom } from '@visx/axis';
+import { GridRows } from '@visx/grid';
+import { Group } from '@visx/group';
+import { localPoint } from '@visx/event';
 import { max, min, extent, bisector } from 'd3-array';
 import dayjs from 'dayjs';
-import { theme, getTheme } from 'theme';
-import type { TooltipSync } from 'hooks/useTooltipSync';
-import { formatCurrency } from 'libs/forex';
+import { theme, getTheme } from '../theme';
 
 const Container = styled.div`
   width: 100%;
@@ -107,25 +105,21 @@ const formatTooltipDate = (d: Date) => dayjs(d).format('YYYY-MM-DD ddd');
 interface ChartProps {
   data?: DataPoint[];
   benchmark?: DataPoint[];
-  syncTooltip?: TooltipSync;
   hideAxis?: boolean;
   hideTooltip?: boolean;
   className?: string;
-  formatPercentage?: boolean;
-  currency?: string;
   benchmarkLabel?: string;
+  formatValue?: (val: number) => string;
 }
 
 function Chart({
   data,
   benchmark,
-  syncTooltip,
   hideAxis,
   hideTooltip,
   className,
-  formatPercentage,
-  currency,
   benchmarkLabel,
+  formatValue,
 }: ChartProps) {
   // bounds
   const [containerRef, { width = 400, height = 300 }] = useMeasure<
@@ -185,7 +179,7 @@ function Chart({
     const index = bisectDate(data, x0);
     const d = data[index];
     if (!d) return 0;
-    return valueScale(getValue(d));
+    return valueScale(getValue(d)) || 0;
   };
   const getTooltipBenchmarkY = () => {
     if (!benchmark) return 0;
@@ -193,7 +187,7 @@ function Chart({
     const index = bisectDate(benchmark, x0);
     const d = benchmark[index];
     if (!d) return 0;
-    return valueScale(getValue(d));
+    return valueScale(getValue(d)) || 0;
   };
   const getTooltipValue = () => {
     if (!data) return 0;
@@ -201,12 +195,7 @@ function Chart({
     const index = bisectDate(data, x0);
     const d = data[index];
     if (!d) return 0;
-    if (formatPercentage) {
-      return `${(getValue(d) * 100).toFixed(1)}%`;
-    }
-    if (currency) {
-      return formatCurrency(currency, getValue(d));
-    }
+    if (formatValue) return formatValue(getValue(d));
     return getValue(d).toFixed(2);
   };
   const getTooltipBenchmark = () => {
@@ -215,35 +204,11 @@ function Chart({
     const index = bisectDate(benchmark, x0);
     const d = benchmark[index];
     if (!d) return 0;
-    if (formatPercentage) {
-      return `${(getValue(d) * 100).toFixed(1)}%`;
-    }
-    if (currency) {
-      return formatCurrency(currency, getValue(d));
-    }
+    if (formatValue) return formatValue(getValue(d));
     return getValue(d).toFixed(2);
   };
   const getTooltipDate = () => formatTooltipDate(tooltipDateRef.current);
-  useEffect(() => {
-    if (syncTooltip) {
-      return syncTooltip.addListener(
-        (date: Date) => {
-          tooltipDateRef.current = date;
-          const x = dateScale(date);
-          if (x > xMax) {
-            set({ x: xMax, opacity: 0, immediate: true });
-          } else if (x < 0) {
-            set({ x: 0, opacity: 0, immediate: true });
-          } else {
-            set({ x, opacity: 1, immediate: true });
-          }
-        },
-        () => {
-          set({ opacity: 0, immediate: true });
-        }
-      );
-    }
-  }, [dateScale, set, syncTooltip, xMax]);
+
   const handleTooltip = useCallback(
     (event: React.TouchEvent | React.MouseEvent) => {
       if (!data) return;
@@ -271,18 +236,15 @@ function Chart({
         d = d2;
       }
       if (!d) return 0;
-      if (syncTooltip) {
-        syncTooltip.show(getDate(d));
-      } else {
-        tooltipDateRef.current = getDate(d);
-        set({
-          x: dateScale(tooltipDateRef.current),
-          opacity: 1,
-          immediate: true,
-        });
-      }
+
+      tooltipDateRef.current = getDate(d);
+      set({
+        x: dateScale(tooltipDateRef.current),
+        opacity: 1,
+        immediate: true,
+      });
     },
-    [data, dateScale, margin.left, set, syncTooltip]
+    [data, dateScale, margin.left, set]
   );
 
   // Theme related styles
@@ -359,16 +321,16 @@ function Chart({
             <>
               <AreaClosed<DataPoint>
                 data={data}
-                x={(d) => dateScale(getDate(d))}
-                y={(d) => valueScale(getValue(d))}
+                x={(d) => dateScale(getDate(d)) || 0}
+                y={(d) => valueScale(getValue(d)) || 0}
                 yScale={valueScale}
                 fill="url(#area-gradient)"
                 curve={curveMonotoneX}
               />
               <LinePath
                 data={data}
-                x={(d) => dateScale(getDate(d))}
-                y={(d) => valueScale(getValue(d))}
+                x={(d) => dateScale(getDate(d)) || 0}
+                y={(d) => valueScale(getValue(d)) || 0}
                 curve={curveMonotoneX}
                 strokeWidth={2.5}
                 stroke={colors.chartLine}
@@ -379,8 +341,8 @@ function Chart({
           {benchmark && (
             <LinePath
               data={benchmark}
-              x={(d) => dateScale(getDate(d))}
-              y={(d) => valueScale(getValue(d))}
+              x={(d) => dateScale(getDate(d)) || 0}
+              y={(d) => valueScale(getValue(d)) || 0}
               curve={curveMonotoneX}
               strokeWidth={1.5}
               stroke={colors.benchmarkLine}
@@ -396,9 +358,7 @@ function Chart({
                   numTicks={5}
                   tickFormat={(v) => {
                     const value = typeof v === 'number' ? v : v.valueOf();
-                    if (formatPercentage) {
-                      return `${(value * 100).toFixed(0)}%`;
-                    }
+                    if (formatValue) return formatValue(value);
                     return value >= 100 || value <= -100
                       ? value.toFixed(0)
                       : value.toFixed(2);
@@ -438,11 +398,7 @@ function Chart({
                 onTouchStart={handleTooltip}
                 onTouchMove={handleTooltip}
                 onMouseMove={handleTooltip}
-                onMouseLeave={() =>
-                  syncTooltip
-                    ? syncTooltip.hide()
-                    : set({ opacity: 0, immediate: true })
-                }
+                onMouseLeave={() => set({ opacity: 0, immediate: true })}
               />
               <g>
                 <AnimatedLine

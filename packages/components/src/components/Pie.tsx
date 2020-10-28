@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useMeasure } from 'react-use';
-import styled, { useTheme } from 'styled-components/macro';
+import styled, { useTheme } from 'styled-components';
 import { lighten } from 'polished';
-import { Group } from '@vx/group';
-import { Text } from '@vx/text';
-import PieBase, { ProvidedProps } from '@vx/shape/lib/shapes/Pie';
-import useColors from 'hooks/useColors';
-import { theme } from 'theme';
+import { Group } from '@visx/group';
+import { Text } from '@visx/text';
+import PieBase, { ProvidedProps } from '@visx/shape/lib/shapes/Pie';
+import { theme } from '../theme';
 
 const Container = styled.div`
   width: 100%;
@@ -20,16 +19,17 @@ const Path = styled.path`
   transition: fill 0.2s;
 `;
 
-interface DataPoint {
+interface PieData {
   label: string;
   percentage: number;
+  color?: string;
 }
 
-const percentage = (d: DataPoint) => d.percentage;
+const percentage = (d: PieData) => d.percentage;
 const margin = { top: 20, left: 20, bottom: 20, right: 20 };
 
 interface PieProps {
-  data?: DataPoint[];
+  data?: PieData[];
   className?: string;
   primaryText?: string;
   secondaryText?: string;
@@ -48,12 +48,11 @@ function Pie({ className, data, primaryText, secondaryText }: PieProps) {
   const donutThickness = Math.min(innerWidth, innerHeight) / 15;
 
   // Colors
-  const getColor = useColors();
   const styledTheme = useTheme();
   const textColor = theme.colors.textOnBackground({ theme: styledTheme });
 
   // Hover
-  const [hoverItem, setHoverItem] = useState<DataPoint | null>(null);
+  const [hoverItem, setHoverItem] = useState<PieData | null>(null);
 
   return (
     <Container ref={containerRef} className={className}>
@@ -99,7 +98,6 @@ function Pie({ className, data, primaryText, secondaryText }: PieProps) {
                 {...pie}
                 innerRadius={radius - donutThickness}
                 outerRadius={radius}
-                getColor={getColor}
                 onHover={(h) => setHoverItem(h)}
               />
             )}
@@ -110,11 +108,10 @@ function Pie({ className, data, primaryText, secondaryText }: PieProps) {
   );
 }
 
-interface PiePieceProps extends ProvidedProps<DataPoint> {
+interface PiePieceProps extends ProvidedProps<PieData> {
   innerRadius: number;
   outerRadius: number;
-  getColor: (d: any) => string;
-  onHover: (d: DataPoint | null) => void;
+  onHover: (d: PieData | null) => void;
 }
 
 function PiePieces({
@@ -122,10 +119,14 @@ function PiePieces({
   path,
   innerRadius,
   outerRadius,
-  getColor,
   onHover,
 }: PiePieceProps) {
   const [hovering, setHovering] = useState(-1);
+
+  // Default color
+  const styledTheme = useTheme();
+  const defaultColor = theme.colors.callToAction({ theme: styledTheme });
+
   return (
     <>
       {arcs.map((arc, i) => (
@@ -140,8 +141,8 @@ function PiePieces({
             }
             fill={
               hovering !== i
-                ? getColor(arc.data.label)
-                : lighten(0.1, getColor(arc.data.label))
+                ? arc.data.color ?? defaultColor
+                : lighten(0.1, arc.data.color ?? defaultColor)
             }
             onMouseEnter={() => {
               setHovering(i);
