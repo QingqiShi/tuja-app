@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import TimeSeries from 'libs/timeSeries';
+import BigNumber from 'bignumber.js';
 import { exchangeCurrency } from 'libs/forex';
 import type { StocksData } from 'libs/stocksClient';
 import type { PortfolioPerformance } from 'libs/portfolio';
@@ -13,7 +14,9 @@ export function collectHoldingsNumShares(
     if (!(ticker in holdingsNumShares)) {
       holdingsNumShares[ticker] = 0;
     }
-    holdingsNumShares[ticker] += units;
+    holdingsNumShares[ticker] = new BigNumber(holdingsNumShares[ticker])
+      .plus(units)
+      .toNumber();
   };
   // Trades
   Object.keys(item.trades).forEach((ticker) =>
