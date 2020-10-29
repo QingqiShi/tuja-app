@@ -4158,10 +4158,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/d3-array@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-2.3.0.tgz#50e7d7d84aa1f8d7645a4397b7d3a287194f5a38"
-  integrity sha512-eBQLBDq0bcXW9K14ktZDL/oeTzhS7BIoyEb0ZQb7gq4kTI/nZD+OISrpmxFll9LIXp7gOmYk+yPPoxt3GeXtQg==
+"@types/d3-array@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-2.4.0.tgz#439ab03217007b2f6b4ca98f9e0a0a23c219518f"
+  integrity sha512-2Z/m5AwX4vjFRcTSnEDSvjY9/CbxKZ8BcgA3wwy8MS3Hy7gT+CqMrNeDhFCdJPtCr4/GphmYYmwl0do5jNkakA==
 
 "@types/d3-color@*":
   version "1.2.2"
