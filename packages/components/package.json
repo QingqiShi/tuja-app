@@ -19,7 +19,7 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-is": "^16.13.1",
-    "styled-components": "^5.2.0"
+    "styled-components": "^5.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
@@ -35,7 +35,7 @@
     "@types/styled-components": "^5.1.4",
     "babel-loader": "^8.1.0",
     "react-icons": "^3.11.0",
-    "styled-components": "^5.2.0"
+    "styled-components": "^5.2.1"
   },
   "browserslist": {
     "production": [
