@@ -13,12 +13,13 @@ export const GlobalStyle = createGlobalStyle`
 
   body * {
     box-sizing: inherit;
+    font-size: inherit;
   }
 
-  html, input {
-    font-size: 14px;
+  html, body {
+    font-size: 16px;
     @media (${theme.breakpoints.minTablet}) {
-      font-size: 16px;
+      font-size: 17px;
     }
     @media (${theme.breakpoints.minLaptop}) {
       font-size: 18px;
