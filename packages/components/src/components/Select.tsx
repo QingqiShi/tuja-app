@@ -49,7 +49,7 @@ const SelectBase = styled.select`
       transparentize(0.9, color)
     )};
   color: ${theme.colors.textOnBackground};
-  padding: 0.8em 1em;
+  padding: 0.8em 3em 0.8em 1em;
   background-color: transparent;
   transition: all 0.2s;
   width: 100%;
@@ -85,12 +85,10 @@ const SelectBase = styled.select`
 
 const DropdownIcon = styled(RiArrowDownSLine)<{ disabled?: boolean }>`
   position: absolute;
-  right: 0;
-  top: 0.02em;
-  padding: 0.25em;
-  font-size: calc(
-    (${theme.spacings('s')}) * 2 + ${theme.fonts.inputHeight} + 6px
-  );
+  height: 100%;
+  width: 1.8em;
+  right: 0.8em;
+  top: 0;
   pointer-events: none;
   ${({ disabled }) =>
     disabled &&
@@ -128,7 +126,7 @@ function Select({
           </option>
         ))}
       </SelectBase>
-      <DropdownIcon disabled={disabled} />
+      <DropdownIcon disabled={disabled} size="auto" />
     </SelectContainer>
   );
 
