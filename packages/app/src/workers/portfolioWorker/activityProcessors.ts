@@ -174,7 +174,7 @@ export function calcHoldings(
     const value = units * price;
     const cost = costs[ticker];
     const gain = value - cost * units;
-    const returns = gain / cost;
+    const returns = gain / (cost * units);
 
     holdings[ticker] = {
       units,
