@@ -64,7 +64,7 @@ export function collectHoldingsCost(
 
     const price =
       Object.keys(item.trades).length === 1
-        ? item.totalTradeCost
+        ? item.totalTradeCost / item.trades[ticker]
         : exchangeCurrency(
             stock.closeSeries?.get(item.date) ?? 0,
             stock.info?.Currency ?? baseCurrency,
