@@ -5,7 +5,7 @@ import firebase from 'firebase/app';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { v4 as uuid } from 'uuid';
-import { Button, DateInput, TextInput } from '@tuja/components';
+import { Button, DateInput, NumberInput, TextInput } from '@tuja/components';
 import CurrencyInput from './CurrencyInput';
 import {
   ActionsContainer,
@@ -108,7 +108,6 @@ function ActivityTradeForm({
   const [date, setDate] = useState<Date>(initialActivity?.date ?? new Date());
   const [tickerToAdd, setTickerToAdd] = useState('');
   const [quantityToAdd, setQuantityToAdd] = useState(0);
-  const [quantityToAddRaw, setQuantityToAddRaw] = useState('0');
   const [cost, setCost] = useState(getInitialCost(initialActivity));
   const [remainingCash, setRemainingCash] = useState(0);
   const [tickers, setTickers] = useState<
@@ -180,7 +179,7 @@ function ActivityTradeForm({
         }
       }}
     >
-      <DateInput label="Date" defaultValue={date} onChange={setDate} required />
+      <DateInput label="Date" value={date} onChange={setDate} required />
       <Label>{mode === 'buy' ? 'Buys' : 'Sells'}*</Label>
       <InvestmentsContainer>
         <AddInvestment>
@@ -233,28 +232,10 @@ function ActivityTradeForm({
             )}
             {tickerToAdd && (
               <div>
-                <TextInput
+                <NumberInput
                   label="Quantity"
-                  value={quantityToAddRaw}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setQuantityToAddRaw(val);
-
-                    const parsed = parseFloat(val);
-                    if (!isNaN(parsed)) {
-                      setQuantityToAdd(parsed);
-                    }
-                  }}
-                  onBlur={() => {
-                    const val = parseFloat(quantityToAddRaw);
-                    if (!isNaN(val)) {
-                      setQuantityToAdd(val);
-                      setQuantityToAddRaw(val.toString());
-                    } else {
-                      setQuantityToAddRaw(quantityToAdd.toString());
-                    }
-                  }}
-                  inputMode="decimal"
+                  value={quantityToAdd}
+                  onChange={setQuantityToAdd}
                 />
               </div>
             )}
@@ -275,7 +256,6 @@ function ActivityTradeForm({
                   ]);
                   setTickerToAdd('');
                   setQuantityToAdd(0);
-                  setQuantityToAddRaw('0');
                 }}
               >
                 Add

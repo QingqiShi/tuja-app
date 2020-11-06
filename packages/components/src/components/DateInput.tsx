@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import dayjs from 'dayjs';
 import TextInput from './TextInput';
+import FormattedInput from './FormattedInput';
 
 function checkDateSupported() {
   var input = document.createElement('input');
@@ -18,56 +19,35 @@ interface DateInputProps
     React.ComponentProps<typeof TextInput>,
     'value' | 'defaultValue' | 'onChange' | 'ref'
   > {
-  defaultValue?: Date;
+  value?: Date;
   onChange?: (newDate: Date) => void;
 }
 
 function DateInput({
   label,
-  defaultValue,
+  value,
   onChange,
   onBlur,
   ...props
 }: DateInputProps) {
-  const [internalDate, setInternalDate] = useState(defaultValue ?? new Date());
-  const [val, setVal] = useState(
-    defaultValue ?? internalDate
-      ? dayjs(defaultValue ?? internalDate).format(DATE_FORMAT)
-      : ''
-  );
-
   const extendedLabel = label
     ? `${label}${!isDateSupported ? ` (${DATE_FORMAT})` : ''}`
     : undefined;
 
   return (
-    <TextInput
+    <FormattedInput
       {...props}
       type="date"
-      placeholder="yyyy/mm/dd"
       max="9999-12-31"
+      placeholder={DATE_FORMAT}
       label={extendedLabel}
-      value={val}
-      onChange={(e) => {
-        setVal(e.target.value);
-        const parsed = dayjs(e.target.value, DATE_FORMAT);
-        if (parsed.isValid()) {
-          setInternalDate(parsed.toDate());
-          if (onChange) {
-            onChange(parsed.toDate());
-          }
-        }
-      }}
-      onBlur={(e) => {
-        const parsed = dayjs(val, DATE_FORMAT);
-        if (!parsed.isValid()) {
-          setVal(dayjs(parsed).format(DATE_FORMAT));
-        } else {
-          setVal(dayjs(internalDate).format(DATE_FORMAT));
-        }
-        if (onBlur) {
-          onBlur(e);
-        }
+      value={value}
+      onChange={onChange}
+      format={(val) => dayjs(val).format(DATE_FORMAT)}
+      parse={(raw) => {
+        const parsed = dayjs(raw, DATE_FORMAT);
+        if (!parsed.isValid()) return null;
+        return parsed.toDate();
       }}
     />
   );

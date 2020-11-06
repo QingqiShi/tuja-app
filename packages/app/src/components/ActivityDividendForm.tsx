@@ -56,7 +56,7 @@ function ActivityDividendForm({
         }
       }}
     >
-      <DateInput label="Date" defaultValue={date} onChange={setDate} required />
+      <DateInput label="Date" value={date} onChange={setDate} required />
       <Field>
         <Label>From Investment*</Label>
         <Select
