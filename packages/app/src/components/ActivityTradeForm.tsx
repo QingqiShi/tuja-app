@@ -5,7 +5,13 @@ import firebase from 'firebase/app';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { v4 as uuid } from 'uuid';
-import { Button, DateInput, NumberInput, TextInput } from '@tuja/components';
+import {
+  Button,
+  DateInput,
+  NumberInput,
+  TextInput,
+  Type,
+} from '@tuja/components';
 import CurrencyInput from './CurrencyInput';
 import {
   ActionsContainer,
@@ -17,7 +23,6 @@ import {
 import useStocksData from 'hooks/useStocksData';
 import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
 import { theme, getTheme } from 'theme';
-import Type from './Type';
 import type { Activity, ActivityFormProps } from 'libs/activities';
 
 const InvestmentsContainer = styled.div`

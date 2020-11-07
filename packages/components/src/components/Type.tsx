@@ -1,6 +1,6 @@
 import React from 'react';
-import styled, { css } from 'styled-components/macro';
-import { theme } from 'theme';
+import styled, { css } from 'styled-components';
+import { theme } from '../theme';
 
 interface TypeProps {
   scale: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2';

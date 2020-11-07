@@ -2,8 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { MdShowChart, MdPieChartOutlined, MdAutorenew } from 'react-icons/md';
 import styled from 'styled-components/macro';
-import { Button } from '@tuja/components';
-import Type from 'components/Type';
+import { Button, Type } from '@tuja/components';
 import { Center } from 'commonStyledComponents';
 import { theme } from 'theme';
 
