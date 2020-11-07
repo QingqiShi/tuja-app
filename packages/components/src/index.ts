@@ -7,5 +7,6 @@ export { default as FormattedInput } from './components/FormattedInput';
 export { default as NumberInput } from './components/NumberInput';
 export { default as Chart } from './components/Chart';
 export { default as Pie } from './components/Pie';
+export { default as Type } from './components/Type';
 
 export { GlobalStyle } from './components';

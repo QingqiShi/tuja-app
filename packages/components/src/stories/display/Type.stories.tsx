@@ -1,13 +1,12 @@
 import React from 'react';
-import styled from 'styled-components/macro';
-import Type from 'components/Type';
+import styled from 'styled-components';
+import { Meta } from '@storybook/react';
+import Type from '../../components/Type';
 
-const TypeStories = {
+export default {
   title: 'Display/Type',
   component: Type,
-};
-
-export default TypeStories;
+} as Meta;
 
 const Container = styled.div`
   max-width: 500px;

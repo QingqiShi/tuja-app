@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import Type from 'components/Type';
+import { Type } from '@tuja/components';
 import { Card } from 'commonStyledComponents';
 import { theme } from 'theme';
 
