@@ -110,14 +110,11 @@ function ActivityTradeForm({
   const [quantityToAdd, setQuantityToAdd] = useState(0);
   const [cost, setCost] = useState(getInitialCost(initialActivity));
   const [remainingCash, setRemainingCash] = useState(0);
-  const [tickers, setTickers] = useState<
-    { ticker: string; units: number; raw: string }[]
-  >(
+  const [tickers, setTickers] = useState<{ ticker: string; units: number }[]>(
     (initialActivity?.type === 'Trade'
       ? initialActivity.trades.map((trade) => ({
           ticker: trade.ticker,
           units: trade.units,
-          raw: trade.units.toString(),
         }))
       : null) ?? []
   );
@@ -269,49 +266,24 @@ function ActivityTradeForm({
             Add the investments to {mode === 'buy' ? 'buy' : 'sell'}
           </Type>
         )}
-        {tickers.map(({ ticker, units, raw }) => (
+        {tickers.map(({ ticker, units }) => (
           <InvestmentRow key={`investment-${ticker}`}>
-            <TextInput
+            <NumberInput
               label={
                 stocksData[ticker]?.info?.Name
                   ? `${ticker} - ${stocksData[ticker]?.info?.Name}`
                   : `${ticker}`
               }
-              value={raw ?? '0'}
-              onChange={(e) => {
-                const val = e.target.value;
-                const parsed = parseFloat(val);
-                if (!isNaN(parsed)) {
-                  setTickers((current) =>
-                    current.map((investment) =>
-                      investment.ticker === ticker
-                        ? { ticker, units: parsed, raw: val }
-                        : investment
-                    )
-                  );
-                }
-              }}
-              onBlur={() => {
-                const val = parseFloat(raw);
-                if (!isNaN(val)) {
-                  setTickers((current) =>
-                    current.map((investment) =>
-                      investment.ticker === ticker
-                        ? { ticker, units: val, raw: val.toString() }
-                        : investment
-                    )
-                  );
-                } else {
-                  setTickers((current) =>
-                    current.map((investment) =>
-                      investment.ticker === ticker
-                        ? { ticker, units, raw: units.toString() }
-                        : investment
-                    )
-                  );
-                }
-              }}
-              inputMode="decimal"
+              value={units}
+              onChange={(newUnits) =>
+                setTickers((current) =>
+                  current.map((investment) =>
+                    investment.ticker === ticker
+                      ? { ticker, units: newUnits }
+                      : investment
+                  )
+                )
+              }
             />
             <Field>
               <Button

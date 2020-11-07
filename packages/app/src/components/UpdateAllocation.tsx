@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { RiCheckLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
-import { Button, TextInput } from '@tuja/components';
+import { Button, FormattedInput, TextInput } from '@tuja/components';
 import { updateHoldingAllocation } from 'libs/portfolio';
 import usePortfolio from 'hooks/usePortfolio';
 import { theme } from 'theme';
@@ -42,9 +42,6 @@ interface UpdateAllocationProps {
 function UpdateAllocation({ ticker, onClose }: UpdateAllocationProps) {
   const { portfolio } = usePortfolio();
   const currentAllocation = portfolio?.targetAllocations?.[ticker] ?? 0;
-  const [rawAllocation, setRawAllocation] = useState(
-    `${currentAllocation * 100}%`
-  );
   const [allocation, setAllocation] = useState(currentAllocation);
 
   useEffect(() => {
@@ -53,20 +50,17 @@ function UpdateAllocation({ ticker, onClose }: UpdateAllocationProps) {
 
   return (
     <Container>
-      <TextInput
+      <FormattedInput
         label={`Target allocation for ${ticker}`}
-        value={rawAllocation}
-        onChange={(e) => setRawAllocation(e.target.value)}
-        onBlur={() => {
-          const val = parseFloat(rawAllocation);
-          if (!isNaN(val)) {
-            setAllocation(val / 100);
-            setRawAllocation(`${val}%`);
-          } else {
-            setRawAllocation(`${allocation * 100}%`);
-          }
-        }}
         inputMode="decimal"
+        value={allocation}
+        onChange={setAllocation}
+        format={(val) => `${val * 100}%`}
+        parse={(raw) => {
+          const parsed = parseFloat(raw);
+          if (isNaN(parsed)) return null;
+          return parsed / 100;
+        }}
       />
       <ActionsContainer>
         <Button
