@@ -126,7 +126,7 @@ function Select({
           </option>
         ))}
       </SelectBase>
-      <DropdownIcon disabled={disabled} size="auto" />
+      <DropdownIcon disabled={disabled} size="100%" />
     </SelectContainer>
   );
 
