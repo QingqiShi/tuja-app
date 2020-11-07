@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { v4 as uuid } from 'uuid';
-import { Button, DateInput, Select, TextInput } from '@tuja/components';
+import { Button, DateInput, NumberInput, Select } from '@tuja/components';
 import { ActionsContainer, Field, Label } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
 import type { ActivityFormProps } from 'libs/activities';
@@ -24,11 +24,6 @@ function ActivityStockDividendForm({
     (initialActivity?.type === 'StockDividend'
       ? initialActivity.units
       : null) ?? 0
-  );
-  const [unitsRaw, setUnitsRaw] = useState(
-    (initialActivity?.type === 'StockDividend'
-      ? initialActivity.units?.toString()
-      : null) ?? '0'
   );
   const [loading, setLoading] = useState(false);
 
@@ -63,7 +58,7 @@ function ActivityStockDividendForm({
         }
       }}
     >
-      <DateInput label="Date" defaultValue={date} onChange={setDate} required />
+      <DateInput label="Date" value={date} onChange={setDate} required />
       <Field>
         <Label>From Investment*</Label>
         <Select
@@ -79,27 +74,10 @@ function ActivityStockDividendForm({
           required
         />
       </Field>
-      <TextInput
+      <NumberInput
         label="Number of Shares Received"
-        value={unitsRaw}
-        onChange={(e) => {
-          const val = e.target.value;
-          setUnitsRaw(val);
-
-          const parsed = parseFloat(unitsRaw);
-          if (!isNaN(parsed)) {
-            setUnits(parsed);
-          }
-        }}
-        onBlur={() => {
-          const parsed = parseFloat(unitsRaw);
-          if (!isNaN(parsed)) {
-            setUnitsRaw(parsed.toString());
-          } else {
-            setUnitsRaw(units.toString());
-          }
-        }}
-        inputMode="decimal"
+        value={units}
+        onChange={setUnits}
       />
       <ActionsContainer>
         <Button

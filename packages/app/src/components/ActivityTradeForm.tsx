@@ -5,7 +5,7 @@ import firebase from 'firebase/app';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { v4 as uuid } from 'uuid';
-import { Button, DateInput, TextInput } from '@tuja/components';
+import { Button, DateInput, NumberInput, TextInput } from '@tuja/components';
 import CurrencyInput from './CurrencyInput';
 import {
   ActionsContainer,
@@ -108,17 +108,13 @@ function ActivityTradeForm({
   const [date, setDate] = useState<Date>(initialActivity?.date ?? new Date());
   const [tickerToAdd, setTickerToAdd] = useState('');
   const [quantityToAdd, setQuantityToAdd] = useState(0);
-  const [quantityToAddRaw, setQuantityToAddRaw] = useState('0');
   const [cost, setCost] = useState(getInitialCost(initialActivity));
   const [remainingCash, setRemainingCash] = useState(0);
-  const [tickers, setTickers] = useState<
-    { ticker: string; units: number; raw: string }[]
-  >(
+  const [tickers, setTickers] = useState<{ ticker: string; units: number }[]>(
     (initialActivity?.type === 'Trade'
       ? initialActivity.trades.map((trade) => ({
           ticker: trade.ticker,
           units: trade.units,
-          raw: trade.units.toString(),
         }))
       : null) ?? []
   );
@@ -180,7 +176,7 @@ function ActivityTradeForm({
         }
       }}
     >
-      <DateInput label="Date" defaultValue={date} onChange={setDate} required />
+      <DateInput label="Date" value={date} onChange={setDate} required />
       <Label>{mode === 'buy' ? 'Buys' : 'Sells'}*</Label>
       <InvestmentsContainer>
         <AddInvestment>
@@ -233,28 +229,10 @@ function ActivityTradeForm({
             )}
             {tickerToAdd && (
               <div>
-                <TextInput
+                <NumberInput
                   label="Quantity"
-                  value={quantityToAddRaw}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setQuantityToAddRaw(val);
-
-                    const parsed = parseFloat(val);
-                    if (!isNaN(parsed)) {
-                      setQuantityToAdd(parsed);
-                    }
-                  }}
-                  onBlur={() => {
-                    const val = parseFloat(quantityToAddRaw);
-                    if (!isNaN(val)) {
-                      setQuantityToAdd(val);
-                      setQuantityToAddRaw(val.toString());
-                    } else {
-                      setQuantityToAddRaw(quantityToAdd.toString());
-                    }
-                  }}
-                  inputMode="decimal"
+                  value={quantityToAdd}
+                  onChange={setQuantityToAdd}
                 />
               </div>
             )}
@@ -275,7 +253,6 @@ function ActivityTradeForm({
                   ]);
                   setTickerToAdd('');
                   setQuantityToAdd(0);
-                  setQuantityToAddRaw('0');
                 }}
               >
                 Add
@@ -289,49 +266,24 @@ function ActivityTradeForm({
             Add the investments to {mode === 'buy' ? 'buy' : 'sell'}
           </Type>
         )}
-        {tickers.map(({ ticker, units, raw }) => (
+        {tickers.map(({ ticker, units }) => (
           <InvestmentRow key={`investment-${ticker}`}>
-            <TextInput
+            <NumberInput
               label={
                 stocksData[ticker]?.info?.Name
                   ? `${ticker} - ${stocksData[ticker]?.info?.Name}`
                   : `${ticker}`
               }
-              value={raw ?? '0'}
-              onChange={(e) => {
-                const val = e.target.value;
-                const parsed = parseFloat(val);
-                if (!isNaN(parsed)) {
-                  setTickers((current) =>
-                    current.map((investment) =>
-                      investment.ticker === ticker
-                        ? { ticker, units: parsed, raw: val }
-                        : investment
-                    )
-                  );
-                }
-              }}
-              onBlur={() => {
-                const val = parseFloat(raw);
-                if (!isNaN(val)) {
-                  setTickers((current) =>
-                    current.map((investment) =>
-                      investment.ticker === ticker
-                        ? { ticker, units: val, raw: val.toString() }
-                        : investment
-                    )
-                  );
-                } else {
-                  setTickers((current) =>
-                    current.map((investment) =>
-                      investment.ticker === ticker
-                        ? { ticker, units, raw: units.toString() }
-                        : investment
-                    )
-                  );
-                }
-              }}
-              inputMode="decimal"
+              value={units}
+              onChange={(newUnits) =>
+                setTickers((current) =>
+                  current.map((investment) =>
+                    investment.ticker === ticker
+                      ? { ticker, units: newUnits }
+                      : investment
+                  )
+                )
+              }
             />
             <Field>
               <Button

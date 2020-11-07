@@ -41,7 +41,7 @@ function ActivityDepositForm({
         }
       }}
     >
-      <DateInput label="Date" defaultValue={date} onChange={setDate} required />
+      <DateInput label="Date" value={date} onChange={setDate} required />
       <CurrencyInput
         label="Deposit Amount"
         value={amount}

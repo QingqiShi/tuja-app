@@ -29,3 +29,9 @@ Required.args = {
   label: 'Date',
   required: true,
 };
+
+export const ExternalValue = Template.bind({});
+ExternalValue.args = {
+  label: 'Date',
+  value: new Date(),
+};

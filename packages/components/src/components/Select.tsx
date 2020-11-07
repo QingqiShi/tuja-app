@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 import { RiArrowDownSLine } from 'react-icons/ri';
