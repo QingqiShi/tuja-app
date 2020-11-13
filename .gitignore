@@ -69,3 +69,6 @@ node_modules/
 
 # VSCode config
 .vscode/
+
+# Mac files
+.DS_Store
