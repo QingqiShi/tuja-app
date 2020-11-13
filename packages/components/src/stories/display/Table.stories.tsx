@@ -1,12 +1,15 @@
 import React from 'react';
-import Table, { TableRow, TableCell, TableHeader } from 'components/Table';
+import { Meta } from '@storybook/react';
+import Table, {
+  TableRow,
+  TableCell,
+  TableHeader,
+} from '../../components/Table';
 
-const TableStories = {
+export default {
   title: 'Display/Table',
   component: Table,
-};
-
-export default TableStories;
+} as Meta;
 
 export const Demo = () => (
   <Table>

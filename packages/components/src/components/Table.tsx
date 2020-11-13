@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { transparentize } from 'polished';
-import { theme, getTheme } from 'theme';
+import { theme, getTheme } from '../theme';
 
 export const Table = styled.table`
   width: 100%;
@@ -65,15 +65,11 @@ const Primary = styled.span`
 const Secondary = styled.span`
   display: block;
   white-space: nowrap;
-  max-width: 30vw;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: ${theme.fonts.helperSize};
   line-height: ${theme.fonts.helperHeight};
   font-weight: ${theme.fonts.helperWeight};
-  @media (${theme.breakpoints.minLaptop}) {
-    max-width: 15vw;
-  }
 `;
 
 interface TableCellProps {
