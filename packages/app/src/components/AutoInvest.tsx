@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
+import { Table, TableRow, TableHeader, TableCell } from '@tuja/components';
 import CurrencyInput from 'components/CurrencyInput';
-import { Table, TableRow, TableHeader, TableCell } from 'components/Table';
 import usePortfolio from 'hooks/usePortfolio';
 import useStocksData from 'hooks/useStocksData';
 import { PortfolioPerformance } from 'libs/portfolio';
