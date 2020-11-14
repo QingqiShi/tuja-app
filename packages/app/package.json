@@ -10,6 +10,7 @@
     "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "eject": "react-scripts eject"
   },
   "dependencies": {
@@ -49,6 +50,7 @@
     "@types/uuid": "^8.3.0",
     "babel-loader": "^8.1.0",
     "react-scripts": "4.0.0",
+    "source-map-explorer": "^2.5.0",
     "worker-loader": "^3.0.5"
   },
   "eslintConfig": {

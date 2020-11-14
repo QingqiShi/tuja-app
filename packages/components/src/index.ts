@@ -14,5 +14,6 @@ export {
   TableCell,
   TableHeader,
 } from './components/Table';
+export { default as TopLinearLoader } from './components/TopLinearLoader';
 
 export { GlobalStyle } from './components';

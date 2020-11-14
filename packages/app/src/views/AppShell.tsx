@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import Portfolio from 'views/App/Portfolio';
-import Activities from 'views/App/Activities';
-import Create from 'views/App/Create';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import 'firebase/functions';
+import { TopLinearLoader } from '@tuja/components';
 import NavBar from 'components/NavBar';
-import useAuth from 'hooks/useAuth';
-import usePortfolio from 'hooks/usePortfolio';
+import GlobalLoader from 'components/GlobalLoader';
+import useAuth, { AuthProvider } from 'hooks/useAuth';
+import usePortfolio, { PortfolioProvider } from 'hooks/usePortfolio';
+import { PortfolioPerformanceProvider } from 'hooks/usePortfolioPerformance';
+import { StartDateProvider } from 'hooks/useStartDate';
+import { StocksDataProvider } from 'hooks/useStocksData';
+import { LoadingStateProvider } from 'hooks/useLoadingState';
 import { theme } from 'theme';
+
+const Portfolio = lazy(() => import('views/App/Portfolio'));
+const Activities = lazy(() => import('views/App/Activities'));
+const Create = lazy(() => import('views/App/Create'));
+
+if (window.location.hostname === 'localhost') {
+  firebase.firestore().settings({ host: 'localhost:5002', ssl: false });
+  firebase.functions().useEmulator('localhost', 5001);
+}
+
+dayjs.extend(isSameOrBefore);
 
 const Container = styled.div`
   padding-bottom: calc(
@@ -24,46 +44,69 @@ function AppShell() {
     <Container>
       <NavBar showSignIn={showSignIn} setShowSignIn={setShowSignIn} />
 
-      {state !== 'SIGNED_IN' && state !== 'SIGNING_IN' && state !== 'UNKNOWN' && (
-        <Switch>
-          <Route path="/demo">
-            <Portfolio onSignIn={() => setShowSignIn(true)} isDemo />
-          </Route>
-          <Route>
-            <Redirect to="/demo" />
-          </Route>
-        </Switch>
-      )}
+      <Suspense fallback={<TopLinearLoader />}>
+        {state !== 'SIGNED_IN' &&
+          state !== 'SIGNING_IN' &&
+          state !== 'UNKNOWN' && (
+            <Switch>
+              <Route path="/demo">
+                <Portfolio onSignIn={() => setShowSignIn(true)} isDemo />
+              </Route>
+              <Route>
+                <Redirect to="/demo" />
+              </Route>
+            </Switch>
+          )}
 
-      {state === 'SIGNED_IN' && portfolioLoaded && !portfolio && (
-        <Switch>
-          <Route path="/create-portfolio">
-            <Create />
-          </Route>
-          <Route>
-            <Redirect to="/create-portfolio" />
-          </Route>
-        </Switch>
-      )}
+        {state === 'SIGNED_IN' && portfolioLoaded && !portfolio && (
+          <Switch>
+            <Route path="/create-portfolio">
+              <Create />
+            </Route>
+            <Route>
+              <Redirect to="/create-portfolio" />
+            </Route>
+          </Switch>
+        )}
 
-      {state === 'SIGNED_IN' && portfolioLoaded && portfolio && (
-        <Switch>
-          <Route path="/portfolio">
-            <Portfolio onSignIn={() => setShowSignIn(true)} />
-          </Route>
-          <Route path="/activities">
-            <Activities />
-          </Route>
-          <Route path="/create-portfolio">
-            <Create />
-          </Route>
-          <Route>
-            <Redirect to="/portfolio" />
-          </Route>
-        </Switch>
-      )}
+        {state === 'SIGNED_IN' && portfolioLoaded && portfolio && (
+          <Switch>
+            <Route path="/portfolio">
+              <Portfolio onSignIn={() => setShowSignIn(true)} />
+            </Route>
+            <Route path="/activities">
+              <Activities />
+            </Route>
+            <Route path="/create-portfolio">
+              <Create />
+            </Route>
+            <Route>
+              <Redirect to="/portfolio" />
+            </Route>
+          </Switch>
+        )}
+      </Suspense>
     </Container>
   );
 }
 
-export default AppShell;
+function AppShellWithProviders() {
+  return (
+    <AuthProvider>
+      <LoadingStateProvider>
+        <StartDateProvider>
+          <StocksDataProvider>
+            <PortfolioProvider>
+              <PortfolioPerformanceProvider>
+                <GlobalLoader />
+                <AppShell />
+              </PortfolioPerformanceProvider>
+            </PortfolioProvider>
+          </StocksDataProvider>
+        </StartDateProvider>
+      </LoadingStateProvider>
+    </AuthProvider>
+  );
+}
+
+export default AppShellWithProviders;

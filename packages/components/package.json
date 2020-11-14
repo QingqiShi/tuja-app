@@ -6,6 +6,7 @@
   "license": "MIT",
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "sideEffects": false,
   "scripts": {
     "start": "tsc --watch --preserveWatchOutput",
     "dev": "CI=true run-p start storybook",

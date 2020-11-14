@@ -3,13 +3,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/functions';
-import 'firebase/auth';
 import 'firebase/analytics';
 import 'firebase/performance';
-import dayjs from 'dayjs';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -26,15 +21,11 @@ firebase.initializeApp({
 });
 
 if (window.location.hostname === 'localhost') {
-  firebase.firestore().settings({ host: 'localhost:5002', ssl: false });
-  firebase.functions().useFunctionsEmulator('http://localhost:5001');
   firebase.analytics().setAnalyticsCollectionEnabled(false);
 } else {
   firebase.analytics();
   firebase.performance();
 }
-
-dayjs.extend(isSameOrBefore);
 
 ReactDOM.render(
   <React.StrictMode>
