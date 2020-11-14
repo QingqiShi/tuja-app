@@ -5,6 +5,7 @@ import { Type } from '@tuja/components';
 import ActivitiesList from 'components/ActivitiesList';
 import { Card, TitleRow } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
+import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
 import { theme } from 'theme';
 
 const Container = styled.div`
@@ -35,6 +36,7 @@ const NoActivityBanner = styled.div`
 
 function Activities() {
   const { portfolio } = usePortfolio();
+  useScrollToTopOnMount();
 
   if (!portfolio?.activities.length) {
     return (

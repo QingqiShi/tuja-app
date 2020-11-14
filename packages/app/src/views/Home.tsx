@@ -4,6 +4,7 @@ import { MdShowChart, MdPieChartOutlined, MdAutorenew } from 'react-icons/md';
 import styled from 'styled-components/macro';
 import { Button, Type } from '@tuja/components';
 import { Center } from 'commonStyledComponents';
+import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
 import { theme } from 'theme';
 
 const FullHeight = styled.div`
@@ -34,6 +35,7 @@ const BetaBadge = styled.div`
 `;
 
 function Home() {
+  useScrollToTopOnMount();
   return (
     <div>
       <Helmet>
