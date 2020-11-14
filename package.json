@@ -11,7 +11,8 @@
     "lint": "lerna run lint",
     "emulate": "firebase emulators:start --only firestore,pubsub,functions --import=testData",
     "emulator:export": "firebase emulators:export ./testData",
-    "shell": "firebase functions:shell"
+    "shell": "firebase functions:shell",
+    "analyze": "lerna run analyze"
   },
   "engines": {
     "node": "12"
