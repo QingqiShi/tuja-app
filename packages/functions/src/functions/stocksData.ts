@@ -47,22 +47,26 @@ Stock live price
 export const stockLivePrice = functions
   .runWith({ memory: '1GB' })
   .https.onCall(async (data) => {
-    const { ticker } = data;
-    if (typeof ticker !== 'string') {
+    const { tickers } = data;
+    if (!Array.isArray(tickers)) {
       throw new functions.https.HttpsError(
         'invalid-argument',
-        'You need to provide a ticker symbol'
+        'You need to provide an array of ticker symbols'
       );
     }
 
-    functions.logger.log('ticker', { ticker });
-
-    const response = await fetch(
-      `https://eodhistoricaldata.com/api/real-time/${ticker}?fmt=json&api_token=${getToken()}`
+    const token = getToken();
+    const livePrices = await Promise.all(
+      tickers.map(async (ticker) => {
+        functions.logger.log('ticker', { ticker });
+        const response = await fetch(
+          `https://eodhistoricaldata.com/api/real-time/${ticker}?fmt=json&api_token=${token}`
+        );
+        return response.json();
+      })
     );
-    const result = await response.json();
 
-    return result;
+    return livePrices;
   });
 
 /* =====

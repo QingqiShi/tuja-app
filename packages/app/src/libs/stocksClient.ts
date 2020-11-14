@@ -78,14 +78,14 @@ export async function fetchStocksInfo(tickers: string[]) {
   return result.data as StockInfo[];
 }
 
-export async function fetchStockLivePrice(ticker: string) {
+export async function fetchStockLivePrice(tickers: string[]) {
   const stockLivePrice = firebase.functions().httpsCallable('stockLivePrice');
 
-  const result = await stockLivePrice({ ticker });
-  return {
-    ...result.data,
-    date: new Date(result.data.timestamp * 1000),
-  } as StockLivePrice;
+  const result = await stockLivePrice({ tickers });
+  return result.data.map((data: any) => ({
+    ...data,
+    date: new Date(data.timestamp * 1000),
+  })) as StockLivePrice[];
 }
 
 export function shouldFetchData(
