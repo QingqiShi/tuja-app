@@ -85,14 +85,10 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
 
   // Callback for fetching current live prices
   const getLivePrices = useCallback(async (tickers: string[]) => {
-    const livePrices = (
-      await Promise.all(
-        tickers.map((ticker) => {
-          console.log('fetch live price', ticker);
-          return fetchStockLivePrice(ticker);
-        })
-      )
-    ).filter((livePrice) => livePrice?.code);
+    console.log('fetch live prices', tickers);
+    const livePrices = (await fetchStockLivePrice(tickers)).filter(
+      (livePrice) => livePrice?.code
+    );
     if (livePrices.length) {
       setStocksData((current) =>
         livePrices
