@@ -2,6 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import useAuth from 'hooks/useAuth';
+import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
 import { createPortfolio } from 'libs/portfolio';
 import { logEvent } from 'libs/analytics';
 import CreatePortfolio from 'components/CreatePortfolio';
@@ -9,6 +10,7 @@ import CreatePortfolio from 'components/CreatePortfolio';
 function Create() {
   const { currentUser } = useAuth();
   const history = useHistory();
+  useScrollToTopOnMount();
 
   return (
     <>

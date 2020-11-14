@@ -4,6 +4,7 @@ import styled from 'styled-components/macro';
 import { Type } from '@tuja/components';
 import PortfolioDashboard from 'components/PortfolioDashboard';
 import { TitleRow } from 'commonStyledComponents';
+import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
 import { theme } from 'theme';
 
 const Container = styled.div`
@@ -31,6 +32,7 @@ interface DashboardProps {
 }
 
 function Dashboard({ onSignIn, isDemo }: DashboardProps) {
+  useScrollToTopOnMount();
   return (
     <Container>
       <Helmet>
