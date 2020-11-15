@@ -10883,10 +10883,10 @@ firebase-functions@^3.11.0:
     express "^4.17.1"
     lodash "^4.17.14"
 
-firebase-tools@^8.16.1:
-  version "8.16.1"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-8.16.1.tgz#f1737ec16dbf6dd79c8b23b0e26f576e7fc906d0"
-  integrity sha512-D5foH0EMg2retKViCFgrH3x8OVjDcfgyw6NWg97RsRHWcEvHx+yMylSfIZIVEzqblrrxRxW/dYwEk1HRETbrYA==
+firebase-tools@^8.16.2:
+  version "8.16.2"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-8.16.2.tgz#fdcae8fe12411aaac90fb5d1602d34bd721fcd3f"
+  integrity sha512-3deje+CJ5XtYDsb92YqKdNZaV6+OBJqGA2zatozSaBaKpVkIqTyt9vpglKaar/9N+UIqsIfpjruLS6dCkVk/Gg==
   dependencies:
     "@google-cloud/pubsub" "^1.7.0"
     JSONStream "^1.2.1"
@@ -16037,15 +16037,7 @@ open@^6.3.0:
   dependencies:
     is-wsl "^1.1.0"
 
-open@^7.0.2, open@^7.0.3:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/open/-/open-7.1.0.tgz#68865f7d3cb238520fa1225a63cf28bcf8368a1c"
-  integrity sha512-lLPI5KgOwEYCDKXf4np7y1PBEkj7HYIyP2DY8mVDRnx0VIIu6bNrRB0R66TuO7Mack6EnTNLm4uvcl1UoklTpA==
-  dependencies:
-    is-docker "^2.0.0"
-    is-wsl "^2.1.1"
-
-open@^7.1.0:
+open@^7.0.2, open@^7.0.3, open@^7.1.0:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/open/-/open-7.3.0.tgz#45461fdee46444f3645b6e14eb3ca94b82e1be69"
   integrity sha512-mgLwQIx2F/ye9SmbrUkurZCnkoXyXyu9EbHtJZrICjVAJfyMArdHp3KkixGdZx1ZHFPNIwl0DDM1dFFqXbTLZw==
