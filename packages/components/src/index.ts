@@ -1,19 +1,14 @@
-export { default as Button } from './components/Button';
-export { default as ButtonGroup } from './components/ButtonGroup';
-export { default as TextInput } from './components/TextInput';
-export { default as DateInput } from './components/DateInput';
-export { default as Select } from './components/Select';
-export { default as FormattedInput } from './components/FormattedInput';
-export { default as NumberInput } from './components/NumberInput';
-export { default as Chart } from './components/Chart';
-export { default as Pie } from './components/Pie';
-export { default as Type } from './components/Type';
-export {
-  default as Table,
-  TableRow,
-  TableCell,
-  TableHeader,
-} from './components/Table';
-export { default as TopLinearLoader } from './components/TopLinearLoader';
+export { default as Button } from './components/inputs/Button';
+export { default as ButtonGroup } from './components/inputs/ButtonGroup';
+export { default as TextInput } from './components/inputs/TextInput';
+export { default as DateInput } from './components/inputs/DateInput';
+export { default as Select } from './components/inputs/Select';
+export { default as FormattedInput } from './components/inputs/FormattedInput';
+export { default as NumberInput } from './components/inputs/NumberInput';
+export { default as Chart } from './components/display/Chart';
+export { default as Pie } from './components/display/Pie';
+export { default as Type } from './components/display/Type';
+export * from './components/display/Table';
+export { default as TopLinearLoader } from './components/feedback/TopLinearLoader';
 
-export { GlobalStyle } from './components';
+export { GlobalStyle } from './globalStyle';

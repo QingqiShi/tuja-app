@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { transparentize } from 'polished';
-import { theme, getTheme } from '../theme';
+import { theme, getTheme } from '../../theme';
 
 const Container = styled.div`
   position: fixed;
@@ -65,7 +65,7 @@ const FastBar = styled(Bar)`
     infinite;
 `;
 
-function TopLinearLoader() {
+function TopLinearLoader(_: {}) {
   return (
     <Container>
       <SlowBar />

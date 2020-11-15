@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Story, Meta } from '@storybook/react';
 import appleStock from '@visx/mock-data/lib/mocks/appleStock';
-import Chart from '../../components/Chart';
+import Chart from './Chart';
 
 const Container = styled.div`
   width: 70vw;
@@ -12,7 +12,7 @@ const Container = styled.div`
 export default {
   title: 'Display/Chart',
   component: Chart,
-  decorators: [(storyFn: any) => <Container>{storyFn()}</Container>],
+  decorators: [(storyFn) => <Container>{storyFn()}</Container>],
 } as Meta;
 
 const Template: Story<React.ComponentProps<typeof Chart>> = (args) => (

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Meta } from '@storybook/react';
-import Type from '../../components/Type';
+import Type from './Type';
 
 export default {
   title: 'Display/Type',

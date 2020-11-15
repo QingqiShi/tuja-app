@@ -1,6 +1,6 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import Select from '../../components/Select';
+import Select from './Select';
 
 export default {
   title: 'Inputs/Select',

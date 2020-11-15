@@ -5,7 +5,7 @@ import { lighten } from 'polished';
 import { Group } from '@visx/group';
 import { Text } from '@visx/text';
 import PieBase, { ProvidedProps } from '@visx/shape/lib/shapes/Pie';
-import { theme } from '../theme';
+import { theme } from '../../theme';
 
 const Container = styled.div`
   width: 100%;

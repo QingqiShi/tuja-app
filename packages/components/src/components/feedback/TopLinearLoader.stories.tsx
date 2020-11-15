@@ -1,6 +1,6 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import TopLinearLoader from '../../components/TopLinearLoader';
+import TopLinearLoader from './TopLinearLoader';
 
 export default {
   title: 'Feedback/TopLinearLoader',

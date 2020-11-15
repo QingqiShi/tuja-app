@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { transparentize } from 'polished';
-import { theme, getTheme } from '../theme';
+import { theme, getTheme } from '../../theme';
 
 export const Table = styled.table`
   width: 100%;
