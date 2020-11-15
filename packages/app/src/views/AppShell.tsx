@@ -23,7 +23,10 @@ const Activities = lazy(() => import('views/App/Activities'));
 const Create = lazy(() => import('views/App/Create'));
 
 if (window.location.hostname === 'localhost') {
-  firebase.firestore().settings({ host: 'localhost:5002', ssl: false });
+  if (!window.firestoreConfigured) {
+    firebase.firestore().settings({ host: 'localhost:5002', ssl: false });
+    window.firestoreConfigured = true;
+  }
   firebase.functions().useEmulator('localhost', 5001);
 }
 

@@ -10,3 +10,7 @@ declare module 'worker-loader!*' {
   // export = WebpackWorker;
   export default WebpackWorker;
 }
+
+interface Window {
+  firestoreConfigured: boolean;
+}
