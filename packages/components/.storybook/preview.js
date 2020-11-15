@@ -1,10 +1,11 @@
 import React from 'react';
 import { addDecorator } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';
-import { GlobalStyle } from '../src/components';
+import { GlobalStyle } from '../src/globalStyle';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
+  layout: 'centered'
 };
 
 export const globalTypes = {

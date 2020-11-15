@@ -9,6 +9,7 @@
   "files": [],
   "references": [
     { "path": "./packages/app/tsconfig.json" },
+    { "path": "./packages/components/tsconfig.json" },
     { "path": "./packages/functions/tsconfig.json" }
   ]
 }

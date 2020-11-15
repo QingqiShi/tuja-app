@@ -1,10 +1,6 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-import Table, {
-  TableRow,
-  TableCell,
-  TableHeader,
-} from '../../components/Table';
+import Table, { TableRow, TableCell, TableHeader } from './Table';
 
 export default {
   title: 'Display/Table',

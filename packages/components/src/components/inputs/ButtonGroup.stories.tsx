@@ -1,6 +1,6 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import ButtonGroup from '../../components/ButtonGroup';
+import ButtonGroup from './ButtonGroup';
 
 export default {
   title: 'Inputs/ButtonGroup',

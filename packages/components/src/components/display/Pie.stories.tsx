@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Story, Meta } from '@storybook/react';
-import Pie from '../../components/Pie';
+import Pie from './Pie';
 
 const Container = styled.div`
   width: 70vw;
@@ -11,7 +11,7 @@ const Container = styled.div`
 export default {
   title: 'Display/Pie',
   component: Pie,
-  decorators: [(storyFn: any) => <Container>{storyFn()}</Container>],
+  decorators: [(storyFn) => <Container>{storyFn()}</Container>],
 } as Meta;
 
 const Template: Story<React.ComponentProps<typeof Pie>> = (args) => (

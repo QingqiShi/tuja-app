@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { transparentize, lighten } from 'polished';
-import { theme, getTheme } from '../theme';
+import { theme, getTheme } from '../../theme';
 
 type ButtonVariant = 'primary' | 'shout' | 'outline';
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
-import { theme, getTheme } from '../theme';
+import { theme, getTheme } from '../../theme';
 
 const Container = styled.div`
   display: inline-flex;

@@ -13,7 +13,7 @@ import { Group } from '@visx/group';
 import { localPoint } from '@visx/event';
 import { max, min, extent, bisector } from 'd3-array';
 import dayjs from 'dayjs';
-import { theme, getTheme } from '../theme';
+import { theme, getTheme } from '../../theme';
 
 const Container = styled.div`
   width: 100%;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import DateInput from '../../components/DateInput';
+import DateInput from './DateInput';
 
 export default {
   title: 'Inputs/DateInput',

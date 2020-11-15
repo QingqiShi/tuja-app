@@ -1,6 +1,6 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import FormattedInput from '../../components/FormattedInput';
+import FormattedInput from './FormattedInput';
 
 export default {
   title: 'Inputs/FormattedInput',
