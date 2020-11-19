@@ -22,7 +22,7 @@ const Side = styled.div`
     position: sticky;
     max-height: calc(100vh - 5rem);
     padding: 1px;
-    top: calc(5rem + ${theme.spacings('s')});
+    top: calc(3.5rem + ${theme.spacings('s')});
   }
   @media (${theme.breakpoints.minLaptop}) {
     width: 20rem;

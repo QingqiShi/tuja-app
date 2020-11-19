@@ -1,16 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { transparentize, lighten } from 'polished';
-import { theme, getTheme } from '../../theme';
+import { theme, getTheme, getPaddings } from '../../theme';
 
 type ButtonVariant = 'primary' | 'shout' | 'outline';
 
-interface ButtonBaseProps
-  extends Partial<Pick<React.ComponentProps<typeof Link>, 'to'>> {
-  hasStartIcon?: boolean;
-  hasEndIcon?: boolean;
+interface ButtonBaseProps {
   variant?: ButtonVariant;
+  compact?: boolean;
+  active?: boolean;
+  align?: 'start' | 'center' | 'end';
 }
 
 const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
@@ -22,20 +21,26 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
   line-height: ${theme.fonts.ctaHeight};
   font-weight: ${theme.fonts.ctaWeight};
   letter-spacing: ${theme.fonts.ctaSpacing};
-  padding: ${theme.spacings('s')};
   border-radius: ${theme.spacings('xs')};
   border: 2px solid transparent;
-  color: ${theme.colors.textOnBackground};
+  color: ${theme.colors.textSecondaryOnBackground};
   background-color: ${getTheme(theme.colors.textOnBackground, (color) =>
     transparentize(1, color)
   )};
   text-transform: uppercase;
-  transition: all 0.2s;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s,
+    opacity 0.2s;
   display: inline-flex;
   place-items: center;
   place-content: center;
   cursor: pointer;
   text-decoration: none;
+
+  ${({ compact }) => getPaddings(compact)}
+
+  ${({ align = 'center' }) => css`
+    place-content: ${align};
+  `}
 
   &:hover {
     background-color: ${getTheme(theme.colors.textOnBackground, (color) =>
@@ -58,23 +63,18 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
   &:disabled {
     opacity: ${({ theme }) => (theme.mode === 'light' ? 0.3 : 0.4)};
     pointer-events: none;
+
+    ${({ active }) =>
+      active &&
+      css`
+        opacity: 1;
+        background-color: ${getTheme(theme.colors.textOnBackground, (color) =>
+          transparentize(0.9, color)
+        )};
+      `}
   }
 
-  ${({ hasStartIcon }) =>
-    hasStartIcon &&
-    css`
-      position: relative;
-      padding-left: calc(${theme.spacings('s')} + 1.5em);
-    `}
-
-  ${({ hasEndIcon }) =>
-    hasEndIcon &&
-    css`
-      position: relative;
-      padding-right: calc(${theme.spacings('s')} + 1.5em);
-    `}
-
-  ${({ variant }) => {
+  ${({ variant, active }) => {
     switch (variant) {
       case 'primary':
         return css`
@@ -98,6 +98,15 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
                 lighten(0.15, color)
               )};
           }
+
+          ${active &&
+          css`
+            &:disabled {
+              background-color: ${getTheme(theme.colors.callToAction, (color) =>
+                lighten(0.15, color)
+              )};
+            }
+          `}
         `;
       case 'outline':
         return css`
@@ -120,61 +129,80 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
   }}
 `;
 
-const FloatingIcon = styled.div<{ isStart?: boolean }>`
-  position: absolute;
-  ${({ isStart }) =>
-    isStart
-      ? css`
-          left: ${theme.spacings('s')};
-        `
-      : css`
-          right: ${theme.spacings('s')};
-        `}
-  font-size: 1.2em;
-  height: 1em;
-`;
-
 const Icon = styled.span`
-  font-size: 1.2em;
   height: 1em;
 `;
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+const Text = styled.span<{ hideTextOnMobile?: boolean }>`
+  &:not(:last-child) {
+    margin-right: ${theme.spacings('xs')};
+  }
+  &:not(:first-child) {
+    margin-left: ${theme.spacings('xs')};
+  }
+
+  ${({ hideTextOnMobile }) =>
+    hideTextOnMobile &&
+    css`
+      display: none;
+      @media (${theme.breakpoints.minTablet}) {
+        display: inline;
+      }
+    `}
+`;
+
+interface ButtonProps<T> extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   icon?: React.ReactNode;
   variant?: ButtonVariant;
-  to?: React.ComponentProps<typeof Link>['to'];
   disabled?: boolean;
+  compact?: boolean;
+  active?: boolean;
+  hideTextOnMobile?: boolean;
+  align?: 'start' | 'center' | 'end';
   onClick?: React.MouseEventHandler;
+  as?: React.ComponentType<T>;
+  otherProps?: T;
 }
 
-function Button({
+function Button<T>({
   children,
   startIcon,
   endIcon,
   icon,
   variant,
-  to,
   disabled,
+  compact,
+  active,
+  hideTextOnMobile,
+  align,
+  as,
+  otherProps,
   ...rest
-}: ButtonProps) {
+}: ButtonProps<T>) {
   const content = (
     <>
-      {startIcon && <FloatingIcon isStart>{startIcon}</FloatingIcon>}
-      {icon ? <Icon>{icon}</Icon> : <span>{children}</span>}
-      {endIcon && <FloatingIcon>{endIcon}</FloatingIcon>}
+      {startIcon && <Icon>{startIcon}</Icon>}
+      {icon ? (
+        <Icon>{icon}</Icon>
+      ) : (
+        <Text hideTextOnMobile={hideTextOnMobile}>{children}</Text>
+      )}
+      {endIcon && <Icon>{endIcon}</Icon>}
     </>
   );
-  if (to && !disabled) {
+  if (as && !disabled && !active) {
     return (
       <ButtonBase
+        as={as}
         {...(rest as any)}
-        hasStartIcon={!!startIcon}
-        hasEndIcon={!!endIcon}
         variant={variant}
-        as={Link}
-        to={to}
+        active={active}
+        disabled={disabled || active}
+        compact={compact}
+        align={align}
+        {...otherProps}
       >
         {content}
       </ButtonBase>
@@ -183,10 +211,11 @@ function Button({
   return (
     <ButtonBase
       {...rest}
-      hasStartIcon={!!startIcon}
-      hasEndIcon={!!endIcon}
       variant={variant}
-      disabled={disabled}
+      active={active}
+      disabled={disabled || active}
+      compact={compact}
+      align={align}
     >
       {content}
     </ButtonBase>

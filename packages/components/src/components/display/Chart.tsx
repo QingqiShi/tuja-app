@@ -421,7 +421,7 @@ function Chart({
                   pointerEvents="none"
                   style={{
                     x: tooltipProps.x,
-                    y: tooltipProps.x.to(getTooltipY),
+                    y: tooltipProps.x?.to(getTooltipY),
                     opacity: tooltipProps.opacity,
                   }}
                 />
@@ -434,7 +434,7 @@ function Chart({
                     pointerEvents="none"
                     style={{
                       x: tooltipProps.x,
-                      y: tooltipProps.x.to(getTooltipBenchmarkY),
+                      y: tooltipProps.x?.to(getTooltipBenchmarkY),
                       opacity: tooltipProps.opacity,
                     }}
                   />
@@ -451,7 +451,7 @@ function Chart({
           top={margin.top + 1}
           style={{
             transform: 'translateX(-50%)',
-            x: tooltipProps.x.to((xVal) => {
+            x: tooltipProps.x?.to((xVal) => {
               const r = tooltipRect.width / 2;
               if (xVal >= xMax - r - 5) {
                 return xMax - r - 5;
@@ -466,10 +466,10 @@ function Chart({
         >
           <StyledTooltip primary>
             <animated.span style={{ minWidth: 130 }}>
-              {tooltipProps.x.to(getTooltipDate)}
+              {tooltipProps.x?.to(getTooltipDate)}
             </animated.span>
             <animated.span style={{ minWidth: 80 }}>
-              {tooltipProps.x.to(getTooltipValue)}
+              {tooltipProps.x?.to(getTooltipValue)}
             </animated.span>
           </StyledTooltip>
         </AnimatedTooltipContainer>
@@ -481,7 +481,7 @@ function Chart({
           bottom={margin.bottom + 1}
           style={{
             transform: 'translateX(-50%)',
-            x: tooltipProps.x.to((xVal) => {
+            x: tooltipProps.x?.to((xVal) => {
               const r = benchTooltipRect.width / 2;
               if (xVal > xMax - r - 5) {
                 return xMax - r - 5;
@@ -496,10 +496,10 @@ function Chart({
         >
           <StyledTooltip>
             <animated.span>
-              {benchmarkLabel ?? tooltipProps.x.to(getTooltipDate)}
+              {benchmarkLabel ?? tooltipProps.x?.to(getTooltipDate)}
             </animated.span>
             <animated.span>
-              {tooltipProps.x.to(getTooltipBenchmark)}
+              {tooltipProps.x?.to(getTooltipBenchmark)}
             </animated.span>
           </StyledTooltip>
         </AnimatedTooltipContainer>

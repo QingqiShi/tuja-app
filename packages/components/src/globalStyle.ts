@@ -18,14 +18,8 @@ export const GlobalStyle = createGlobalStyle`
 
   html, body {
     font-size: 16px;
-    @media (${theme.breakpoints.minTablet}) {
-      font-size: 17px;
-    }
     @media (${theme.breakpoints.minLaptop}) {
       font-size: 18px;
-    }
-    @media (${theme.breakpoints.minDesktop}) {
-      font-size: 20px;
     }
   }
 `;
