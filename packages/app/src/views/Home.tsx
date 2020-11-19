@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { MdShowChart, MdPieChartOutlined, MdAutorenew } from 'react-icons/md';
 import styled from 'styled-components/macro';
@@ -48,7 +49,7 @@ function Home() {
               Tuja<BetaBadge>Beta</BetaBadge>
             </Title>
             <SubTitle scale="h4">Portfolio Tracker</SubTitle>
-            <Button variant="shout" to="/portfolio">
+            <Button variant="shout" as={Link} otherProps={{ to: '/portfolio' }}>
               Try now
             </Button>
           </div>
@@ -83,7 +84,7 @@ function Home() {
       <FullHeight>
         <Center>
           <Title scale="h1">Try Tuja now</Title>
-          <Button variant="shout" to="/portfolio">
+          <Button variant="shout" as={Link} otherProps={{ to: '/portfolio' }}>
             Go to app
           </Button>
         </Center>

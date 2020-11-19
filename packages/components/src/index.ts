@@ -10,5 +10,6 @@ export { default as Pie } from './components/display/Pie';
 export { default as Type } from './components/display/Type';
 export * from './components/display/Table';
 export { default as TopLinearLoader } from './components/feedback/TopLinearLoader';
+export { default as TopBar } from './components/controls/TopBar';
 
 export { GlobalStyle } from './globalStyle';

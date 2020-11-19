@@ -5,7 +5,6 @@ import { GlobalStyle } from '../src/globalStyle';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
-  layout: 'centered'
 };
 
 export const globalTypes = {

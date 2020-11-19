@@ -36,6 +36,18 @@ Shout.args = {
   children: 'Shout',
 };
 
+export const Compact = Template.bind({});
+Compact.args = {
+  children: 'Default',
+  compact: true,
+};
+
+export const Active = Template.bind({});
+Active.args = {
+  children: 'Default',
+  active: true,
+};
+
 export const StartIcon = Template.bind({});
 StartIcon.args = {
   startIcon: <FaUserCircle />,

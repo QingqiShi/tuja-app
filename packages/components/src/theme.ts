@@ -1,5 +1,5 @@
-import { DefaultTheme } from 'styled-components/macro';
-import { lighten } from 'polished';
+import { DefaultTheme, css } from 'styled-components';
+import { lighten, darken, transparentize } from 'polished';
 
 const lightPallete = {
   primary: '#FFFFFF',
@@ -36,6 +36,10 @@ export const theme = {
       theme.mode === 'light' ? lightPallete.primary : darkPallete.primary,
     textOnBackground: ({ theme }: ThemeProps) =>
       theme.mode === 'light' ? lightPallete.secondary : darkPallete.secondary,
+    textSecondaryOnBackground: ({ theme }: ThemeProps) =>
+      theme.mode === 'light'
+        ? lighten(0.1, lightPallete.secondary)
+        : darken(0.1, darkPallete.secondary),
     backgroundRaised: ({ theme }: ThemeProps) =>
       theme.mode === 'light'
         ? lightPallete.primary
@@ -55,6 +59,12 @@ export const theme = {
   },
   spacings: (...vals: (keyof typeof spacings)[]) =>
     vals.map((val) => spacings[val]).join(' '),
+  shadows: {
+    soft: ({ theme }: ThemeProps) =>
+      theme.mode === 'light'
+        ? `0 0 1rem 0 ${transparentize(0.9, lightPallete.secondary)}`
+        : `0 0 1rem 0 rgba(0, 0, 0, 0.1)`,
+  },
   fonts: {
     ctaSize: '1rem',
     ctaHeight: '1.2em',
@@ -76,6 +86,27 @@ export const theme = {
     minLaptop: 'min-width: 1025px',
     minDesktop: 'min-width: 1441px',
   },
+  paddings: {
+    normal: {
+      mobile: '1.5rem',
+      tablet: '1.2rem',
+      laptop: '1rem',
+    },
+    compact: {
+      mobile: '1rem',
+      tablet: '0.8rem',
+      laptop: '0.5rem',
+    },
+  },
+  backdropBlur: '1rem',
+  zIndex: {
+    behind: -100,
+    background: 0,
+    raised: 100,
+    fixed: 200,
+    backdrop: 300,
+    modal: 400,
+  },
 };
 
 export const getTheme = (
@@ -84,4 +115,17 @@ export const getTheme = (
 ) => {
   if (typeof val === 'string') return manipulator(val);
   return (p: ThemeProps) => manipulator(val(p));
+};
+
+export const getPaddings = (isCompact?: boolean) => (p: ThemeProps) => {
+  const paddingName = isCompact ? ('compact' as const) : ('normal' as const);
+  return css`
+    padding: ${theme.paddings[paddingName].mobile};
+    @media (${theme.breakpoints.minTablet}) {
+      padding: ${theme.paddings[paddingName].tablet};
+    }
+    @media (${theme.breakpoints.minLaptop}) {
+      padding: ${theme.paddings[paddingName].laptop};
+    }
+  `;
 };
