@@ -88,9 +88,9 @@ export const theme = {
   },
   paddings: {
     normal: {
-      mobile: '1.5rem',
-      tablet: '1.2rem',
-      laptop: '1rem',
+      mobile: '1.3rem',
+      tablet: '1.1rem',
+      laptop: '0.8rem',
     },
     compact: {
       mobile: '1rem',
