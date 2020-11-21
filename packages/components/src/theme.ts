@@ -60,6 +60,7 @@ export const theme = {
   spacings: (...vals: (keyof typeof spacings)[]) =>
     vals.map((val) => spacings[val]).join(' '),
   shadows: {
+    none: '0 0 1rem 0 rgba(0, 0, 0, 0)',
     soft: ({ theme }: ThemeProps) =>
       theme.mode === 'light'
         ? `0 0 1rem 0 ${transparentize(0.9, lightPallete.secondary)}`
@@ -98,7 +99,7 @@ export const theme = {
       laptop: '0.5rem',
     },
   },
-  backdropBlur: '1rem',
+  backdropBlur: '1.3rem',
   zIndex: {
     behind: -100,
     background: 0,
