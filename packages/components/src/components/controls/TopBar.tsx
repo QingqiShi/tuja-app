@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 import Button from '../inputs/Button';
 import { theme, getTheme } from '../../theme';
-import { OverlayCard } from '../../commonComponents';
+import { TranslucentSurface } from '../../commonComponents';
 
 const Placeholder = styled.div`
   height: 4rem;
@@ -14,7 +14,10 @@ const Placeholder = styled.div`
   }
 `;
 
-const Bar = styled.header<{ isAtTop: boolean }>`
+const Bar = styled(TranslucentSurface).attrs((props) => ({
+  ...props,
+  as: 'header',
+}))<{ isAtTop: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -22,33 +25,19 @@ const Bar = styled.header<{ isAtTop: boolean }>`
   display: flex;
   align-items: center;
   z-index: ${theme.zIndex.fixed};
-  background-color: ${getTheme(theme.colors.backgroundRaised, (c) =>
-    transparentize(1, c)
-  )};
-  transition: box-shadow 0.2s, background-color 0.2s, backdrop-filter 0.2s;
+  transition: box-shadow 0.2s, background-color 0.2s;
 
   ${({ isAtTop }) =>
-    !isAtTop &&
+    isAtTop &&
     css`
-      background-color: ${(props) =>
-        isAtTop
-          ? transparentize(0.1, theme.colors.backgroundMain(props))
-          : transparentize(0.1, theme.colors.backgroundRaised(props))};
-      box-shadow: ${theme.shadows.soft};
+      background-color: ${getTheme(theme.colors.backgroundRaised, (c) =>
+        transparentize(1, c)
+      )};
+      box-shadow: ${theme.shadows.none};
+      @supports (backdrop-filter: saturate(0) blur(0)) {
+        backdrop-filter: saturate(0) blur(0);
+      }
     `}
-
-  @supports (backdrop-filter: blur(${theme.backdropBlur})) {
-    backdrop-filter: blur(0);
-    ${({ isAtTop }) =>
-      !isAtTop &&
-      css`
-        backdrop-filter: blur(${theme.backdropBlur});
-        background-color: ${(props) =>
-          isAtTop
-            ? transparentize(0.3, theme.colors.backgroundMain(props))
-            : transparentize(0.3, theme.colors.backgroundRaised(props))};
-      `}
-  }
 
   height: 4rem;
   @media (${theme.breakpoints.minLaptop}) {
@@ -94,7 +83,7 @@ const EndNav = styled(Nav)`
   flex-grow: 0;
 `;
 
-const Overlay = styled(OverlayCard)`
+const Overlay = styled(TranslucentSurface)`
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -127,7 +116,7 @@ interface TopBarProps {
 function TopBar({ links, endLinks, menu, logo }: TopBarProps) {
   const [showMenu, setShowMenu] = useState(false);
   const placeholderRef = useRef<HTMLDivElement>(null);
-  const intersection = useIntersection(placeholderRef, { threshold: 1 });
+  const intersection = useIntersection(placeholderRef, { threshold: 0.5 });
 
   const flyoutRef = useRef<HTMLDivElement>(null);
   useClickAway(flyoutRef, () => setShowMenu(false));
