@@ -28,6 +28,7 @@ export const StocksDataContext = createContext({
     _baseCurrency: string
   ) => {},
   stocksData: {} as StocksData,
+  clearCache: async () => {},
 });
 
 interface DBSchemaV2 extends DBSchema {
@@ -327,8 +328,18 @@ export function StocksDataProvider({ children }: React.PropsWithChildren<{}>) {
     [db, getLivePrices, setLoadingState, stocksData]
   );
 
+  const clearCache = useCallback(async () => {
+    if (!db) return;
+
+    const clearStocksHistoryTx = db.transaction('stocksHistory', 'readwrite');
+    await clearStocksHistoryTx.objectStore('stocksHistory').clear();
+
+    const clearStocksInfoTx = db.transaction('stocksInfo', 'readwrite');
+    await clearStocksInfoTx.objectStore('stocksInfo').clear();
+  }, [db]);
+
   return (
-    <StocksDataContext.Provider value={{ stocksData, addTickers }}>
+    <StocksDataContext.Provider value={{ stocksData, addTickers, clearCache }}>
       {children}
     </StocksDataContext.Provider>
   );
