@@ -18,8 +18,8 @@ const commonTheme = {
       spacing: '0.028em',
     },
     input: {
-      size: '1.1rem',
-      height: '1.3em',
+      size: '1rem',
+      height: '1.2em',
       weight: 400,
     },
     label: {

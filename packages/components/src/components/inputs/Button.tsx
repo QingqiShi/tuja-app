@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize, lighten } from 'polished';
-import { paddings } from '../../mixins';
+import { ctaFont, paddings } from '../../mixins';
 
 type ButtonVariant = 'primary' | 'shout' | 'outline';
 
@@ -16,26 +16,21 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
   shouldForwardProp: (prop, validator) =>
     !['hasStartIcon', 'hasEndIcon'].includes(prop) && validator(prop),
 })`
-  font-family: ${({ theme }) => theme.fontFamily};
-  font-size: ${({ theme }) => theme.fonts.cta.size};
-  line-height: ${({ theme }) => theme.fonts.cta.height};
-  font-weight: ${({ theme }) => theme.fonts.cta.weight};
-  letter-spacing: ${({ theme }) => theme.fonts.cta.spacing};
+  ${ctaFont}
+  ${paddings}
+
   border-radius: ${({ theme }) => theme.spacings.xs};
   border: 2px solid transparent;
   color: ${({ theme }) => theme.colors.textSecondaryOnBackground};
   background-color: ${({ theme }) =>
     transparentize(1, theme.colors.textOnBackground)};
   text-transform: uppercase;
+  text-decoration: none;
   transition: background-color 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s,
     opacity 0.2s;
   display: inline-flex;
   place-items: center;
-  place-content: center;
   cursor: pointer;
-  text-decoration: none;
-
-  ${paddings}
 
   ${({ align = 'center' }) => css`
     place-content: ${align};

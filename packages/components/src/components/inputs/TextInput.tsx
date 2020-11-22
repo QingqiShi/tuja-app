@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
+import { inputFont, labelFont, helperFont, paddings } from '../../mixins';
 
 const InputBase = styled.input.attrs((props) => ({
   ...props,
@@ -8,15 +9,13 @@ const InputBase = styled.input.attrs((props) => ({
   // in CSS to check for empty values
   placeholder: props.placeholder || ' ',
 }))`
-  font-family: ${({ theme }) => theme.fontFamily};
-  font-size: ${({ theme }) => theme.fonts.input.size};
-  line-height: ${({ theme }) => theme.fonts.input.height};
-  font-weight: ${({ theme }) => theme.fonts.input.weight};
+  ${inputFont}
+  ${paddings}
+
   border-radius: ${({ theme }) => theme.spacings.xs};
   border: 2px solid
     ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
   color: ${({ theme }) => theme.colors.textOnBackground};
-  padding: 0.8em 1em;
   background-color: transparent;
   transition: all 0.2s;
   width: 100%;
@@ -45,8 +44,8 @@ const InputBase = styled.input.attrs((props) => ({
   }
 
   ::-webkit-calendar-picker-indicator {
-    font-size: 0.9em;
-    line-height: 0.9em;
+    font-size: 1em;
+    line-height: 1em;
     padding: 0;
     margin: 0;
   }
@@ -76,20 +75,15 @@ const Label = styled.label`
 `;
 
 const LabelLine = styled.span`
-  font-size: ${({ theme }) => theme.fonts.label.size};
-  line-height: ${({ theme }) => theme.fonts.label.height};
-  font-weight: ${({ theme }) => theme.fonts.label.weight};
+  ${labelFont}
   margin-bottom: ${({ theme }) => theme.spacings.xs};
   display: block;
 `;
 
-const HelperText = styled.span`
-  font-size: ${({ theme }) => theme.fonts.helper.size};
-  line-height: ${({ theme }) => theme.fonts.helper.height};
-  font-weight: ${({ theme }) => theme.fonts.helper.weight};
+const HelperText = styled.div`
+  ${helperFont}
   margin-top: ${({ theme }) => theme.spacings.xs};
   color: ${({ theme }) => transparentize(0.2, theme.colors.textOnBackground)};
-  display: block;
 `;
 
 const InputContainer = styled.div`

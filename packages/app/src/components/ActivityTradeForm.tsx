@@ -37,7 +37,7 @@ const InvestmentsContainer = styled.div`
 
 const InvestmentRow = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   > :first-child {
     flex-grow: 1;
     margin-right: ${theme.spacings('xs')};

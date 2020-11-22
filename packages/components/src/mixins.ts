@@ -46,3 +46,32 @@ export const translucent = css`
       transparentize(0.2, theme.colors.backgroundRaised)};
   }
 `;
+
+export const ctaFont = css`
+  font-family: ${({ theme }) => theme.fontFamily};
+  font-size: ${({ theme }) => theme.fonts.cta.size};
+  line-height: ${({ theme }) => theme.fonts.cta.height};
+  font-weight: ${({ theme }) => theme.fonts.cta.weight};
+  letter-spacing: ${({ theme }) => theme.fonts.cta.spacing};
+`;
+
+export const inputFont = css`
+  font-family: ${({ theme }) => theme.fontFamily};
+  font-size: ${({ theme }) => theme.fonts.input.size};
+  line-height: ${({ theme }) => theme.fonts.input.height};
+  font-weight: ${({ theme }) => theme.fonts.input.weight};
+`;
+
+export const labelFont = css`
+  font-family: ${({ theme }) => theme.fontFamily};
+  font-size: ${({ theme }) => theme.fonts.label.size};
+  line-height: ${({ theme }) => theme.fonts.label.height};
+  font-weight: ${({ theme }) => theme.fonts.label.weight};
+`;
+
+export const helperFont = css`
+  font-family: ${({ theme }) => theme.fontFamily};
+  font-size: ${({ theme }) => theme.fonts.helper.size};
+  line-height: ${({ theme }) => theme.fonts.helper.height};
+  font-weight: ${({ theme }) => theme.fonts.helper.weight};
+`;
