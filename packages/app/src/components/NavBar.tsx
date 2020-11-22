@@ -8,11 +8,13 @@ import {
   RiPieChartLine,
   RiFileListLine,
   RiMenuAddLine,
+  RiDeleteBinLine,
 } from 'react-icons/ri';
 import { TopBar, Type } from '@tuja/components';
 import { theme } from 'theme';
 import useAuth from 'hooks/useAuth';
 import usePortfolio from 'hooks/usePortfolio';
+import useStocksData from 'hooks/useStocksData';
 import SignIn from './SignIn';
 
 const PopOut = styled.div`
@@ -62,6 +64,7 @@ interface NavBarProps {
 function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
   const { state, signOut } = useAuth();
   const { portfolio } = usePortfolio();
+  const { clearCache } = useStocksData();
   const location = useLocation();
 
   const [internalShow, setInternalShow] = useState(false);
@@ -107,6 +110,11 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
       as: Link as any,
       otherProps: { to: '/create-portfolio' },
       active: location.pathname === '/create-portfolio',
+    });
+    menu.push({
+      children: 'Clear cache',
+      startIcon: <RiDeleteBinLine />,
+      onClick: clearCache,
     });
     menu.push({
       children: 'Sign out',
