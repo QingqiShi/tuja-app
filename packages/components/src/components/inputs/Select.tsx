@@ -2,11 +2,10 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 import { RiArrowDownSLine } from 'react-icons/ri';
-import { theme, getTheme } from '../../theme';
 
 const Label = styled.label`
   display: block;
-  margin-bottom: ${theme.spacings('s')};
+  margin-bottom: ${({ theme }) => theme.spacings.s};
   text-align: left;
   width: 100%;
   > * {
@@ -15,21 +14,19 @@ const Label = styled.label`
 `;
 
 const LabelLine = styled.span`
-  font-size: ${theme.fonts.labelSize};
-  line-height: ${theme.fonts.labelHeight};
-  font-weight: ${theme.fonts.labelWeight};
-  margin-bottom: ${theme.spacings('xs')};
+  font-size: ${({ theme }) => theme.fonts.label.size};
+  line-height: ${({ theme }) => theme.fonts.label.height};
+  font-weight: ${({ theme }) => theme.fonts.label.weight};
+  margin-bottom: ${({ theme }) => theme.spacings.xs};
   display: block;
 `;
 
 const HelperText = styled.span`
-  font-size: ${theme.fonts.helperSize};
-  line-height: ${theme.fonts.helperHeight};
-  font-weight: ${theme.fonts.helperWeight};
-  margin-top: ${theme.spacings('xs')};
-  color: ${getTheme(theme.colors.textOnBackground, (color) =>
-    transparentize(0.2, color)
-  )};
+  font-size: ${({ theme }) => theme.fonts.helper.size};
+  line-height: ${({ theme }) => theme.fonts.helper.height};
+  font-weight: ${({ theme }) => theme.fonts.helper.weight};
+  margin-top: ${({ theme }) => theme.spacings.xs};
+  color: ${({ theme }) => transparentize(0.2, theme.colors.textOnBackground)};
   display: block;
 `;
 
@@ -39,16 +36,14 @@ const SelectContainer = styled.div`
 `;
 
 const SelectBase = styled.select`
-  font-family: ${theme.fontFamily};
-  font-size: ${theme.fonts.inputSize};
-  line-height: ${theme.fonts.inputHeight};
-  font-weight: ${theme.fonts.inputWeight};
-  border-radius: ${theme.spacings('xs')};
-  border: 2px solid
-    ${getTheme(theme.colors.textOnBackground, (color) =>
-      transparentize(0.9, color)
-    )};
-  color: ${theme.colors.textOnBackground};
+  font-family: ${({ theme }) => theme.fontFamily};
+  font-size: ${({ theme }) => theme.fonts.input.size};
+  line-height: ${({ theme }) => theme.fonts.input.height};
+  font-weight: ${({ theme }) => theme.fonts.input.weight};
+  border-radius: ${({ theme }) => theme.spacings.xs};
+  border: ${({ theme }) =>
+    `2px solid ${transparentize(0.9, theme.colors.textOnBackground)}`};
+  color: ${({ theme }) => theme.colors.textOnBackground};
   padding: 0.8em 3em 0.8em 1em;
   background-color: transparent;
   transition: all 0.2s;
@@ -57,24 +52,22 @@ const SelectBase = styled.select`
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 ${theme.spacings('s')} 0
-      ${getTheme(theme.colors.textOnBackground, (color) =>
-        transparentize(0.9, color)
-      )};
+    box-shadow: ${({ theme }) =>
+      `0 0 ${theme.spacings.s} 0 ${transparentize(
+        0.9,
+        theme.colors.textOnBackground
+      )}`};
   }
 
   &:disabled {
     opacity: 0.5;
-    color: ${theme.colors.textOnBackground};
-    background-color: ${getTheme(theme.colors.textOnBackground, (color) =>
-      transparentize(0.9, color)
-    )};
+    color: ${({ theme }) => theme.colors.textOnBackground};
+    background-color: ${({ theme }) =>
+      transparentize(0.9, theme.colors.textOnBackground)};
   }
 
   &:invalid {
-    color: ${getTheme(theme.colors.textOnBackground, (color) =>
-      transparentize(0.5, color)
-    )};
+    color: ${({ theme }) => transparentize(0.5, theme.colors.textOnBackground)};
   }
 
   option {
@@ -93,9 +86,8 @@ const DropdownIcon = styled(RiArrowDownSLine)<{ disabled?: boolean }>`
   ${({ disabled }) =>
     disabled &&
     css`
-      color: ${getTheme(theme.colors.textOnBackground, (color) =>
-        transparentize(0.5, color)
-      )};
+      color: ${({ theme }) =>
+        transparentize(0.5, theme.colors.textOnBackground)};
     `}
 `;
 
@@ -116,7 +108,7 @@ function Select({
   const select = (
     <SelectContainer>
       <SelectBase required={required} disabled={disabled} {...props}>
-        {options.map((option, i) => (
+        {options.map((option) => (
           <option
             value={option.value}
             key={`select-option-${option.value}`}

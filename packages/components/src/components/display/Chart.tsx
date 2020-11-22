@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useRef } from 'react';
 import { useMeasure } from 'react-use';
 import { useSpring, animated } from '@react-spring/web';
-import styled, { useTheme, css } from 'styled-components';
+import styled, { css, useTheme } from 'styled-components';
 import { transparentize } from 'polished';
 import { LinearGradient } from '@visx/gradient';
 import { AreaClosed, LinePath, Bar } from '@visx/shape';
@@ -13,7 +13,6 @@ import { Group } from '@visx/group';
 import { localPoint } from '@visx/event';
 import { max, min, extent, bisector } from 'd3-array';
 import dayjs from 'dayjs';
-import { theme, getTheme } from '../../theme';
 
 const Container = styled.div`
   width: 100%;
@@ -28,7 +27,7 @@ const StyledTooltip = styled.div<{ primary?: boolean }>`
   font-size: 14px;
   line-height: 1em;
   font-weight: 600;
-  padding: ${theme.spacings('xs')};
+  padding: ${({ theme }) => theme.spacings.xs};
   pointer-events: none;
   position: absolute;
   min-width: 200px;
@@ -36,29 +35,23 @@ const StyledTooltip = styled.div<{ primary?: boolean }>`
   position: static;
   display: flex;
   justify-content: space-between;
-  border-radius: ${theme.spacings('xs')};
-  background-color: ${theme.colors.backgroundRaised};
-  ${({ primary }) =>
+  border-radius: ${({ theme }) => theme.spacings.xs};
+  background-color: ${({ theme }) => theme.colors.backgroundRaised};
+  ${({ primary, theme }) =>
     primary
       ? css`
           color: ${theme.colors.textOnBackground};
           box-shadow: 0 0 0 1px
-            ${getTheme(theme.colors.textOnBackground, (color) =>
-              transparentize(0.7, color)
-            )};
+            ${transparentize(0.7, theme.colors.textOnBackground)};
         `
       : css`
-          color: ${getTheme(theme.colors.textOnBackground, (c) =>
-            transparentize(0.5, c)
-          )};
+          color: ${transparentize(0.5, theme.colors.textOnBackground)};
           box-shadow: 0 0 0 1px
-            ${getTheme(theme.colors.textOnBackground, (color) =>
-              transparentize(0.9, color)
-            )};
+            ${transparentize(0.9, theme.colors.textOnBackground)};
         `}
 
   > :first-child {
-    margin-right: ${theme.spacings('xs')};
+    margin-right: ${({ theme }) => theme.spacings.xs};
   }
 
   > * {
@@ -122,9 +115,10 @@ function Chart({
   formatValue,
 }: ChartProps) {
   // bounds
-  const [containerRef, { width = 400, height = 300 }] = useMeasure<
-    HTMLDivElement
-  >();
+  const [
+    containerRef,
+    { width = 400, height = 300 },
+  ] = useMeasure<HTMLDivElement>();
   const [leftAxisRef, leftAxisRect] = useMeasure<any>();
   const margin = {
     top: hideAxis ? 0 : 20,
@@ -248,31 +242,18 @@ function Chart({
   );
 
   // Theme related styles
-  const styledTheme = useTheme();
-  const colors = useMemo(
-    () => ({
-      chartLine: theme.colors.callToActionText({
-        theme: styledTheme,
-      }),
-      benchmarkLine: transparentize(
-        0.4,
-        theme.colors.textOnBackground({ theme: styledTheme })
-      ),
-      gridLine: transparentize(
-        0.9,
-        theme.colors.textOnBackground({ theme: styledTheme })
-      ),
-      text: transparentize(
-        0.6,
-        theme.colors.textOnBackground({ theme: styledTheme })
-      ),
-    }),
-    [styledTheme]
-  );
+  const theme = useTheme();
+  const colors = {
+    chartLine: theme.colors.callToActionText,
+    benchmarkLine: transparentize(0.4, theme.colors.textOnBackground),
+    gridLine: transparentize(0.9, theme.colors.textOnBackground),
+    text: transparentize(0.6, theme.colors.textOnBackground),
+    chartGradientTo: theme.colors.backgroundRaised,
+  };
   const axisBottomTickLabelProps = {
     textAnchor: 'middle' as const,
     fontFamily: theme.fontFamily,
-    fontSize: theme.fonts.helperSize,
+    fontSize: theme.fonts.helper.size,
     fill: colors.text,
   };
   const axisLeftTickLabelProps = {
@@ -280,7 +261,7 @@ function Chart({
     dy: '0.25em',
     textAnchor: 'end' as const,
     fontFamily: theme.fontFamily,
-    fontSize: theme.fonts.helperSize,
+    fontSize: theme.fonts.helper.size,
     fill: colors.text,
   };
 
@@ -302,11 +283,9 @@ function Chart({
             id="area-gradient"
             from={colors.chartLine}
             fromOpacity={0.28}
-            to={theme.colors.backgroundRaised({
-              theme: styledTheme,
-            })}
-            toOffset="80%"
+            to={colors.chartGradientTo}
             toOpacity={0}
+            toOffset="80%"
           />
           {!hideAxis && (
             <GridRows

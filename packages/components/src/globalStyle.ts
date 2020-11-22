@@ -1,10 +1,9 @@
 import { createGlobalStyle } from 'styled-components';
-import { theme } from './theme';
 
 export const GlobalStyle = createGlobalStyle`
   body {
-    color: ${theme.colors.textOnBackground};
-    background-color: ${theme.colors.backgroundMain};
+    color: ${({ theme }) => theme.colors.textOnBackground};
+    background-color: ${({ theme }) => theme.colors.backgroundMain};
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -18,7 +17,7 @@ export const GlobalStyle = createGlobalStyle`
 
   html, body {
     font-size: 16px;
-    @media (${theme.breakpoints.minLaptop}) {
+    @media (${({ theme }) => theme.breakpoints.minLaptop}) {
       font-size: 18px;
     }
   }

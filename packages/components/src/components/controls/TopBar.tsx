@@ -4,60 +4,53 @@ import { RiMenuLine } from 'react-icons/ri';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 import Button from '../inputs/Button';
-import { theme, getTheme } from '../../theme';
-import { TranslucentSurface } from '../../commonComponents';
+import { shadow, card, translucent } from '../../mixins';
 
 const Placeholder = styled.div`
   height: 4rem;
-  @media (${theme.breakpoints.minLaptop}) {
+  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
     height: 3.5rem;
   }
 `;
 
-const Bar = styled(TranslucentSurface).attrs((props) => ({
-  ...props,
-  as: 'header',
-}))<{ isAtTop: boolean }>`
+const Bar = styled.header<{ isAtTop: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   display: flex;
   align-items: center;
-  z-index: ${theme.zIndex.fixed};
+  z-index: ${({ theme }) => theme.zIndex.fixed};
+  background-color: ${({ theme }) =>
+    transparentize(1, theme.colors.backgroundRaised)};
   transition: box-shadow 0.2s, background-color 0.2s;
 
   ${({ isAtTop }) =>
-    isAtTop &&
+    !isAtTop &&
     css`
-      background-color: ${getTheme(theme.colors.backgroundRaised, (c) =>
-        transparentize(1, c)
-      )};
-      box-shadow: ${theme.shadows.none};
-      @supports (backdrop-filter: saturate(0) blur(0)) {
-        backdrop-filter: saturate(0) blur(0);
-      }
+      ${shadow}
+      ${translucent}
     `}
 
   height: 4rem;
-  @media (${theme.breakpoints.minLaptop}) {
+  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
     height: 3.5rem;
   }
 
-  padding: 0 ${theme.spacings('xs')};
-  @media (${theme.breakpoints.minTablet}) {
-    padding: 0 ${theme.spacings('s')};
+  padding: 0 ${({ theme }) => theme.spacings.xs};
+  @media (${({ theme }) => theme.breakpoints.minTablet}) {
+    padding: 0 ${({ theme }) => theme.spacings.s};
   }
-  @media (${theme.breakpoints.minLaptop}) {
-    padding: 0 ${theme.spacings('m')};
+  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+    padding: 0 ${({ theme }) => theme.spacings.m};
   }
-  @media (${theme.breakpoints.minDesktop}) {
-    padding: 0 ${theme.spacings('l')};
+  @media (${({ theme }) => theme.breakpoints.minDesktop}) {
+    padding: 0 ${({ theme }) => theme.spacings.l};
   }
 `;
 
 const LogoContainer = styled.div`
-  margin-right: ${theme.spacings('s')};
+  margin-right: ${({ theme }) => theme.spacings.s};
 `;
 
 const Nav = styled.nav`
@@ -65,13 +58,13 @@ const Nav = styled.nav`
   flex-grow: 1;
 
   &:not(:first-child) {
-    @media (${theme.breakpoints.minLaptop}) {
-      margin-left: ${theme.spacings('m')};
+    @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+      margin-left: ${({ theme }) => theme.spacings.m};
     }
   }
 
   > * {
-    margin-right: ${theme.spacings('xs')};
+    margin-right: ${({ theme }) => theme.spacings.xs};
   }
 
   > :last-child {
@@ -83,26 +76,28 @@ const EndNav = styled(Nav)`
   flex-grow: 0;
 `;
 
-const Overlay = styled(TranslucentSurface)`
+const Overlay = styled.div`
+  ${card}
+  ${translucent}
   display: flex;
   flex-direction: column;
   position: fixed;
-  padding: ${theme.spacings('xs')};
-  z-index: ${theme.zIndex.fixed};
-  top: calc(4rem + ${theme.spacings('xs')});
-  min-width: calc(100vw - ${theme.spacings('xs')} * 2);
-  right: ${theme.spacings('xs')};
+  padding: ${({ theme }) => theme.spacings.xs};
+  z-index: ${({ theme }) => theme.zIndex.fixed};
+  top: calc(4rem + ${({ theme }) => theme.spacings.xs});
+  min-width: calc(100vw - ${({ theme }) => theme.spacings.xs} * 2);
+  right: ${({ theme }) => theme.spacings.xs};
 
-  @media (${theme.breakpoints.minTablet}) {
+  @media (${({ theme }) => theme.breakpoints.minTablet}) {
     min-width: 15rem;
-    right: ${theme.spacings('s')};
+    right: ${({ theme }) => theme.spacings.s};
   }
-  @media (${theme.breakpoints.minLaptop}) {
-    top: calc(3.5rem + ${theme.spacings('xs')});
-    right: ${theme.spacings('m')};
+  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+    top: calc(3.5rem + ${({ theme }) => theme.spacings.xs});
+    right: ${({ theme }) => theme.spacings.m};
   }
-  @media (${theme.breakpoints.minDesktop}) {
-    right: ${theme.spacings('l')};
+  @media (${({ theme }) => theme.breakpoints.minDesktop}) {
+    right: ${({ theme }) => theme.spacings.l};
   }
 `;
 

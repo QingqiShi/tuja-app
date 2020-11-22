@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { transparentize } from 'polished';
-import { theme, getTheme } from '../../theme';
 
 export const Table = styled.table`
   width: 100%;
@@ -13,12 +12,12 @@ export const Table = styled.table`
 export const TableRow = styled.tr`
   td,
   th {
-    padding: ${theme.spacings('s')};
+    padding: ${({ theme }) => theme.spacings.s};
     border-bottom: 1px solid
-      ${getTheme(theme.colors.textOnBackground, (c) => transparentize(0.9, c))};
+      ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
 
-    @media (${theme.breakpoints.minLaptop}) {
-      padding: ${theme.spacings('s')} ${theme.spacings('m')};
+    @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+      padding: ${({ theme }) => `${theme.spacings.s} ${theme.spacings.m}`};
     }
   }
 
@@ -28,12 +27,10 @@ export const TableRow = styled.tr`
 `;
 
 export const TableHeader = styled.th`
-  font-size: ${theme.fonts.labelSize};
-  line-height: ${theme.fonts.labelHeight};
-  font-weight: ${theme.fonts.labelWeight};
-  color: ${getTheme(theme.colors.textOnBackground, (c) =>
-    transparentize(0.5, c)
-  )};
+  font-size: ${({ theme }) => theme.fonts.label.size};
+  line-height: ${({ theme }) => theme.fonts.label.height};
+  font-weight: ${({ theme }) => theme.fonts.label.weight};
+  color: ${({ theme }) => transparentize(0.5, theme.colors.textOnBackground)};
 
   &:first-of-type {
     text-align: left;
@@ -57,8 +54,8 @@ const StyledTableCell = styled.td`
 const Primary = styled.span`
   display: block;
   white-space: nowrap;
-  font-size: ${theme.fonts.ctaSize};
-  line-height: ${theme.fonts.ctaHeight};
+  font-size: ${({ theme }) => theme.fonts.cta.size};
+  line-height: ${({ theme }) => theme.fonts.cta.height};
   font-weight: 500;
 `;
 
@@ -67,9 +64,9 @@ const Secondary = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: ${theme.fonts.helperSize};
-  line-height: ${theme.fonts.helperHeight};
-  font-weight: ${theme.fonts.helperWeight};
+  font-size: ${({ theme }) => theme.fonts.helper.size};
+  line-height: ${({ theme }) => theme.fonts.helper.height};
+  font-weight: ${({ theme }) => theme.fonts.helper.weight};
 `;
 
 interface TableCellProps {

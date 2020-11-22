@@ -5,7 +5,6 @@ import { lighten } from 'polished';
 import { Group } from '@visx/group';
 import { Text } from '@visx/text';
 import PieBase, { ProvidedProps } from '@visx/shape/lib/shapes/Pie';
-import { theme } from '../../theme';
 
 const Container = styled.div`
   width: 100%;
@@ -37,9 +36,10 @@ interface PieProps {
 
 function Pie({ className, data, primaryText, secondaryText }: PieProps) {
   // Bounds
-  const [containerRef, { width = 400, height = 300 }] = useMeasure<
-    HTMLDivElement
-  >();
+  const [
+    containerRef,
+    { width = 400, height = 300 },
+  ] = useMeasure<HTMLDivElement>();
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
   const radius = Math.min(innerWidth, innerHeight) / 2;
@@ -48,8 +48,8 @@ function Pie({ className, data, primaryText, secondaryText }: PieProps) {
   const donutThickness = Math.min(innerWidth, innerHeight) / 15;
 
   // Colors
-  const styledTheme = useTheme();
-  const textColor = theme.colors.textOnBackground({ theme: styledTheme });
+  const theme = useTheme();
+  const textColor = theme.colors.textOnBackground;
 
   // Hover
   const [hoverItem, setHoverItem] = useState<PieData | null>(null);
@@ -124,8 +124,8 @@ function PiePieces({
   const [hovering, setHovering] = useState(-1);
 
   // Default color
-  const styledTheme = useTheme();
-  const defaultColor = theme.colors.callToAction({ theme: styledTheme });
+  const theme = useTheme();
+  const defaultColor = theme.colors.callToAction;
 
   return (
     <>

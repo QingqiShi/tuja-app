@@ -2,6 +2,7 @@ import React from 'react';
 import { addDecorator } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../src/globalStyle';
+import { getTheme } from '../src/theme';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -30,7 +31,7 @@ addDecorator((storyFn) => (
 ));
 
 addDecorator((storyFn, context) => (
-  <ThemeProvider theme={{ mode: context.globals.theme }}>
+  <ThemeProvider theme={getTheme(context.globals.theme)}>
     {storyFn()}
   </ThemeProvider>
 ));

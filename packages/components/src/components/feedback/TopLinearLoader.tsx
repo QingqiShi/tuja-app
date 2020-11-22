@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { transparentize } from 'polished';
-import { theme, getTheme } from '../../theme';
 
 const Container = styled.div`
   position: fixed;
@@ -11,9 +10,8 @@ const Container = styled.div`
   height: 4px;
   overflow: hidden;
   z-index: 900;
-  background-color: ${getTheme(theme.colors.callToActionText, (c) =>
-    transparentize(0.7, c)
-  )};
+  background-color: ${({ theme }) =>
+    transparentize(0.7, theme.colors.callToActionText)};
 `;
 
 const barAnimationSlow = keyframes`
@@ -52,7 +50,7 @@ const Bar = styled.div`
   left: 0;
   bottom: 0;
   width: auto;
-  background-color: ${theme.colors.callToActionText};
+  background-color: ${({ theme }) => theme.colors.callToActionText};
 `;
 
 const SlowBar = styled(Bar)`

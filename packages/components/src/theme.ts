@@ -1,85 +1,85 @@
-import { DefaultTheme, css } from 'styled-components';
+import { useTheme as useStyledTheme } from 'styled-components';
 import { lighten, darken, transparentize } from 'polished';
 
-const lightPallete = {
-  primary: '#FFFFFF',
-  secondary: '#211A1D',
-  accent: '#5218FA',
-  error: '#FA0011',
-  ordinals: ['#556480', '#CF9F97', '#9DAECC', '#B8CC89', '#75805C'],
-};
-
-const darkPallete = {
-  primary: '#211A1D',
-  secondary: '#FFFFFF',
-  accent: '#774AFB',
-  error: '#FF2331',
-  ordinals: ['#5B6A87', '#D6A59C', '#A3B4D4', '#BFD48E', '#7C8761'],
-};
-
-const spacings = {
-  xs: '0.5rem',
-  s: '1rem',
-  m: '2rem',
-  l: '3rem',
-  xl: '5rem',
-  xxl: '8rem',
-};
-
-interface ThemeProps {
-  theme: DefaultTheme;
-}
-
-export const theme = {
-  colors: {
-    backgroundMain: ({ theme }: ThemeProps) =>
-      theme.mode === 'light' ? lightPallete.primary : darkPallete.primary,
-    textOnBackground: ({ theme }: ThemeProps) =>
-      theme.mode === 'light' ? lightPallete.secondary : darkPallete.secondary,
-    textSecondaryOnBackground: ({ theme }: ThemeProps) =>
-      theme.mode === 'light'
-        ? lighten(0.1, lightPallete.secondary)
-        : darken(0.1, darkPallete.secondary),
-    backgroundRaised: ({ theme }: ThemeProps) =>
-      theme.mode === 'light'
-        ? lightPallete.primary
-        : lighten(0.04, darkPallete.primary),
-    callToAction: ({ theme }: ThemeProps) =>
-      theme.mode === 'light' ? lightPallete.accent : darkPallete.accent,
-    textOnCallToAction: ({ theme }: ThemeProps) =>
-      theme.mode === 'light' ? lightPallete.primary : darkPallete.secondary,
-    callToActionText: ({ theme }: ThemeProps) =>
-      theme.mode === 'light'
-        ? lightPallete.accent
-        : lighten(0.07, darkPallete.accent),
-    error: ({ theme }: ThemeProps) =>
-      theme.mode === 'light' ? lightPallete.error : darkPallete.error,
-    ordinals: ({ theme }: ThemeProps) =>
-      theme.mode === 'light' ? lightPallete.ordinals : darkPallete.ordinals,
-  },
-  spacings: (...vals: (keyof typeof spacings)[]) =>
-    vals.map((val) => spacings[val]).join(' '),
-  shadows: {
-    none: '0 0 1rem 0 rgba(0, 0, 0, 0)',
-    soft: ({ theme }: ThemeProps) =>
-      theme.mode === 'light'
-        ? `0 0 1rem 0 ${transparentize(0.9, lightPallete.secondary)}`
-        : `0 0 1rem 0 rgba(0, 0, 0, 0.1)`,
+const commonTheme = {
+  spacings: {
+    xs: '0.5rem',
+    s: '1rem',
+    m: '2rem',
+    l: '3rem',
+    xl: '5rem',
+    xxl: '8rem',
   },
   fonts: {
-    ctaSize: '1rem',
-    ctaHeight: '1.2em',
-    ctaWeight: 600,
-    ctaSpacing: '0.028em',
-    inputSize: '1.1rem',
-    inputHeight: '1.3em',
-    inputWeight: 400,
-    labelSize: '0.9rem',
-    labelHeight: '1.2em',
-    labelWeight: 500,
-    helperSize: '0.8rem',
-    helperHeight: '1.5em',
-    helperWeight: 400,
+    cta: {
+      size: '1rem',
+      height: '1.2em',
+      weight: 600,
+      spacing: '0.028em',
+    },
+    input: {
+      size: '1.1rem',
+      height: '1.3em',
+      weight: 400,
+    },
+    label: {
+      size: '0.9rem',
+      height: '1.2em',
+      weight: 500,
+    },
+    helper: {
+      size: '0.8rem',
+      height: '1.5em',
+      weight: 400,
+    },
+    h1: {
+      size: '3.815rem',
+      height: '1.1em',
+      spacing: '-0.025em',
+      weight: 800,
+    },
+    h2: {
+      size: '3.052rem',
+      height: '1.1em',
+      spacing: '-0.025em',
+      weight: 750,
+    },
+    h3: {
+      size: '2.441rem',
+      height: '1.1em',
+      spacing: '-0.025em',
+      weight: 700,
+    },
+    h4: {
+      size: '1.953rem',
+      height: '1.1em',
+      spacing: '-0.025em',
+      weight: 650,
+    },
+    h5: {
+      size: '1.563rem',
+      height: '1.1em',
+      spacing: '-0.025em',
+      weight: 650,
+    },
+    h6: {
+      size: '1.25rem',
+      height: '1.1em',
+      spacing: '-0.025em',
+      weight: 600,
+    },
+    body1: {
+      size: '1rem',
+      height: '1.7em',
+      spacing: '0',
+      weight: 400,
+    },
+    body2: {
+      size: '0.9rem',
+      height: '1.5em',
+      spacing: '0',
+      weight: 400,
+    },
   },
   fontFamily: "'Inter', sans-serif",
   breakpoints: {
@@ -110,23 +110,68 @@ export const theme = {
   },
 };
 
-export const getTheme = (
-  val: string | ((p: ThemeProps) => string),
-  manipulator: (val: string) => string
-) => {
-  if (typeof val === 'string') return manipulator(val);
-  return (p: ThemeProps) => manipulator(val(p));
+const lightPallete = {
+  primary: '#FFFFFF',
+  secondary: '#211A1D',
+  accent: '#5218FA',
+  error: '#FA0011',
+  ordinals: ['#556480', '#CF9F97', '#9DAECC', '#B8CC89', '#75805C'],
 };
 
-export const getPaddings = (isCompact?: boolean) => (p: ThemeProps) => {
-  const paddingName = isCompact ? ('compact' as const) : ('normal' as const);
-  return css`
-    padding: ${theme.paddings[paddingName].mobile};
-    @media (${theme.breakpoints.minTablet}) {
-      padding: ${theme.paddings[paddingName].tablet};
-    }
-    @media (${theme.breakpoints.minLaptop}) {
-      padding: ${theme.paddings[paddingName].laptop};
-    }
-  `;
+const darkPallete = {
+  primary: '#211A1D',
+  secondary: '#FFFFFF',
+  accent: '#774AFB',
+  error: '#FF2331',
+  ordinals: ['#5B6A87', '#D6A59C', '#A3B4D4', '#BFD48E', '#7C8761'],
+};
+
+const themes = {
+  light: {
+    mode: 'light' as const,
+    ...commonTheme,
+    colors: {
+      backgroundMain: lightPallete.primary,
+      textOnBackground: lightPallete.secondary,
+      textSecondaryOnBackground: lighten(0.1, lightPallete.secondary),
+      backgroundRaised: lightPallete.primary,
+      callToAction: lightPallete.accent,
+      textOnCallToAction: lightPallete.primary,
+      callToActionText: lightPallete.accent,
+      error: lightPallete.error,
+      disabled: lighten(0.6, lightPallete.secondary),
+      ordinals: lightPallete.ordinals,
+    },
+    shadows: {
+      none: '0 0 1rem 0 rgba(0, 0, 0, 0)',
+      soft: `0 0 1rem 0 ${transparentize(0.9, lightPallete.secondary)}`,
+    },
+  },
+  dark: {
+    mode: 'dark' as const,
+    ...commonTheme,
+    colors: {
+      backgroundMain: darkPallete.primary,
+      textOnBackground: darkPallete.secondary,
+      textSecondaryOnBackground: darken(0.1, darkPallete.secondary),
+      backgroundRaised: lighten(0.04, darkPallete.primary),
+      callToAction: darkPallete.accent,
+      textOnCallToAction: darkPallete.secondary,
+      callToActionText: lighten(0.07, darkPallete.accent),
+      error: darkPallete.error,
+      disabled: lighten(0.6, darkPallete.secondary),
+      ordinals: darkPallete.ordinals,
+    },
+    shadows: {
+      none: '0 0 1rem 0 rgba(0, 0, 0, 0)',
+      soft: '0 0 1rem 0 rgba(0, 0, 0, 0.1)',
+    },
+  },
+};
+
+export const getTheme = (theme: 'dark' | 'light') => themes[theme];
+
+export const useTheme = () => {
+  const theme = useStyledTheme();
+  return theme;
 };
