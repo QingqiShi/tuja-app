@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import dayjs from 'dayjs';
@@ -105,7 +106,8 @@ interface PortfolioOverviewProps {
 }
 
 function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
-  const { portfolio, portfolios, handleChangePortfolio } = usePortfolio();
+  const history = useHistory();
+  const { portfolio, portfolios } = usePortfolio();
   const { portfolioPerformance } = usePortfolioPerformance();
   const [startDate] = useStartDate();
 
@@ -138,11 +140,11 @@ function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
             {!isDemo && portfolios.length > 1 && (
               <Select
                 defaultValue={`${portfolios.indexOf(portfolio)}`}
-                options={portfolios.map((p, i) => ({
+                options={portfolios.map((p) => ({
                   label: p.name,
-                  value: `${i}`,
+                  value: p.id,
                 }))}
-                onChange={(e) => handleChangePortfolio(Number(e.target.value))}
+                onChange={(e) => history.push(`/portfolio/${e.target.value}`)}
               />
             )}
           </EditableTitle>

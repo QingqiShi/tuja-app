@@ -9,34 +9,29 @@ import useLoadingState from './useLoadingState';
 export const PortfolioContext = createContext({
   portfolio: null as Portfolio | null,
   portfolios: [] as Portfolio[],
-  handleChangePortfolio: (_index: number) => {},
   loaded: false,
 });
 
 const currentDate = dayjs(dayjs().format('YYYY-MM-DD'));
 const defaultDate = currentDate.subtract(3, 'month');
 
-export function PortfolioProvider({ children }: React.PropsWithChildren<{}>) {
+interface PortfolioProviderProps {
+  portfolioId?: string;
+}
+
+export function PortfolioProvider({
+  children,
+  portfolioId,
+}: React.PropsWithChildren<PortfolioProviderProps>) {
   const [globalLoading] = useLoadingState();
   const { state, currentUser } = useAuth();
   const { addTickers } = useStocksData();
   const [startDate, setStartDate] = useStartDate();
   const [loaded, setLoaded] = useState(false);
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
-  const [selectedPortfolio, setSelectedPortfolio] = useState(-1);
 
-  const portfolio = portfolios[selectedPortfolio] ?? null;
-  const handleChangePortfolio = (index: number) => {
-    setSelectedPortfolio(index);
-    const newPortfoliioStartDate = portfolios[index]?.activities[0]?.date;
-    if (newPortfoliioStartDate) {
-      setStartDate(
-        defaultDate.isAfter(newPortfoliioStartDate)
-          ? defaultDate.toDate()
-          : newPortfoliioStartDate
-      );
-    }
-  };
+  const portfolio =
+    portfolios.find((portfolio) => portfolio.id === portfolioId) ?? null;
 
   const authStateKnown = state !== 'UNKNOWN';
   const uid = currentUser?.uid;
@@ -55,15 +50,6 @@ export function PortfolioProvider({ children }: React.PropsWithChildren<{}>) {
       setLoaded(true);
     });
   }, [authStateKnown, uid]);
-
-  useEffect(() => {
-    if (
-      (selectedPortfolio < 0 || isNaN(selectedPortfolio)) &&
-      portfolios.length > 0
-    ) {
-      setSelectedPortfolio(0);
-    }
-  }, [portfolios.length, selectedPortfolio]);
 
   const portfolioCurrency = portfolio?.currency;
   const portfolioTickers = portfolio?.tickers;
@@ -94,9 +80,8 @@ export function PortfolioProvider({ children }: React.PropsWithChildren<{}>) {
   return (
     <PortfolioContext.Provider
       value={{
-        portfolio: portfolios[selectedPortfolio] ?? null,
+        portfolio,
         portfolios,
-        handleChangePortfolio,
         loaded,
       }}
     >

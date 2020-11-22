@@ -18,13 +18,17 @@ function Create() {
         <title>Create Portfolio | Tuja App</title>
       </Helmet>
       <CreatePortfolio
-        onCreate={(name, currency) => {
-          createPortfolio(name, currency, currentUser?.uid ?? '');
+        onCreate={async (name, currency) => {
+          const id = await createPortfolio(
+            name,
+            currency,
+            currentUser?.uid ?? ''
+          );
 
           // Analytics
           logEvent('create_portfolio', { currency });
 
-          history.push('/portfolio');
+          history.push(`/portfolio/${id}`);
         }}
       />
     </>

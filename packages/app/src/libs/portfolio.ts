@@ -35,10 +35,14 @@ export interface PortfolioPerformance {
   };
 }
 
-export function createPortfolio(name: string, currency: string, uid: string) {
+export async function createPortfolio(
+  name: string,
+  currency: string,
+  uid: string
+) {
   const collectionRef = firebase.firestore().collection(`/portfolios`);
   const docRef = collectionRef.doc();
-  return docRef.set({
+  await docRef.set({
     id: docRef.id,
     user: uid,
     name,
@@ -47,6 +51,8 @@ export function createPortfolio(name: string, currency: string, uid: string) {
     aliases: {},
     activities: [],
   } as Portfolio);
+
+  return docRef.id;
 }
 
 export function watchPortfolio(
