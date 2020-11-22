@@ -1,27 +1,23 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
-import { theme, getTheme } from '../../theme';
 
 const Container = styled.div`
   display: inline-flex;
-  border-radius: ${theme.spacings('s')};
+  border-radius: ${({ theme }) => theme.spacings.s};
 `;
 
 const Button = styled.button<{ isActive?: boolean }>`
-  font-family: ${theme.fontFamily};
-  line-height: ${theme.fonts.ctaHeight};
-  font-weight: ${theme.fonts.ctaWeight};
-  letter-spacing: ${theme.fonts.ctaSpacing};
-  padding: ${theme.spacings('xs')};
+  font-family: ${({ theme }) => theme.fontFamily};
+  line-height: ${({ theme }) => theme.fonts.cta.height};
+  font-weight: ${({ theme }) => theme.fonts.cta.weight};
+  letter-spacing: ${({ theme }) => theme.fonts.cta.spacing};
+  padding: ${({ theme }) => theme.spacings.xs};
   border: 1px solid
-    ${getTheme(theme.colors.textOnBackground, (c) => transparentize(1, c))};
-  color: ${getTheme(theme.colors.textOnBackground, (c) =>
-    transparentize(0.3, c)
-  )};
-  background-color: ${getTheme(theme.colors.textOnBackground, (color) =>
-    transparentize(0.95, color)
-  )};
+    ${({ theme }) => transparentize(1, theme.colors.textOnBackground)};
+  color: ${({ theme }) => transparentize(0.3, theme.colors.textOnBackground)};
+  background-color: ${({ theme }) =>
+    transparentize(0.95, theme.colors.textOnBackground)};
   font-size: 0.8rem;
   text-transform: uppercase;
   transition: all 0.2s;
@@ -32,42 +28,37 @@ const Button = styled.button<{ isActive?: boolean }>`
   text-decoration: none;
 
   &:hover {
-    background-color: ${getTheme(theme.colors.textOnBackground, (color) =>
-      transparentize(0.9, color)
-    )};
+    background-color: ${({ theme }) =>
+      transparentize(0.9, theme.colors.textOnBackground)};
   }
 
   &:focus {
     outline: none;
     border: 1px solid
-      ${getTheme(theme.colors.textOnBackground, (color) =>
-        transparentize(0.9, color)
-      )};
-    box-shadow: 0 0 ${theme.spacings('s')} 0
-      ${getTheme(theme.colors.textOnBackground, (color) =>
-        transparentize(0.9, color)
-      )};
+      ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
+    box-shadow: 0 0 ${({ theme }) => theme.spacings.s} 0
+      ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
   }
 
   &:first-child {
-    border-top-left-radius: ${theme.spacings('xs')};
-    border-bottom-left-radius: ${theme.spacings('xs')};
+    border-top-left-radius: ${({ theme }) => theme.spacings.xs};
+    border-bottom-left-radius: ${({ theme }) => theme.spacings.xs};
   }
 
   &:last-child {
-    border-top-right-radius: ${theme.spacings('xs')};
-    border-bottom-right-radius: ${theme.spacings('xs')};
+    border-top-right-radius: ${({ theme }) => theme.spacings.xs};
+    border-bottom-right-radius: ${({ theme }) => theme.spacings.xs};
   }
 
   ${({ isActive }) =>
     isActive &&
     css`
-      background-color: ${theme.colors.callToAction};
-      color: ${theme.colors.textOnCallToAction};
+      background-color: ${({ theme }) => theme.colors.callToAction};
+      color: ${({ theme }) => theme.colors.textOnCallToAction};
       cursor: default;
 
       &:hover {
-        background-color: ${theme.colors.callToAction};
+        background-color: ${({ theme }) => theme.colors.callToAction};
       }
     `}
 `;

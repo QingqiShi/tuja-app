@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize, lighten } from 'polished';
-import { theme, getTheme, getPaddings } from '../../theme';
+import { paddings } from '../../mixins';
 
 type ButtonVariant = 'primary' | 'shout' | 'outline';
 
@@ -16,17 +16,16 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
   shouldForwardProp: (prop, validator) =>
     !['hasStartIcon', 'hasEndIcon'].includes(prop) && validator(prop),
 })`
-  font-family: ${theme.fontFamily};
-  font-size: ${theme.fonts.ctaSize};
-  line-height: ${theme.fonts.ctaHeight};
-  font-weight: ${theme.fonts.ctaWeight};
-  letter-spacing: ${theme.fonts.ctaSpacing};
-  border-radius: ${theme.spacings('xs')};
+  font-family: ${({ theme }) => theme.fontFamily};
+  font-size: ${({ theme }) => theme.fonts.cta.size};
+  line-height: ${({ theme }) => theme.fonts.cta.height};
+  font-weight: ${({ theme }) => theme.fonts.cta.weight};
+  letter-spacing: ${({ theme }) => theme.fonts.cta.spacing};
+  border-radius: ${({ theme }) => theme.spacings.xs};
   border: 2px solid transparent;
-  color: ${theme.colors.textSecondaryOnBackground};
-  background-color: ${getTheme(theme.colors.textOnBackground, (color) =>
-    transparentize(1, color)
-  )};
+  color: ${({ theme }) => theme.colors.textSecondaryOnBackground};
+  background-color: ${({ theme }) =>
+    transparentize(1, theme.colors.textOnBackground)};
   text-transform: uppercase;
   transition: background-color 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s,
     opacity 0.2s;
@@ -36,45 +35,39 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
   cursor: pointer;
   text-decoration: none;
 
-  ${({ compact }) => getPaddings(compact)}
+  ${paddings}
 
   ${({ align = 'center' }) => css`
     place-content: ${align};
   `}
 
   &:hover {
-    background-color: ${getTheme(theme.colors.textOnBackground, (color) =>
-      transparentize(0.9, color)
-    )};
+    background-color: ${({ theme }) =>
+      transparentize(0.9, theme.colors.textOnBackground)};
   }
 
   &:focus {
     outline: none;
     border: 2px solid
-      ${getTheme(theme.colors.textOnBackground, (color) =>
-        transparentize(0.9, color)
-      )};
-    box-shadow: 0 0 ${theme.spacings('s')} 0
-      ${getTheme(theme.colors.textOnBackground, (color) =>
-        transparentize(0.9, color)
-      )};
+      ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
+    box-shadow: 0 0 ${({ theme }) => theme.spacings.s} 0
+      ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
   }
 
   &:disabled {
-    opacity: ${({ theme }) => (theme.mode === 'light' ? 0.3 : 0.4)};
+    color: ${({ theme }) => theme.colors.disabled};
     pointer-events: none;
 
     ${({ active }) =>
       active &&
       css`
-        opacity: 1;
-        background-color: ${getTheme(theme.colors.textOnBackground, (color) =>
-          transparentize(0.9, color)
-        )};
+        color: ${({ theme }) => theme.colors.textSecondaryOnBackground};
+        background-color: ${({ theme }) =>
+          transparentize(0.9, theme.colors.textOnBackground)};
       `}
   }
 
-  ${({ variant, active }) => {
+  ${({ variant, active, theme }) => {
     switch (variant) {
       case 'primary':
         return css`
@@ -86,25 +79,19 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
           color: ${theme.colors.textOnCallToAction};
 
           &:hover {
-            background-color: ${getTheme(theme.colors.callToAction, (color) =>
-              lighten(0.15, color)
-            )};
+            background-color: ${lighten(0.15, theme.colors.callToAction)};
           }
 
           &:focus {
             border: 2px solid transparent;
-            box-shadow: 0 0 ${theme.spacings('s')} 0
-              ${getTheme(theme.colors.callToAction, (color) =>
-                lighten(0.15, color)
-              )};
+            box-shadow: 0 0 ${theme.spacings.s} 0
+              ${lighten(0.15, theme.colors.callToAction)};
           }
 
           ${active &&
           css`
             &:disabled {
-              background-color: ${getTheme(theme.colors.callToAction, (color) =>
-                lighten(0.15, color)
-              )};
+              background-color: ${lighten(0.15, theme.colors.callToAction)};
             }
           `}
         `;
@@ -119,10 +106,8 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
 
           &:focus {
             border: 2px solid ${theme.colors.callToAction};
-            box-shadow: 0 0 ${theme.spacings('s')} 0
-              ${getTheme(theme.colors.callToAction, (color) =>
-                lighten(0.15, color)
-              )};
+            box-shadow: 0 0 ${theme.spacings.s} 0
+              ${lighten(0.15, theme.colors.callToAction)};
           }
         `;
     }
@@ -135,13 +120,13 @@ const Icon = styled.span`
 
 const Text = styled.span<{ hideTextOnMobile?: boolean }>`
   &:not(:last-child) {
-    margin-right: ${theme.spacings('xs')};
+    margin-right: ${({ theme }) => theme.spacings.xs};
   }
   &:not(:first-child) {
-    margin-left: ${theme.spacings('xs')};
+    margin-left: ${({ theme }) => theme.spacings.xs};
   }
 
-  ${({ hideTextOnMobile }) =>
+  ${({ hideTextOnMobile, theme }) =>
     hideTextOnMobile &&
     css`
       display: none;
