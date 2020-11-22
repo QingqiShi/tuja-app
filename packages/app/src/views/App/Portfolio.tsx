@@ -26,12 +26,12 @@ const Container = styled.div`
   }
 `;
 
-interface DashboardProps {
+interface PortfolioProps {
   onSignIn: () => void;
   isDemo?: boolean;
 }
 
-function Dashboard({ onSignIn, isDemo }: DashboardProps) {
+function Portfolio({ onSignIn, isDemo }: PortfolioProps) {
   useScrollToTopOnMount();
   return (
     <Container>
@@ -46,4 +46,4 @@ function Dashboard({ onSignIn, isDemo }: DashboardProps) {
   );
 }
 
-export default Dashboard;
+export default Portfolio;

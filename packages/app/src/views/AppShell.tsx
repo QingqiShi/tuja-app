@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useState } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -41,7 +41,7 @@ const Container = styled.div`
 function AppShell() {
   const [showSignIn, setShowSignIn] = useState(false);
   const { state } = useAuth();
-  const { portfolio, loaded: portfolioLoaded } = usePortfolio();
+  const { portfolio, portfolios, loaded: portfolioLoaded } = usePortfolio();
 
   return (
     <Container>
@@ -61,45 +61,60 @@ function AppShell() {
             </Switch>
           )}
 
-        {state === 'SIGNED_IN' && portfolioLoaded && !portfolio && (
-          <Switch>
-            <Route path="/create-portfolio">
-              <Create />
-            </Route>
-            <Route>
-              <Redirect to="/create-portfolio" />
-            </Route>
-          </Switch>
-        )}
+        {state === 'SIGNED_IN' &&
+          portfolioLoaded &&
+          !portfolio &&
+          !portfolios.length && (
+            <Switch>
+              <Route path="/create-portfolio">
+                <Create />
+              </Route>
+              <Route>
+                <Redirect to="/create-portfolio" />
+              </Route>
+            </Switch>
+          )}
 
-        {state === 'SIGNED_IN' && portfolioLoaded && portfolio && (
-          <Switch>
-            <Route path="/portfolio">
-              <Portfolio onSignIn={() => setShowSignIn(true)} />
-            </Route>
-            <Route path="/activities">
-              <Activities />
-            </Route>
-            <Route path="/create-portfolio">
-              <Create />
-            </Route>
-            <Route>
-              <Redirect to="/portfolio" />
-            </Route>
-          </Switch>
-        )}
+        {state === 'SIGNED_IN' &&
+          portfolioLoaded &&
+          !portfolio &&
+          !!portfolios.length && (
+            <Redirect to={`/portfolio/${portfolios[0].id}`} />
+          )}
+
+        {state === 'SIGNED_IN' &&
+          portfolioLoaded &&
+          portfolio &&
+          !!portfolios.length && (
+            <Switch>
+              <Route path="/portfolio/:portfolioId" exact>
+                <Portfolio onSignIn={() => setShowSignIn(true)} />
+              </Route>
+              <Route path="/portfolio/:portfolioId/activities">
+                <Activities />
+              </Route>
+              <Route path="/portfolio/:portfolioId/create-portfolio">
+                <Create />
+              </Route>
+              <Route>
+                <Redirect to={`/portfolio/${portfolio.id}`} />
+              </Route>
+            </Switch>
+          )}
       </Suspense>
     </Container>
   );
 }
 
 function AppShellWithProviders() {
+  const match = useRouteMatch<{ portfolioId?: string }>('/:page/:portfolioId');
+
   return (
     <AuthProvider>
       <LoadingStateProvider>
         <StartDateProvider>
           <StocksDataProvider>
-            <PortfolioProvider>
+            <PortfolioProvider portfolioId={match?.params.portfolioId}>
               <PortfolioPerformanceProvider>
                 <GlobalLoader />
                 <AppShell />

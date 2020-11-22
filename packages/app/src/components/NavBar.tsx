@@ -91,15 +91,17 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
       children: 'Portfolio',
       startIcon: <RiPieChartLine />,
       as: Link as any,
-      otherProps: { to: '/portfolio' },
-      active: location.pathname === '/portfolio',
+      otherProps: { to: `/portfolio/${portfolio.id}` },
+      active: location.pathname === `/portfolio/${portfolio.id}`,
     });
     links.push({
       children: 'Activities',
       startIcon: <RiFileListLine />,
       as: Link as any,
-      otherProps: { to: '/activities' },
-      active: location.pathname === '/activities',
+      otherProps: {
+        to: `/portfolio/${portfolio.id}/activities`,
+      },
+      active: location.pathname === `/portfolio/${portfolio.id}/activities`,
     });
   }
 
@@ -108,8 +110,16 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
       children: 'Create portfolio',
       startIcon: <RiMenuAddLine />,
       as: Link as any,
-      otherProps: { to: '/create-portfolio' },
-      active: location.pathname === '/create-portfolio',
+      otherProps: {
+        to: portfolio
+          ? `/portfolio/${portfolio.id}/create-portfolio`
+          : '/create-portfolio',
+      },
+      active:
+        location.pathname ===
+        (portfolio
+          ? `/portfolio/${portfolio.id}/create-portfolio`
+          : '/create-portfolio'),
     });
     menu.push({
       children: 'Clear cache',
