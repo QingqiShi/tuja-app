@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 import { RiArrowDownSLine } from 'react-icons/ri';
+import { inputFont, labelFont, helperFont, paddings } from '../../mixins';
 
 const Label = styled.label`
   display: block;
@@ -14,17 +15,13 @@ const Label = styled.label`
 `;
 
 const LabelLine = styled.span`
-  font-size: ${({ theme }) => theme.fonts.label.size};
-  line-height: ${({ theme }) => theme.fonts.label.height};
-  font-weight: ${({ theme }) => theme.fonts.label.weight};
+  ${labelFont}
   margin-bottom: ${({ theme }) => theme.spacings.xs};
   display: block;
 `;
 
 const HelperText = styled.span`
-  font-size: ${({ theme }) => theme.fonts.helper.size};
-  line-height: ${({ theme }) => theme.fonts.helper.height};
-  font-weight: ${({ theme }) => theme.fonts.helper.weight};
+  ${helperFont}
   margin-top: ${({ theme }) => theme.spacings.xs};
   color: ${({ theme }) => transparentize(0.2, theme.colors.textOnBackground)};
   display: block;
@@ -36,15 +33,13 @@ const SelectContainer = styled.div`
 `;
 
 const SelectBase = styled.select`
-  font-family: ${({ theme }) => theme.fontFamily};
-  font-size: ${({ theme }) => theme.fonts.input.size};
-  line-height: ${({ theme }) => theme.fonts.input.height};
-  font-weight: ${({ theme }) => theme.fonts.input.weight};
+  ${inputFont}
+  ${paddings}
+  padding-right: 3rem;
   border-radius: ${({ theme }) => theme.spacings.xs};
   border: ${({ theme }) =>
     `2px solid ${transparentize(0.9, theme.colors.textOnBackground)}`};
   color: ${({ theme }) => theme.colors.textOnBackground};
-  padding: 0.8em 3em 0.8em 1em;
   background-color: transparent;
   transition: all 0.2s;
   width: 100%;
@@ -79,8 +74,7 @@ const SelectBase = styled.select`
 const DropdownIcon = styled(RiArrowDownSLine)<{ disabled?: boolean }>`
   position: absolute;
   height: 100%;
-  width: 1.8em;
-  right: 0.8em;
+  width: 1.5em;
   top: 0;
   pointer-events: none;
   ${({ disabled }) =>
@@ -89,6 +83,14 @@ const DropdownIcon = styled(RiArrowDownSLine)<{ disabled?: boolean }>`
       color: ${({ theme }) =>
         transparentize(0.5, theme.colors.textOnBackground)};
     `}
+
+  right: ${({ theme }) => theme.paddings.normal.mobile};
+  @media (${({ theme }) => theme.breakpoints.minTablet}) {
+    right: ${({ theme }) => theme.paddings.normal.tablet};
+  }
+  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+    right: ${({ theme }) => theme.paddings.normal.laptop};
+  }
 `;
 
 interface SelectProps extends Omit<React.ComponentProps<'select'>, 'ref'> {

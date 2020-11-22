@@ -109,7 +109,7 @@ export const ActionsContainer = styled.div`
 `;
 
 export const Field = styled.div`
-  margin-bottom: ${theme.spacings('s')};
+  margin-top: calc(1.08rem + ${({ theme }) => theme.spacings.xs});
 `;
 
 export const Label = styled.label`
