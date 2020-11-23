@@ -23,7 +23,7 @@
     "dayjs": "^1.9.6",
     "escape-string-regexp": "^4.0.0",
     "idb": "^5.0.7",
-    "polished": "^4.0.3",
+    "polished": "^4.0.4",
     "react-helmet-async": "^1.0.7",
     "react-icons": "^3.11.0",
     "react-router-dom": "^5.2.0",
