@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@react-spring/web": "^9.0.0-rc.3",
-    "@visx/visx": "^1.1.0",
+    "@visx/visx": "^1.2.0",
     "react-use": "^15.3.4"
   },
   "devDependencies": {
