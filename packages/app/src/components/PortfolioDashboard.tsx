@@ -2,11 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { RiMoreLine, RiSubtractLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
-import { Button, ButtonGroup, Chart, Type } from '@tuja/components';
+import { Button, ButtonGroup, Chart, Modal, Type } from '@tuja/components';
 import DashboardLayout from 'components/DashboardLayout';
 import PortfolioOverview from 'components/PortfolioOverview';
 import PortfolioPieCard from 'components/PortfolioPieCard';
-import Backdrop from 'components/Backdrop';
 import InvestmentsList from 'components/InvestmentsList';
 import ActivityTradeForm from 'components/ActivityTradeForm';
 import ActivityDepositForm from 'components/ActivityDepositForm';
@@ -17,7 +16,6 @@ import { Card, CardMedia } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
 import useStartDate from 'hooks/useStartDate';
-import useBodyScrollLock from 'hooks/useBodyScrollLock';
 import { addPortfolioActivity } from 'libs/portfolio';
 import { Activity } from 'libs/activities';
 import { logEvent } from 'libs/analytics';
@@ -132,15 +130,10 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
 
   // Activity modals
   const [showBuyModal, setShowBuyModal] = useState(false);
-  const buyModalRef = useBodyScrollLock(showBuyModal);
   const [showDepositModal, setShowDepositModal] = useState(false);
-  const depositModalRef = useBodyScrollLock(showDepositModal);
   const [showSellModal, setShowSellModal] = useState(false);
-  const sellModalRef = useBodyScrollLock(showSellModal);
   const [showDividendModal, setShowDividendModal] = useState(false);
-  const dividendModalRef = useBodyScrollLock(showDividendModal);
   const [showStockDividendModal, setShowStockDividendModal] = useState(false);
-  const stockDividendModalRef = useBodyScrollLock(showStockDividendModal);
 
   const handleSubmit = async (activity: Activity) => {
     if (portfolio?.id) {
@@ -295,76 +288,66 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
         }
       />
       {showBuyModal && (
-        <Backdrop onClick={() => setShowBuyModal(false)}>
-          <Card ref={buyModalRef}>
-            <ModalContainer>
-              <Type scale="h5">Buy</Type>
-              <ActivityTradeForm
-                mode="buy"
-                currency={portfolio.currency}
-                onClose={() => setShowBuyModal(false)}
-                onSubmit={handleSubmit}
-              />
-            </ModalContainer>
-          </Card>
-        </Backdrop>
+        <Modal onClose={() => setShowBuyModal(false)}>
+          <ModalContainer>
+            <Type scale="h5">Buy</Type>
+            <ActivityTradeForm
+              mode="buy"
+              currency={portfolio.currency}
+              onClose={() => setShowBuyModal(false)}
+              onSubmit={handleSubmit}
+            />
+          </ModalContainer>
+        </Modal>
       )}
       {showDepositModal && (
-        <Backdrop onClick={() => setShowDepositModal(false)}>
-          <Card ref={depositModalRef}>
-            <ModalContainer>
-              <Type scale="h5">Deposit</Type>
-              <ActivityDepositForm
-                currency={portfolio.currency}
-                onClose={() => setShowDepositModal(false)}
-                onSubmit={handleSubmit}
-              />
-            </ModalContainer>
-          </Card>
-        </Backdrop>
+        <Modal onClose={() => setShowDepositModal(false)}>
+          <ModalContainer>
+            <Type scale="h5">Deposit</Type>
+            <ActivityDepositForm
+              currency={portfolio.currency}
+              onClose={() => setShowDepositModal(false)}
+              onSubmit={handleSubmit}
+            />
+          </ModalContainer>
+        </Modal>
       )}
       {showSellModal && (
-        <Backdrop onClick={() => setShowSellModal(false)}>
-          <Card ref={sellModalRef}>
-            <ModalContainer>
-              <Type scale="h5">Sell</Type>
-              <ActivityTradeForm
-                mode="sell"
-                currency={portfolio.currency}
-                onClose={() => setShowSellModal(false)}
-                onSubmit={handleSubmit}
-              />
-            </ModalContainer>
-          </Card>
-        </Backdrop>
+        <Modal onClose={() => setShowSellModal(false)}>
+          <ModalContainer>
+            <Type scale="h5">Sell</Type>
+            <ActivityTradeForm
+              mode="sell"
+              currency={portfolio.currency}
+              onClose={() => setShowSellModal(false)}
+              onSubmit={handleSubmit}
+            />
+          </ModalContainer>
+        </Modal>
       )}
       {showDividendModal && (
-        <Backdrop onClick={() => setShowDividendModal(false)}>
-          <Card ref={dividendModalRef}>
-            <ModalContainer>
-              <Type scale="h5">Cash Dividend</Type>
-              <ActivityDividendForm
-                currency={portfolio.currency}
-                onClose={() => setShowDividendModal(false)}
-                onSubmit={handleSubmit}
-              />
-            </ModalContainer>
-          </Card>
-        </Backdrop>
+        <Modal onClose={() => setShowDividendModal(false)}>
+          <ModalContainer>
+            <Type scale="h5">Cash Dividend</Type>
+            <ActivityDividendForm
+              currency={portfolio.currency}
+              onClose={() => setShowDividendModal(false)}
+              onSubmit={handleSubmit}
+            />
+          </ModalContainer>
+        </Modal>
       )}
       {showStockDividendModal && (
-        <Backdrop onClick={() => setShowStockDividendModal(false)}>
-          <Card ref={stockDividendModalRef}>
-            <ModalContainer>
-              <Type scale="h5">Stock Dividend</Type>
-              <ActivityStockDividendForm
-                currency={portfolio.currency}
-                onClose={() => setShowStockDividendModal(false)}
-                onSubmit={handleSubmit}
-              />
-            </ModalContainer>
-          </Card>
-        </Backdrop>
+        <Modal onClose={() => setShowStockDividendModal(false)}>
+          <ModalContainer>
+            <Type scale="h5">Stock Dividend</Type>
+            <ActivityStockDividendForm
+              currency={portfolio.currency}
+              onClose={() => setShowStockDividendModal(false)}
+              onSubmit={handleSubmit}
+            />
+          </ModalContainer>
+        </Modal>
       )}
     </>
   );
