@@ -83,12 +83,16 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
               ${lighten(0.15, theme.colors.callToAction)};
           }
 
-          ${active &&
-          css`
-            &:disabled {
-              background-color: ${lighten(0.15, theme.colors.callToAction)};
-            }
-          `}
+          &:disabled {
+            color: ${theme.colors.textOnCallToAction};
+            background-color: ${lighten(0.6, theme.colors.textOnBackground)};
+            ${active &&
+            css`
+              color: ${({ theme }) => theme.colors.textSecondaryOnBackground};
+              background-color: ${({ theme }) =>
+                transparentize(0.9, theme.colors.textOnBackground)};
+            `}
+          }
         `;
       case 'outline':
         return css`
