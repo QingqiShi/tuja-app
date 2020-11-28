@@ -5,7 +5,7 @@ import {
   clearAllBodyScrollLocks,
 } from 'body-scroll-lock';
 
-function useBodyScrollLock(shouldLock: boolean) {
+export function useBodyScrollLock(shouldLock: boolean) {
   const targetRef = useRef<any>(null);
 
   useLayoutEffect(() => {
@@ -21,5 +21,3 @@ function useBodyScrollLock(shouldLock: boolean) {
 
   return targetRef;
 }
-
-export default useBodyScrollLock;

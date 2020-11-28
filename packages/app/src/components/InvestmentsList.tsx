@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-import { Select } from '@tuja/components';
-import Backdrop from 'components/Backdrop';
+import { Modal, Select } from '@tuja/components';
 import UpdateAlias from 'components/UpdateAlias';
 import UpdateAllocation from 'components/UpdateAllocation';
 import InvestmentsListItem from 'components/InvestmentsListItem';
 import { PortfolioPerformance } from 'libs/portfolio';
-import useBodyScrollLock from 'hooks/useBodyScrollLock';
 import useColors from 'hooks/useColors';
 import useStocksData from 'hooks/useStocksData';
-import { Card } from 'commonStyledComponents';
 import { theme } from 'theme';
 
 const SortByContainer = styled.div`
@@ -50,9 +47,6 @@ function InvestmentsList({
   const [sortBy, setSortBy] = useState<
     'GAIN' | 'VALUE' | 'ALLOCATION' | 'TODAY' | 'CHART'
   >('CHART');
-
-  const aliasRef = useBodyScrollLock(showAlias);
-  const allocationRef = useBodyScrollLock(showAllocation);
 
   const { stocksData } = useStocksData();
   const getColor = useColors();
@@ -118,25 +112,21 @@ function InvestmentsList({
       })}
 
       {showAlias && currentTicker && (
-        <Backdrop onClick={() => setShowAlias(false)}>
-          <Card ref={aliasRef}>
-            <UpdateAlias
-              ticker={currentTicker}
-              onClose={() => setShowAlias(false)}
-            />
-          </Card>
-        </Backdrop>
+        <Modal onClose={() => setShowAlias(false)}>
+          <UpdateAlias
+            ticker={currentTicker}
+            onClose={() => setShowAlias(false)}
+          />
+        </Modal>
       )}
 
       {showAllocation && currentTicker && (
-        <Backdrop onClick={() => setShowAllocation(false)}>
-          <Card ref={allocationRef}>
-            <UpdateAllocation
-              ticker={currentTicker}
-              onClose={() => setShowAllocation(false)}
-            />
-          </Card>
-        </Backdrop>
+        <Modal onClose={() => setShowAllocation(false)}>
+          <UpdateAllocation
+            ticker={currentTicker}
+            onClose={() => setShowAllocation(false)}
+          />
+        </Modal>
       )}
     </>
   );

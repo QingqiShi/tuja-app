@@ -47,6 +47,19 @@ export const translucent = css`
   }
 `;
 
+export const translucentInverted = css`
+  background-color: ${({ theme }) =>
+    transparentize(0.4, theme.colors.textOnBackground)};
+
+  @supports (
+    backdrop-filter: saturate(180%) blur(${({ theme }) => theme.backdropBlur})
+  ) {
+    backdrop-filter: saturate(180%) blur(${({ theme }) => theme.backdropBlur});
+    background-color: ${({ theme }) =>
+      transparentize(0.7, theme.colors.textOnBackground)};
+  }
+`;
+
 export const ctaFont = css`
   font-family: ${({ theme }) => theme.fontFamily};
   font-size: ${({ theme }) => theme.fonts.cta.size};

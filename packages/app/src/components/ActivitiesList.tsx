@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import dayjs from 'dayjs';
-import { Type } from '@tuja/components';
-import Backdrop from './Backdrop';
+import { Modal, Type } from '@tuja/components';
 import ActivityDepositForm from './ActivityDepositForm';
 import ActivityDividendForm from './ActivityDividendForm';
 import ActivityStockDividendForm from './ActivityStockDividendForm';
@@ -14,7 +13,6 @@ import { logEvent } from 'libs/analytics';
 import { updatePortfolioActivities } from 'libs/portfolio';
 import { Activity } from 'libs/activities';
 import usePortfolio from 'hooks/usePortfolio';
-import useBodyScrollLock from 'hooks/useBodyScrollLock';
 import { theme, getTheme } from 'theme';
 
 const ActivityCard = styled(Card)`
@@ -62,7 +60,6 @@ function ActivitiesList() {
 
   const [updateIndex, setUpdateIndex] = useState(0);
   const [showUpdateActivity, setShowUpdateActivity] = useState(false);
-  const updateActivityRef = useBodyScrollLock(showUpdateActivity);
 
   if (!portfolio) {
     return null;
@@ -208,61 +205,59 @@ function ActivitiesList() {
       })}
 
       {showUpdateActivity && (
-        <Backdrop onClick={() => setShowUpdateActivity(false)}>
-          <Card ref={updateActivityRef}>
-            {updateActivity?.type === 'Deposit' && (
-              <UpdateActivityContainer>
-                <Type scale="h5">Deposit</Type>
-                <ActivityDepositForm
-                  currency={portfolio.currency}
-                  initialActivity={updateActivity}
-                  onClose={() => setShowUpdateActivity(false)}
-                  onSubmit={handleUpdateActivity}
-                  onDelete={handleDeleteActivity}
-                />
-              </UpdateActivityContainer>
-            )}
-            {updateActivity?.type === 'Dividend' && (
-              <UpdateActivityContainer>
-                <Type scale="h5">Cash Dividend</Type>
-                <ActivityDividendForm
-                  currency={portfolio.currency}
-                  initialActivity={updateActivity}
-                  onClose={() => setShowUpdateActivity(false)}
-                  onSubmit={handleUpdateActivity}
-                  onDelete={handleDeleteActivity}
-                />
-              </UpdateActivityContainer>
-            )}
-            {updateActivity?.type === 'StockDividend' && (
-              <UpdateActivityContainer>
-                <Type scale="h5">Stock Dividend</Type>
-                <ActivityStockDividendForm
-                  currency={portfolio.currency}
-                  initialActivity={updateActivity}
-                  onClose={() => setShowUpdateActivity(false)}
-                  onSubmit={handleUpdateActivity}
-                  onDelete={handleDeleteActivity}
-                />
-              </UpdateActivityContainer>
-            )}
-            {updateActivity?.type === 'Trade' && (
-              <UpdateActivityContainer>
-                <Type scale="h5">
-                  {updateActivity?.cost > 0 ? 'Buy' : 'Sell'}
-                </Type>
-                <ActivityTradeForm
-                  mode={updateActivity?.cost > 0 ? 'buy' : 'sell'}
-                  currency={portfolio.currency}
-                  initialActivity={updateActivity}
-                  onClose={() => setShowUpdateActivity(false)}
-                  onSubmit={handleUpdateActivity}
-                  onDelete={handleDeleteActivity}
-                />
-              </UpdateActivityContainer>
-            )}
-          </Card>
-        </Backdrop>
+        <Modal onClose={() => setShowUpdateActivity(false)}>
+          {updateActivity?.type === 'Deposit' && (
+            <UpdateActivityContainer>
+              <Type scale="h5">Deposit</Type>
+              <ActivityDepositForm
+                currency={portfolio.currency}
+                initialActivity={updateActivity}
+                onClose={() => setShowUpdateActivity(false)}
+                onSubmit={handleUpdateActivity}
+                onDelete={handleDeleteActivity}
+              />
+            </UpdateActivityContainer>
+          )}
+          {updateActivity?.type === 'Dividend' && (
+            <UpdateActivityContainer>
+              <Type scale="h5">Cash Dividend</Type>
+              <ActivityDividendForm
+                currency={portfolio.currency}
+                initialActivity={updateActivity}
+                onClose={() => setShowUpdateActivity(false)}
+                onSubmit={handleUpdateActivity}
+                onDelete={handleDeleteActivity}
+              />
+            </UpdateActivityContainer>
+          )}
+          {updateActivity?.type === 'StockDividend' && (
+            <UpdateActivityContainer>
+              <Type scale="h5">Stock Dividend</Type>
+              <ActivityStockDividendForm
+                currency={portfolio.currency}
+                initialActivity={updateActivity}
+                onClose={() => setShowUpdateActivity(false)}
+                onSubmit={handleUpdateActivity}
+                onDelete={handleDeleteActivity}
+              />
+            </UpdateActivityContainer>
+          )}
+          {updateActivity?.type === 'Trade' && (
+            <UpdateActivityContainer>
+              <Type scale="h5">
+                {updateActivity?.cost > 0 ? 'Buy' : 'Sell'}
+              </Type>
+              <ActivityTradeForm
+                mode={updateActivity?.cost > 0 ? 'buy' : 'sell'}
+                currency={portfolio.currency}
+                initialActivity={updateActivity}
+                onClose={() => setShowUpdateActivity(false)}
+                onSubmit={handleUpdateActivity}
+                onDelete={handleDeleteActivity}
+              />
+            </UpdateActivityContainer>
+          )}
+        </Modal>
       )}
     </div>
   );
