@@ -114,7 +114,11 @@ function AppShellWithProviders() {
       <LoadingStateProvider>
         <StartDateProvider>
           <StocksDataProvider>
-            <PortfolioProvider portfolioId={match?.params.portfolioId}>
+            <PortfolioProvider
+              portfolioId={
+                match ? match?.params.portfolioId : 'example-portfolio'
+              }
+            >
               <PortfolioPerformanceProvider>
                 <GlobalLoader />
                 <AppShell />

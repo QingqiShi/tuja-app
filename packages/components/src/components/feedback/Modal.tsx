@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
-import { card, translucentInverted } from '../../mixins';
+import { card } from '../../mixins';
 
 const Container = styled.div`
   position: fixed;
