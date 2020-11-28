@@ -52,7 +52,7 @@ function AppShell() {
           state !== 'SIGNING_IN' &&
           state !== 'UNKNOWN' && (
             <Switch>
-              <Route path="/demo">
+              <Route path="/demo" exact>
                 <Portfolio onSignIn={() => setShowSignIn(true)} isDemo />
               </Route>
               <Route>
@@ -66,7 +66,7 @@ function AppShell() {
           !portfolio &&
           !portfolios.length && (
             <Switch>
-              <Route path="/create-portfolio">
+              <Route path="/create-portfolio" exact>
                 <Create />
               </Route>
               <Route>
@@ -90,10 +90,10 @@ function AppShell() {
               <Route path="/portfolio/:portfolioId" exact>
                 <Portfolio onSignIn={() => setShowSignIn(true)} />
               </Route>
-              <Route path="/portfolio/:portfolioId/activities">
+              <Route path="/portfolio/:portfolioId/activities" exact>
                 <Activities />
               </Route>
-              <Route path="/portfolio/:portfolioId/create-portfolio">
+              <Route path="/portfolio/:portfolioId/create-portfolio" exact>
                 <Create />
               </Route>
               <Route>
