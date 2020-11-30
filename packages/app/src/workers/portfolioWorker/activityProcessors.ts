@@ -224,3 +224,20 @@ export function cutTimeSeries(
     (d) => startDay.isSameOrBefore(d[0]) && endDay.isAfter(d[0])
   );
 }
+
+export function calcBenchmarkReturn(
+  date: Date,
+  stocksData: StocksData,
+  initialValue?: number,
+  benchmarkTicker?: string
+) {
+  if (benchmarkTicker && initialValue) {
+    const benchmarkValue = stocksData[benchmarkTicker].adjustedSeries?.get(
+      date
+    );
+    if (benchmarkValue) {
+      return (benchmarkValue - initialValue) / initialValue;
+    }
+  }
+  return 0;
+}

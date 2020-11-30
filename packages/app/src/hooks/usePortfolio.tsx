@@ -55,12 +55,17 @@ export function PortfolioProvider({
   const portfolioTickers = portfolio?.tickers;
   useEffect(() => {
     if (!globalLoading && portfolioTickers && portfolioCurrency) {
-      console.log('addTickers', portfolioTickers);
-      addTickers(portfolioTickers, startDate, portfolioCurrency);
+      const tickers = new Set(portfolioTickers);
+      if (portfolio?.benchmark) {
+        tickers.add(portfolio.benchmark);
+      }
+      console.log('addTickers', tickers);
+      addTickers([...tickers], startDate, portfolioCurrency);
     }
   }, [
     addTickers,
     globalLoading,
+    portfolio?.benchmark,
     portfolioCurrency,
     portfolioTickers,
     startDate,

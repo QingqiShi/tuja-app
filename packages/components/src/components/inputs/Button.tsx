@@ -84,8 +84,11 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
           }
 
           &:disabled {
-            color: ${theme.colors.textOnCallToAction};
-            background-color: ${lighten(0.6, theme.colors.textOnBackground)};
+            color: ${transparentize(0.3, theme.colors.textOnBackground)};
+            background-color: ${transparentize(
+              0.8,
+              theme.colors.textOnBackground
+            )};
             ${active &&
             css`
               color: ${({ theme }) => theme.colors.textSecondaryOnBackground};
