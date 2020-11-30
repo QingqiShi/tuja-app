@@ -15,6 +15,7 @@ export interface Portfolio {
   aliases: { [ticker: string]: string };
   user: string;
   targetAllocations?: { [ticker: string]: number };
+  benchmark?: string;
 }
 
 export interface PortfolioPerformance {
@@ -23,6 +24,7 @@ export interface PortfolioPerformance {
   twrrSeries: TimeSeries;
   gainSeries: TimeSeries;
   cashFlowSeries: TimeSeries;
+  benchmarkSeries: TimeSeries;
   cash: number;
   totalHoldingsValue: number;
   holdings: {
@@ -147,6 +149,11 @@ export function updateHoldingAllocation(
     };
     t.update(docRef, portfolioToDb(portfolio));
   });
+}
+
+export function updatePortfolioBenchmark(id: string, benchmarkTicker: string) {
+  const docRef = firebase.firestore().collection(`/portfolios`).doc(id);
+  return docRef.update({ benchmark: benchmarkTicker });
 }
 
 function dbToPortfolio(data: any): Portfolio {

@@ -16,6 +16,7 @@ import {
   calcDailyTwrr,
   calcGain,
   calcHoldings,
+  calcBenchmarkReturn,
   accumulateDailyTwrr,
   cutTimeSeries,
 } from './portfolioWorker/activityProcessors';
@@ -81,11 +82,13 @@ function processPayload(payload: Payload): PortfolioPerformance {
     cash: 0,
     cashFlow: 0,
     lastCashFlow: null as null | readonly [Date, number],
+    benchmarkInitial: 0,
   };
   const valueSeries = new TimeSeries();
   const gainSeries = new TimeSeries();
   const dailyTwrrSeries = new TimeSeries();
   const cashFlowSeries = new TimeSeries();
+  const benchmarkSeries = new TimeSeries();
 
   iterateActivities(activitiesIterator, {
     onActivity: (item) => {
@@ -96,6 +99,7 @@ function processPayload(payload: Payload): PortfolioPerformance {
         cash: collectCash(item, ctx.cash),
         cashFlow: cashFlow.totalCashFlow,
         lastCashFlow: cashFlow.lastCashFlow,
+        benchmarkInitial: ctx.benchmarkInitial,
       };
     },
     onDate: (date) => {
@@ -115,12 +119,34 @@ function processPayload(payload: Payload): PortfolioPerformance {
       dailyTwrrSeries.data.push([date, dailyTwrr]);
 
       cashFlowSeries.data.push([date, ctx.cashFlow]);
+
+      if (portfolio.benchmark) {
+        const startDay = dayjs(startDate);
+        const benchmarkVal = stocksData[
+          portfolio.benchmark
+        ].adjustedSeries?.get(date);
+        if (startDay.isSameOrBefore(date)) {
+          if (!ctx.benchmarkInitial && benchmarkVal) {
+            ctx.benchmarkInitial = benchmarkVal;
+          }
+          benchmarkSeries.data.push([
+            date,
+            calcBenchmarkReturn(
+              date,
+              stocksData,
+              ctx.benchmarkInitial,
+              portfolio.benchmark
+            ),
+          ]);
+        }
+      }
     },
   });
 
   cutTimeSeries(valueSeries, startDate, endDate);
   cutTimeSeries(gainSeries, startDate, endDate);
   cutTimeSeries(cashFlowSeries, startDate, endDate);
+  cutTimeSeries(benchmarkSeries, startDate, endDate);
   const twrrSeries = accumulateDailyTwrr(dailyTwrrSeries, startDate, endDate);
 
   const holdings = calcHoldings(
@@ -140,5 +166,6 @@ function processPayload(payload: Payload): PortfolioPerformance {
     cash: ctx.cash,
     totalHoldingsValue: valueSeries.getLast() - ctx.cash,
     holdings,
+    benchmarkSeries,
   };
 }

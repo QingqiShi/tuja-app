@@ -9,13 +9,16 @@ import {
   RiFileListLine,
   RiMenuAddLine,
   RiDeleteBinLine,
+  RiArrowLeftRightLine,
 } from 'react-icons/ri';
-import { TopBar, Type } from '@tuja/components';
+import { Modal, TopBar, Type } from '@tuja/components';
 import { theme } from 'theme';
 import useAuth from 'hooks/useAuth';
 import usePortfolio from 'hooks/usePortfolio';
 import useStocksData from 'hooks/useStocksData';
+import { updatePortfolioBenchmark } from 'libs/portfolio';
 import SignIn from './SignIn';
+import SetBenchmarkForm from './SetBenchmarkForm';
 
 const PopOut = styled.div`
   position: fixed;
@@ -56,6 +59,13 @@ const BetaBadge = styled.span`
   width: 0;
 `;
 
+const ModalContainer = styled.div`
+  width: 400px;
+  max-width: 100%;
+  text-align: center;
+  position: relative;
+`;
+
 interface NavBarProps {
   showSignIn?: boolean;
   setShowSignIn?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -82,6 +92,8 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
     }
   }, [setShowSignIn, state]);
 
+  const [showBenchmarkModal, setShowBenchmarkModal] = useState(false);
+
   const links: React.ComponentProps<typeof TopBar>['links'] = [];
   const endLinks: React.ComponentProps<typeof TopBar>['links'] = [];
   const menu: React.ComponentProps<typeof TopBar>['links'] = [];
@@ -106,6 +118,11 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
   }
 
   if (state === 'SIGNED_IN') {
+    menu.push({
+      children: 'Set benchmark',
+      startIcon: <RiArrowLeftRightLine />,
+      onClick: () => setShowBenchmarkModal(true),
+    });
     menu.push({
       children: 'Create portfolio',
       startIcon: <RiMenuAddLine />,
@@ -160,6 +177,21 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
         <PopOut>
           <SignIn ref={popOutRef} />
         </PopOut>
+      )}
+      {showBenchmarkModal && portfolio && (
+        <Modal onClose={() => setShowBenchmarkModal(false)}>
+          <ModalContainer>
+            <Type scale="h5">Portfolio Benchmark</Type>
+            <SetBenchmarkForm
+              defaultBenchmark={portfolio.benchmark}
+              onClose={() => setShowBenchmarkModal(false)}
+              onSubmit={(benchmark) =>
+                updatePortfolioBenchmark(portfolio.id, benchmark)
+              }
+              onDelete={() => updatePortfolioBenchmark(portfolio.id, '')}
+            />
+          </ModalContainer>
+        </Modal>
       )}
     </>
   );
