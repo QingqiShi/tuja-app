@@ -21,7 +21,7 @@
     "d3-scale": "^3.2.3",
     "dayjs": "^1.9.6",
     "escape-string-regexp": "^4.0.0",
-    "idb": "^5.0.7",
+    "idb": "^5.0.8",
     "polished": "^4.0.5",
     "react-helmet-async": "^1.0.7",
     "react-icons": "^4.1.0",
