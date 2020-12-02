@@ -44,7 +44,7 @@
     "@testing-library/user-event": "^12.3.0",
     "@types/body-scroll-lock": "^2.6.1",
     "@types/d3-array": "^2.8.0",
-    "@types/jest": "^26.0.15",
+    "@types/jest": "^26.0.16",
     "@types/react-router-dom": "^5.1.6",
     "@types/uuid": "^8.3.0",
     "babel-loader": "^8.1.0",
