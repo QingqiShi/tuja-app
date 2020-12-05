@@ -2,12 +2,12 @@ import { useMemo } from 'react';
 import { useTheme } from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { scaleOrdinal } from 'd3-scale';
-import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
+import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import { theme } from 'theme';
 
 function useColors() {
   const styledTheme = useTheme();
-  const { portfolioPerformance } = usePortfolioPerformance();
+  const { portfolioPerformance } = usePortfolioProcessor();
 
   const getColor = useMemo(() => {
     const holdings = portfolioPerformance?.holdings;

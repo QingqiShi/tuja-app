@@ -3,6 +3,7 @@ import { Switch, Route, Redirect, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import minMax from 'dayjs/plugin/minMax';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -12,9 +13,8 @@ import NavBar from 'components/NavBar';
 import GlobalLoader from 'components/GlobalLoader';
 import useAuth, { AuthProvider } from 'hooks/useAuth';
 import usePortfolio, { PortfolioProvider } from 'hooks/usePortfolio';
-import { PortfolioPerformanceProvider } from 'hooks/usePortfolioPerformance';
+import { PortfolioProcessorProvider } from 'hooks/usePortfolioProcessor';
 import { StartDateProvider } from 'hooks/useStartDate';
-import { StocksDataProvider } from 'hooks/useStocksData';
 import { LoadingStateProvider } from 'hooks/useLoadingState';
 import { theme } from 'theme';
 
@@ -31,6 +31,7 @@ if (window.location.hostname === 'localhost') {
 }
 
 dayjs.extend(isSameOrBefore);
+dayjs.extend(minMax);
 
 const Container = styled.div`
   padding-bottom: calc(
@@ -113,18 +114,16 @@ function AppShellWithProviders() {
     <AuthProvider>
       <LoadingStateProvider>
         <StartDateProvider>
-          <StocksDataProvider>
-            <PortfolioProvider
-              portfolioId={
-                match ? match?.params.portfolioId : 'example-portfolio'
-              }
-            >
-              <PortfolioPerformanceProvider>
-                <GlobalLoader />
-                <AppShell />
-              </PortfolioPerformanceProvider>
-            </PortfolioProvider>
-          </StocksDataProvider>
+          <PortfolioProvider
+            portfolioId={
+              match ? match?.params.portfolioId : 'example-portfolio'
+            }
+          >
+            <PortfolioProcessorProvider>
+              <GlobalLoader />
+              <AppShell />
+            </PortfolioProcessorProvider>
+          </PortfolioProvider>
         </StartDateProvider>
       </LoadingStateProvider>
     </AuthProvider>

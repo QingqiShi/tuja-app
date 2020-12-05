@@ -6,7 +6,6 @@ import UpdateAllocation from 'components/UpdateAllocation';
 import InvestmentsListItem from 'components/InvestmentsListItem';
 import { PortfolioPerformance } from 'libs/portfolio';
 import useColors from 'hooks/useColors';
-import useStocksData from 'hooks/useStocksData';
 import { theme } from 'theme';
 
 const SortByContainer = styled.div`
@@ -48,7 +47,6 @@ function InvestmentsList({
     'GAIN' | 'VALUE' | 'ALLOCATION' | 'TODAY' | 'CHART'
   >('CHART');
 
-  const { stocksData } = useStocksData();
   const getColor = useColors();
 
   const value = valueSeries.getLast();
@@ -62,8 +60,8 @@ function InvestmentsList({
           return holdings[b].value / value - holdings[a].value / value;
         case 'TODAY':
           return (
-            (stocksData[b].livePrice?.change_p ?? 0) -
-            (stocksData[a].livePrice?.change_p ?? 0)
+            (holdings[b].livePrice?.change_p ?? 0) -
+            (holdings[a].livePrice?.change_p ?? 0)
           );
         case 'GAIN':
         default:

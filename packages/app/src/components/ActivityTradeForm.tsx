@@ -20,8 +20,7 @@ import {
   Card,
   CardMedia,
 } from 'commonStyledComponents';
-import useStocksData from 'hooks/useStocksData';
-import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
+import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import { theme, getTheme } from 'theme';
 import type { Activity, ActivityFormProps } from 'libs/activities';
 
@@ -108,8 +107,7 @@ function ActivityTradeForm({
   onSubmit,
   onDelete,
 }: ActivityTradeFormProps) {
-  const { stocksData } = useStocksData();
-  const { portfolioPerformance } = usePortfolioPerformance();
+  const { portfolioPerformance } = usePortfolioProcessor();
   const [date, setDate] = useState<Date>(initialActivity?.date ?? new Date());
   const [tickerToAdd, setTickerToAdd] = useState('');
   const [quantityToAdd, setQuantityToAdd] = useState(0);
@@ -275,8 +273,8 @@ function ActivityTradeForm({
           <InvestmentRow key={`investment-${ticker}`}>
             <NumberInput
               label={
-                stocksData[ticker]?.info?.Name
-                  ? `${ticker} - ${stocksData[ticker]?.info?.Name}`
+                portfolioPerformance?.holdings[ticker]?.info?.Name
+                  ? `${ticker} - ${portfolioPerformance?.holdings[ticker]?.info?.Name}`
                   : `${ticker}`
               }
               value={units}

@@ -15,8 +15,8 @@ import { Modal, TopBar, Type } from '@tuja/components';
 import { theme } from 'theme';
 import useAuth from 'hooks/useAuth';
 import usePortfolio from 'hooks/usePortfolio';
-import useStocksData from 'hooks/useStocksData';
 import { updatePortfolioBenchmark } from 'libs/portfolio';
+import { getDB, clearCache } from 'workers/modules/cachedStocksData';
 import SignIn from './SignIn';
 import SetBenchmarkForm from './SetBenchmarkForm';
 
@@ -74,7 +74,6 @@ interface NavBarProps {
 function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
   const { state, signOut } = useAuth();
   const { portfolio } = usePortfolio();
-  const { clearCache } = useStocksData();
   const location = useLocation();
 
   const [internalShow, setInternalShow] = useState(false);
@@ -141,7 +140,11 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
     menu.push({
       children: 'Clear cache',
       startIcon: <RiDeleteBinLine />,
-      onClick: clearCache,
+      onClick: async () => {
+        const db = await getDB();
+        await clearCache(db);
+        window.location.reload();
+      },
     });
     menu.push({
       children: 'Sign out',

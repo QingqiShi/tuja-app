@@ -1,5 +1,5 @@
 import escapeRegexp from 'escape-string-regexp';
-import type { StocksData } from './stocksClient';
+import type { StockHistory } from './stocksClient';
 
 // A map for special currency cases
 const currencyNormalisation: {
@@ -35,7 +35,7 @@ export function exchangeCurrency(
   currency: string,
   baseCurrency: string,
   date: Date,
-  stocksData: StocksData
+  stocksHistory: { [ticker: string]: StockHistory }
 ) {
   const normalisedValue =
     currency in currencyNormalisation
@@ -47,7 +47,7 @@ export function exchangeCurrency(
     return normalisedValue;
   }
 
-  return normalisedValue * (stocksData[forexPair]?.closeSeries?.get(date) ?? 1);
+  return normalisedValue * (stocksHistory[forexPair]?.close?.get(date) ?? 1);
 }
 
 export function formatCurrency(currency: string, value: number) {
