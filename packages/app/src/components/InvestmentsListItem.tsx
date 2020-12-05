@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { RiEdit2Line, RiPercentLine } from 'react-icons/ri';
 import styled, { css } from 'styled-components/macro';
 import { transparentize } from 'polished';
@@ -6,11 +6,13 @@ import { Button, Chart, Type } from '@tuja/components';
 import { PortfolioPerformance } from 'libs/portfolio';
 import { formatCurrency } from 'libs/forex';
 import usePortfolio from 'hooks/usePortfolio';
-import useStocksData from 'hooks/useStocksData';
+import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import useStartDate from 'hooks/useStartDate';
 import { Card } from 'commonStyledComponents';
 import useAuth from 'hooks/useAuth';
 import { theme, getTheme } from 'theme';
+import { StockHistory } from 'libs/stocksClient';
+import { getDB, getStocksHistory } from 'workers/modules/cachedStocksData';
 
 const InvestmentContainer = styled.div`
   position: relative;
@@ -147,6 +149,8 @@ interface InvestmentsListItemProps {
   onSetAllocation?: () => void;
 }
 
+const endDate = new Date();
+
 function InvestmentsListItem({
   ticker,
   holdingPerformance,
@@ -160,16 +164,30 @@ function InvestmentsListItem({
 }: InvestmentsListItemProps) {
   const { state } = useAuth();
   const { portfolio } = usePortfolio();
-  const { stocksData } = useStocksData();
+  const { isReady } = usePortfolioProcessor();
   const [startDate] = useStartDate();
+
+  // Load stock history from cache so we can display chart
+  const [stockHistory, setStockHistory] = useState<StockHistory | null>(null);
+  useEffect(() => {
+    const fetch = async () => {
+      if (startDate) {
+        const db = await getDB();
+        const result = await getStocksHistory(db, [ticker], startDate, endDate);
+        setStockHistory(result[ticker]);
+      }
+    };
+    if (isReady) {
+      fetch();
+    }
+  }, [isReady, startDate, ticker]);
 
   if (!portfolio || portfolioValue === 0) {
     return null;
   }
 
   const { currency, aliases, targetAllocations } = portfolio;
-  const { value, gain, units, returns } = holdingPerformance;
-  const { info, livePrice } = stocksData[ticker];
+  const { value, gain, units, returns, info, livePrice } = holdingPerformance;
 
   return (
     <InvestmentContainer onClick={onToggle}>
@@ -228,7 +246,7 @@ function InvestmentsListItem({
           {mode === 'CHART' && (
             <PriceContainer>
               <Chart
-                data={stocksData[ticker].adjustedSeries?.data.filter(
+                data={stockHistory?.adjusted?.data.filter(
                   (dp) => startDate && dp[0] >= startDate
                 )}
                 hideTooltip

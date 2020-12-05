@@ -2,7 +2,11 @@ import dayjs from 'dayjs';
 import TimeSeries from 'libs/timeSeries';
 import BigNumber from 'bignumber.js';
 import { exchangeCurrency } from 'libs/forex';
-import type { StocksData } from 'libs/stocksClient';
+import type {
+  StockHistory,
+  StockInfo,
+  StockLivePrice,
+} from 'libs/stocksClient';
 import type { PortfolioPerformance } from 'libs/portfolio';
 import type { ActivityIterateItem } from './activityIterator';
 
@@ -44,7 +48,8 @@ export function collectHoldingsCost(
     numShares: { [ticker: string]: number };
     costs: { [ticker: string]: number };
   },
-  stocksData: StocksData,
+  stocksInfo: { [ticker: string]: StockInfo },
+  stocksHistory: { [ticker: string]: StockHistory },
   baseCurrency: string
 ) {
   const newUnits: { [ticker: string]: number } = {};
@@ -57,8 +62,9 @@ export function collectHoldingsCost(
   };
   // Trades
   Object.keys(item.trades).forEach((ticker) => {
-    const stock = stocksData[ticker];
-    if (!stock) return;
+    const stockInfo = stocksInfo[ticker];
+    const stockHistory = stocksHistory[ticker];
+    if (!stockInfo || !stockHistory) return;
 
     setUnits(ticker, item.trades[ticker]);
 
@@ -66,11 +72,11 @@ export function collectHoldingsCost(
       Object.keys(item.trades).length === 1
         ? item.totalTradeCost / item.trades[ticker]
         : exchangeCurrency(
-            stock.closeSeries?.get(item.date) ?? 0,
-            stock.info?.Currency ?? baseCurrency,
+            stockHistory.close.get(item.date) ?? 0,
+            stockInfo.Currency ?? baseCurrency,
             baseCurrency,
             item.date,
-            stocksData
+            stocksHistory
           );
     const units = newUnits[ticker];
     const currentCost = costs[ticker] ?? 0;
@@ -108,20 +114,22 @@ export function collectCashFlow(
 export function calcHoldingsValues(
   date: Date,
   holdingsNumShares: { [ticker: string]: number },
-  stocksData: StocksData,
+  stocksInfo: { [ticker: string]: StockInfo },
+  stocksHistory: { [ticker: string]: StockHistory },
   baseCurrency: string
 ) {
   const holdingsValues: { [ticker: string]: number } = {};
   let totalHoldingsValue = 0;
   Object.keys(holdingsNumShares).forEach((ticker) => {
-    const stock = stocksData[ticker];
-    if (!stock) return;
+    const stockInfo = stocksInfo[ticker];
+    const stockHistory = stocksHistory[ticker];
+    if (!stockInfo || !stockHistory) return;
     const price = exchangeCurrency(
-      stock.closeSeries?.get(date) ?? 0,
-      stock.info?.Currency ?? baseCurrency,
+      stockHistory.close.get(date) ?? 0,
+      stockInfo.Currency ?? baseCurrency,
       baseCurrency,
       date,
-      stocksData
+      stocksHistory
     );
     holdingsValues[ticker] = price * holdingsNumShares[ticker];
     totalHoldingsValue += holdingsValues[ticker];
@@ -154,22 +162,25 @@ export function calcGain(totalValue: number, cashFlow: number) {
 export function calcHoldings(
   numShares: { [ticker: string]: number },
   costs: { [ticker: string]: number },
-  stocksData: StocksData,
   endDate: Date,
-  baseCurrency: string
+  baseCurrency: string,
+  stocksInfo: { [ticker: string]: StockInfo },
+  stocksHistory: { [ticker: string]: StockHistory },
+  stocksLivePrice: { [ticker: string]: StockLivePrice }
 ) {
   const holdings: PortfolioPerformance['holdings'] = {};
   Object.keys(numShares).forEach((ticker) => {
-    const stock = stocksData[ticker];
-    if (!stock) return;
+    const stockInfo = stocksInfo[ticker];
+    const stockHistory = stocksHistory[ticker];
+    if (!stockInfo || !stockHistory) return;
 
     const units = numShares[ticker];
     const price = exchangeCurrency(
-      stock.closeSeries?.get(endDate) ?? 0,
-      stock.info?.Currency ?? baseCurrency,
+      stockHistory.close.get(endDate) ?? 0,
+      stockInfo.Currency ?? baseCurrency,
       baseCurrency,
       endDate,
-      stocksData
+      stocksHistory
     );
     const value = units * price;
     const cost = costs[ticker];
@@ -181,6 +192,8 @@ export function calcHoldings(
       value,
       gain,
       returns,
+      info: stocksInfo[ticker],
+      livePrice: stocksLivePrice[ticker],
     };
   });
   return holdings;
@@ -227,14 +240,12 @@ export function cutTimeSeries(
 
 export function calcBenchmarkReturn(
   date: Date,
-  stocksData: StocksData,
+  stocksHistory: { [ticker: string]: StockHistory },
   initialValue?: number,
   benchmarkTicker?: string
 ) {
   if (benchmarkTicker && initialValue) {
-    const benchmarkValue = stocksData[benchmarkTicker].adjustedSeries?.get(
-      date
-    );
+    const benchmarkValue = stocksHistory[benchmarkTicker]?.adjusted.get(date);
     if (benchmarkValue) {
       return (benchmarkValue - initialValue) / initialValue;
     }

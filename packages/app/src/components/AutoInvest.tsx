@@ -3,7 +3,6 @@ import styled from 'styled-components/macro';
 import { Table, TableRow, TableHeader, TableCell } from '@tuja/components';
 import CurrencyInput from 'components/CurrencyInput';
 import usePortfolio from 'hooks/usePortfolio';
-import useStocksData from 'hooks/useStocksData';
 import { PortfolioPerformance } from 'libs/portfolio';
 import { formatCurrency } from 'libs/forex';
 import { CardMedia } from 'commonStyledComponents';
@@ -24,7 +23,6 @@ interface AutoInvestProps {
 
 function AutoInvest({ portfolioPerformance }: AutoInvestProps) {
   const { portfolio } = usePortfolio();
-  const { stocksData } = useStocksData();
 
   const targetAllocations = portfolio?.targetAllocations;
   const holdings = portfolioPerformance.holdings;
@@ -91,7 +89,7 @@ function AutoInvest({ portfolioPerformance }: AutoInvestProps) {
                     <TableCell
                       secondary={
                         portfolio.aliases[ticker] ??
-                        stocksData[ticker].info?.Name ??
+                        holdings[ticker].info?.Name ??
                         ticker
                       }
                     >

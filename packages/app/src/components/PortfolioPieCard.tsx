@@ -5,7 +5,7 @@ import { Card, CardMedia } from 'commonStyledComponents';
 import { formatCurrency } from 'libs/forex';
 import usePortfolio from 'hooks/usePortfolio';
 import useColors from 'hooks/useColors';
-import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
+import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import { theme } from 'theme';
 
 const PieContainer = styled.div`
@@ -48,7 +48,7 @@ interface PortfolioPieCardProps {}
 
 function PortfolioPieCard(_props: PortfolioPieCardProps) {
   const { portfolio } = usePortfolio();
-  const { portfolioPerformance } = usePortfolioPerformance();
+  const { portfolioPerformance } = usePortfolioProcessor();
 
   const portfolioValue = portfolioPerformance?.valueSeries.getLast() ?? 0;
 

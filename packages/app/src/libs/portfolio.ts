@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import firebase from 'firebase/app';
 import TimeSeries from './timeSeries';
 import { Activity } from './activities';
+import { StockInfo, StockLivePrice } from './stocksClient';
 
 const PORTFOLIO_DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -33,6 +34,8 @@ export interface PortfolioPerformance {
       gain: number;
       units: number;
       returns: number;
+      info: StockInfo;
+      livePrice: StockLivePrice;
     };
   };
 }

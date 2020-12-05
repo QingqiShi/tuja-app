@@ -8,7 +8,7 @@ import EditableTitle from 'components/EditableTitle';
 import { updatePortfolioName } from 'libs/portfolio';
 import { formatCurrency } from 'libs/forex';
 import usePortfolio from 'hooks/usePortfolio';
-import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
+import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import useStartDate from 'hooks/useStartDate';
 import { theme, getTheme } from 'theme';
 
@@ -108,7 +108,7 @@ interface PortfolioOverviewProps {
 function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
   const history = useHistory();
   const { portfolio, portfolios } = usePortfolio();
-  const { portfolioPerformance } = usePortfolioPerformance();
+  const { portfolioPerformance } = usePortfolioProcessor();
   const [startDate] = useStartDate();
 
   if (!portfolio) {

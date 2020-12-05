@@ -12,6 +12,13 @@ export interface StockInfo {
   Type?: string;
 }
 
+export interface StockHistory {
+  ticker: string;
+  close: TimeSeries;
+  adjusted: TimeSeries;
+  range: { startDate: Date; endDate: Date };
+}
+
 export interface StockLivePrice {
   date: Date;
   code: string;
@@ -149,6 +156,48 @@ export function resolveMissingStocksHistory(
         startDate: dayjs(existingData.seriesRange.endDate)
           .add(1, 'day')
           .toDate(),
+        endDate,
+      });
+    }
+
+    return missingData;
+  });
+}
+
+export function getMissingStocksHistory(
+  tickers: string[],
+  stocksHistory: { [ticker: string]: StockHistory },
+  startDate: Date,
+  endDate: Date
+) {
+  return tickers.flatMap((ticker) => {
+    const existingData = stocksHistory[ticker];
+
+    if (
+      !existingData ||
+      !existingData.range ||
+      !existingData.adjusted ||
+      !existingData.close
+    ) {
+      return { ticker, startDate, endDate };
+    }
+
+    const missingData = [];
+
+    if (dayjs(startDate).isBefore(existingData.range.startDate, 'date')) {
+      missingData.push({
+        ticker,
+        startDate,
+        endDate: dayjs(existingData.range.startDate)
+          .subtract(1, 'day')
+          .toDate(),
+      });
+    }
+
+    if (dayjs(endDate).isAfter(existingData.range.endDate, 'date')) {
+      missingData.push({
+        ticker,
+        startDate: dayjs(existingData.range.endDate).add(1, 'day').toDate(),
         endDate,
       });
     }

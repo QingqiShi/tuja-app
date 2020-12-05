@@ -2,9 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { Portfolio, watchPortfolio, examplePortfolio } from 'libs/portfolio';
 import useAuth from './useAuth';
-import useStocksData from './useStocksData';
 import useStartDate from './useStartDate';
-import useLoadingState from './useLoadingState';
 
 export const PortfolioContext = createContext({
   portfolio: null as Portfolio | null,
@@ -23,9 +21,7 @@ export function PortfolioProvider({
   children,
   portfolioId,
 }: React.PropsWithChildren<PortfolioProviderProps>) {
-  const [globalLoading] = useLoadingState();
   const { state, currentUser } = useAuth();
-  const { addTickers } = useStocksData();
   const [startDate, setStartDate] = useStartDate();
   const [loaded, setLoaded] = useState(false);
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
@@ -50,26 +46,6 @@ export function PortfolioProvider({
       setLoaded(true);
     });
   }, [authStateKnown, uid]);
-
-  const portfolioCurrency = portfolio?.currency;
-  const portfolioTickers = portfolio?.tickers;
-  useEffect(() => {
-    if (!globalLoading && portfolioTickers && portfolioCurrency) {
-      const tickers = new Set(portfolioTickers);
-      if (portfolio?.benchmark) {
-        tickers.add(portfolio.benchmark);
-      }
-      console.log('addTickers', tickers);
-      addTickers([...tickers], startDate, portfolioCurrency);
-    }
-  }, [
-    addTickers,
-    globalLoading,
-    portfolio?.benchmark,
-    portfolioCurrency,
-    portfolioTickers,
-    startDate,
-  ]);
 
   const portfolioStartDate = portfolio?.activities[0]?.date;
   useEffect(() => {

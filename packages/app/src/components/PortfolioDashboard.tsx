@@ -14,7 +14,7 @@ import ActivityStockDividendForm from 'components/ActivityStockDividendForm';
 import AutoInvest from 'components/AutoInvest';
 import { Card, CardMedia } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
-import usePortfolioPerformance from 'hooks/usePortfolioPerformance';
+import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import useStartDate from 'hooks/useStartDate';
 import { addPortfolioActivity } from 'libs/portfolio';
 import { Activity } from 'libs/activities';
@@ -102,7 +102,7 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
   // Context data
   const [startDate, setStartDate] = useStartDate();
   const { portfolio } = usePortfolio();
-  const { portfolioPerformance } = usePortfolioPerformance();
+  const { portfolioPerformance } = usePortfolioProcessor();
 
   // Chart type selection
   const [selectedChart, setSelectedChart] = useState('value');
