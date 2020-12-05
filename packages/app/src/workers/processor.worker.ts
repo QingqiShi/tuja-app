@@ -6,12 +6,7 @@ import firebase from 'firebase/app';
 import 'firebase/functions';
 import type { Portfolio, PortfolioPerformance } from 'libs/portfolio';
 import { getForexPair } from 'libs/forex';
-import {
-  StockHistory,
-  StockInfo,
-  fetchStockLivePrice,
-  StockLivePrice,
-} from 'libs/stocksClient';
+import { StockHistory, StockInfo, StockLivePrice } from 'libs/stocksClient';
 import TimeSeries from 'libs/timeSeries';
 import {
   getActivitiesIterator,
@@ -34,6 +29,7 @@ import {
   getDB,
   getStocksHistory,
   getStocksInfo,
+  getStocksLivePrice,
 } from './modules/cachedStocksData';
 
 firebase.initializeApp({
@@ -148,13 +144,10 @@ async function processPortfolio(payload: ProcessPortfolioPayload) {
   );
 
   // Fetch live prices and merge into stocksHistory
-  console.log('fetch live prices', [...tickers, ...currencies]);
-  const stocksLivePrices: { [ticker: string]: StockLivePrice } = {};
-  (await fetchStockLivePrice([...tickers, ...currencies])).forEach(
-    (livePrice) => {
-      stocksLivePrices[livePrice.code] = livePrice;
-    }
-  );
+  const stocksLivePrices = await getStocksLivePrice(db, [
+    ...tickers,
+    ...currencies,
+  ]);
   mergeLivePricesIntoHistory(stocksLivePrices, stocksHistory);
 
   // Process portfolio

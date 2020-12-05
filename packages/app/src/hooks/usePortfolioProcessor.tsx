@@ -28,6 +28,22 @@ export function PortfolioProcessorProvider({
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    if (!portfolioPerformance && portfolio) {
+      const saved = localStorage.getItem(`performance-${portfolio.id}`);
+      const parsed = saved && JSON.parse(saved);
+      if (parsed) {
+        setPortfolioPerformance({
+          ...parsed,
+          valueSeries: new TimeSeries(parsed.valueSeries),
+          cashFlowSeries: new TimeSeries(parsed.cashFlowSeries),
+          gainSeries: new TimeSeries(parsed.gainSeries),
+          twrrSeries: new TimeSeries(parsed.twrrSeries),
+        });
+      }
+    }
+  }, [portfolio, portfolioPerformance]);
+
+  useEffect(() => {
     const worker = new Processor();
 
     if (portfolio && startDate && endDate) {
@@ -43,13 +59,18 @@ export function PortfolioProcessorProvider({
       const messageData = e.data;
       if (messageData?.type === 'process-portfolio') {
         setLoadingState(false);
-        setPortfolioPerformance({
+        const newPortfolioPerformance = {
           ...messageData.payload,
           valueSeries: new TimeSeries(messageData.payload.valueSeries),
           cashFlowSeries: new TimeSeries(messageData.payload.cashFlowSeries),
           gainSeries: new TimeSeries(messageData.payload.gainSeries),
           twrrSeries: new TimeSeries(messageData.payload.twrrSeries),
-        });
+        };
+        localStorage.setItem(
+          `performance-${newPortfolioPerformance.id}`,
+          JSON.stringify(newPortfolioPerformance)
+        );
+        setPortfolioPerformance(newPortfolioPerformance);
         setIsReady(true);
       }
     };

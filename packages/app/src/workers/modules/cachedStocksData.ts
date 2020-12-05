@@ -1,15 +1,17 @@
 import dayjs from 'dayjs';
 import { IDBPDatabase, DBSchema, openDB } from 'idb';
 import {
+  fetchStockLivePrice,
   fetchStocksHistory,
   fetchStocksInfo,
   getMissingStocksHistory,
   StockHistory,
   StockInfo,
+  StockLivePrice,
 } from 'libs/stocksClient';
 import TimeSeries from 'libs/timeSeries';
 
-interface DBSchemaV2 extends DBSchema {
+interface DBSchemaV3 extends DBSchema {
   stocksInfo: {
     key: string;
     value: StockInfo;
@@ -18,12 +20,16 @@ interface DBSchemaV2 extends DBSchema {
     key: string;
     value: StockHistory;
   };
+  stocksLivePrice: {
+    key: string;
+    value: { timestamp: number; livePrice: StockLivePrice };
+  };
 }
 
-type Database = IDBPDatabase<DBSchemaV2>;
+type Database = IDBPDatabase<DBSchemaV3>;
 
 export function getDB(): Promise<Database> {
-  return openDB<DBSchemaV2>('stocksData', 2, {
+  return openDB<DBSchemaV3>('stocksData', 3, {
     upgrade(upgradeDB, oldVersion) {
       if (oldVersion < 1) {
         upgradeDB.createObjectStore('stocksInfo', {
@@ -33,6 +39,11 @@ export function getDB(): Promise<Database> {
       if (oldVersion < 2) {
         upgradeDB.createObjectStore('stocksHistory', {
           keyPath: 'ticker',
+        });
+      }
+      if (oldVersion < 3) {
+        upgradeDB.createObjectStore('stocksLivePrice', {
+          keyPath: 'livePrice.code',
         });
       }
     },
@@ -157,6 +168,46 @@ export async function getStocksHistory(
   await writeTx.done;
 
   return stocksHistory;
+}
+
+export async function getStocksLivePrice(db: Database, tickers: string[]) {
+  const stocksLivePrice: { [ticker: string]: StockLivePrice } = {};
+  const readTx = db.transaction(['stocksLivePrice'], 'readonly');
+  const readStore = readTx.objectStore('stocksLivePrice');
+  const timestamp = new Date().getTime();
+  const threshold = 900000; // 15 minutes
+
+  // Get stocks info from the cache db
+  await Promise.all(
+    tickers.map(async (ticker) => {
+      const stockLivePrice = await readStore.get(ticker);
+      if (stockLivePrice && timestamp - stockLivePrice.timestamp < threshold) {
+        stocksLivePrice[ticker] = stockLivePrice.livePrice;
+      }
+    })
+  );
+  await readTx.done;
+
+  // Fetch missing stocks info and write to cache
+  const tickersToFetch = tickers.filter(
+    (ticker) => !(ticker in stocksLivePrice)
+  );
+  if (tickersToFetch.length) {
+    console.log('fetch live prices', tickersToFetch);
+    const fetchedStocksLivePrice = await fetchStockLivePrice(tickersToFetch);
+
+    const writeTx = db.transaction(['stocksLivePrice'], 'readwrite');
+    const writeStore = writeTx.objectStore('stocksLivePrice');
+    await Promise.all(
+      fetchedStocksLivePrice.map((stockLivePrice) => {
+        stocksLivePrice[stockLivePrice.code] = stockLivePrice;
+        return writeStore.add({ timestamp, livePrice: stockLivePrice });
+      })
+    );
+    await writeTx.done;
+  }
+
+  return stocksLivePrice;
 }
 
 export async function clearCache(db: Database) {
