@@ -201,7 +201,7 @@ export async function getStocksLivePrice(db: Database, tickers: string[]) {
     await Promise.all(
       fetchedStocksLivePrice.map((stockLivePrice) => {
         stocksLivePrice[stockLivePrice.code] = stockLivePrice;
-        return writeStore.add({ timestamp, livePrice: stockLivePrice });
+        return writeStore.put({ timestamp, livePrice: stockLivePrice });
       })
     );
     await writeTx.done;
