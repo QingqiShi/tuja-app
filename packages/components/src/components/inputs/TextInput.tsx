@@ -96,7 +96,7 @@ const InputContainer = styled.div`
   }
 `;
 
-interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TextInputProps extends Omit<React.ComponentProps<'input'>, 'ref'> {
   label?: string;
   helperText?: string;
   endIcon?: React.ReactNode;
