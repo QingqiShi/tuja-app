@@ -138,7 +138,7 @@ const Text = styled.span<{ hideTextOnMobile?: boolean }>`
     `}
 `;
 
-interface ButtonProps<T> extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps<T> extends Omit<React.ComponentProps<'button'>, 'ref'> {
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   icon?: React.ReactNode;
