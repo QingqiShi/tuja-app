@@ -25,7 +25,7 @@ export interface PortfolioPerformance {
   twrrSeries: TimeSeries;
   gainSeries: TimeSeries;
   cashFlowSeries: TimeSeries;
-  benchmarkSeries: TimeSeries;
+  benchmarkSeries?: TimeSeries;
   cash: number;
   totalHoldingsValue: number;
   holdings: {
@@ -38,6 +38,14 @@ export interface PortfolioPerformance {
       livePrice: StockLivePrice;
     };
   };
+}
+
+interface MaybePortfolioPerformance extends PortfolioPerformance {
+  valueSeries: any;
+  twrrSeries: any;
+  gainSeries: any;
+  cashFlowSeries: any;
+  benchmarkSeries?: any;
 }
 
 export async function createPortfolio(
@@ -157,6 +165,22 @@ export function updateHoldingAllocation(
 export function updatePortfolioBenchmark(id: string, benchmarkTicker: string) {
   const docRef = firebase.firestore().collection(`/portfolios`).doc(id);
   return docRef.update({ benchmark: benchmarkTicker });
+}
+
+export function processPerformanceSeries<T>(
+  portfolioPerformance: MaybePortfolioPerformance,
+  handleTimeSeries: (x: any) => T
+) {
+  return {
+    ...portfolioPerformance,
+    valueSeries: handleTimeSeries(portfolioPerformance.valueSeries),
+    twrrSeries: handleTimeSeries(portfolioPerformance.twrrSeries),
+    gainSeries: handleTimeSeries(portfolioPerformance.gainSeries),
+    cashFlowSeries: handleTimeSeries(portfolioPerformance.cashFlowSeries),
+    benchmarkSeries:
+      portfolioPerformance.benchmarkSeries &&
+      handleTimeSeries(portfolioPerformance.benchmarkSeries),
+  };
 }
 
 function dbToPortfolio(data: any): Portfolio {

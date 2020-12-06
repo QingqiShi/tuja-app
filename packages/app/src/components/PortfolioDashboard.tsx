@@ -269,11 +269,7 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                   <Chart
                     data={portfolioPerformance?.twrrSeries.data ?? []}
                     formatValue={(val) => `${(val * 100).toFixed(1)}%`}
-                    benchmark={
-                      portfolio.benchmark
-                        ? portfolioPerformance?.benchmarkSeries.data
-                        : undefined
-                    }
+                    benchmark={portfolioPerformance?.benchmarkSeries?.data}
                     benchmarkLabel={portfolio.benchmark}
                     hideAxis
                   />

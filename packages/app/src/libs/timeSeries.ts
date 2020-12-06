@@ -28,6 +28,15 @@ class TimeSeries {
     });
 
     this.data = [...this.data].sort((a, b) => a[0].getTime() - b[0].getTime());
+    return this;
+  }
+
+  toPlainObject() {
+    return {
+      data: this.data.map(
+        ([date, val]) => [dayjs(date).format('YYYY-MM-DD'), val] as const
+      ),
+    };
   }
 
   mergeWith(series: TimeSeries) {

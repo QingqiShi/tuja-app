@@ -175,7 +175,7 @@ export async function getStocksLivePrice(db: Database, tickers: string[]) {
   const readTx = db.transaction(['stocksLivePrice'], 'readonly');
   const readStore = readTx.objectStore('stocksLivePrice');
   const timestamp = new Date().getTime();
-  const threshold = 900000; // 15 minutes
+  const threshold = 180000; // 3 minutes
 
   // Get stocks info from the cache db
   await Promise.all(
@@ -216,4 +216,7 @@ export async function clearCache(db: Database) {
 
   const clearStocksInfoTx = db.transaction('stocksInfo', 'readwrite');
   await clearStocksInfoTx.objectStore('stocksInfo').clear();
+
+  const clearStocksLivePriceTx = db.transaction('stocksLivePrice', 'readwrite');
+  await clearStocksLivePriceTx.objectStore('stocksLivePrice').clear();
 }
