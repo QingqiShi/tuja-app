@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useMeasure } from 'react-use';
 import styled, { useTheme } from 'styled-components';
 import { lighten } from 'polished';

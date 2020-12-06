@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import { PortfolioPerformance } from 'libs/portfolio';
 import TimeSeries from 'libs/timeSeries';
 import usePortfolio from 'hooks/usePortfolio';

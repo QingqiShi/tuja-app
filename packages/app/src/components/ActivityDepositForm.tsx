@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { RiHandCoinLine, RiDeleteBinLine } from 'react-icons/ri';
 import { v4 as uuid } from 'uuid';
 import { Button, DateInput } from '@tuja/components';

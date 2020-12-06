@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components/macro';
 import { RiBriefcaseLine, RiAddLine } from 'react-icons/ri';
 import { Button, Select, TextInput, Type } from '@tuja/components';

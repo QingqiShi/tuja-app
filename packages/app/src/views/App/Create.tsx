@@ -1,4 +1,3 @@
-import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import useAuth from 'hooks/useAuth';

@@ -1,4 +1,3 @@
-import React from 'react';
 import FormattedInput from './FormattedInput';
 
 interface NumberInputProps

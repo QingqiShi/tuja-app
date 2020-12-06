@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { RiDragDropLine, RiCloseLine, RiFileLine } from 'react-icons/ri';

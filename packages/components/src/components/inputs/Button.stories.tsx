@@ -1,4 +1,3 @@
-import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import { FaUserCircle } from 'react-icons/fa';
 import { RiSendPlane2Line, RiHomeLine } from 'react-icons/ri';

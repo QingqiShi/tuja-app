@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { Table, TableRow, TableHeader, TableCell } from '@tuja/components';
 import CurrencyInput from 'components/CurrencyInput';

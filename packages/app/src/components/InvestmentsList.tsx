@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components/macro';
 import { Modal, Select } from '@tuja/components';
 import UpdateAlias from 'components/UpdateAlias';
