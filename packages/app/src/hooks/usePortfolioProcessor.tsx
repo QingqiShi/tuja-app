@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { PortfolioPerformance } from 'libs/portfolio';
+import { PortfolioPerformance, processPerformanceSeries } from 'libs/portfolio';
 import TimeSeries from 'libs/timeSeries';
 import usePortfolio from 'hooks/usePortfolio';
 import useStartDate from 'hooks/useStartDate';
@@ -31,14 +31,15 @@ export function PortfolioProcessorProvider({
     if (!portfolioPerformance && portfolio) {
       const saved = localStorage.getItem(`performance-${portfolio.id}`);
       const parsed = saved && JSON.parse(saved);
+      console.log(parsed);
       if (parsed) {
-        setPortfolioPerformance({
-          ...parsed,
-          valueSeries: new TimeSeries(parsed.valueSeries),
-          cashFlowSeries: new TimeSeries(parsed.cashFlowSeries),
-          gainSeries: new TimeSeries(parsed.gainSeries),
-          twrrSeries: new TimeSeries(parsed.twrrSeries),
-        });
+        setPortfolioPerformance(
+          processPerformanceSeries(
+            parsed,
+            (series: { data: [string, number][] }) =>
+              new TimeSeries().handleData(series.data)
+          )
+        );
       }
     }
   }, [portfolio, portfolioPerformance]);
@@ -56,19 +57,21 @@ export function PortfolioProcessorProvider({
     }
 
     const handler = (e: MessageEvent) => {
-      const messageData = e.data;
-      if (messageData?.type === 'process-portfolio') {
+      const { type, payload } = e.data ?? {};
+      if (type === 'process-portfolio') {
         setLoadingState(false);
-        const newPortfolioPerformance = {
-          ...messageData.payload,
-          valueSeries: new TimeSeries(messageData.payload.valueSeries),
-          cashFlowSeries: new TimeSeries(messageData.payload.cashFlowSeries),
-          gainSeries: new TimeSeries(messageData.payload.gainSeries),
-          twrrSeries: new TimeSeries(messageData.payload.twrrSeries),
-        };
+        const newPortfolioPerformance = processPerformanceSeries(
+          payload,
+          (series: { data: [Date, number][] }) => new TimeSeries(series)
+        );
         localStorage.setItem(
           `performance-${newPortfolioPerformance.id}`,
-          JSON.stringify(newPortfolioPerformance)
+          JSON.stringify(
+            processPerformanceSeries(
+              newPortfolioPerformance,
+              (series: TimeSeries) => series.toPlainObject()
+            )
+          )
         );
         setPortfolioPerformance(newPortfolioPerformance);
         setIsReady(true);
