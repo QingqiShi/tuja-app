@@ -31,7 +31,6 @@ export function PortfolioProcessorProvider({
     if (!portfolioPerformance && portfolio) {
       const saved = localStorage.getItem(`performance-${portfolio.id}`);
       const parsed = saved && JSON.parse(saved);
-      console.log(parsed);
       if (parsed) {
         setPortfolioPerformance(
           processPerformanceSeries(
