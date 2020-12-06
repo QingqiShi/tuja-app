@@ -31,7 +31,16 @@ jobs:
       #     flags: unittests
       #     name: Coverage
       #     fail_ci_if_error: true
-      - uses: dorny/paths-filter@v2
+      - run: yarn build
+      - name: Deploy to Firebase Hosting
+        if: steps.changes.outputs.hosting == 'true' || steps.changes.outputs.root == 'true'
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Check changed files
+        uses: dorny/paths-filter@v2
         id: changes
         with:
           filters: |
@@ -46,14 +55,6 @@ jobs:
               - 'package.json'
               - 'firebase.json'
               - '.firebaserc'
-      - run: yarn build
-      - name: Deploy to Firebase Hosting
-        if: steps.changes.outputs.hosting == 'true' || steps.changes.outputs.root == 'true'
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Deploy to Firebase Functions
         if: steps.changes.outputs.functions == 'true' || steps.changes.outputs.root == 'true'
         uses: w9jds/firebase-action@master
