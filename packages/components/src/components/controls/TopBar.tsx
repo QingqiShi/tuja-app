@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useIntersection, useClickAway } from 'react-use';
 import { RiMenuLine } from 'react-icons/ri';
 import styled, { css } from 'styled-components';

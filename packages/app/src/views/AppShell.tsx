@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Switch, Route, Redirect, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';

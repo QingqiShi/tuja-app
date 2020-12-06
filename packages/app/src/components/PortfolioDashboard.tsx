@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { RiMoreLine, RiSubtractLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';

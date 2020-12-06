@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { RiEdit2Line, RiPercentLine } from 'react-icons/ri';
 import styled, { css } from 'styled-components/macro';
 import { transparentize } from 'polished';

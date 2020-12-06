@@ -1,4 +1,3 @@
-import React from 'react';
 import { FormattedInput } from '@tuja/components';
 import { formatCurrency, parseCurrency } from 'libs/forex';
 

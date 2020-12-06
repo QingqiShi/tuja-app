@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { Story, Meta } from '@storybook/react';
 import appleStock from '@visx/mock-data/lib/mocks/appleStock';

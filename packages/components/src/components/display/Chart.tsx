@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef, useEffect } from 'react';
+import { useMemo, useCallback, useRef, useEffect } from 'react';
 import { useMeasure } from 'react-use';
 import styled, { css, useTheme } from 'styled-components';
 import { transparentize } from 'polished';

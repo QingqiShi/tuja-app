@@ -1,13 +1,7 @@
-import React, {
-  useState,
-  useContext,
-  createContext,
-  Dispatch,
-  SetStateAction,
-} from 'react';
+import { useState, useContext, createContext } from 'react';
 
 const StartDateContext = createContext<
-  [Date | null, Dispatch<SetStateAction<Date | null>>]
+  [Date | null, React.Dispatch<React.SetStateAction<Date | null>>]
 >([null, () => {}]);
 
 export function StartDateProvider({ children }: React.PropsWithChildren<{}>) {

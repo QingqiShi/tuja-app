@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useMemo } from 'react';
+import { forwardRef, useState, useMemo } from 'react';
 import styled from 'styled-components/macro';
 import { RiMailSendLine } from 'react-icons/ri';
 import { FaMagic, FaRegQuestionCircle } from 'react-icons/fa';

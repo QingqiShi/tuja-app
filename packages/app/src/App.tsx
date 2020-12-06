@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { useMedia } from 'react-use';
 import { ThemeProvider } from 'styled-components/macro';

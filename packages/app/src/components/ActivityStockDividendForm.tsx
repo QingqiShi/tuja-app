@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { v4 as uuid } from 'uuid';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDebounce } from 'react-use';
 import { RiAddLine, RiDeleteBinLine } from 'react-icons/ri';
 import firebase from 'firebase/app';

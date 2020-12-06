@@ -1,4 +1,4 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -28,13 +28,13 @@ if (window.location.hostname === 'localhost') {
 }
 
 ReactDOM.render(
-  <React.StrictMode>
+  <StrictMode>
     <HelmetProvider>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </HelmetProvider>
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById('root')
 );
 

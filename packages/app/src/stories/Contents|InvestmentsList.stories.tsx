@@ -1,4 +1,3 @@
-import React from 'react';
 import { PortfolioContext } from 'hooks/usePortfolio';
 import InvestmentsList from 'components/InvestmentsList';
 

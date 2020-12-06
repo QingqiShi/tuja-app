@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components/macro';
 import { Pie } from '@tuja/components';
 import { Card, CardMedia } from 'commonStyledComponents';

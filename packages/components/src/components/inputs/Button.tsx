@@ -1,4 +1,3 @@
-import React from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize, lighten } from 'polished';
 import { ctaFont, paddings } from '../../mixins';

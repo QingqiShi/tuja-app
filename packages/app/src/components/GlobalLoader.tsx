@@ -1,4 +1,3 @@
-import React from 'react';
 import useLoadingState from 'hooks/useLoadingState';
 import { TopLinearLoader } from '@tuja/components';
 
