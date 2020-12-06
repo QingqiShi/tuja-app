@@ -31,10 +31,40 @@ jobs:
       #     flags: unittests
       #     name: Coverage
       #     fail_ci_if_error: true
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            hosting:
+              - 'packages/app/**'
+              - 'packages/components/**'
+            functions:
+              - 'packages/functions/**'
+            firestore:
+              - 'firestore*'
+            root:
+              - 'package.json'
+              - 'firebase.json'
+              - '.firebaserc'
       - run: yarn build
-      - name: Deploy to Firebase
+      - name: Deploy to Firebase Hosting
+        if: steps.changes.outputs.hosting == 'true' || steps.changes.outputs.root == 'true'
         uses: w9jds/firebase-action@master
         with:
-          args: deploy
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Deploy to Firebase Functions
+        if: steps.changes.outputs.functions == 'true' || steps.changes.outputs.root == 'true'
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Deploy to Firebase Firestore
+        if: steps.changes.outputs.firestore == 'true' || steps.changes.outputs.root == 'true'
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only firestore
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
