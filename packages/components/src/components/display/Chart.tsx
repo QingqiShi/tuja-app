@@ -181,11 +181,13 @@ function Chart({
         tooltipRect,
         benchTooltipRect,
         benchmarkLabel,
+        formatValue,
       }: {
         xMax: number;
         tooltipRect: ReturnType<typeof useMeasure>[1];
         benchTooltipRect: ReturnType<typeof useMeasure>[1];
         benchmarkLabel?: string;
+        formatValue?: (val: number) => string;
       }
     ) => {
       if (tooltipLineRef.current) {
@@ -222,14 +224,18 @@ function Chart({
         tooltipDateSpanRef.current.innerText = formatTooltipDate(date);
       }
       if (tooltipValueSpanRef.current) {
-        tooltipValueSpanRef.current.innerText = dataValue.toFixed(2);
+        tooltipValueSpanRef.current.innerText = formatValue
+          ? formatValue(dataValue)
+          : dataValue.toFixed(2);
       }
       if (benchTooltipRect.width && tooltipBenchLabelSpanRef.current) {
         tooltipBenchLabelSpanRef.current.innerText =
           benchmarkLabel ?? formatTooltipDate(date);
       }
       if (benchTooltipRect.width && tooltipBenchSpanRef.current) {
-        tooltipBenchSpanRef.current.innerText = benchmarkValue.toFixed(2);
+        tooltipBenchSpanRef.current.innerText = formatValue
+          ? formatValue(benchmarkValue)
+          : benchmarkValue.toFixed(2);
       }
     }
   );
@@ -296,7 +302,7 @@ function Chart({
         date,
         dataValue ?? 0,
         benchmarkValue ?? 0,
-        { xMax, tooltipRect, benchTooltipRect, benchmarkLabel }
+        { xMax, tooltipRect, benchTooltipRect, benchmarkLabel, formatValue }
       );
     },
     [
@@ -305,6 +311,7 @@ function Chart({
       benchmarkLabel,
       data,
       dateScale,
+      formatValue,
       margin.left,
       tooltipRect,
       valueScale,
