@@ -1,6 +1,5 @@
-import React, { useMemo, useCallback, useRef } from 'react';
+import React, { useMemo, useCallback, useRef, useEffect } from 'react';
 import { useMeasure } from 'react-use';
-import { useSpring, animated } from '@react-spring/web';
 import styled, { css, useTheme } from 'styled-components';
 import { transparentize } from 'polished';
 import { LinearGradient } from '@visx/gradient';
@@ -65,7 +64,7 @@ interface TooltipContainerProps {
   bottom?: number;
   left: number;
 }
-const AnimatedTooltipContainer = styled(animated.div)<TooltipContainerProps>`
+const TooltipContainer = styled.div<TooltipContainerProps>`
   position: absolute;
   pointer-events: none;
   left: ${({ left }) => left}px;
@@ -80,7 +79,6 @@ const AnimatedTooltipContainer = styled(animated.div)<TooltipContainerProps>`
       bottom: ${bottom}px;
     `}
 `;
-const AnimatedLine = animated.line;
 
 type DataPoint = readonly [Date, number];
 
@@ -160,48 +158,101 @@ function Chart({
   // tooltip handler
   const [tooltipRef, tooltipRect] = useMeasure<HTMLDivElement>();
   const [benchTooltipRef, benchTooltipRect] = useMeasure<HTMLDivElement>();
-  const tooltipDateRef = useRef(new Date());
-  const [tooltipProps, set] = useSpring(() => ({
-    x: 0,
-    opacity: 0,
-    immediate: true,
-    config: { restVelocity: 1, round: 0.1 },
-  }));
-  const getTooltipY = () => {
-    if (!data) return 0;
-    const x0 = tooltipDateRef.current;
-    const index = bisectDate(data, x0);
-    const d = data[index];
-    if (!d) return 0;
-    return valueScale(getValue(d)) || 0;
+  const tooltipLineRef = useRef<SVGLineElement>(null);
+  const tooltipDotRef = useRef<SVGCircleElement>(null);
+  const tooltipBenchDotRef = useRef<SVGCircleElement>(null);
+  const tooltipContainerRef = useRef<HTMLDivElement>(null);
+  const tooltipBenchContainerRef = useRef<HTMLDivElement>(null);
+  const tooltipDateSpanRef = useRef<HTMLSpanElement>(null);
+  const tooltipValueSpanRef = useRef<HTMLSpanElement>(null);
+  const tooltipBenchLabelSpanRef = useRef<HTMLSpanElement>(null);
+  const tooltipBenchSpanRef = useRef<HTMLSpanElement>(null);
+
+  const setTooltipStylesRef = useRef(
+    (
+      x: number,
+      dataY: number,
+      benchmarkY: number,
+      date: Date,
+      dataValue: number,
+      benchmarkValue: number,
+      {
+        xMax,
+        tooltipRect,
+        benchTooltipRect,
+        benchmarkLabel,
+      }: {
+        xMax: number;
+        tooltipRect: ReturnType<typeof useMeasure>[1];
+        benchTooltipRect: ReturnType<typeof useMeasure>[1];
+        benchmarkLabel?: string;
+      }
+    ) => {
+      if (tooltipLineRef.current) {
+        tooltipLineRef.current.style.opacity = '1';
+        tooltipLineRef.current.style.transform = `translate3d(${x}px, 0, 0)`;
+      }
+      if (tooltipDotRef.current) {
+        tooltipDotRef.current.style.opacity = '1';
+        tooltipDotRef.current.style.transform = `translate3d(${x}px, ${dataY}px, 0)`;
+      }
+      if (tooltipBenchDotRef.current) {
+        tooltipBenchDotRef.current.style.opacity = '1';
+        tooltipBenchDotRef.current.style.transform = `translate3d(${x}px, ${benchmarkY}px, 0)`;
+      }
+      if (tooltipContainerRef.current) {
+        const w = tooltipRect.width;
+        const r = w / 2;
+        let tooltipX = x - r;
+        if (x >= xMax - 5 - r) tooltipX = xMax - 5 - w;
+        if (x <= r + 5) tooltipX = 5;
+        tooltipContainerRef.current.style.opacity = '1';
+        tooltipContainerRef.current.style.transform = `translate3d(${tooltipX}px, 0, 0)`;
+      }
+      if (benchTooltipRect.width && tooltipBenchContainerRef.current) {
+        const w = benchTooltipRect.width;
+        const r = w / 2;
+        let tooltipX = x - r;
+        if (x >= xMax - 5 - r) tooltipX = xMax - 5 - w;
+        if (x <= r + 5) tooltipX = 5;
+        tooltipBenchContainerRef.current.style.opacity = '1';
+        tooltipBenchContainerRef.current.style.transform = `translate3d(${tooltipX}px, 0, 0)`;
+      }
+      if (tooltipDateSpanRef.current) {
+        tooltipDateSpanRef.current.innerText = formatTooltipDate(date);
+      }
+      if (tooltipValueSpanRef.current) {
+        tooltipValueSpanRef.current.innerText = dataValue.toFixed(2);
+      }
+      if (benchTooltipRect.width && tooltipBenchLabelSpanRef.current) {
+        tooltipBenchLabelSpanRef.current.innerText =
+          benchmarkLabel ?? formatTooltipDate(date);
+      }
+      if (benchTooltipRect.width && tooltipBenchSpanRef.current) {
+        tooltipBenchSpanRef.current.innerText = benchmarkValue.toFixed(2);
+      }
+    }
+  );
+  const clearTooltip = () => {
+    if (tooltipLineRef.current) {
+      tooltipLineRef.current.style.opacity = '0';
+    }
+    if (tooltipDotRef.current) {
+      tooltipDotRef.current.style.opacity = '0';
+    }
+    if (tooltipBenchDotRef.current) {
+      tooltipBenchDotRef.current.style.opacity = '0';
+    }
+    if (tooltipContainerRef.current) {
+      tooltipContainerRef.current.style.opacity = '0';
+    }
+    if (tooltipBenchContainerRef.current) {
+      tooltipBenchContainerRef.current.style.opacity = '0';
+    }
   };
-  const getTooltipBenchmarkY = () => {
-    if (!benchmark) return 0;
-    const x0 = tooltipDateRef.current;
-    const index = bisectDate(benchmark, x0);
-    const d = benchmark[index];
-    if (!d) return 0;
-    return valueScale(getValue(d)) || 0;
-  };
-  const getTooltipValue = () => {
-    if (!data) return 0;
-    const x0 = tooltipDateRef.current;
-    const index = bisectDate(data, x0);
-    const d = data[index];
-    if (!d) return 0;
-    if (formatValue) return formatValue(getValue(d));
-    return getValue(d).toFixed(2);
-  };
-  const getTooltipBenchmark = () => {
-    if (!benchmark) return 0;
-    const x0 = tooltipDateRef.current;
-    const index = bisectDate(benchmark, x0);
-    const d = benchmark[index];
-    if (!d) return 0;
-    if (formatValue) return formatValue(getValue(d));
-    return getValue(d).toFixed(2);
-  };
-  const getTooltipDate = () => formatTooltipDate(tooltipDateRef.current);
+  useEffect(() => {
+    clearTooltip();
+  }, []);
 
   const handleTooltip = useCallback(
     (event: React.TouchEvent | React.MouseEvent) => {
@@ -231,14 +282,34 @@ function Chart({
       }
       if (!d) return 0;
 
-      tooltipDateRef.current = getDate(d);
-      set({
-        x: dateScale(tooltipDateRef.current),
-        opacity: 1,
-        immediate: true,
-      });
+      const date = getDate(d);
+      const dataIndex = bisectDate(data, date);
+      const dataPoint = data[dataIndex];
+      const dataValue = dataPoint && getValue(dataPoint);
+      const benchmarkIndex = bisectDate(benchmark ?? [], date);
+      const benchmarkPoint = (benchmark ?? [])[benchmarkIndex];
+      const benchmarkValue = benchmarkPoint && getValue(benchmarkPoint);
+      setTooltipStylesRef.current?.(
+        dateScale(date) ?? 0,
+        valueScale(dataValue ?? 0) ?? 0,
+        valueScale(benchmarkValue ?? 0) ?? 0,
+        date,
+        dataValue ?? 0,
+        benchmarkValue ?? 0,
+        { xMax, tooltipRect, benchTooltipRect, benchmarkLabel }
+      );
     },
-    [data, dateScale, margin.left, set]
+    [
+      benchTooltipRect,
+      benchmark,
+      benchmarkLabel,
+      data,
+      dateScale,
+      margin.left,
+      tooltipRect,
+      valueScale,
+      xMax,
+    ]
   );
 
   // Theme related styles
@@ -377,10 +448,11 @@ function Chart({
                 onTouchStart={handleTooltip}
                 onTouchMove={handleTooltip}
                 onMouseMove={handleTooltip}
-                onMouseLeave={() => set({ opacity: 0, immediate: true })}
+                onMouseLeave={clearTooltip}
               />
               <g>
-                <AnimatedLine
+                <line
+                  ref={tooltipLineRef}
                   x1="0"
                   y1="0"
                   x2="0"
@@ -390,32 +462,23 @@ function Chart({
                   strokeWidth={2}
                   pointerEvents="none"
                   strokeDasharray="5,2"
-                  style={tooltipProps}
                 />
-                <animated.circle
+                <circle
+                  ref={tooltipDotRef}
                   cx={0}
                   cy={0}
                   r={5}
                   fill={colors.chartLine}
                   pointerEvents="none"
-                  style={{
-                    x: tooltipProps.x,
-                    y: tooltipProps.x?.to(getTooltipY),
-                    opacity: tooltipProps.opacity,
-                  }}
                 />
                 {benchmark && (
-                  <animated.circle
+                  <circle
+                    ref={tooltipBenchDotRef}
                     cx={0}
                     cy={0}
                     r={3}
                     fill={colors.benchmarkLine}
                     pointerEvents="none"
-                    style={{
-                      x: tooltipProps.x,
-                      y: tooltipProps.x?.to(getTooltipBenchmarkY),
-                      opacity: tooltipProps.opacity,
-                    }}
                   />
                 )}
               </g>
@@ -424,64 +487,34 @@ function Chart({
         </Group>
       </svg>
       {!hideTooltip && (
-        <AnimatedTooltipContainer
-          ref={tooltipRef}
+        <TooltipContainer
+          ref={tooltipContainerRef}
           left={margin.left}
           top={margin.top + 1}
-          style={{
-            transform: 'translateX(-50%)',
-            x: tooltipProps.x?.to((xVal) => {
-              const r = tooltipRect.width / 2;
-              if (xVal >= xMax - r - 5) {
-                return xMax - r - 5;
-              }
-              if (xVal <= r + 5) {
-                return r + 5;
-              }
-              return xVal;
-            }),
-            opacity: tooltipProps.opacity,
-          }}
         >
-          <StyledTooltip primary>
-            <animated.span style={{ minWidth: 130 }}>
-              {tooltipProps.x?.to(getTooltipDate)}
-            </animated.span>
-            <animated.span style={{ minWidth: 80 }}>
-              {tooltipProps.x?.to(getTooltipValue)}
-            </animated.span>
-          </StyledTooltip>
-        </AnimatedTooltipContainer>
+          <div ref={tooltipRef}>
+            <StyledTooltip primary>
+              <span ref={tooltipDateSpanRef} style={{ minWidth: 130 }} />
+              <span ref={tooltipValueSpanRef} style={{ minWidth: 80 }}>
+                0
+              </span>
+            </StyledTooltip>
+          </div>
+        </TooltipContainer>
       )}
       {!hideTooltip && benchmark && (
-        <AnimatedTooltipContainer
-          ref={benchTooltipRef}
+        <TooltipContainer
+          ref={tooltipBenchContainerRef}
           left={margin.left}
           bottom={margin.bottom + 1}
-          style={{
-            transform: 'translateX(-50%)',
-            x: tooltipProps.x?.to((xVal) => {
-              const r = benchTooltipRect.width / 2;
-              if (xVal > xMax - r - 5) {
-                return xMax - r - 5;
-              }
-              if (xVal <= r + 5) {
-                return r + 5;
-              }
-              return xVal;
-            }),
-            opacity: tooltipProps.opacity,
-          }}
         >
-          <StyledTooltip>
-            <animated.span>
-              {benchmarkLabel ?? tooltipProps.x?.to(getTooltipDate)}
-            </animated.span>
-            <animated.span>
-              {tooltipProps.x?.to(getTooltipBenchmark)}
-            </animated.span>
-          </StyledTooltip>
-        </AnimatedTooltipContainer>
+          <div ref={benchTooltipRef}>
+            <StyledTooltip>
+              <span ref={tooltipBenchLabelSpanRef} />
+              <span ref={tooltipBenchSpanRef}>0</span>
+            </StyledTooltip>
+          </div>
+        </TooltipContainer>
       )}
     </Container>
   );
