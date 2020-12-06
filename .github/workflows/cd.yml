@@ -32,7 +32,8 @@ jobs:
       #     name: Coverage
       #     fail_ci_if_error: true
       - run: yarn build
-      - uses: dorny/paths-filter@v2
+      - name: Check changed files
+        uses: dorny/paths-filter@v2
         id: changes
         with:
           filters: |
