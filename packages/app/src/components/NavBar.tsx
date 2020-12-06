@@ -1,11 +1,4 @@
-import {
-  useState,
-  useRef,
-  useEffect,
-  ComponentProps,
-  Dispatch,
-  SetStateAction,
-} from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useClickAway } from 'react-use';
 import styled from 'styled-components/macro';
@@ -75,7 +68,7 @@ const ModalContainer = styled.div`
 
 interface NavBarProps {
   showSignIn?: boolean;
-  setShowSignIn?: Dispatch<SetStateAction<boolean>>;
+  setShowSignIn?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
@@ -100,9 +93,9 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
 
   const [showBenchmarkModal, setShowBenchmarkModal] = useState(false);
 
-  const links: ComponentProps<typeof TopBar>['links'] = [];
-  const endLinks: ComponentProps<typeof TopBar>['links'] = [];
-  const menu: ComponentProps<typeof TopBar>['links'] = [];
+  const links: React.ComponentProps<typeof TopBar>['links'] = [];
+  const endLinks: React.ComponentProps<typeof TopBar>['links'] = [];
+  const menu: React.ComponentProps<typeof TopBar>['links'] = [];
 
   if (state === 'SIGNED_IN' && portfolio) {
     links.push({

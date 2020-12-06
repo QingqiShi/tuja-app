@@ -1,4 +1,3 @@
-
 import { addDecorator } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../src/globalStyle';
