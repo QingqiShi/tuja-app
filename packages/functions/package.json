@@ -17,14 +17,12 @@
   },
   "dependencies": {
     "@google-cloud/pubsub": "^2.7.0",
-    "cheerio": "^1.0.0-rc.3",
     "firebase-admin": "^9.4.1",
     "firebase-functions": "^3.12.0",
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.22",
     "@types/node": "12",
     "@types/node-cache": "^4.2.5",
     "@types/node-fetch": "^2.5.7",
