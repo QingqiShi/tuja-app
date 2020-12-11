@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import fetch from 'node-fetch';
 import NodeCache from 'node-cache';
-import { normalizeForex, exchangeCurrency, getForexPair } from '@tuja/forex';
+import { normalizeForex, getForexPair } from '@tuja/forex';
 
 // Get EodHistoricalData API token from firebase config
 const getToken = () => functions.config().eodhistoricaldata.token;
