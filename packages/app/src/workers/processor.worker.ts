@@ -4,8 +4,8 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import minMax from 'dayjs/plugin/minMax';
 import firebase from 'firebase/app';
 import 'firebase/functions';
+import { normalizeForex, getForexPair } from '@tuja/forex';
 import type { Portfolio, PortfolioPerformance } from 'libs/portfolio';
-import { getForexPair } from 'libs/forex';
 import { StockHistory, StockInfo, StockLivePrice } from 'libs/stocksClient';
 import TimeSeries from 'libs/timeSeries';
 import {
@@ -130,8 +130,17 @@ async function processPortfolio(payload: ProcessPortfolioPayload) {
       Object.keys(stocksInfo)
         .map((ticker) => stocksInfo[ticker])
         .filter((x) => !!x)
-        .map((info) => getForexPair(info.Currency, (currency as any) ?? 'GBP'))
+        .map((info) => {
+          const normalized = normalizeForex(info.Currency);
+          if (normalized.currency !== currency) {
+            return normalized.currency;
+          }
+          return null;
+        })
         .filter(<T extends {}>(x: T | null): x is T => !!x)
+        .map((normalizedCurrency) =>
+          getForexPair(normalizedCurrency, (currency as any) ?? 'GBP')
+        )
     ),
   ];
 

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import TimeSeries from 'libs/timeSeries';
 import BigNumber from 'bignumber.js';
-import { exchangeCurrency } from 'libs/forex';
+import { exchangeCurrency } from '@tuja/forex';
 import type {
   StockHistory,
   StockInfo,
@@ -75,8 +75,7 @@ export function collectHoldingsCost(
             stockHistory.close.get(item.date) ?? 0,
             stockInfo.Currency ?? baseCurrency,
             baseCurrency,
-            item.date,
-            stocksHistory
+            (forexPair) => stocksHistory[forexPair]?.close.get(item.date)
           );
     const units = newUnits[ticker];
     const currentCost = costs[ticker] ?? 0;
@@ -128,8 +127,7 @@ export function calcHoldingsValues(
       stockHistory.close.get(date) ?? 0,
       stockInfo.Currency ?? baseCurrency,
       baseCurrency,
-      date,
-      stocksHistory
+      (forexPair) => stocksHistory[forexPair]?.close.get(date)
     );
     holdingsValues[ticker] = price * holdingsNumShares[ticker];
     totalHoldingsValue += holdingsValues[ticker];
@@ -179,8 +177,7 @@ export function calcHoldings(
       stockHistory.close.get(endDate) ?? 0,
       stockInfo.Currency ?? baseCurrency,
       baseCurrency,
-      endDate,
-      stocksHistory
+      (forexPair) => stocksHistory[forexPair]?.close.get(endDate)
     );
     const value = units * price;
     const cost = costs[ticker];
