@@ -8,4 +8,5 @@ export {
   stockLivePrice,
   stockHistory,
   stocksInfo,
+  stocksPrices,
 } from './functions/stocksData';
