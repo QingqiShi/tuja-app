@@ -1,7 +1,7 @@
 import styled from 'styled-components/macro';
 import { Pie } from '@tuja/components';
+import { formatCurrency } from '@tuja/forex';
 import { Card, CardMedia } from 'commonStyledComponents';
-import { formatCurrency } from 'libs/forex';
 import usePortfolio from 'hooks/usePortfolio';
 import useColors from 'hooks/useColors';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
