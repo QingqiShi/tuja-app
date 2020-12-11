@@ -11,7 +11,7 @@
     "start": "tsc --watch --preserveWatchOutput -p tsconfig-build.json",
     "dev": "yarn start",
     "build": "tsc -p tsconfig-build.json",
-    "lint": "eslint src/**/*.tsx",
+    "lint": "eslint src/**/*.ts",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "devDependencies": {
