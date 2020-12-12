@@ -22,15 +22,15 @@ export interface StockHistory {
 export interface StockLivePrice {
   date: Date;
   code: string;
-  close: number;
+  close: number | 'NA';
   previousClose: number;
   timestamp?: number;
-  open?: number;
-  high?: number;
-  low?: number;
+  open?: number | 'NA';
+  high?: number | 'NA';
+  low?: number | 'NA';
   volume?: number;
-  change?: number;
-  change_p?: number;
+  change?: number | 'NA';
+  change_p?: number | 'NA';
 }
 
 export interface StocksData {

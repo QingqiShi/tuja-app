@@ -185,7 +185,7 @@ function mergeLivePricesIntoHistory(
   Object.keys(livePrices).forEach((ticker) => {
     const livePrice = livePrices[ticker];
     const stockHistory = stocksHistory[livePrice.code];
-    if (stockHistory) {
+    if (stockHistory && livePrice.close !== 'NA') {
       const livePriceSeries = new TimeSeries({
         data: [[livePrice.date, livePrice.close]],
       });

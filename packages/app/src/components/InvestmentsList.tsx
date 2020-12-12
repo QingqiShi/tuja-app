@@ -59,10 +59,14 @@ function InvestmentsList({
         case 'ALLOCATION':
           return holdings[b].value / value - holdings[a].value / value;
         case 'TODAY':
-          return (
-            (holdings[b].livePrice?.change_p ?? 0) -
-            (holdings[a].livePrice?.change_p ?? 0)
-          );
+          const livePriceA = holdings[a].livePrice;
+          const livePriceB = holdings[b].livePrice;
+          if (livePriceA.change_p === 'NA') {
+            return 1;
+          } else if (livePriceB.change_p === 'NA') {
+            return -1;
+          }
+          return (livePriceB.change_p ?? 0) - (livePriceA.change_p ?? 0);
         case 'GAIN':
         default:
           return holdings[b].gain - holdings[a].gain;
