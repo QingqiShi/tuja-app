@@ -28,7 +28,7 @@ const Backdrop = styled.div`
     transparentize(0.1, theme.colors.backgroundMain)};
 `;
 
-const ModalCard = styled.div<{ padding?: boolean }>`
+const ModalCard = styled.div<{ padding?: boolean; minWidth?: number }>`
   ${card}
   max-height: 100%;
   max-width: 100%;
@@ -39,23 +39,30 @@ const ModalCard = styled.div<{ padding?: boolean }>`
     css`
       padding: ${theme.spacings.m};
     `}
+  ${({ minWidth }) =>
+    minWidth &&
+    css`
+      min-width: min(${minWidth}rem, 100%);
+    `}
 `;
 
 interface ModalProps {
   onClose?: () => void;
   padding?: boolean;
+  minWidth?: number;
 }
 
 function Modal({
   onClose,
   padding = true,
+  minWidth,
   children,
 }: React.PropsWithChildren<ModalProps>) {
   const ref = useBodyScrollLock(true);
   return (
     <Container>
       <Backdrop onClick={onClose} />
-      <ModalCard ref={ref} padding={padding}>
+      <ModalCard ref={ref} padding={padding} minWidth={minWidth}>
         {children}
       </ModalCard>
     </Container>

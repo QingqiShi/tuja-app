@@ -1,24 +1,32 @@
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
-import { inputFont, labelFont, helperFont, paddings } from '../../mixins';
+import {
+  inputFont,
+  labelFont,
+  helperFont,
+  paddings,
+  border,
+  inputEndPadding,
+  inputLeadPadding,
+} from '../../mixins';
 
 const InputBase = styled.input.attrs((props) => ({
   ...props,
   // Use a single space for placeholders so we can use :placeholder-shown
   // in CSS to check for empty values
   placeholder: props.placeholder || ' ',
-}))`
+}))<{ hasEndIcon?: boolean; hasLeadIcon?: boolean }>`
   ${inputFont}
   ${paddings}
-
-  border-radius: ${({ theme }) => theme.spacings.xs};
-  border: 2px solid
-    ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
+  ${border}
   color: ${({ theme }) => theme.colors.textOnBackground};
   background-color: transparent;
   transition: all 0.2s;
   width: 100%;
   appearance: none;
+
+  ${({ hasLeadIcon }) => hasLeadIcon && inputLeadPadding}
+  ${({ hasEndIcon }) => hasEndIcon && inputEndPadding}
 
   &::placeholder {
     color: ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
@@ -88,17 +96,45 @@ const HelperText = styled.div`
 const InputContainer = styled.div`
   width: 100%;
   position: relative;
-  > div {
-    position: absolute;
-    right: ${({ theme }) => theme.spacings.s};
-    top: 50%;
-  }
+`;
+
+const IconContainer = styled.div<{ isLead?: boolean }>`
+  position: absolute;
+  height: 100%;
+  width: 1.5em;
+  top: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
+
+  ${({ isLead }) =>
+    isLead
+      ? css`
+          left: ${({ theme }) => theme.paddings.normal.mobile};
+          @media (${({ theme }) => theme.breakpoints.minTablet}) {
+            left: ${({ theme }) => theme.paddings.normal.tablet};
+          }
+          @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+            left: ${({ theme }) => theme.paddings.normal.laptop};
+          }
+        `
+      : css`
+          right: ${({ theme }) => theme.paddings.normal.mobile};
+          @media (${({ theme }) => theme.breakpoints.minTablet}) {
+            right: ${({ theme }) => theme.paddings.normal.tablet};
+          }
+          @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+            right: ${({ theme }) => theme.paddings.normal.laptop};
+          }
+        `}
 `;
 
 interface TextInputProps extends Omit<React.ComponentProps<'input'>, 'ref'> {
   label?: string;
   helperText?: string;
   endIcon?: React.ReactNode;
+  leadIcon?: React.ReactNode;
 }
 
 function TextInput({
@@ -106,6 +142,7 @@ function TextInput({
   required,
   helperText,
   endIcon,
+  leadIcon,
   ...rest
 }: TextInputProps) {
   if (label || helperText) {
@@ -118,8 +155,14 @@ function TextInput({
           </LabelLine>
         )}
         <InputContainer>
-          <InputBase required={required} {...rest} />
-          {endIcon}
+          {leadIcon && <IconContainer isLead>{leadIcon}</IconContainer>}
+          <InputBase
+            required={required}
+            hasLeadIcon={!!leadIcon}
+            hasEndIcon={!!endIcon}
+            {...rest}
+          />
+          {endIcon && <IconContainer>{endIcon}</IconContainer>}
         </InputContainer>
         {helperText && <HelperText>{helperText}</HelperText>}
       </Label>
@@ -128,8 +171,14 @@ function TextInput({
 
   return (
     <InputContainer>
-      <InputBase {...rest} />
-      {endIcon}
+      {leadIcon && <IconContainer isLead>{leadIcon}</IconContainer>}
+      <InputBase
+        hasLeadIcon={!!leadIcon}
+        hasEndIcon={!!endIcon}
+        required={required}
+        {...rest}
+      />
+      {helperText && <HelperText>{helperText}</HelperText>}
     </InputContainer>
   );
 }

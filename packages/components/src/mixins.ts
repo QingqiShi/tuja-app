@@ -34,6 +34,12 @@ export const card = css`
   background-color: ${({ theme }) => theme.colors.backgroundRaised};
 `;
 
+export const border = css`
+  border-radius: ${({ theme }) => theme.spacings.xs};
+  border: 2px solid
+    ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
+`;
+
 export const translucent = css`
   background-color: ${({ theme }) =>
     transparentize(0.1, theme.colors.backgroundRaised)};
@@ -87,4 +93,24 @@ export const helperFont = css`
   font-size: ${({ theme }) => theme.fonts.helper.size};
   line-height: ${({ theme }) => theme.fonts.helper.height};
   font-weight: ${({ theme }) => theme.fonts.helper.weight};
+`;
+
+export const inputLeadPadding = css`
+  padding-left: 3.7rem;
+  @media (${({ theme }) => theme.breakpoints.minTablet}) {
+    padding-left: 3.5rem;
+  }
+  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+    padding-left: 3rem;
+  }
+`;
+
+export const inputEndPadding = css`
+  padding-right: 3.7rem;
+  @media (${({ theme }) => theme.breakpoints.minTablet}) {
+    padding-right: 3.5rem;
+  }
+  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+    padding-right: 3rem;
+  }
 `;

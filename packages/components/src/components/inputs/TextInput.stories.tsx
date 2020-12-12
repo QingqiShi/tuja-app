@@ -1,4 +1,5 @@
 import { Story, Meta } from '@storybook/react';
+import { RiCheckLine, RiSearchLine } from 'react-icons/ri';
 import TextInput from './TextInput';
 
 export default {
@@ -59,4 +60,19 @@ Invalid.args = {
   type: 'email',
   label: 'Email',
   defaultValue: 'testtest',
+};
+
+export const EndIcon = Template.bind({});
+EndIcon.args = {
+  type: 'email',
+  label: 'Email',
+  defaultValue: 'qingqishi@live.com',
+  endIcon: <RiCheckLine size="100%" />,
+};
+
+export const LeadIcon = Template.bind({});
+LeadIcon.args = {
+  type: 'text',
+  placeholder: 'Search',
+  leadIcon: <RiSearchLine size="100%" />,
 };

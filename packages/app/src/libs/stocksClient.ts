@@ -95,73 +95,26 @@ export async function fetchStockLivePrice(tickers: string[]) {
   })) as StockLivePrice[];
 }
 
-export function shouldFetchData(
-  ticker: string,
-  stocksData: StocksData,
-  startDate?: Date | null,
-  endDate?: Date | null
-) {
-  if (!startDate || !endDate) return false;
+export async function fetchStockSearch(query: string) {
+  const searchStocks = firebase.functions().httpsCallable('searchStocks');
 
-  return (
-    !(ticker in stocksData) ||
-    !stocksData[ticker].closeSeries ||
-    !stocksData[ticker].adjustedSeries?.data.length ||
-    !stocksData[ticker].seriesRange?.startDate ||
-    !stocksData[ticker].seriesRange?.endDate ||
-    dayjs(stocksData[ticker].seriesRange?.startDate).isAfter(
-      startDate,
-      'day'
-    ) ||
-    dayjs(endDate).isAfter(
-      stocksData[ticker].seriesRange?.endDate as Date,
-      'day'
-    )
-  );
+  const result = await searchStocks({ query });
+  return result.data as StockInfo[];
 }
 
-export function resolveMissingStocksHistory(
+export async function fetchStocksPrices(
   tickers: string[],
-  stocksData: StocksData,
-  startDate: Date,
-  endDate: Date
+  date: Date,
+  currency: string
 ) {
-  return tickers.flatMap((ticker) => {
-    const existingData = stocksData[ticker];
+  const stocksPrices = firebase.functions().httpsCallable('stocksPrices');
 
-    if (
-      !existingData ||
-      !existingData.seriesRange ||
-      !existingData.adjustedSeries ||
-      !existingData.closeSeries
-    ) {
-      return { ticker, startDate, endDate };
-    }
-
-    const missingData = [];
-
-    if (dayjs(startDate).isBefore(existingData.seriesRange.startDate, 'date')) {
-      missingData.push({
-        ticker,
-        startDate,
-        endDate: dayjs(existingData.seriesRange.startDate)
-          .subtract(1, 'day')
-          .toDate(),
-      });
-    }
-
-    if (dayjs(endDate).isAfter(existingData.seriesRange.endDate, 'date')) {
-      missingData.push({
-        ticker,
-        startDate: dayjs(existingData.seriesRange.endDate)
-          .add(1, 'day')
-          .toDate(),
-        endDate,
-      });
-    }
-
-    return missingData;
+  const result = await stocksPrices({
+    tickers,
+    date: dayjs(date).format('YYYY-MM-DD'),
+    currency,
   });
+  return result.data as { [ticker: string]: number };
 }
 
 export function getMissingStocksHistory(

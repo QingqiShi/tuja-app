@@ -8,7 +8,7 @@ import DashboardLayout from 'components/DashboardLayout';
 import PortfolioOverview from 'components/PortfolioOverview';
 import PortfolioPieCard from 'components/PortfolioPieCard';
 import InvestmentsList from 'components/InvestmentsList';
-import ActivityTradeForm from 'components/ActivityTradeForm';
+import ActivityTradeModal from 'components/ActivityTradeModal';
 import ActivityDepositForm from 'components/ActivityDepositForm';
 import ActivityDividendForm from 'components/ActivityDividendForm';
 import ActivityStockDividendForm from 'components/ActivityStockDividendForm';
@@ -290,17 +290,12 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
         }
       />
       {showBuyModal && (
-        <Modal onClose={() => setShowBuyModal(false)}>
-          <ModalContainer>
-            <Type scale="h5">Buy</Type>
-            <ActivityTradeForm
-              mode="buy"
-              currency={portfolio.currency}
-              onClose={() => setShowBuyModal(false)}
-              onSubmit={handleSubmit}
-            />
-          </ModalContainer>
-        </Modal>
+        <ActivityTradeModal
+          mode="buy"
+          currency={portfolio.currency}
+          onClose={() => setShowBuyModal(false)}
+          onSubmit={handleSubmit}
+        />
       )}
       {showDepositModal && (
         <Modal onClose={() => setShowDepositModal(false)}>
@@ -315,17 +310,12 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
         </Modal>
       )}
       {showSellModal && (
-        <Modal onClose={() => setShowSellModal(false)}>
-          <ModalContainer>
-            <Type scale="h5">Sell</Type>
-            <ActivityTradeForm
-              mode="sell"
-              currency={portfolio.currency}
-              onClose={() => setShowSellModal(false)}
-              onSubmit={handleSubmit}
-            />
-          </ModalContainer>
-        </Modal>
+        <ActivityTradeModal
+          mode="sell"
+          currency={portfolio.currency}
+          onClose={() => setShowSellModal(false)}
+          onSubmit={handleSubmit}
+        />
       )}
       {showDividendModal && (
         <Modal onClose={() => setShowDividendModal(false)}>
