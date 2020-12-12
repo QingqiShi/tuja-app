@@ -24,7 +24,6 @@ import {
 } from '@tuja/components';
 import { exchangeCurrency, formatCurrency } from '@tuja/libs';
 import CurrencyInput from './CurrencyInput';
-import { Field } from 'commonStyledComponents';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import { theme, getTheme } from 'theme';
 import type { Activity, ActivityFormProps } from 'libs/activities';
