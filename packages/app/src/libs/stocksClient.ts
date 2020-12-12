@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import dayjs from 'dayjs';
-import TimeSeries from './timeSeries';
+import { TimeSeries } from '@tuja/libs';
 
 export interface StockInfo {
   Ticker: string;

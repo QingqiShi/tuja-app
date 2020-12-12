@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { v4 as uuid } from 'uuid';
 import firebase from 'firebase/app';
-import TimeSeries from './timeSeries';
+import { TimeSeries } from '@tuja/libs';
 import { Activity } from './activities';
 import { StockInfo, StockLivePrice } from './stocksClient';
 

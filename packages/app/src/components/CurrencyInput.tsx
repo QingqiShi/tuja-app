@@ -1,5 +1,5 @@
 import { FormattedInput } from '@tuja/components';
-import { formatCurrency, parseCurrency } from '@tuja/forex';
+import { formatCurrency, parseCurrency } from '@tuja/libs';
 
 interface CurrencyInputProps
   extends Omit<

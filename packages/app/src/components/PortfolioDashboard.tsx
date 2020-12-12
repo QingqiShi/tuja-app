@@ -3,7 +3,7 @@ import { RiMoreLine, RiSubtractLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
 import { Button, ButtonGroup, Chart, Modal, Type } from '@tuja/components';
-import { formatCurrency } from '@tuja/forex';
+import { formatCurrency } from '@tuja/libs';
 import DashboardLayout from 'components/DashboardLayout';
 import PortfolioOverview from 'components/PortfolioOverview';
 import PortfolioPieCard from 'components/PortfolioPieCard';

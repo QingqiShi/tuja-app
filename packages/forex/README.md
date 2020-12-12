@@ -1,3 +1,0 @@
-# `@tuja/forex`
-
-Forex utilities.

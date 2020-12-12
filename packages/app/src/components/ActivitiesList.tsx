@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import dayjs from 'dayjs';
 import { Modal, Type } from '@tuja/components';
-import { formatCurrency } from '@tuja/forex';
+import { formatCurrency } from '@tuja/libs';
 import ActivityDepositForm from './ActivityDepositForm';
 import ActivityDividendForm from './ActivityDividendForm';
 import ActivityStockDividendForm from './ActivityStockDividendForm';
