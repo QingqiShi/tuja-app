@@ -217,7 +217,9 @@ function InvestmentsListItem({
                 {units} ×{' '}
                 {info &&
                   livePrice &&
-                  formatCurrency(info.Currency, livePrice.close)}
+                  (livePrice.close !== 'NA'
+                    ? formatCurrency(info.Currency, livePrice.close)
+                    : 'NA')}
               </Type>
             </PriceContainer>
           )}
@@ -234,12 +236,18 @@ function InvestmentsListItem({
           {mode === 'TODAY' && (
             <PriceContainer>
               <Type scale="h6">
-                {(livePrice?.change_p ?? 0) >= 0 ? '+' : ''}
-                {(livePrice?.change_p ?? 0).toFixed(2)}%
+                {livePrice.change_p === 'NA'
+                  ? 'NA'
+                  : `${(livePrice?.change_p ?? 0) >= 0 ? '+' : ''}${(
+                      livePrice?.change_p ?? 0
+                    ).toFixed(2)}%`}
               </Type>
               <Type scale="body1">
                 {(livePrice?.change ?? 0) >= 0 && '+'}
-                {info && formatCurrency(info.Currency, livePrice?.change ?? 0)}
+                {info &&
+                  (livePrice.change === 'NA'
+                    ? 'NA'
+                    : formatCurrency(info.Currency, livePrice?.change ?? 0))}
               </Type>
             </PriceContainer>
           )}
@@ -289,7 +297,9 @@ function InvestmentsListItem({
             <Type scale="body1">
               {info &&
                 livePrice &&
-                formatCurrency(info.Currency, livePrice.close)}
+                (livePrice.close === 'NA'
+                  ? 'NA'
+                  : formatCurrency(info.Currency, livePrice.close))}
             </Type>
           </div>
           <div>
@@ -301,8 +311,11 @@ function InvestmentsListItem({
           <div>
             <Label>Today's change</Label>
             <Type scale="body1">
-              {(livePrice?.change_p ?? 0) >= 0 ? '+' : ''}
-              {(livePrice?.change_p ?? 0).toFixed(2)}%
+              {livePrice.change_p === 'NA'
+                ? 'NA'
+                : `${(livePrice?.change_p ?? 0) >= 0 ? '+' : ''}${(
+                    livePrice?.change_p ?? 0
+                  ).toFixed(2)}%`}
             </Type>
           </div>
           <div>
