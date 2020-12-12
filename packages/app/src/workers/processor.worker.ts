@@ -308,6 +308,6 @@ function calculatePerformance(
     cash: ctx.cash,
     totalHoldingsValue: valueSeries.getLast() - ctx.cash,
     holdings,
-    benchmarkSeries,
+    benchmarkSeries: portfolio.benchmark ? benchmarkSeries : undefined,
   };
 }
