@@ -144,7 +144,7 @@ export const stocksPrices = functions
       currency: '',
     });
 
-    const { normalizeForex, getForexPair } = await import('../libs');
+    const { normalizeForex, getForexPair } = await import('@tuja/libs');
 
     const DATE_FORMAT = 'YYYY-MM-DD';
     const { default: dayjs } = await import('dayjs');

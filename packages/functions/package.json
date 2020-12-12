@@ -7,9 +7,12 @@
   "homepage": "https://github.com/QingqiShi/tuja-app#readme",
   "license": "MIT",
   "scripts": {
-    "dev": "yarn build -w --preserveWatchOutput",
+    "start": "yarn dev",
+    "dev": "tsc -w --preserveWatchOutput",
     "build": "tsc",
-    "lint": "eslint \"src/**/*\""
+    "lint": "eslint \"src/**/*\"",
+    "predeploy": "node pre-deploy",
+    "postdeploy": "node post-deploy"
   },
   "main": "lib/index.js",
   "engines": {
@@ -17,6 +20,7 @@
   },
   "dependencies": {
     "@google-cloud/pubsub": "^2.7.0",
+    "@tuja/libs": "^0.0.0",
     "d3-array": "^2.9.1",
     "dayjs": "^1.9.7",
     "escape-string-regexp": "^4.0.0",

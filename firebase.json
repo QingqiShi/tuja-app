@@ -1,7 +1,8 @@
 {
   "functions": {
     "source": "packages/functions",
-    "predeploy": ["yarn lint", "yarn build"]
+    "predeploy": ["yarn lint", "yarn build", "yarn predeploy"],
+    "postdeploy": ["yarn postdeploy"]
   },
   "hosting": {
     "public": "packages/app/build",
