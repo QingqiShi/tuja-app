@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
 import dayjs from 'dayjs';
 import { Select, Type } from '@tuja/components';
-import { formatCurrency } from '@tuja/forex';
+import { formatCurrency } from '@tuja/libs';
 import EditableTitle from 'components/EditableTitle';
 import { updatePortfolioName } from 'libs/portfolio';
 import usePortfolio from 'hooks/usePortfolio';

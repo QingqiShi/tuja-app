@@ -4,10 +4,9 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import minMax from 'dayjs/plugin/minMax';
 import firebase from 'firebase/app';
 import 'firebase/functions';
-import { normalizeForex, getForexPair } from '@tuja/forex';
+import { normalizeForex, getForexPair, TimeSeries } from '@tuja/libs';
 import type { Portfolio, PortfolioPerformance } from 'libs/portfolio';
 import { StockHistory, StockInfo, StockLivePrice } from 'libs/stocksClient';
-import TimeSeries from 'libs/timeSeries';
 import {
   getActivitiesIterator,
   iterateActivities,

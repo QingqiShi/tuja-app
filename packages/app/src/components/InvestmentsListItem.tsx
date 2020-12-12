@@ -3,7 +3,7 @@ import { RiEdit2Line, RiPercentLine } from 'react-icons/ri';
 import styled, { css } from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { Button, Chart, Type } from '@tuja/components';
-import { formatCurrency } from '@tuja/forex';
+import { formatCurrency } from '@tuja/libs';
 import { PortfolioPerformance } from 'libs/portfolio';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';

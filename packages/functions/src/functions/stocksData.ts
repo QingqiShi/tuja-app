@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions';
 import fetch from 'node-fetch';
-import NodeCache from 'node-cache';
+import { validatePayload } from '../utils/validatePayload';
+import { getCache } from '../utils/cache';
 
 // Get EodHistoricalData API token from firebase config
 const getToken = () => functions.config().eodhistoricaldata.token;
@@ -9,63 +10,65 @@ const getToken = () => functions.config().eodhistoricaldata.token;
 Searching
 */
 
-const searchStocksCache = new NodeCache();
+const _searchStocks = async (query: string) => {
+  const searchStocksCache = await getCache('searchStocks');
+  const stocksInfoCache = await getCache('stocksInfo');
+
+  const cache = searchStocksCache.get(query);
+  if (cache) {
+    functions.logger.log('cache hit', { key: query });
+    return cache;
+  }
+
+  functions.logger.log('cache miss', { key: query });
+  const response = await fetch(
+    `https://eodhistoricaldata.com/api/search/${query}?api_token=${getToken()}`
+  );
+  const result = (await response.json()).map((info: any) => {
+    const stockInfo = {
+      Ticker: `${info.Code}.${info.Exchange}`,
+      ...info,
+    };
+    stocksInfoCache.set(stockInfo.Ticker, stockInfo);
+    return stockInfo;
+  });
+
+  searchStocksCache.set(query, result);
+  return result;
+};
 
 export const searchStocks = functions
   .runWith({ memory: '1GB' })
   .https.onCall(async (data) => {
-    const { query } = data;
-    if (typeof query !== 'string') {
-      throw new functions.https.HttpsError(
-        'invalid-argument',
-        'You need to provide a search query'
-      );
-    }
-
+    const { query } = validatePayload(data, { query: '' });
     functions.logger.log('query', { query });
 
-    const cache = searchStocksCache.get(query);
-    if (cache) {
-      functions.logger.log('cache hit', { key: query });
-      return cache;
-    }
-
-    functions.logger.log('cache miss', { key: query });
-    const response = await fetch(
-      `https://eodhistoricaldata.com/api/search/${query}?api_token=${getToken()}`
-    );
-    const result = await response.json();
-
-    searchStocksCache.set(query, result);
-    return result;
+    return _searchStocks(query);
   });
 
 /* =====
 Stock live price
 */
 
+function _stocksLivePrices(tickers: string[]) {
+  const token = getToken();
+  return Promise.all(
+    tickers.map(async (ticker) => {
+      functions.logger.log('ticker', { ticker });
+      const response = await fetch(
+        `https://eodhistoricaldata.com/api/real-time/${ticker}?fmt=json&api_token=${token}`
+      );
+      return response.json();
+    })
+  );
+}
+
 export const stockLivePrice = functions
   .runWith({ memory: '1GB' })
   .https.onCall(async (data) => {
-    const { tickers } = data;
-    if (!Array.isArray(tickers)) {
-      throw new functions.https.HttpsError(
-        'invalid-argument',
-        'You need to provide an array of ticker symbols'
-      );
-    }
+    const { tickers } = validatePayload(data, { tickers: [''] });
 
-    const token = getToken();
-    const livePrices = await Promise.all(
-      tickers.map(async (ticker) => {
-        functions.logger.log('ticker', { ticker });
-        const response = await fetch(
-          `https://eodhistoricaldata.com/api/real-time/${ticker}?fmt=json&api_token=${token}`
-        );
-        return response.json();
-      })
-    );
-
+    const livePrices = await _stocksLivePrices(tickers);
     return livePrices;
   });
 
@@ -73,47 +76,29 @@ export const stockLivePrice = functions
 Historical data
 */
 
-const stockHistoryCache = new NodeCache();
+const _getHistories = async (tickers: string[], from: string, to: string) => {
+  return Promise.all(
+    tickers.map(async (ticker) => {
+      const response = await fetch(
+        `https://eodhistoricaldata.com/api/eod/${ticker}?from=${from}&to=${to}&fmt=json&api_token=${getToken()}`
+      );
+      const result = await response.json();
+      return result;
+    })
+  );
+};
 
 export const stockHistory = functions
   .runWith({ memory: '1GB' })
   .https.onCall(async (data) => {
-    const { ticker, from, to } = data;
-    if (typeof ticker !== 'string') {
-      throw new functions.https.HttpsError(
-        'invalid-argument',
-        'You need to provide a ticker symbol'
-      );
-    }
-    if (typeof from !== 'string') {
-      throw new functions.https.HttpsError(
-        'invalid-argument',
-        'You need to provide a from date'
-      );
-    }
-    if (typeof to !== 'string') {
-      throw new functions.https.HttpsError(
-        'invalid-argument',
-        'You need to provide a to date'
-      );
-    }
-
+    const { ticker, from, to } = validatePayload(data, {
+      ticker: '',
+      from: '',
+      to: '',
+    });
     functions.logger.log('ticker', { ticker });
 
-    const cacheKey = `${ticker}-${from}-${to}`;
-    const cache = stockHistoryCache.get(cacheKey);
-    if (cache) {
-      functions.logger.log('cache hit', { key: cacheKey });
-      return cache;
-    }
-
-    functions.logger.log('cache miss', { key: cacheKey });
-    const response = await fetch(
-      `https://eodhistoricaldata.com/api/eod/${ticker}?from=${from}&to=${to}&fmt=json&api_token=${getToken()}`
-    );
-    const result = await response.json();
-
-    stockHistoryCache.set(cacheKey, result);
+    const [result] = await _getHistories([ticker], from, to);
     return result;
   });
 
@@ -121,68 +106,100 @@ export const stockHistory = functions
 Stock info
 */
 
-// Cache exchange tickers for 1 day
-const exchangeTickersCache = new NodeCache({ stdTTL: 86400 });
+const _getStockInfo = async (ticker: string) => {
+  const stocksInfoCache = await getCache('stocksInfo');
 
-interface ExchangeMap {
-  [ticker: string]: { Code: string };
-}
-
-async function fetchExchangeTickers(exchange: string) {
-  const cache = exchangeTickersCache.get(exchange);
+  const cache = stocksInfoCache.get(ticker);
   if (cache) {
-    functions.logger.log('cache hit', { key: exchange });
-    return cache as ExchangeMap;
+    functions.logger.log('cache hit', { key: ticker });
+    return cache;
   }
 
-  functions.logger.log('cache miss', { key: exchange });
-  const response = await fetch(
-    `https://eodhistoricaldata.com/api/exchange-symbol-list/${exchange}?fmt=json&api_token=${getToken()}`
+  const searchResult = await _searchStocks(ticker.split('.')[0]);
+  return searchResult?.find(
+    ({ Ticker }: { Ticker: string }) => Ticker === ticker
   );
-
-  const result = (await response.json()) as { Code: string }[];
-
-  // Convert it to a map for fast random access
-  const map: ExchangeMap = {};
-  result.forEach((detail) => {
-    map[detail.Code] = detail;
-  });
-
-  exchangeTickersCache.set(exchange, map);
-  return map;
-}
+};
 
 export const stocksInfo = functions
   .runWith({ memory: '1GB' })
   .https.onCall(async (data) => {
-    const { tickers } = data;
-    if (!Array.isArray(tickers)) {
-      throw new functions.https.HttpsError(
-        'invalid-argument',
-        'You need to provide an array of tickers'
+    const { tickers } = validatePayload(data, { tickers: [''] });
+    functions.logger.log('tickers', { tickers });
+
+    const results = await Promise.all(tickers.map(_getStockInfo));
+    return results;
+  });
+
+/* =====
+StocksPrices
+*/
+
+export const stocksPrices = functions
+  .runWith({ memory: '1GB' })
+  .https.onCall(async (data) => {
+    const { tickers, date, currency } = validatePayload(data, {
+      tickers: [''],
+      date: '',
+      currency: '',
+    });
+
+    const { normalizeForex, getForexPair } = await import(
+      '../../../libs/build'
+    );
+
+    const DATE_FORMAT = 'YYYY-MM-DD';
+    const { default: dayjs } = await import('dayjs');
+
+    // Get info to figure out what currency to fetch
+    console.log(tickers);
+    const mappedStocksInfo = await Promise.all(tickers.map(_getStockInfo));
+    const forexPairs = [
+      ...new Set(
+        mappedStocksInfo
+          .map((info) => {
+            const tickerCurrency = info.Currency;
+            if (!tickerCurrency) return null;
+            const { currency: normalized } = normalizeForex(tickerCurrency);
+            if (normalized === currency) return null;
+            return normalized;
+          })
+          .filter((c): c is string => !!c)
+          .map((c) => getForexPair(c, currency))
+      ),
+    ];
+
+    const d = dayjs(date, DATE_FORMAT);
+    const today = dayjs();
+
+    const tickersAndForexPairs = [...tickers, ...forexPairs];
+
+    if (d.isSame(today, 'day')) {
+      const livePrices = await _stocksLivePrices(tickersAndForexPairs);
+      return tickersAndForexPairs.reduce(
+        (map, ticker, i) => ({
+          ...map,
+          [ticker]:
+            livePrices[i].close !== 'NA'
+              ? livePrices[i].close
+              : livePrices[i].previousClose,
+        }),
+        {}
       );
     }
 
-    functions.logger.log('tickers', { tickers });
-
-    const exchanges = [
-      ...new Set(tickers.map((ticker) => ticker.split('.')[1])),
-    ];
-
-    const exchangeTickersMaps = await Promise.all(
-      exchanges.map((exchange) => fetchExchangeTickers(exchange))
+    const histories = await _getHistories(
+      tickersAndForexPairs,
+      d.subtract(5, 'day').format(DATE_FORMAT),
+      d.format(DATE_FORMAT)
     );
-    const exchangeMap: {
-      [exchange: string]: typeof exchangeTickersMaps[0];
-    } = exchanges.reduce(
-      (map, exchange, i) => ({ ...map, [exchange]: exchangeTickersMaps[i] }),
+    return tickersAndForexPairs.reduce(
+      (map, ticker, i) => ({
+        ...map,
+        [ticker]: histories[i][histories[i].length - 1].close,
+      }),
       {}
     );
-
-    const results = tickers.map((ticker) => {
-      const [symbol, exchange] = ticker.split('.');
-      return { Ticker: ticker, ...exchangeMap[exchange][symbol] };
-    });
-
-    return results;
   });
+
+// TODO: use the search API to fetch stocks into?

@@ -8,7 +8,7 @@ const bisectDate = bisector<[Date, number], Date>((d, x) => {
   return 1;
 }).right;
 
-class TimeSeries {
+export class TimeSeries {
   data: [Date, number][] = [];
 
   constructor(obj?: { data: [Date, number][] }) {
@@ -96,5 +96,3 @@ export function validateSeries(series: [Date, number][]) {
   }
   return true;
 }
-
-export default TimeSeries;

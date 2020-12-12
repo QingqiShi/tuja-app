@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
-import TimeSeries from 'libs/timeSeries';
 import BigNumber from 'bignumber.js';
-import { exchangeCurrency } from '@tuja/forex';
+import { exchangeCurrency, TimeSeries } from '@tuja/libs';
 import type {
   StockHistory,
   StockInfo,

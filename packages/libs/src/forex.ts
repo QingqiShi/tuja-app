@@ -1,5 +1,5 @@
 import escapeRegexp from 'escape-string-regexp';
-import { normalizationMap } from './normalization';
+import { normalizationMap } from './constants';
 
 /**
  * Convert non-standard currencies to more standard ones.
