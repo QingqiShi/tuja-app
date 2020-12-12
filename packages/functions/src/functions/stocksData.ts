@@ -144,9 +144,7 @@ export const stocksPrices = functions
       currency: '',
     });
 
-    const { normalizeForex, getForexPair } = await import(
-      '../../../libs/build'
-    );
+    const { normalizeForex, getForexPair } = await import('../libs');
 
     const DATE_FORMAT = 'YYYY-MM-DD';
     const { default: dayjs } = await import('dayjs');
