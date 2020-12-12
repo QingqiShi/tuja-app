@@ -28,10 +28,13 @@ const Backdrop = styled.div`
     transparentize(0.1, theme.colors.backgroundMain)};
 `;
 
-const ModalCard = styled.div<{ padding?: boolean; minWidth?: number }>`
+const ModalCard = styled.div<{
+  padding?: boolean;
+  minWidth?: number;
+  maxWidth?: number;
+}>`
   ${card}
   max-height: 100%;
-  max-width: 100%;
   overflow: auto;
   z-index: ${({ theme }) => theme.zIndex.modal};
   ${({ padding, theme }) =>
@@ -44,25 +47,42 @@ const ModalCard = styled.div<{ padding?: boolean; minWidth?: number }>`
     css`
       min-width: min(${minWidth}rem, 100%);
     `}
+  ${({ maxWidth }) =>
+    maxWidth
+      ? css`
+          max-width: ${maxWidth}rem;
+        `
+      : css`
+          max-width: 100%;
+        `}
 `;
 
 interface ModalProps {
   onClose?: () => void;
   padding?: boolean;
   minWidth?: number;
+  maxWidth?: number;
+  width?: number;
 }
 
 function Modal({
   onClose,
   padding = true,
   minWidth,
+  maxWidth,
+  width,
   children,
 }: React.PropsWithChildren<ModalProps>) {
   const ref = useBodyScrollLock(true);
   return (
     <Container>
       <Backdrop onClick={onClose} />
-      <ModalCard ref={ref} padding={padding} minWidth={minWidth}>
+      <ModalCard
+        ref={ref}
+        padding={padding}
+        minWidth={minWidth ?? width}
+        maxWidth={maxWidth ?? width}
+      >
         {children}
       </ModalCard>
     </Container>
