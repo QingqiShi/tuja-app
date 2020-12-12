@@ -24,7 +24,6 @@ import {
 } from '@tuja/components';
 import { exchangeCurrency, formatCurrency } from '@tuja/libs';
 import CurrencyInput from './CurrencyInput';
-import { Field } from 'commonStyledComponents';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import { theme, getTheme } from 'theme';
 import type { Activity, ActivityFormProps } from 'libs/activities';
@@ -95,12 +94,12 @@ const LoaderContainer = styled.div`
 
 const ButtonRow = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   > :first-child {
     flex-grow: 1;
   }
   button {
-    margin: 0 0 0 ${theme.spacings('xs')};
+    margin: 0 0 calc(${theme.spacings('s')} + 1px) ${theme.spacings('xs')};
   }
 `;
 
@@ -343,23 +342,21 @@ function ActivityTradeModal({
                 })
               }
             />
-            <Field>
-              <Button
-                icon={<RiDeleteBinLine />}
-                type="button"
-                onClick={() => {
-                  setSelectedTickers((current) =>
-                    current.filter(
-                      ({ Ticker: currentTicker }) => currentTicker !== Ticker
-                    )
-                  );
-                  setQuantities((current) => {
-                    delete current[Ticker];
-                    return current;
-                  });
-                }}
-              />
-            </Field>
+            <Button
+              icon={<RiDeleteBinLine />}
+              type="button"
+              onClick={() => {
+                setSelectedTickers((current) =>
+                  current.filter(
+                    ({ Ticker: currentTicker }) => currentTicker !== Ticker
+                  )
+                );
+                setQuantities((current) => {
+                  delete current[Ticker];
+                  return current;
+                });
+              }}
+            />
           </ButtonRow>
         ))}
       </QuantitiesContainer>
@@ -461,13 +458,14 @@ function ActivityTradeModal({
   ];
 
   return (
-    <Modal onClose={onClose} minWidth={30}>
-      {initialLoading && (
+    <Modal onClose={onClose} width={30}>
+      {initialLoading ? (
         <LoaderContainer>
           <LinearLoader />
         </LoaderContainer>
+      ) : (
+        steps[showStep]
       )}
-      {!initialLoading && steps[showStep]}
     </Modal>
   );
 }
