@@ -7,7 +7,7 @@ import { formatCurrency } from '@tuja/libs';
 import ActivityDepositForm from './ActivityDepositForm';
 import ActivityDividendForm from './ActivityDividendForm';
 import ActivityStockDividendForm from './ActivityStockDividendForm';
-import ActivityTradeForm from './ActivityTradeForm';
+import ActivityTradeModal from './ActivityTradeModal';
 import { Card } from 'commonStyledComponents';
 import { logEvent } from 'libs/analytics';
 import { updatePortfolioActivities } from 'libs/portfolio';
@@ -204,7 +204,7 @@ function ActivitiesList() {
         ));
       })}
 
-      {showUpdateActivity && (
+      {showUpdateActivity && updateActivity?.type !== 'Trade' && (
         <Modal onClose={() => setShowUpdateActivity(false)}>
           {updateActivity?.type === 'Deposit' && (
             <UpdateActivityContainer>
@@ -242,22 +242,18 @@ function ActivitiesList() {
               />
             </UpdateActivityContainer>
           )}
-          {updateActivity?.type === 'Trade' && (
-            <UpdateActivityContainer>
-              <Type scale="h5">
-                {updateActivity?.cost > 0 ? 'Buy' : 'Sell'}
-              </Type>
-              <ActivityTradeForm
-                mode={updateActivity?.cost > 0 ? 'buy' : 'sell'}
-                currency={portfolio.currency}
-                initialActivity={updateActivity}
-                onClose={() => setShowUpdateActivity(false)}
-                onSubmit={handleUpdateActivity}
-                onDelete={handleDeleteActivity}
-              />
-            </UpdateActivityContainer>
-          )}
         </Modal>
+      )}
+
+      {showUpdateActivity && updateActivity?.type === 'Trade' && (
+        <ActivityTradeModal
+          mode={updateActivity?.cost > 0 ? 'buy' : 'sell'}
+          currency={portfolio.currency}
+          initialActivity={updateActivity}
+          onClose={() => setShowUpdateActivity(false)}
+          onSubmit={handleUpdateActivity}
+          onDelete={handleDeleteActivity}
+        />
       )}
     </div>
   );

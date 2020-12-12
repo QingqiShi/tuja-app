@@ -1,7 +1,13 @@
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 import { RiArrowDownSLine } from 'react-icons/ri';
-import { inputFont, labelFont, helperFont, paddings } from '../../mixins';
+import {
+  inputFont,
+  labelFont,
+  helperFont,
+  paddings,
+  inputEndPadding,
+} from '../../mixins';
 
 const Label = styled.label`
   display: block;
@@ -34,6 +40,7 @@ const SelectContainer = styled.div`
 const SelectBase = styled.select`
   ${inputFont}
   ${paddings}
+  ${inputEndPadding}
   border-radius: ${({ theme }) => theme.spacings.xs};
   border: ${({ theme }) =>
     `2px solid ${transparentize(0.9, theme.colors.textOnBackground)}`};
@@ -42,14 +49,6 @@ const SelectBase = styled.select`
   transition: all 0.2s;
   width: 100%;
   appearance: none;
-
-  padding-right: 3rem;
-  @media (${({ theme }) => theme.breakpoints.minTablet}) {
-    padding-right: 3rem;
-  }
-  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-    padding-right: 3rem;
-  }
 
   &:focus {
     outline: none;

@@ -2,9 +2,14 @@ import styled, { css } from 'styled-components';
 
 interface TypeProps {
   scale: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2';
-  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
+  as?:
+    | string
+    | React.ComponentClass<any, any>
+    | React.FunctionComponent<any>
+    | undefined;
   className?: string;
   noMargin?: boolean;
+  weight?: number;
 }
 
 const defaultAs = {
@@ -18,7 +23,7 @@ const defaultAs = {
   body2: 'p' as const,
 };
 
-const TypeBase = styled.span<Pick<TypeProps, 'scale' | 'noMargin'>>`
+const TypeBase = styled.span<Pick<TypeProps, 'scale' | 'noMargin' | 'weight'>>`
   font-family: ${({ theme }) => theme.fontFamily};
   ${({ scale }) => css`
     font-size: ${({ theme }) => theme.fonts[scale].size};
@@ -26,6 +31,11 @@ const TypeBase = styled.span<Pick<TypeProps, 'scale' | 'noMargin'>>`
     letter-spacing: ${({ theme }) => theme.fonts[scale].spacing};
     font-weight: ${({ theme }) => theme.fonts[scale].weight};
   `}
+  ${({ weight }) =>
+    weight &&
+    css`
+      font-weight: ${weight};
+    `}
   margin: ${({ scale, noMargin }) => {
     if (noMargin) return '0';
     return scale === 'body1' || scale === 'body2'
@@ -44,6 +54,7 @@ function Type({
   children,
   className,
   noMargin,
+  weight,
 }: React.PropsWithChildren<TypeProps>) {
   return (
     <TypeBase
@@ -51,6 +62,7 @@ function Type({
       as={as ?? defaultAs[scale]}
       className={className}
       noMargin={noMargin}
+      weight={weight}
     >
       {children}
     </TypeBase>
