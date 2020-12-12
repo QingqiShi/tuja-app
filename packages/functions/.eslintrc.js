@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  ignorePatterns: ['*.js'],
   env: {
     browser: true,
     es6: true,

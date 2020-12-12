@@ -12,7 +12,9 @@
     "emulate": "firebase emulators:start --only firestore,pubsub,functions --import=testData",
     "emulator:export": "firebase emulators:export ./testData",
     "shell": "firebase functions:shell",
-    "analyze": "lerna run analyze"
+    "analyze": "lerna run analyze",
+    "predeploy": "lerna run predeploy",
+    "postdeploy": "lerna run postdeploy"
   },
   "engines": {
     "node": "12"

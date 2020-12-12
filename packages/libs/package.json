@@ -8,8 +8,8 @@
   "types": "build/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "start": "tsc --watch --preserveWatchOutput -p tsconfig-build.json",
-    "dev": "yarn start",
+    "start": "yarn dev",
+    "dev": "tsc --watch --preserveWatchOutput -p tsconfig-build.json",
     "build": "tsc -p tsconfig-build.json",
     "lint": "eslint src/**/*.ts",
     "test": "echo \"Error: run tests from root\" && exit 1"
