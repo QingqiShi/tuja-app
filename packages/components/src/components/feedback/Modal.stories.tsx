@@ -14,4 +14,5 @@ export const Default = Template.bind({});
 Default.args = {
   children: <div>test</div>,
   padding: true,
+  open: true,
 };

@@ -113,8 +113,8 @@ function InvestmentsList({
         );
       })}
 
-      {showAlias && currentTicker && (
-        <Modal onClose={() => setShowAlias(false)}>
+      {currentTicker && (
+        <Modal onClose={() => setShowAlias(false)} open={showAlias}>
           <UpdateAlias
             ticker={currentTicker}
             onClose={() => setShowAlias(false)}
@@ -122,8 +122,8 @@ function InvestmentsList({
         </Modal>
       )}
 
-      {showAllocation && currentTicker && (
-        <Modal onClose={() => setShowAllocation(false)}>
+      {currentTicker && (
+        <Modal onClose={() => setShowAllocation(false)} open={showAllocation}>
           <UpdateAllocation
             ticker={currentTicker}
             onClose={() => setShowAllocation(false)}

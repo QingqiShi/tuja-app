@@ -7,7 +7,7 @@ import { formatCurrency } from '@tuja/libs';
 import ActivityDepositForm from './ActivityDepositForm';
 import ActivityDividendForm from './ActivityDividendForm';
 import ActivityStockDividendForm from './ActivityStockDividendForm';
-import ActivityTradeModal from './ActivityTradeModal';
+import ActivityTradeForm from './ActivityTradeForm';
 import { Card } from 'commonStyledComponents';
 import { logEvent } from 'libs/analytics';
 import { updatePortfolioActivities } from 'libs/portfolio';
@@ -204,57 +204,58 @@ function ActivitiesList() {
         ));
       })}
 
-      {showUpdateActivity && updateActivity?.type !== 'Trade' && (
-        <Modal onClose={() => setShowUpdateActivity(false)}>
-          {updateActivity?.type === 'Deposit' && (
-            <UpdateActivityContainer>
-              <Type scale="h5">Deposit</Type>
-              <ActivityDepositForm
-                currency={portfolio.currency}
-                initialActivity={updateActivity}
-                onClose={() => setShowUpdateActivity(false)}
-                onSubmit={handleUpdateActivity}
-                onDelete={handleDeleteActivity}
-              />
-            </UpdateActivityContainer>
-          )}
-          {updateActivity?.type === 'Dividend' && (
-            <UpdateActivityContainer>
-              <Type scale="h5">Cash Dividend</Type>
-              <ActivityDividendForm
-                currency={portfolio.currency}
-                initialActivity={updateActivity}
-                onClose={() => setShowUpdateActivity(false)}
-                onSubmit={handleUpdateActivity}
-                onDelete={handleDeleteActivity}
-              />
-            </UpdateActivityContainer>
-          )}
-          {updateActivity?.type === 'StockDividend' && (
-            <UpdateActivityContainer>
-              <Type scale="h5">Stock Dividend</Type>
-              <ActivityStockDividendForm
-                currency={portfolio.currency}
-                initialActivity={updateActivity}
-                onClose={() => setShowUpdateActivity(false)}
-                onSubmit={handleUpdateActivity}
-                onDelete={handleDeleteActivity}
-              />
-            </UpdateActivityContainer>
-          )}
-        </Modal>
-      )}
-
-      {showUpdateActivity && updateActivity?.type === 'Trade' && (
-        <ActivityTradeModal
-          mode={updateActivity?.cost > 0 ? 'buy' : 'sell'}
-          currency={portfolio.currency}
-          initialActivity={updateActivity}
-          onClose={() => setShowUpdateActivity(false)}
-          onSubmit={handleUpdateActivity}
-          onDelete={handleDeleteActivity}
-        />
-      )}
+      <Modal
+        onClose={() => setShowUpdateActivity(false)}
+        open={showUpdateActivity}
+        width={30}
+      >
+        {updateActivity?.type === 'Deposit' && (
+          <UpdateActivityContainer>
+            <Type scale="h5">Deposit</Type>
+            <ActivityDepositForm
+              currency={portfolio.currency}
+              initialActivity={updateActivity}
+              onClose={() => setShowUpdateActivity(false)}
+              onSubmit={handleUpdateActivity}
+              onDelete={handleDeleteActivity}
+            />
+          </UpdateActivityContainer>
+        )}
+        {updateActivity?.type === 'Dividend' && (
+          <UpdateActivityContainer>
+            <Type scale="h5">Cash Dividend</Type>
+            <ActivityDividendForm
+              currency={portfolio.currency}
+              initialActivity={updateActivity}
+              onClose={() => setShowUpdateActivity(false)}
+              onSubmit={handleUpdateActivity}
+              onDelete={handleDeleteActivity}
+            />
+          </UpdateActivityContainer>
+        )}
+        {updateActivity?.type === 'StockDividend' && (
+          <UpdateActivityContainer>
+            <Type scale="h5">Stock Dividend</Type>
+            <ActivityStockDividendForm
+              currency={portfolio.currency}
+              initialActivity={updateActivity}
+              onClose={() => setShowUpdateActivity(false)}
+              onSubmit={handleUpdateActivity}
+              onDelete={handleDeleteActivity}
+            />
+          </UpdateActivityContainer>
+        )}
+        {updateActivity?.type === 'Trade' && (
+          <ActivityTradeForm
+            mode={updateActivity?.cost > 0 ? 'buy' : 'sell'}
+            currency={portfolio.currency}
+            initialActivity={updateActivity}
+            onClose={() => setShowUpdateActivity(false)}
+            onSubmit={handleUpdateActivity}
+            onDelete={handleDeleteActivity}
+          />
+        )}
+      </Modal>
     </div>
   );
 }

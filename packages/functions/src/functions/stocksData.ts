@@ -54,7 +54,6 @@ function _stocksLivePrices(tickers: string[]) {
   const token = getToken();
   return Promise.all(
     tickers.map(async (ticker) => {
-      functions.logger.log('ticker', { ticker });
       const response = await fetch(
         `https://eodhistoricaldata.com/api/real-time/${ticker}?fmt=json&api_token=${token}`
       );
@@ -67,6 +66,7 @@ export const stockLivePrice = functions
   .runWith({ memory: '1GB' })
   .https.onCall(async (data) => {
     const { tickers } = validatePayload(data, { tickers: [''] });
+    functions.logger.log('tickers', { tickers });
 
     const livePrices = await _stocksLivePrices(tickers);
     return livePrices;
@@ -143,6 +143,7 @@ export const stocksPrices = functions
       date: '',
       currency: '',
     });
+    functions.logger.log('tickers', { tickers });
 
     const { normalizeForex, getForexPair } = await import('@tuja/libs');
 
@@ -150,7 +151,6 @@ export const stocksPrices = functions
     const { default: dayjs } = await import('dayjs');
 
     // Get info to figure out what currency to fetch
-    console.log(tickers);
     const mappedStocksInfo = await Promise.all(tickers.map(_getStockInfo));
     const forexPairs = [
       ...new Set(

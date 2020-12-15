@@ -18,3 +18,5 @@ export { default as TopBar } from './components/controls/TopBar';
 
 export { GlobalStyle } from './globalStyle';
 export { getTheme } from './theme';
+
+export * from 'framer-motion';
