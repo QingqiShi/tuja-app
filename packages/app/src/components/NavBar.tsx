@@ -181,8 +181,11 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
           <SignIn ref={popOutRef} />
         </PopOut>
       )}
-      {showBenchmarkModal && portfolio && (
-        <Modal onClose={() => setShowBenchmarkModal(false)}>
+      {portfolio && (
+        <Modal
+          onClose={() => setShowBenchmarkModal(false)}
+          open={showBenchmarkModal}
+        >
           <ModalContainer>
             <Type scale="h5">Portfolio Benchmark</Type>
             <SetBenchmarkForm

@@ -16,11 +16,11 @@ import {
   Button,
   DateInput,
   LinearLoader,
-  Modal,
   NumberInput,
   SearchSuggest,
   StockListItem,
   Type,
+  motion,
 } from '@tuja/components';
 import { exchangeCurrency, formatCurrency } from '@tuja/libs';
 import CurrencyInput from './CurrencyInput';
@@ -122,18 +122,18 @@ function decodeHtml(html: string) {
   return txt.value;
 }
 
-interface ActivityTradeModalProps extends ActivityFormProps {
+interface ActivityTradeFormProps extends ActivityFormProps {
   mode: 'buy' | 'sell';
 }
 
-function ActivityTradeModal({
+function ActivityTradeForm({
   mode,
   currency,
   initialActivity,
   onClose,
   onSubmit,
   onDelete,
-}: ActivityTradeModalProps) {
+}: ActivityTradeFormProps) {
   const { portfolioPerformance } = usePortfolioProcessor();
 
   const [showStep, setShowStep] = useState(0);
@@ -225,7 +225,7 @@ function ActivityTradeModal({
         setSearchSuggestions((current) => [
           ...current,
           ...stocksInfo.filter(
-            ({ Ticker }) => !current.find((s) => s.Ticker !== Ticker)
+            ({ Ticker }) => !current.find((s) => s.Ticker === Ticker)
           ),
         ]);
         setQuantities(
@@ -277,7 +277,7 @@ function ActivityTradeModal({
   };
 
   const steps = [
-    <>
+    <motion.div key="trade-step-1">
       <Type scale="h4">Choose your investments</Type>
       <SearchSuggest
         onSearch={search}
@@ -322,8 +322,9 @@ function ActivityTradeModal({
           Selected {selectedTickers.length}
         </Button>
       </ActionsContainer>
-    </>,
-    <>
+    </motion.div>,
+
+    <motion.div key="trade-step-2">
       <Type scale="h4">Number of shares</Type>
       <QuantitiesContainer>
         {selectedTickers.map(({ Ticker, Name }) => (
@@ -454,20 +455,18 @@ function ActivityTradeModal({
           {!!initialActivity && `Update ${mode === 'buy' ? 'Buy' : 'Sell'}`}
         </Button>
       </ActionsContainer>
-    </>,
+    </motion.div>,
   ];
 
-  return (
-    <Modal onClose={onClose} width={30}>
-      {initialLoading ? (
-        <LoaderContainer>
-          <LinearLoader />
-        </LoaderContainer>
-      ) : (
-        steps[showStep]
-      )}
-    </Modal>
-  );
+  if (initialLoading) {
+    return (
+      <LoaderContainer>
+        <LinearLoader />
+      </LoaderContainer>
+    );
+  }
+
+  return steps[showStep];
 }
 
-export default ActivityTradeModal;
+export default ActivityTradeForm;

@@ -1,9 +1,10 @@
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
+import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion';
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 import { card } from '../../mixins';
 
-const Container = styled.div`
+const Container = motion.custom(styled.div`
   position: fixed;
   top: 0;
   right: 0;
@@ -15,7 +16,7 @@ const Container = styled.div`
   padding: ${({ theme }) =>
     `calc(${theme.spacings.s} + env(safe-area-inset-top)) ${theme.spacings.s} calc(${theme.spacings.s} + env(safe-area-inset-bottom))`};
   z-index: ${({ theme }) => theme.zIndex.fixed};
-`;
+`);
 
 const Backdrop = styled.div`
   position: absolute;
@@ -28,15 +29,20 @@ const Backdrop = styled.div`
     transparentize(0.1, theme.colors.backgroundMain)};
 `;
 
-const ModalCard = styled.div<{
+const ModalCard = motion.custom(styled.div<{
   padding?: boolean;
   minWidth?: number;
   maxWidth?: number;
 }>`
   ${card}
   max-height: 100%;
-  overflow: auto;
+  overflow: hidden auto;
   z-index: ${({ theme }) => theme.zIndex.modal};
+
+  > div {
+    position: relative;
+  }
+
   ${({ padding, theme }) =>
     padding &&
     css`
@@ -55,10 +61,11 @@ const ModalCard = styled.div<{
       : css`
           max-width: 100%;
         `}
-`;
+`);
 
 interface ModalProps {
   onClose?: () => void;
+  open?: boolean;
   padding?: boolean;
   minWidth?: number;
   maxWidth?: number;
@@ -67,6 +74,7 @@ interface ModalProps {
 
 function Modal({
   onClose,
+  open = false,
   padding = true,
   minWidth,
   maxWidth,
@@ -74,18 +82,32 @@ function Modal({
   children,
 }: React.PropsWithChildren<ModalProps>) {
   const ref = useBodyScrollLock(true);
+
   return (
-    <Container>
-      <Backdrop onClick={onClose} />
-      <ModalCard
-        ref={ref}
-        padding={padding}
-        minWidth={minWidth ?? width}
-        maxWidth={maxWidth ?? width}
-      >
-        {children}
-      </ModalCard>
-    </Container>
+    <AnimatePresence>
+      {open && (
+        <Container
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <Backdrop onClick={onClose} />
+          <AnimateSharedLayout>
+            <ModalCard
+              ref={ref}
+              padding={padding}
+              minWidth={minWidth ?? width}
+              maxWidth={maxWidth ?? width}
+              initial={{ y: 100 }}
+              animate={{ y: 0 }}
+              layout="position"
+            >
+              {children}
+            </ModalCard>
+          </AnimateSharedLayout>
+        </Container>
+      )}
+    </AnimatePresence>
   );
 }
 
