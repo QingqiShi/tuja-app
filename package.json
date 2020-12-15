@@ -39,7 +39,7 @@
     "@types/styled-components": "^5.1.5",
     "commitizen": "^4.2.2",
     "cz-conventional-changelog": "^3.3.0",
-    "firebase": "^8.1.2",
+    "firebase": "^8.2.0",
     "firebase-tools": "^8.18.1",
     "husky": "^4.3.5",
     "lerna": "^3.21.0",
