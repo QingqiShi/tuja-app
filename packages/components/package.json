@@ -19,7 +19,7 @@
   "dependencies": {
     "@visx/visx": "^1.2.0",
     "body-scroll-lock": "^3.1.5",
-    "framer-motion": "^2.9.5",
+    "framer-motion": "^3.0.0",
     "react-use": "^15.3.4"
   },
   "devDependencies": {
