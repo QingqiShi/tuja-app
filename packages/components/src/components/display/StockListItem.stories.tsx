@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Story, Meta } from '@storybook/react';
 import StockListItem from './StockListItem';
 
 export default {
@@ -6,6 +6,13 @@ export default {
   component: StockListItem,
 } as Meta;
 
-export const Demo = () => (
-  <StockListItem code="AAPL" exchange="US" name="Apple Ltd" />
+const Template: Story<React.ComponentProps<typeof StockListItem>> = (args) => (
+  <StockListItem {...args} />
 );
+
+export const Demo = Template.bind({});
+Demo.args = {
+  code: 'AAPL',
+  exchange: 'US',
+  name: 'Apple Ltd',
+};

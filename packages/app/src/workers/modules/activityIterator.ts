@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import type { Activity } from 'libs/activities';
+import type { Activity } from '@tuja/libs';
 
 // An item that describes all activities for a given date
 export interface ActivityIterateItem {

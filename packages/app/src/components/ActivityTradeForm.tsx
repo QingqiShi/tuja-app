@@ -22,11 +22,15 @@ import {
   Type,
   motion,
 } from '@tuja/components';
-import { exchangeCurrency, formatCurrency } from '@tuja/libs';
+import {
+  Activity,
+  ActivityFormProps,
+  exchangeCurrency,
+  formatCurrency,
+} from '@tuja/libs';
 import CurrencyInput from './CurrencyInput';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import { theme, getTheme } from 'theme';
-import type { Activity, ActivityFormProps } from 'libs/activities';
 import {
   fetchStockSearch,
   fetchStocksInfo,
@@ -88,10 +92,6 @@ const EditableField = styled.div`
   }
 `;
 
-const LoaderContainer = styled.div`
-  position: relative;
-`;
-
 const ButtonRow = styled.div`
   display: flex;
   align-items: flex-end;
@@ -100,6 +100,13 @@ const ButtonRow = styled.div`
   }
   button {
     margin: 0 0 calc(${theme.spacings('s')} + 1px) ${theme.spacings('xs')};
+  }
+`;
+
+const ButtonRowCenter = styled(ButtonRow)`
+  align-items: center;
+  button {
+    margin: 0 0 1px ${theme.spacings('xs')};
   }
 `;
 
@@ -141,7 +148,7 @@ function ActivityTradeForm({
 
   // Trade date
   const [date, setDate] = useState(initialActivity?.date ?? new Date());
-  const [showDateInput, setShowDateInput] = useState(false);
+  const [showDateInput, setShowDateInput] = useState(!!initialActivity);
 
   // Search suggestions
   const [searchSuggestions, setSearchSuggestions] = useState<StockInfo[]>(
@@ -177,7 +184,9 @@ function ActivityTradeForm({
 
   // Total value
   const [totalValue, setTotalValue] = useState(getInitialCost(initialActivity));
-  const [showTotalValueInput, setShowTotalValueInput] = useState(false);
+  const [showTotalValueInput, setShowTotalValueInput] = useState(
+    !!initialActivity
+  );
   useEffect(() => {
     const fetch = async () => {
       const tickers = Object.keys(quantities);
@@ -277,7 +286,7 @@ function ActivityTradeForm({
   };
 
   const steps = [
-    <motion.div key="trade-step-1">
+    <motion.div>
       <Type scale="h4">Choose your investments</Type>
       <SearchSuggest
         onSearch={search}
@@ -324,7 +333,7 @@ function ActivityTradeForm({
       </ActionsContainer>
     </motion.div>,
 
-    <motion.div key="trade-step-2">
+    <motion.div>
       <Type scale="h4">Number of shares</Type>
       <QuantitiesContainer>
         {selectedTickers.map(({ Ticker, Name }) => (
@@ -367,7 +376,7 @@ function ActivityTradeForm({
         </Type>
         <EditableField>
           {showDateInput ? (
-            <ButtonRow>
+            <ButtonRowCenter>
               <DateInput value={date} onChange={setDate} />
               <Button
                 icon={<RiCloseLine />}
@@ -376,7 +385,7 @@ function ActivityTradeForm({
                   setDate(new Date());
                 }}
               />
-            </ButtonRow>
+            </ButtonRowCenter>
           ) : (
             <Button
               endIcon={<RiCalendarLine />}
@@ -393,7 +402,7 @@ function ActivityTradeForm({
         </Type>
         <EditableField>
           {showTotalValueInput ? (
-            <ButtonRow>
+            <ButtonRowCenter>
               <CurrencyInput
                 value={totalValue}
                 onChange={setTotalValue}
@@ -403,7 +412,7 @@ function ActivityTradeForm({
                 icon={<RiCloseLine />}
                 onClick={() => setShowTotalValueInput(false)}
               />
-            </ButtonRow>
+            </ButtonRowCenter>
           ) : (
             <Button
               endIcon={<RiEditLine />}
@@ -460,9 +469,9 @@ function ActivityTradeForm({
 
   if (initialLoading) {
     return (
-      <LoaderContainer>
+      <motion.div>
         <LinearLoader />
-      </LoaderContainer>
+      </motion.div>
     );
   }
 

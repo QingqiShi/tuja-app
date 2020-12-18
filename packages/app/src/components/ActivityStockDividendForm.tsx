@@ -3,9 +3,9 @@ import { GiReceiveMoney } from 'react-icons/gi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { v4 as uuid } from 'uuid';
 import { Button, DateInput, NumberInput, Select } from '@tuja/components';
+import type { ActivityFormProps } from '@tuja/libs';
 import { ActionsContainer, Field, Label } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
-import type { ActivityFormProps } from 'libs/activities';
 
 function ActivityStockDividendForm({
   initialActivity,
