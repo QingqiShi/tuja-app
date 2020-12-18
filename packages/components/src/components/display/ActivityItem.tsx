@@ -31,6 +31,7 @@ const ActivityAmount = styled(Type)`
 `;
 
 const TickersList = styled.div`
+  display: grid;
   margin-top: ${({ theme }) => theme.spacings.xs};
   padding-top: ${({ theme }) => theme.spacings.xs};
   border-top: 1px solid
