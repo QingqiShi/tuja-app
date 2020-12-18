@@ -39,3 +39,16 @@ export interface ActivityFormProps {
   onSubmit?: (activity: Activity) => Promise<void>;
   onDelete?: () => Promise<void>;
 }
+
+export const activityLabels = (activity: Activity) => {
+  if (activity.type === 'Trade') {
+    return activity.cost >= 0 ? 'Buy' : 'Sell';
+  }
+  if (activity.type === 'Dividend') {
+    return 'Cash Dividend';
+  }
+  if (activity.type === 'StockDividend') {
+    return 'Stock Dividend';
+  }
+  return activity.type;
+};

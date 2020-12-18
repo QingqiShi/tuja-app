@@ -1,8 +1,7 @@
 import dayjs from 'dayjs';
 import { v4 as uuid } from 'uuid';
 import firebase from 'firebase/app';
-import { TimeSeries } from '@tuja/libs';
-import { Activity } from './activities';
+import { Activity, TimeSeries } from '@tuja/libs';
 import { StockInfo, StockLivePrice } from './stocksClient';
 
 const PORTFOLIO_DATE_FORMAT = 'YYYY-MM-DD';
