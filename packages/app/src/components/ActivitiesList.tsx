@@ -20,7 +20,7 @@ const UpdateActivityContainer = styled.div`
 const MonthTitle = styled(Type)`
   position: sticky;
   background-color: ${({ theme }) => theme.colors.backgroundMain};
-  z-index: ${({ theme }) => theme.zIndex.fixed};
+  z-index: ${({ theme }) => theme.zIndex.raised};
   top: 4rem;
   @media (${({ theme }) => theme.breakpoints.minLaptop}) {
     top: 3.5rem;
