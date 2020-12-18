@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import dayjs from 'dayjs';
-import { Portfolio, watchPortfolio, examplePortfolio } from 'libs/portfolio';
+import { Portfolio, watchPortfolio, examplePortfolio } from '@tuja/libs';
 import useAuth from './useAuth';
 import useStartDate from './useStartDate';
 
