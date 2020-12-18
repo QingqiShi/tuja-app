@@ -12,10 +12,10 @@ import {
   RiArrowLeftRightLine,
 } from 'react-icons/ri';
 import { Modal, TopBar, Type } from '@tuja/components';
+import { updatePortfolioBenchmark } from '@tuja/libs';
 import { theme } from 'theme';
 import useAuth from 'hooks/useAuth';
 import usePortfolio from 'hooks/usePortfolio';
-import { updatePortfolioBenchmark } from 'libs/portfolio';
 import { getDB, clearCache } from 'workers/modules/cachedStocksData';
 import SignIn from './SignIn';
 import SetBenchmarkForm from './SetBenchmarkForm';

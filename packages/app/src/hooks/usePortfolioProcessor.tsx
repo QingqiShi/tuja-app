@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { TimeSeries } from '@tuja/libs';
-import { PortfolioPerformance, processPerformanceSeries } from 'libs/portfolio';
+import { PortfolioPerformance, processPerformanceSeries } from '@tuja/libs';
 import usePortfolio from 'hooks/usePortfolio';
 import useStartDate from 'hooks/useStartDate';
 import useLoadingState from './useLoadingState';

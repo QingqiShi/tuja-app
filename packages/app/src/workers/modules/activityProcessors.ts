@@ -1,12 +1,13 @@
 import dayjs from 'dayjs';
 import BigNumber from 'bignumber.js';
-import { exchangeCurrency, TimeSeries } from '@tuja/libs';
-import type {
+import {
+  exchangeCurrency,
+  TimeSeries,
   StockHistory,
   StockInfo,
   StockLivePrice,
-} from 'libs/stocksClient';
-import type { PortfolioPerformance } from 'libs/portfolio';
+  PortfolioPerformance,
+} from '@tuja/libs';
 import type { ActivityIterateItem } from './activityIterator';
 
 export function collectHoldingsNumShares(

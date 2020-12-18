@@ -2,13 +2,12 @@ import { useState, Fragment } from 'react';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
 import { ActivityItem, Modal, Type } from '@tuja/components';
-import { Activity } from '@tuja/libs';
+import { Activity, updatePortfolioActivities } from '@tuja/libs';
 import ActivityDepositForm from './ActivityDepositForm';
 import ActivityDividendForm from './ActivityDividendForm';
 import ActivityStockDividendForm from './ActivityStockDividendForm';
 import ActivityTradeForm from './ActivityTradeForm';
 import { logEvent } from 'libs/analytics';
-import { updatePortfolioActivities } from 'libs/portfolio';
 import usePortfolio from 'hooks/usePortfolio';
 
 const UpdateActivityContainer = styled.div`

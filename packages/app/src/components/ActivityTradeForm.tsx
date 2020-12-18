@@ -27,17 +27,15 @@ import {
   ActivityFormProps,
   exchangeCurrency,
   formatCurrency,
-} from '@tuja/libs';
-import CurrencyInput from './CurrencyInput';
-import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
-import { theme, getTheme } from 'theme';
-import {
   fetchStockSearch,
   fetchStocksInfo,
   fetchStocksPrices,
   StockInfo,
-} from 'libs/stocksClient';
-import { PortfolioPerformance } from 'libs/portfolio';
+  PortfolioPerformance,
+} from '@tuja/libs';
+import CurrencyInput from './CurrencyInput';
+import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
+import { theme, getTheme } from 'theme';
 
 const verticalCenter = css`
   display: flex;
