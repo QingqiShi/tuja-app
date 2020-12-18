@@ -1,8 +1,8 @@
 import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { createPortfolio } from '@tuja/libs';
 import useAuth from 'hooks/useAuth';
 import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
+import { createPortfolio } from 'libs/portfolio';
 import { logEvent } from 'libs/analytics';
 import CreatePortfolio from 'components/CreatePortfolio';
 

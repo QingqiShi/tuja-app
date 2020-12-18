@@ -3,7 +3,7 @@ import { RiMoreLine, RiSubtractLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
 import { Button, ButtonGroup, Chart, Modal, Type } from '@tuja/components';
-import { Activity, formatCurrency, addPortfolioActivity } from '@tuja/libs';
+import { Activity, formatCurrency } from '@tuja/libs';
 import DashboardLayout from 'components/DashboardLayout';
 import PortfolioOverview from 'components/PortfolioOverview';
 import PortfolioPieCard from 'components/PortfolioPieCard';
@@ -17,6 +17,7 @@ import { Card, CardMedia } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import useStartDate from 'hooks/useStartDate';
+import { addPortfolioActivity } from 'libs/portfolio';
 import { logEvent } from 'libs/analytics';
 import { theme } from 'theme';
 

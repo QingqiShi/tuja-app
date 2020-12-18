@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { Table, TableRow, TableHeader, TableCell } from '@tuja/components';
-import { formatCurrency, PortfolioPerformance } from '@tuja/libs';
+import { formatCurrency } from '@tuja/libs';
 import CurrencyInput from 'components/CurrencyInput';
 import usePortfolio from 'hooks/usePortfolio';
+import { PortfolioPerformance } from 'libs/portfolio';
 import { CardMedia } from 'commonStyledComponents';
 import { theme } from 'theme';
 
