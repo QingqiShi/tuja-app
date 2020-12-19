@@ -8,6 +8,12 @@ import { normalizeForex, getForexPair, TimeSeries } from '@tuja/libs';
 import type { Portfolio, PortfolioPerformance } from 'libs/portfolio';
 import { StockHistory, StockInfo, StockLivePrice } from 'libs/stocksClient';
 import {
+  getDB,
+  getStocksHistory,
+  getStocksInfo,
+  getStocksLivePrice,
+} from 'libs/cachedStocksData';
+import {
   getActivitiesIterator,
   iterateActivities,
 } from './modules/activityIterator';
@@ -24,12 +30,6 @@ import {
   collectHoldingsNumShares,
   cutTimeSeries,
 } from './modules/activityProcessors';
-import {
-  getDB,
-  getStocksHistory,
-  getStocksInfo,
-  getStocksLivePrice,
-} from './modules/cachedStocksData';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyBHHoqcowFL7iaC2LP6QrP-pQyxUCqB3QM',

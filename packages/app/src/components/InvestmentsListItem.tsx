@@ -12,7 +12,7 @@ import { Card } from 'commonStyledComponents';
 import useAuth from 'hooks/useAuth';
 import { theme, getTheme } from 'theme';
 import { StockHistory } from 'libs/stocksClient';
-import { getDB, getStocksHistory } from 'workers/modules/cachedStocksData';
+import { getDB, getStocksHistory } from 'libs/cachedStocksData';
 
 const InvestmentContainer = styled.div`
   position: relative;
