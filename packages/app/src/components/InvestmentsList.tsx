@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import styled from 'styled-components/macro';
 import { Modal, Select } from '@tuja/components';
-import { PortfolioPerformance } from '@tuja/libs';
 import UpdateAlias from 'components/UpdateAlias';
 import UpdateAllocation from 'components/UpdateAllocation';
 import InvestmentsListItem from 'components/InvestmentsListItem';
+import { PortfolioPerformance } from 'libs/portfolio';
 import useColors from 'hooks/useColors';
 import { theme } from 'theme';
 
