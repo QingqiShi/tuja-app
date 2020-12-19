@@ -123,6 +123,10 @@ export function getMissingStocksHistory(
   startDate: Date,
   endDate: Date
 ) {
+  const today = dayjs();
+  const actualEndDate = today.isSame(endDate, 'day')
+    ? dayjs(endDate).subtract(1, 'day').toDate()
+    : endDate;
   return tickers.flatMap((ticker) => {
     const existingData = stocksHistory[ticker];
 
@@ -132,7 +136,7 @@ export function getMissingStocksHistory(
       !existingData.adjusted ||
       !existingData.close
     ) {
-      return { ticker, startDate, endDate };
+      return { ticker, startDate, endDate: actualEndDate };
     }
 
     const missingData = [];
@@ -147,11 +151,11 @@ export function getMissingStocksHistory(
       });
     }
 
-    if (dayjs(endDate).isAfter(existingData.range.endDate, 'date')) {
+    if (dayjs(actualEndDate).isAfter(existingData.range.endDate, 'date')) {
       missingData.push({
         ticker,
         startDate: dayjs(existingData.range.endDate).add(1, 'day').toDate(),
-        endDate,
+        endDate: actualEndDate,
       });
     }
 
