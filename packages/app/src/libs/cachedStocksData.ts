@@ -148,10 +148,10 @@ export async function getStocksHistory(
           adjusted: current.adjusted.mergeWith(history.adjustedSeries),
           range: {
             startDate: dayjs
-              .min(dayjs(startDate), dayjs(current.range.startDate))
+              .min(dayjs(fetchInfo.startDate), dayjs(current.range.startDate))
               .toDate(),
             endDate: dayjs
-              .max(dayjs(endDate), dayjs(current.range.endDate))
+              .max(dayjs(fetchInfo.endDate), dayjs(current.range.endDate))
               .toDate(),
           },
         };
