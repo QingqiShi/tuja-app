@@ -38,7 +38,7 @@
     "babel-loader": "^8.1.0",
     "react-scripts": "4.0.1",
     "source-map-explorer": "^2.5.1",
-    "worker-loader": "^3.0.6"
+    "worker-loader": "^3.0.7"
   },
   "eslintConfig": {
     "extends": "react-app"
