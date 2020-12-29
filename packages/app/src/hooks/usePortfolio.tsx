@@ -1,12 +1,17 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import dayjs from 'dayjs';
-import { Portfolio, watchPortfolio, examplePortfolio } from 'libs/portfolio';
+import type { Portfolio } from '@tuja/libs';
+import { watchPortfolios, examplePortfolio } from 'libs/portfolioClient';
 import useAuth from './useAuth';
 import useStartDate from './useStartDate';
 
-export const PortfolioContext = createContext({
-  portfolio: null as Portfolio | null,
-  portfolios: [] as Portfolio[],
+export const PortfolioContext = createContext<{
+  portfolio: Portfolio | null;
+  portfolios: Portfolio[];
+  loaded: boolean;
+}>({
+  portfolio: null,
+  portfolios: [],
   loaded: false,
 });
 
@@ -21,42 +26,60 @@ export function PortfolioProvider({
   children,
   portfolioId,
 }: React.PropsWithChildren<PortfolioProviderProps>) {
+  // Auth states
   const { state, currentUser } = useAuth();
-  const [startDate, setStartDate] = useStartDate();
-  const [loaded, setLoaded] = useState(false);
-  const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
-
-  const portfolio =
-    portfolios.find((portfolio) => portfolio.id === portfolioId) ?? null;
-
   const authStateKnown = state !== 'UNKNOWN';
   const uid = currentUser?.uid;
 
+  // Start date
+  const [startDate, setStartDate] = useStartDate();
+
+  // Portfolio states
+  const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
+  const portfolio =
+    portfolios.find((portfolio) => portfolio.id === portfolioId) ?? null;
+
+  // Loaded state
+  const [loaded, setLoaded] = useState(false);
+
+  // Set up the watcher to get portfolios from db
+  // Load example portfolio if user not logged in
   useEffect(() => {
     if (!authStateKnown) return;
 
     if (!uid) {
-      setLoaded(true);
       setPortfolios([examplePortfolio]);
       return;
     }
 
-    return watchPortfolio({ uid: uid }, (portfolios) => {
-      setPortfolios(portfolios);
+    return watchPortfolios({ uid: uid }, (portfolios) => {
+      setPortfolios(portfolios ?? []);
       setLoaded(true);
     });
-  }, [authStateKnown, uid]);
+  }, [authStateKnown, setStartDate, uid]);
 
-  const portfolioStartDate = portfolio?.activities[0]?.date;
+  // Set the initial start date
+  const portfolioStartDate = portfolio?.activitiesStartDate;
+  // const portfolioId = portfolio?.id;
+  // const dateInvalid =
+  //   startDate &&
+  //   portfolioStartDate &&
+  //   dayjs(startDate).isBefore(portfolioStartDate);
   useEffect(() => {
-    if (!startDate && portfolioStartDate) {
-      setStartDate(
-        defaultDate.isAfter(portfolioStartDate)
-          ? defaultDate.toDate()
-          : portfolioStartDate
-      );
+    if (!portfolioStartDate) {
+      setStartDate(null);
+      return;
     }
-  }, [portfolioStartDate, setStartDate, startDate]);
+
+    console.log('testStartDate');
+    setStartDate(
+      defaultDate.isAfter(portfolioStartDate)
+        ? defaultDate.toDate()
+        : portfolioStartDate
+    );
+
+    // depend on portfolioId - when the user switches portfolio
+  }, [portfolioStartDate, setStartDate, portfolioId]);
 
   return (
     <PortfolioContext.Provider

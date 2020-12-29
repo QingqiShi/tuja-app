@@ -1,113 +1,11 @@
 import dayjs from 'dayjs';
-import BigNumber from 'bignumber.js';
 import { exchangeCurrency, TimeSeries } from '@tuja/libs';
 import type {
   StockHistory,
   StockInfo,
   StockLivePrice,
 } from 'libs/stocksClient';
-import type { PortfolioPerformance } from 'libs/portfolio';
-import type { ActivityIterateItem } from './activityIterator';
-
-export function collectHoldingsNumShares(
-  item: ActivityIterateItem,
-  { ...holdingsNumShares }: { [ticker: string]: number }
-) {
-  const processTicker = (ticker: string, units: number) => {
-    if (!(ticker in holdingsNumShares)) {
-      holdingsNumShares[ticker] = 0;
-    }
-    holdingsNumShares[ticker] = new BigNumber(holdingsNumShares[ticker])
-      .plus(units)
-      .toNumber();
-  };
-  // Trades
-  Object.keys(item.trades).forEach((ticker) =>
-    processTicker(ticker, item.trades[ticker])
-  );
-  // Stock dividend
-  Object.keys(item.stockDividend).forEach((ticker) =>
-    processTicker(ticker, item.stockDividend[ticker])
-  );
-  // Remove tickers no longer held
-  Object.keys(holdingsNumShares).forEach((ticker) => {
-    if (!holdingsNumShares[ticker]) {
-      delete holdingsNumShares[ticker];
-    }
-  });
-  return holdingsNumShares;
-}
-
-export function collectHoldingsCost(
-  item: ActivityIterateItem,
-  {
-    numShares,
-    costs,
-  }: {
-    numShares: { [ticker: string]: number };
-    costs: { [ticker: string]: number };
-  },
-  stocksInfo: { [ticker: string]: StockInfo },
-  stocksHistory: { [ticker: string]: StockHistory },
-  baseCurrency: string
-) {
-  const newUnits: { [ticker: string]: number } = {};
-  const newCosts: { [ticker: string]: number } = { ...costs };
-  const setUnits = (ticker: string, units: number) => {
-    if (!(ticker in newUnits)) {
-      newUnits[ticker] = 0;
-    }
-    newUnits[ticker] += units;
-  };
-  // Trades
-  Object.keys(item.trades).forEach((ticker) => {
-    const stockInfo = stocksInfo[ticker];
-    const stockHistory = stocksHistory[ticker];
-    if (!stockInfo || !stockHistory) return;
-
-    setUnits(ticker, item.trades[ticker]);
-
-    const price =
-      Object.keys(item.trades).length === 1
-        ? item.totalTradeCost / item.trades[ticker]
-        : exchangeCurrency(
-            stockHistory.close.get(item.date) ?? 0,
-            stockInfo.Currency ?? baseCurrency,
-            baseCurrency,
-            (forexPair) => stocksHistory[forexPair]?.close.get(item.date)
-          );
-    const units = newUnits[ticker];
-    const currentCost = costs[ticker] ?? 0;
-    const currentUnits = numShares[ticker] ?? 0;
-    newCosts[ticker] =
-      (currentCost * currentUnits + price * units) / (currentUnits + units);
-  });
-  // Stock dividend
-  Object.keys(item.stockDividend).forEach((ticker) => {
-    const currentCost = newCosts[ticker] ?? costs[ticker] ?? 0;
-    const currentUnits = numShares[ticker] ?? 0 + newUnits[ticker] ?? 0;
-
-    setUnits(ticker, item.stockDividend[ticker]);
-    newCosts[ticker] =
-      (currentCost * currentUnits) /
-      (currentUnits + item.stockDividend[ticker]);
-  });
-  return newCosts;
-}
-
-export function collectCash(item: ActivityIterateItem, prevCash: number) {
-  return prevCash + item.deposit + item.cashDividend - item.totalTradeCost;
-}
-
-export function collectCashFlow(
-  item: ActivityIterateItem,
-  prevCashFlow: number
-) {
-  return {
-    totalCashFlow: prevCashFlow + item.deposit,
-    lastCashFlow: [item.date, item.deposit] as const,
-  };
-}
+import type { PortfolioPerformance } from 'libs/portfolioClient';
 
 export function calcHoldingsValues(
   date: Date,
@@ -158,7 +56,6 @@ export function calcGain(totalValue: number, cashFlow: number) {
 
 export function calcHoldings(
   numShares: { [ticker: string]: number },
-  costs: { [ticker: string]: number },
   endDate: Date,
   baseCurrency: string,
   stocksInfo: { [ticker: string]: StockInfo },
@@ -179,15 +76,10 @@ export function calcHoldings(
       (forexPair) => stocksHistory[forexPair]?.close.get(endDate)
     );
     const value = units * price;
-    const cost = costs[ticker];
-    const gain = value - cost * units;
-    const returns = gain / (cost * units);
 
     holdings[ticker] = {
       units,
       value,
-      gain,
-      returns,
       info: stocksInfo[ticker],
       livePrice: stocksLivePrice[ticker],
     };
@@ -219,19 +111,6 @@ export function accumulateDailyTwrr(
   });
 
   return timeWeightedReturns;
-}
-
-export function cutTimeSeries(
-  series: TimeSeries,
-  startDate: Date,
-  endDate: Date
-) {
-  // Filter out of range data
-  const startDay = dayjs(startDate);
-  const endDay = dayjs(endDate);
-  series.data = series.data.filter(
-    (d) => startDay.isSameOrBefore(d[0]) && endDay.isAfter(d[0])
-  );
 }
 
 export function calcBenchmarkReturn(

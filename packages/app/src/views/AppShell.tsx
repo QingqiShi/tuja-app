@@ -13,7 +13,6 @@ import NavBar from 'components/NavBar';
 import GlobalLoader from 'components/GlobalLoader';
 import useAuth, { AuthProvider } from 'hooks/useAuth';
 import usePortfolio, { PortfolioProvider } from 'hooks/usePortfolio';
-import { PortfolioProcessorProvider } from 'hooks/usePortfolioProcessor';
 import { StartDateProvider } from 'hooks/useStartDate';
 import { LoadingStateProvider } from 'hooks/useLoadingState';
 import { theme } from 'theme';
@@ -24,10 +23,16 @@ const Create = lazy(() => import('views/App/Create'));
 
 if (window.location.hostname === 'localhost') {
   if (!window.firestoreConfigured) {
-    firebase.firestore().settings({ host: 'localhost:5002', ssl: false });
+    firebase.firestore().settings({
+      host: 'localhost:5002',
+      ssl: false,
+      ignoreUndefinedProperties: true,
+    });
     window.firestoreConfigured = true;
   }
   firebase.functions().useEmulator('localhost', 5001);
+} else {
+  firebase.firestore().settings({ ignoreUndefinedProperties: true });
 }
 
 dayjs.extend(isSameOrBefore);
@@ -109,20 +114,15 @@ function AppShell() {
 
 function AppShellWithProviders() {
   const match = useRouteMatch<{ portfolioId?: string }>('/:page/:portfolioId');
+  const portfolioId = match ? match?.params.portfolioId : 'example-portfolio';
 
   return (
     <AuthProvider>
       <LoadingStateProvider>
         <StartDateProvider>
-          <PortfolioProvider
-            portfolioId={
-              match ? match?.params.portfolioId : 'example-portfolio'
-            }
-          >
-            <PortfolioProcessorProvider>
-              <GlobalLoader />
-              <AppShell />
-            </PortfolioProcessorProvider>
+          <PortfolioProvider portfolioId={portfolioId}>
+            <GlobalLoader />
+            <AppShell />
           </PortfolioProvider>
         </StartDateProvider>
       </LoadingStateProvider>

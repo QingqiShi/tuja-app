@@ -4,9 +4,11 @@ import { Modal, Select } from '@tuja/components';
 import UpdateAlias from 'components/UpdateAlias';
 import UpdateAllocation from 'components/UpdateAllocation';
 import InvestmentsListItem from 'components/InvestmentsListItem';
-import { PortfolioPerformance } from 'libs/portfolio';
+import { PortfolioPerformance } from 'libs/portfolioClient';
 import useColors from 'hooks/useColors';
 import { theme } from 'theme';
+import usePortfolio from 'hooks/usePortfolio';
+import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 
 const SortByContainer = styled.div`
   @media (${theme.breakpoints.minTablet}) {
@@ -32,13 +34,12 @@ const SortByContainer = styled.div`
   }
 `;
 
-interface InvestmentsListProps {
-  portfolioPerformance: PortfolioPerformance;
-}
+function InvestmentsList() {
+  const { portfolio } = usePortfolio();
+  const { portfolioPerformance } = usePortfolioProcessor();
 
-function InvestmentsList({
-  portfolioPerformance: { valueSeries, holdings },
-}: InvestmentsListProps) {
+  const { holdings, valueSeries } = portfolioPerformance!;
+
   const [showMore, setShowMore] = useState('');
   const [showAlias, setShowAlias] = useState(false);
   const [showAllocation, setShowAllocation] = useState(false);
@@ -68,8 +69,17 @@ function InvestmentsList({
           }
           return (livePriceB.change_p ?? 0) - (livePriceA.change_p ?? 0);
         case 'GAIN':
-        default:
-          return holdings[b].gain - holdings[a].gain;
+        default: {
+          const costBasis = portfolio?.costBasis;
+          if (!costBasis) return 1;
+
+          const aGain =
+            holdings[a].value - (costBasis[a] ?? 0) * holdings[a].units;
+          const bGain =
+            holdings[b].value - (costBasis[b] ?? 0) * holdings[b].units;
+
+          return bGain - aGain;
+        }
       }
     })
     .filter((ticker) => !!holdings[ticker].units);

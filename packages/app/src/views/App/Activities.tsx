@@ -2,8 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components/macro';
 import { Type } from '@tuja/components';
 import ActivitiesList from 'components/ActivitiesList';
-import { Card, TitleRow } from 'commonStyledComponents';
-import usePortfolio from 'hooks/usePortfolio';
+import { TitleRow } from 'commonStyledComponents';
 import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
 import { theme } from 'theme';
 
@@ -27,28 +26,8 @@ const Container = styled.div`
   }
 `;
 
-const NoActivityBanner = styled.div`
-  display: grid;
-  place-items: center;
-  margin: ${theme.spacings('m')};
-`;
-
 function Activities() {
-  const { portfolio } = usePortfolio();
   useScrollToTopOnMount();
-
-  if (!portfolio?.activities.length) {
-    return (
-      <>
-        <Helmet>
-          <title>Activities | Tuja App</title>
-        </Helmet>
-        <NoActivityBanner>
-          <Card>No activity found</Card>
-        </NoActivityBanner>
-      </>
-    );
-  }
 
   return (
     <Container>

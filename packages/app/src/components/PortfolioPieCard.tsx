@@ -64,7 +64,7 @@ function PortfolioPieCard(_props: PortfolioPieCardProps) {
         .concat({
           label: 'Cash',
           percentage: portfolioValue
-            ? portfolioPerformance.cash / portfolioValue
+            ? (portfolioPerformance.lastSnapshot?.cash ?? 0) / portfolioValue
             : 0,
           color: getColor('Cash'),
         })

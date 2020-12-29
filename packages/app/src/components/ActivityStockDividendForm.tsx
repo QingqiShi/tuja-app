@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import { v4 as uuid } from 'uuid';
 import { Button, DateInput, NumberInput, Select } from '@tuja/components';
 import type { ActivityFormProps } from '@tuja/libs';
 import { ActionsContainer, Field, Label } from 'commonStyledComponents';
@@ -28,7 +27,7 @@ function ActivityStockDividendForm({
   const [loading, setLoading] = useState(false);
 
   const availableStocks =
-    portfolio?.tickers.map((ticker) => ({
+    Object.keys(portfolio?.latestSnapshot?.numShares ?? {}).map((ticker) => ({
       label: ticker,
       value: ticker,
     })) ?? [];
@@ -42,7 +41,7 @@ function ActivityStockDividendForm({
         try {
           if (onSubmit) {
             await onSubmit({
-              id: initialActivity?.id ?? uuid(),
+              ...initialActivity,
               type: 'StockDividend',
               date,
               ticker,
