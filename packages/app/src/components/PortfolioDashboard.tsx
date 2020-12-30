@@ -180,7 +180,6 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                     <Button
                       variant="shout"
                       onClick={() => setShowBuyModal(true)}
-                      compact
                     >
                       Buy
                     </Button>
@@ -188,7 +187,6 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                   <Button
                     variant={!!activitiesStartDate ? 'outline' : 'shout'}
                     onClick={() => setShowDepositModal(true)}
-                    compact
                   >
                     Deposit
                   </Button>
@@ -199,7 +197,6 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                       icon={
                         showMoreActions ? <RiSubtractLine /> : <RiMoreLine />
                       }
-                      compact
                     />
                   )}
                 </ActionsRow>
@@ -211,21 +208,18 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                         <Button
                           variant="outline"
                           onClick={() => setShowSellModal(true)}
-                          compact
                         >
                           Sell
                         </Button>
                         <Button
                           variant="outline"
                           onClick={() => setShowDividendModal(true)}
-                          compact
                         >
                           Cash Dividend
                         </Button>
                         <Button
                           variant="outline"
                           onClick={() => setShowStockDividendModal(true)}
-                          compact
                         >
                           Stock Dividend
                         </Button>
