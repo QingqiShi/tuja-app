@@ -156,6 +156,8 @@ async function _updateCosts(
 /**
  * Migrate all portfolios from old structure to new one where activites are
  * split out into seperate documents.
+ *
+ * Unused because the migration is done.
  */
 export const migrateActivities = functions
   .runWith({ memory: '1GB' })
