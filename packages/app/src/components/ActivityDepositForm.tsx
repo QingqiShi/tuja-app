@@ -31,7 +31,6 @@ function ActivityDepositForm({
               amount,
             });
           }
-          setLoading(false);
           if (onClose) {
             onClose();
           }
