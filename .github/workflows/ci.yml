@@ -23,8 +23,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn--
       - run: yarn install
-      - run: yarn lint
       - run: yarn build
+      - run: yarn lint
 #       - run: npm test -- --coverage --reporters="default" --reporters="jest-junit"
 #         env:
 #           CI: true
