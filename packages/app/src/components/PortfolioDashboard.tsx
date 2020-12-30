@@ -26,32 +26,13 @@ const DatePeriodContainer = styled.div`
   text-align: right;
 `;
 
-const ActionsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  position: sticky;
-  top: 100px;
-  margin: ${theme.spacings('s')} 0;
-
-  > button {
-    margin-bottom: ${theme.spacings('xs')};
-    flex-grow: 1;
-    margin-right: ${theme.spacings('xs')};
-  }
-
-  > button:last-child:not(:first-child) {
-    flex-grow: 0;
-  }
-
-  > button:nth-child(3) {
-    margin-right: 0;
-  }
-`;
-
-const ConstFirstRow = styled.div`
+const ActionsRow = styled.div`
   display: flex;
   margin: ${theme.spacings('s')} 0 ${theme.spacings('xs')};
+
+  &:last-child {
+    margin-bottom: ${theme.spacings('s')};
+  }
 
   > button {
     margin-right: ${theme.spacings('xs')};
@@ -60,15 +41,23 @@ const ConstFirstRow = styled.div`
 
   > button:last-child {
     margin-right: 0;
+  }
+
+  > button:last-child:not(:first-child) {
     flex-grow: 0;
   }
 `;
 
 const WideAction = styled.div`
   margin-bottom: ${theme.spacings('s')};
+
   > button {
     width: 100%;
     margin-bottom: ${theme.spacings('xs')};
+  }
+
+  > button:last-child {
+    margin-bottom: 0;
   }
 `;
 
@@ -186,7 +175,7 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
             <PortfolioPieCard />
             {!isDemo && (
               <div>
-                <ConstFirstRow>
+                <ActionsRow>
                   {!!activitiesStartDate && (
                     <Button
                       variant="shout"
@@ -213,7 +202,7 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                       compact
                     />
                   )}
-                </ConstFirstRow>
+                </ActionsRow>
                 {showMoreActions &&
                   !!activitiesStartDate &&
                   portfolio.costBasis && (
@@ -246,11 +235,11 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
               </div>
             )}
             {isDemo && onSignIn && (
-              <ActionsContainer>
+              <ActionsRow>
                 <Button variant="shout" onClick={onSignIn}>
                   Make Your Own
                 </Button>
-              </ActionsContainer>
+              </ActionsRow>
             )}
           </>
         }
