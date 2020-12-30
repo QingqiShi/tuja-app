@@ -10,7 +10,6 @@ import usePortfolio from 'hooks/usePortfolio';
 import useStartDate from 'hooks/useStartDate';
 import useLoadingState from 'hooks/useLoadingState';
 import {
-  MaybePortfolioPerformance,
   PortfolioPerformance,
   processPerformanceSeries,
   watchSnapshots,

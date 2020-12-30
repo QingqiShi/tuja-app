@@ -32,7 +32,7 @@ export function PortfolioProvider({
   const uid = currentUser?.uid;
 
   // Start date
-  const [startDate, setStartDate] = useStartDate();
+  const [, setStartDate] = useStartDate();
 
   // Portfolio states
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);

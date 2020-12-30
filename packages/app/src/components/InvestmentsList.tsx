@@ -4,7 +4,6 @@ import { Modal, Select } from '@tuja/components';
 import UpdateAlias from 'components/UpdateAlias';
 import UpdateAllocation from 'components/UpdateAllocation';
 import InvestmentsListItem from 'components/InvestmentsListItem';
-import { PortfolioPerformance } from 'libs/portfolioClient';
 import useColors from 'hooks/useColors';
 import { theme } from 'theme';
 import usePortfolio from 'hooks/usePortfolio';
