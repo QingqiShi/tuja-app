@@ -231,8 +231,9 @@ export const migrateActivities = functions
     res.send('Done');
   });
 
-export const aggregateActivities = functions.firestore
-  .document('portfolios/{portfolioId}/activities/{activityId}')
+export const aggregateActivities = functions
+  .runWith({ memory: '1GB' })
+  .firestore.document('portfolios/{portfolioId}/activities/{activityId}')
   .onWrite(async (snap, context) => {
     const afterActivity = snap.after.data() as DbActivity | undefined;
     const beforeActivity = snap.before.data() as DbActivity | undefined;
