@@ -19,7 +19,7 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
   ${paddings}
 
   border-radius: ${({ theme }) => theme.spacings.xs};
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   color: ${({ theme }) => theme.colors.textSecondaryOnBackground};
   background-color: ${({ theme }) =>
     transparentize(1, theme.colors.textOnBackground)};
@@ -42,10 +42,10 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
 
   &:focus {
     outline: none;
-    border: 2px solid
+    border: 1px solid
       ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
-    box-shadow: 0 0 ${({ theme }) => theme.spacings.s} 0
-      ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
+    box-shadow: 0 0 0.2rem 0
+      ${({ theme }) => transparentize(0.6, theme.colors.textOnBackground)};
   }
 
   &:disabled {
@@ -69,46 +69,54 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
         `;
       case 'shout':
         return css`
-          background-color: ${theme.colors.callToAction};
           color: ${theme.colors.textOnCallToAction};
+          background-color: ${transparentize(0.2, theme.colors.callToAction)};
+          border: 1px solid ${theme.colors.callToActionText};
 
           &:hover {
-            background-color: ${lighten(0.15, theme.colors.callToAction)};
+            background-color: ${theme.colors.callToAction};
           }
 
           &:focus {
-            border: 2px solid transparent;
-            box-shadow: 0 0 ${theme.spacings.s} 0
-              ${lighten(0.15, theme.colors.callToAction)};
+            border: 1px solid transparent;
+            box-shadow: 0 0 0.2rem 0 ${lighten(0.15, theme.colors.callToAction)};
           }
 
           &:disabled {
-            color: ${transparentize(0.3, theme.colors.textOnBackground)};
-            background-color: ${transparentize(
-              0.8,
-              theme.colors.textOnBackground
-            )};
+            color: ${({ theme }) => theme.colors.disabled};
+            background-color: ${({ theme }) =>
+              transparentize(0.95, theme.colors.textOnBackground)};
+            border: 1px solid
+              ${transparentize(0.9, theme.colors.textOnBackground)};
             ${active &&
             css`
               color: ${({ theme }) => theme.colors.textSecondaryOnBackground};
-              background-color: ${({ theme }) =>
-                transparentize(0.9, theme.colors.textOnBackground)};
             `}
           }
         `;
       case 'outline':
         return css`
-          border: 2px solid ${theme.colors.callToAction};
-          color: ${theme.colors.callToActionText};
+          background-color: ${({ theme }) =>
+            transparentize(
+              theme.mode === 'light' ? 1 : 0.95,
+              theme.colors.textOnBackground
+            )};
+          border: 1px solid
+            ${transparentize(0.9, theme.colors.textOnBackground)};
+          color: ${theme.colors.textOnBackground};
 
           &:hover {
-            border: 2px solid ${theme.colors.callToActionText};
+            background-color: ${({ theme }) =>
+              transparentize(
+                theme.mode === 'light' ? 0.95 : 0.85,
+                theme.colors.callToActionText
+              )};
+            border: 1px solid ${theme.colors.callToActionText};
           }
 
-          &:focus {
-            border: 2px solid ${theme.colors.callToAction};
-            box-shadow: 0 0 ${theme.spacings.s} 0
-              ${lighten(0.15, theme.colors.callToAction)};
+          &:disabled {
+            background-color: ${({ theme }) =>
+              transparentize(0.95, theme.colors.textOnBackground)};
           }
         `;
     }

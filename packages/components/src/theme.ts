@@ -89,14 +89,26 @@ const commonTheme = {
   },
   paddings: {
     normal: {
-      mobile: '1.3rem',
-      tablet: '1.1rem',
-      laptop: '0.8rem',
+      mobile: '1.3rem 1.5rem',
+      tablet: '1.1rem 1.3rem',
+      laptop: '0.8rem 1.1rem',
     },
     compact: {
-      mobile: '1rem',
-      tablet: '0.8rem',
-      laptop: '0.5rem',
+      mobile: '1rem 1.2rem',
+      tablet: '0.8rem 1rem',
+      laptop: '0.5rem 0.8rem',
+    },
+  },
+  right: {
+    normal: {
+      mobile: '1.5rem',
+      tablet: '1.3rem',
+      laptop: '1.1rem',
+    },
+    compact: {
+      mobile: '1.2rem',
+      tablet: '1rem',
+      laptop: '0.8rem',
     },
   },
   backdropBlur: '1.3rem',
@@ -139,7 +151,7 @@ const themes = {
       textOnCallToAction: lightPallete.primary,
       callToActionText: lightPallete.accent,
       error: lightPallete.error,
-      disabled: lighten(0.6, lightPallete.secondary),
+      disabled: darken(0.3, lightPallete.primary),
       ordinals: lightPallete.ordinals,
     },
     shadows: {
@@ -159,7 +171,7 @@ const themes = {
       textOnCallToAction: darkPallete.secondary,
       callToActionText: lighten(0.07, darkPallete.accent),
       error: darkPallete.error,
-      disabled: lighten(0.6, darkPallete.secondary),
+      disabled: lighten(0.3, darkPallete.primary),
       ordinals: darkPallete.ordinals,
     },
     shadows: {

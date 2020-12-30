@@ -44,16 +44,31 @@ const ActionsContainer = styled.div`
     flex-grow: 0;
   }
 
-  > button:last-child {
+  > button:nth-child(3) {
     margin-right: 0;
   }
 `;
 
-const WideAction = styled.div`
-  width: 100%;
+const ConstFirstRow = styled.div`
+  display: flex;
+  margin: ${theme.spacings('s')} 0 ${theme.spacings('xs')};
 
-  > * {
+  > button {
+    margin-right: ${theme.spacings('xs')};
+    flex-grow: 1;
+  }
+
+  > button:last-child {
+    margin-right: 0;
+    flex-grow: 0;
+  }
+`;
+
+const WideAction = styled.div`
+  margin-bottom: ${theme.spacings('s')};
+  > button {
     width: 100%;
+    margin-bottom: ${theme.spacings('xs')};
   }
 `;
 
@@ -170,56 +185,65 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
           <>
             <PortfolioPieCard />
             {!isDemo && (
-              <ActionsContainer>
-                {!!activitiesStartDate && (
-                  <Button variant="shout" onClick={() => setShowBuyModal(true)}>
-                    Buy
-                  </Button>
-                )}
-                <Button
-                  variant={!!activitiesStartDate ? 'outline' : 'shout'}
-                  onClick={() => setShowDepositModal(true)}
-                >
-                  Deposit
-                </Button>
-                {!!activitiesStartDate && portfolio.costBasis && (
+              <div>
+                <ConstFirstRow>
+                  {!!activitiesStartDate && (
+                    <Button
+                      variant="shout"
+                      onClick={() => setShowBuyModal(true)}
+                      compact
+                    >
+                      Buy
+                    </Button>
+                  )}
                   <Button
-                    variant="primary"
-                    onClick={() => setShowMoreActions((val) => !val)}
-                    icon={showMoreActions ? <RiSubtractLine /> : <RiMoreLine />}
-                  />
-                )}
+                    variant={!!activitiesStartDate ? 'outline' : 'shout'}
+                    onClick={() => setShowDepositModal(true)}
+                    compact
+                  >
+                    Deposit
+                  </Button>
+                  {!!activitiesStartDate && portfolio.costBasis && (
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowMoreActions((val) => !val)}
+                      icon={
+                        showMoreActions ? <RiSubtractLine /> : <RiMoreLine />
+                      }
+                      compact
+                    />
+                  )}
+                </ConstFirstRow>
                 {showMoreActions &&
                   !!activitiesStartDate &&
                   portfolio.costBasis && (
                     <>
                       <WideAction>
                         <Button
-                          variant="primary"
+                          variant="outline"
                           onClick={() => setShowSellModal(true)}
+                          compact
                         >
                           Sell
                         </Button>
-                      </WideAction>
-                      <WideAction>
                         <Button
-                          variant="primary"
+                          variant="outline"
                           onClick={() => setShowDividendModal(true)}
+                          compact
                         >
                           Cash Dividend
                         </Button>
-                      </WideAction>
-                      <WideAction>
                         <Button
-                          variant="primary"
+                          variant="outline"
                           onClick={() => setShowStockDividendModal(true)}
+                          compact
                         >
                           Stock Dividend
                         </Button>
                       </WideAction>
                     </>
                   )}
-              </ActionsContainer>
+              </div>
             )}
             {isDemo && onSignIn && (
               <ActionsContainer>

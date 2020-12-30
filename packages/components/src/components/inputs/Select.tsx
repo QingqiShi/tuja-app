@@ -89,12 +89,12 @@ const DropdownIcon = styled(RiArrowDownSLine)<{ disabled?: boolean }>`
         transparentize(0.5, theme.colors.textOnBackground)};
     `}
 
-  right: ${({ theme }) => theme.paddings.normal.mobile};
+  right: ${({ theme }) => theme.right.normal.mobile};
   @media (${({ theme }) => theme.breakpoints.minTablet}) {
-    right: ${({ theme }) => theme.paddings.normal.tablet};
+    right: ${({ theme }) => theme.right.normal.tablet};
   }
   @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-    right: ${({ theme }) => theme.paddings.normal.laptop};
+    right: ${({ theme }) => theme.right.normal.laptop};
   }
 `;
 
