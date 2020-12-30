@@ -277,7 +277,6 @@ function ActivityTradeForm({
           cost: mode === 'buy' ? totalValue : totalValue * -1,
         });
       }
-      setIsLoading(false);
       if (onClose) {
         onClose();
       }

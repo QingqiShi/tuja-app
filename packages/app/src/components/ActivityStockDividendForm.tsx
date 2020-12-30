@@ -48,7 +48,6 @@ function ActivityStockDividendForm({
               units,
             });
           }
-          setLoading(false);
           if (onClose) {
             onClose();
           }

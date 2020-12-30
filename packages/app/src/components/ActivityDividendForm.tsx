@@ -46,7 +46,6 @@ function ActivityDividendForm({
               amount,
             });
           }
-          setLoading(false);
           if (onClose) {
             onClose();
           }
