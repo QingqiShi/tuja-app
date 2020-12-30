@@ -247,35 +247,77 @@ export const examplePortfolio: Portfolio = {
     'SGLN.LSE': 'Gold ETC',
     'VUSA.LSE': 'S&P 500 ETF',
   },
-  activities: [
-    { id: '1', date: new Date('2019-07-01'), type: 'Deposit', amount: 5000 },
-    {
-      id: '2',
-      date: new Date('2019-07-01'),
-      type: 'Trade',
-      trades: [{ ticker: 'AAPL.US', units: 10 }],
-      cost: 1587.7,
+  activities: [],
+  latestSnapshot: {
+    date: new Date('2020-08-31'),
+    cash: 97.8,
+    cashFlow: 5000,
+    numShares: {
+      'AAPL.US': 40,
+      'SGLN.LSE': 50,
+      'VUSA.LSE': 50,
     },
-    {
-      id: '3',
-      date: new Date('2019-07-01'),
-      type: 'Trade',
-      trades: [{ ticker: 'SGLN.LSE', units: 50 }],
-      cost: 1077.5,
-    },
-    {
-      id: '4',
-      date: new Date('2019-07-01'),
-      type: 'Trade',
-      trades: [{ ticker: 'VUSA.LSE', units: 50 }],
-      cost: 2237,
-    },
-    {
-      id: '5',
-      date: new Date('2020-08-31'),
-      type: 'StockDividend',
-      ticker: 'AAPL.US',
-      units: 30,
-    },
-  ],
+  },
+  costBasis: {
+    'AAPL.US': 39.6925,
+    'SGLN.LSE': 21.55,
+    'VUSA.LSE': 44.74,
+  },
+  activitiesStartDate: new Date('2019-07-01'),
+  benchmark: 'GSPC.INDX',
 };
+
+export const exampleActivities = [
+  { id: '1', date: new Date('2019-07-01'), type: 'Deposit', amount: 5000 },
+  {
+    id: '2',
+    date: new Date('2019-07-01'),
+    type: 'Trade',
+    trades: [{ ticker: 'AAPL.US', units: 10 }],
+    cost: 1587.7,
+  },
+  {
+    id: '3',
+    date: new Date('2019-07-01'),
+    type: 'Trade',
+    trades: [{ ticker: 'SGLN.LSE', units: 50 }],
+    cost: 1077.5,
+  },
+  {
+    id: '4',
+    date: new Date('2019-07-01'),
+    type: 'Trade',
+    trades: [{ ticker: 'VUSA.LSE', units: 50 }],
+    cost: 2237,
+  },
+  {
+    id: '5',
+    date: new Date('2020-08-31'),
+    type: 'StockDividend',
+    ticker: 'AAPL.US',
+    units: 30,
+  },
+];
+
+export const exampleSnapshots: Snapshot[] = [
+  {
+    date: new Date('2019-07-01'),
+    cash: 97.8,
+    cashFlow: 5000,
+    numShares: {
+      'AAPL.US': 10,
+      'SGLN.LSE': 50,
+      'VUSA.LSE': 50,
+    },
+  },
+  {
+    date: new Date('2020-08-31'),
+    cash: 97.8,
+    cashFlow: 5000,
+    numShares: {
+      'AAPL.US': 40,
+      'SGLN.LSE': 50,
+      'VUSA.LSE': 50,
+    },
+  },
+];

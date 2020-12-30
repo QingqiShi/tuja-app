@@ -13,6 +13,7 @@ import {
   PortfolioPerformance,
   processPerformanceSeries,
   watchSnapshots,
+  exampleSnapshots,
 } from 'libs/portfolioClient';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -38,6 +39,11 @@ export function PortfolioProcessorProvider({
   const baseCurrency = portfolio?.currency;
 
   useEffect(() => {
+    if (portfolioId === 'example-portfolio') {
+      setSnapshots(exampleSnapshots);
+      return;
+    }
+
     if (portfolioId && startDate) {
       return watchSnapshots(portfolioId, startDate, (newSnapshots) => {
         if (newSnapshots.length) {
@@ -50,6 +56,8 @@ export function PortfolioProcessorProvider({
       });
     }
   }, [portfolioLastSnapshot, portfolioId, startDate]);
+
+  console.log(portfolioId, snapshots);
 
   const [
     portfolioPerformance,
