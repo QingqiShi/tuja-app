@@ -2,7 +2,7 @@ import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import useAuth from 'hooks/useAuth';
 import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
-import { createPortfolio } from 'libs/portfolio';
+import { createPortfolio } from 'libs/portfolioClient';
 import { logEvent } from 'libs/analytics';
 import CreatePortfolio from 'components/CreatePortfolio';
 

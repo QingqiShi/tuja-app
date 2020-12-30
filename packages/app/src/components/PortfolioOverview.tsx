@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { Select, Type } from '@tuja/components';
 import { formatCurrency } from '@tuja/libs';
 import EditableTitle from 'components/EditableTitle';
-import { updatePortfolioName } from 'libs/portfolio';
+import { updatePortfolioName } from 'libs/portfolioClient';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import useStartDate from 'hooks/useStartDate';
@@ -107,7 +107,7 @@ interface PortfolioOverviewProps {
 function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
   const history = useHistory();
   const { portfolio, portfolios } = usePortfolio();
-  const { portfolioPerformance } = usePortfolioProcessor();
+  const { portfolioPerformance, resetSnapshots } = usePortfolioProcessor();
   const [startDate] = useStartDate();
 
   if (!portfolio) {
@@ -124,6 +124,7 @@ function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
         <div>
           <Label>Portfolio Name</Label>
           <EditableTitle
+            key={portfolio.name}
             defaultValue={portfolio.name ?? 'My Investments'}
             onChange={
               !isDemo
@@ -143,7 +144,10 @@ function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
                   label: p.name,
                   value: p.id,
                 }))}
-                onChange={(e) => history.push(`/portfolio/${e.target.value}`)}
+                onChange={(e) => {
+                  resetSnapshots();
+                  history.push(`/portfolio/${e.target.value}`);
+                }}
               />
             )}
           </EditableTitle>

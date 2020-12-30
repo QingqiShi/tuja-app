@@ -106,7 +106,7 @@ export const stockHistory = functions
 Stock info
 */
 
-const _getStockInfo = async (ticker: string) => {
+export const _getStockInfo = async (ticker: string) => {
   const stocksInfoCache = await getCache('stocksInfo');
 
   const cache = stocksInfoCache.get(ticker);
@@ -135,6 +135,77 @@ export const stocksInfo = functions
 StocksPrices
 */
 
+export const _getStocksPrices = async (
+  tickers: string[],
+  date: string | Date,
+  currency: string,
+  useOpenPrice?: boolean
+) => {
+  const { normalizeForex, getForexPair } = await import('@tuja/libs');
+
+  const DATE_FORMAT = 'YYYY-MM-DD';
+  const { default: dayjs } = await import('dayjs');
+
+  // Get info to figure out what currency to fetch
+  const mappedStocksInfo = await Promise.all(tickers.map(_getStockInfo));
+  const forexPairs = [
+    ...new Set(
+      mappedStocksInfo
+        .map((info) => {
+          const tickerCurrency = info.Currency;
+          if (!tickerCurrency) return null;
+          const { currency: normalized } = normalizeForex(tickerCurrency);
+          if (normalized === currency) return null;
+          return normalized;
+        })
+        .filter((c): c is string => !!c)
+        .map((c) => getForexPair(c, currency))
+    ),
+  ];
+
+  const d = typeof date === 'string' ? dayjs(date, DATE_FORMAT) : dayjs(date);
+  const today = dayjs();
+
+  const tickersAndForexPairs = [...tickers, ...forexPairs];
+
+  if (d.isSame(today, 'day')) {
+    const livePrices = await _stocksLivePrices(tickersAndForexPairs);
+    return tickersAndForexPairs.reduce(
+      (map, ticker, i) =>
+        useOpenPrice
+          ? {
+              ...map,
+              [ticker]:
+                livePrices[i].open !== 'NA'
+                  ? livePrices[i].open
+                  : livePrices[i].previousClose,
+            }
+          : {
+              ...map,
+              [ticker]:
+                livePrices[i].close !== 'NA'
+                  ? livePrices[i].close
+                  : livePrices[i].previousClose,
+            },
+      {} as { [ticker: string]: number }
+    );
+  }
+
+  const histories = await _getHistories(
+    tickersAndForexPairs,
+    d.subtract(5, 'day').format(DATE_FORMAT),
+    d.format(DATE_FORMAT)
+  );
+  return tickersAndForexPairs.reduce(
+    (map, ticker, i) => ({
+      ...map,
+      [ticker]:
+        histories[i][histories[i].length - 1][useOpenPrice ? 'open' : 'close'],
+    }),
+    {} as { [ticker: string]: number }
+  );
+};
+
 export const stocksPrices = functions
   .runWith({ memory: '1GB' })
   .https.onCall(async (data) => {
@@ -145,59 +216,7 @@ export const stocksPrices = functions
     });
     functions.logger.log('tickers', { tickers });
 
-    const { normalizeForex, getForexPair } = await import('@tuja/libs');
-
-    const DATE_FORMAT = 'YYYY-MM-DD';
-    const { default: dayjs } = await import('dayjs');
-
-    // Get info to figure out what currency to fetch
-    const mappedStocksInfo = await Promise.all(tickers.map(_getStockInfo));
-    const forexPairs = [
-      ...new Set(
-        mappedStocksInfo
-          .map((info) => {
-            const tickerCurrency = info.Currency;
-            if (!tickerCurrency) return null;
-            const { currency: normalized } = normalizeForex(tickerCurrency);
-            if (normalized === currency) return null;
-            return normalized;
-          })
-          .filter((c): c is string => !!c)
-          .map((c) => getForexPair(c, currency))
-      ),
-    ];
-
-    const d = dayjs(date, DATE_FORMAT);
-    const today = dayjs();
-
-    const tickersAndForexPairs = [...tickers, ...forexPairs];
-
-    if (d.isSame(today, 'day')) {
-      const livePrices = await _stocksLivePrices(tickersAndForexPairs);
-      return tickersAndForexPairs.reduce(
-        (map, ticker, i) => ({
-          ...map,
-          [ticker]:
-            livePrices[i].close !== 'NA'
-              ? livePrices[i].close
-              : livePrices[i].previousClose,
-        }),
-        {}
-      );
-    }
-
-    const histories = await _getHistories(
-      tickersAndForexPairs,
-      d.subtract(5, 'day').format(DATE_FORMAT),
-      d.format(DATE_FORMAT)
-    );
-    return tickersAndForexPairs.reduce(
-      (map, ticker, i) => ({
-        ...map,
-        [ticker]: histories[i][histories[i].length - 1].close,
-      }),
-      {}
-    );
+    return _getStocksPrices(tickers, date, currency);
   });
 
 // TODO: use the search API to fetch stocks into?

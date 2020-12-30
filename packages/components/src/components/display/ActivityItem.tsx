@@ -1,17 +1,16 @@
 import styled from 'styled-components';
 import dayjs from 'dayjs';
-import { motion } from 'framer-motion';
 import { transparentize } from 'polished';
 import { Activity, activityLabels, formatCurrency } from '@tuja/libs';
 import Type from './Type';
 import { card } from '../../mixins';
 
-const Container = motion.custom(styled.div`
+const Container = styled.div`
   ${card}
   padding: ${({ theme }) => theme.spacings.s};
   margin-bottom: ${({ theme }) => theme.spacings.s};
   cursor: pointer;
-`);
+`;
 
 const Summary = styled.div`
   display: flex;
@@ -47,7 +46,6 @@ const TickerItem = styled(Type).attrs({ as: 'span' })`
 interface ActivityItemProps {
   activity: Activity;
   currency: string;
-  layoutId?: string;
   getStockName?: (ticker: string) => string;
   onClick?: () => void;
 }
@@ -55,74 +53,71 @@ interface ActivityItemProps {
 function ActivityItem({
   activity,
   currency,
-  layoutId,
   getStockName,
   onClick,
 }: ActivityItemProps) {
   return (
-    <Container onClick={onClick} layoutId={layoutId}>
-      <motion.div layout>
-        <Summary>
-          <div>
-            <Type scale="body1" noMargin>
-              {activityLabels(activity)}
-            </Type>
-            <ActivityDate scale="body2" noMargin>
-              {dayjs(activity.date).format('YYYY-MM-DD')}
-            </ActivityDate>
-          </div>
-          {activity.type === 'Deposit' && (
-            <ActivityAmount scale="h6" noMargin>
-              {activity.amount > 0 && '+'}
-              {formatCurrency(currency, activity.amount)}
-            </ActivityAmount>
-          )}
-          {activity.type === 'Dividend' && (
-            <ActivityAmount scale="h6" noMargin>
-              {formatCurrency(currency, activity.amount)}
-            </ActivityAmount>
-          )}
-          {activity.type === 'StockDividend' && (
-            <ActivityAmount scale="h6" noMargin>
-              {activity.units} Share{activity.units !== 1 && 's'}
-            </ActivityAmount>
-          )}
-          {activity.type === 'Trade' && (
-            <ActivityAmount scale="h6" noMargin>
-              {formatCurrency(
-                currency,
-                activity.cost >= 0 ? activity.cost : activity.cost * -1
-              )}
-            </ActivityAmount>
-          )}
-        </Summary>
-        {activity.type !== 'Deposit' && (
-          <TickersList>
-            {(activity.type === 'Dividend' ||
-              activity.type === 'StockDividend') && (
-              <TickerItem scale="body2" noMargin>
-                {activity.ticker.split('.')[0]}
-                {getStockName && ` · ${getStockName(activity.ticker)}`}
-              </TickerItem>
-            )}
-            {activity.type === 'Trade' &&
-              activity.trades.map((trade, i) => (
-                <TickerItem key={`${activity.id}-${i}`} scale="body2" noMargin>
-                  <Summary>
-                    <TickerItem scale="body2" noMargin>
-                      {trade.ticker.split('.')[0]}
-                      {getStockName && ` · ${getStockName(trade.ticker)}`}
-                    </TickerItem>
-                    <div>
-                      {trade.units >= 0 ? '+' : ''}
-                      {trade.units}
-                    </div>
-                  </Summary>
-                </TickerItem>
-              ))}
-          </TickersList>
+    <Container onClick={onClick}>
+      <Summary>
+        <div>
+          <Type scale="body1" noMargin>
+            {activityLabels(activity)}
+          </Type>
+          <ActivityDate scale="body2" noMargin>
+            {dayjs(activity.date).format('YYYY-MM-DD')}
+          </ActivityDate>
+        </div>
+        {activity.type === 'Deposit' && (
+          <ActivityAmount scale="h6" noMargin>
+            {activity.amount > 0 && '+'}
+            {formatCurrency(currency, activity.amount)}
+          </ActivityAmount>
         )}
-      </motion.div>
+        {activity.type === 'Dividend' && (
+          <ActivityAmount scale="h6" noMargin>
+            {formatCurrency(currency, activity.amount)}
+          </ActivityAmount>
+        )}
+        {activity.type === 'StockDividend' && (
+          <ActivityAmount scale="h6" noMargin>
+            {activity.units} Share{activity.units !== 1 && 's'}
+          </ActivityAmount>
+        )}
+        {activity.type === 'Trade' && (
+          <ActivityAmount scale="h6" noMargin>
+            {formatCurrency(
+              currency,
+              activity.cost >= 0 ? activity.cost : activity.cost * -1
+            )}
+          </ActivityAmount>
+        )}
+      </Summary>
+      {activity.type !== 'Deposit' && (
+        <TickersList>
+          {(activity.type === 'Dividend' ||
+            activity.type === 'StockDividend') && (
+            <TickerItem scale="body2" noMargin>
+              {activity.ticker.split('.')[0]}
+              {getStockName && ` · ${getStockName(activity.ticker)}`}
+            </TickerItem>
+          )}
+          {activity.type === 'Trade' &&
+            activity.trades.map((trade, i) => (
+              <TickerItem key={`${activity.id}-${i}`} scale="body2" noMargin>
+                <Summary>
+                  <TickerItem scale="body2" noMargin>
+                    {trade.ticker.split('.')[0]}
+                    {getStockName && ` · ${getStockName(trade.ticker)}`}
+                  </TickerItem>
+                  <div>
+                    {trade.units >= 0 ? '+' : ''}
+                    {trade.units}
+                  </div>
+                </Summary>
+              </TickerItem>
+            ))}
+        </TickersList>
+      )}
     </Container>
   );
 }

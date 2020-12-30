@@ -4,6 +4,7 @@ import { Type } from '@tuja/components';
 import PortfolioDashboard from 'components/PortfolioDashboard';
 import { TitleRow } from 'commonStyledComponents';
 import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
+import { PortfolioProcessorProvider } from 'hooks/usePortfolioProcessor';
 import { theme } from 'theme';
 
 const Container = styled.div`
@@ -40,7 +41,9 @@ function Portfolio({ onSignIn, isDemo }: PortfolioProps) {
       <TitleRow>
         <Type scale="h3">Portfolio</Type>
       </TitleRow>
-      <PortfolioDashboard isDemo={isDemo} onSignIn={onSignIn} />
+      <PortfolioProcessorProvider>
+        <PortfolioDashboard isDemo={isDemo} onSignIn={onSignIn} />
+      </PortfolioProcessorProvider>
     </Container>
   );
 }

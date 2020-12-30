@@ -11,7 +11,6 @@ import {
 } from 'react-icons/ri';
 import styled, { css } from 'styled-components/macro';
 import { transparentize } from 'polished';
-import { v4 as uuid } from 'uuid';
 import {
   Button,
   DateInput,
@@ -37,7 +36,7 @@ import {
   fetchStocksPrices,
   StockInfo,
 } from 'libs/stocksClient';
-import { PortfolioPerformance } from 'libs/portfolio';
+import { PortfolioPerformance } from 'libs/portfolioClient';
 
 const verticalCenter = css`
   display: flex;
@@ -265,14 +264,16 @@ function ActivityTradeForm({
     try {
       if (onSubmit) {
         await onSubmit({
-          id: initialActivity?.id ?? uuid(),
+          ...initialActivity,
           type: 'Trade',
           date,
-          trades: selectedTickers.map(({ Ticker }) => ({
-            ticker: Ticker,
-            units:
-              mode === 'buy' ? quantities[Ticker] : quantities[Ticker] * -1,
-          })),
+          trades: selectedTickers
+            .map(({ Ticker }) => ({
+              ticker: Ticker,
+              units:
+                mode === 'buy' ? quantities[Ticker] : quantities[Ticker] * -1,
+            }))
+            .filter(({ units }) => !!units),
           cost: mode === 'buy' ? totalValue : totalValue * -1,
         });
       }

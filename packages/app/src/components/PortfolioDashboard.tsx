@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { RiMoreLine, RiSubtractLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
@@ -17,7 +17,7 @@ import { Card, CardMedia } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import useStartDate from 'hooks/useStartDate';
-import { addPortfolioActivity } from 'libs/portfolio';
+import { addActivity } from 'libs/portfolioClient';
 import { logEvent } from 'libs/analytics';
 import { theme } from 'theme';
 
@@ -107,16 +107,13 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
   const [selectedChart, setSelectedChart] = useState('value');
 
   // Date range selection
-  const activitiesStartDate = useMemo(
-    () => dayjs(portfolio?.activities[0]?.date),
-    [portfolio]
-  );
+  const activitiesStartDate = portfolio?.activitiesStartDate;
 
   const periodButtons = [
     ...defaultPeriods.filter(({ value }) =>
-      value.isAfter(portfolio?.activities[0]?.date ?? currentDate)
+      value.isAfter(activitiesStartDate ?? currentDate)
     ),
-    { label: 'All', value: activitiesStartDate },
+    { label: 'All', value: dayjs(activitiesStartDate) ?? currentDate },
   ];
 
   const selectedPeriod =
@@ -136,7 +133,7 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
 
   const handleSubmit = async (activity: Activity) => {
     if (portfolio?.id) {
-      addPortfolioActivity(portfolio?.id, activity);
+      addActivity(portfolio?.id, activity);
 
       // Analytics
       logEvent('create_activity', { type: activity.type });
@@ -174,54 +171,54 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
             <PortfolioPieCard />
             {!isDemo && (
               <ActionsContainer>
-                {portfolio.activities.length > 0 && (
+                {!!activitiesStartDate && (
                   <Button variant="shout" onClick={() => setShowBuyModal(true)}>
                     Buy
                   </Button>
                 )}
                 <Button
-                  variant={
-                    portfolio.activities.length > 0 ? 'outline' : 'shout'
-                  }
+                  variant={!!activitiesStartDate ? 'outline' : 'shout'}
                   onClick={() => setShowDepositModal(true)}
                 >
                   Deposit
                 </Button>
-                {portfolio.activities.length > 1 && (
+                {!!activitiesStartDate && portfolio.costBasis && (
                   <Button
                     variant="primary"
                     onClick={() => setShowMoreActions((val) => !val)}
                     icon={showMoreActions ? <RiSubtractLine /> : <RiMoreLine />}
                   />
                 )}
-                {showMoreActions && portfolio.activities.length > 1 && (
-                  <>
-                    <WideAction>
-                      <Button
-                        variant="primary"
-                        onClick={() => setShowSellModal(true)}
-                      >
-                        Sell
-                      </Button>
-                    </WideAction>
-                    <WideAction>
-                      <Button
-                        variant="primary"
-                        onClick={() => setShowDividendModal(true)}
-                      >
-                        Cash Dividend
-                      </Button>
-                    </WideAction>
-                    <WideAction>
-                      <Button
-                        variant="primary"
-                        onClick={() => setShowStockDividendModal(true)}
-                      >
-                        Stock Dividend
-                      </Button>
-                    </WideAction>
-                  </>
-                )}
+                {showMoreActions &&
+                  !!activitiesStartDate &&
+                  portfolio.costBasis && (
+                    <>
+                      <WideAction>
+                        <Button
+                          variant="primary"
+                          onClick={() => setShowSellModal(true)}
+                        >
+                          Sell
+                        </Button>
+                      </WideAction>
+                      <WideAction>
+                        <Button
+                          variant="primary"
+                          onClick={() => setShowDividendModal(true)}
+                        >
+                          Cash Dividend
+                        </Button>
+                      </WideAction>
+                      <WideAction>
+                        <Button
+                          variant="primary"
+                          onClick={() => setShowStockDividendModal(true)}
+                        >
+                          Stock Dividend
+                        </Button>
+                      </WideAction>
+                    </>
+                  )}
               </ActionsContainer>
             )}
             {isDemo && onSignIn && (
@@ -275,9 +272,7 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                 )}
               </CardMedia>
             </ChartCard>
-            {portfolioPerformance && (
-              <InvestmentsList portfolioPerformance={portfolioPerformance} />
-            )}
+            {portfolioPerformance && <InvestmentsList />}
             {portfolioPerformance &&
               !!Object.keys(portfolio.targetAllocations ?? {}).length && (
                 <Card>

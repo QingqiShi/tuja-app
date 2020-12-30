@@ -15,7 +15,7 @@ import { Modal, TopBar, Type } from '@tuja/components';
 import { theme } from 'theme';
 import useAuth from 'hooks/useAuth';
 import usePortfolio from 'hooks/usePortfolio';
-import { updatePortfolioBenchmark } from 'libs/portfolio';
+import { updatePortfolioBenchmark } from 'libs/portfolioClient';
 import { getDB, clearCache } from 'libs/cachedStocksData';
 import SignIn from './SignIn';
 import SetBenchmarkForm from './SetBenchmarkForm';

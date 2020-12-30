@@ -4,8 +4,14 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import minMax from 'dayjs/plugin/minMax';
 import firebase from 'firebase/app';
 import 'firebase/functions';
-import { normalizeForex, getForexPair, TimeSeries } from '@tuja/libs';
-import type { Portfolio, PortfolioPerformance } from 'libs/portfolio';
+import {
+  normalizeForex,
+  getForexPair,
+  TimeSeries,
+  Portfolio,
+  Snapshot,
+} from '@tuja/libs';
+import type { PortfolioPerformance } from 'libs/portfolioClient';
 import { StockHistory, StockInfo, StockLivePrice } from 'libs/stocksClient';
 import {
   getDB,
@@ -13,10 +19,7 @@ import {
   getStocksInfo,
   getStocksLivePrice,
 } from 'libs/cachedStocksData';
-import {
-  getActivitiesIterator,
-  iterateActivities,
-} from './modules/activityIterator';
+import { iterateSnapshots } from './modules/snapshotsIterator';
 import {
   accumulateDailyTwrr,
   calcBenchmarkReturn,
@@ -24,11 +27,6 @@ import {
   calcGain,
   calcHoldings,
   calcHoldingsValues,
-  collectCash,
-  collectCashFlow,
-  collectHoldingsCost,
-  collectHoldingsNumShares,
-  cutTimeSeries,
 } from './modules/activityProcessors';
 
 firebase.initializeApp({
@@ -47,9 +45,12 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(minMax);
 
 interface ProcessPortfolioPayload {
-  portfolio: Portfolio;
+  snapshots: Snapshot[];
   startDate: Date;
   endDate: Date;
+  baseCurrency: Portfolio['currency'];
+  benchmark: Portfolio['benchmark'];
+  portfolioId: Portfolio['id'];
 }
 
 type MessageData = {
@@ -77,15 +78,12 @@ addEventListener('message', async (event) => {
  * Validates received message
  */
 function validate(messageData: MessageData) {
-  if (messageData.type === 'process-portfolio') {
-    const { payload } = messageData;
-    if (!payload) return false;
-    const { portfolio, startDate, endDate } = payload;
-    if (!portfolio || !startDate || !endDate) return false;
-    const { activities, currency } = portfolio;
-    if (!currency || !activities?.length) return false;
-    return true;
-  }
+  if (messageData.type !== 'process-portfolio') return false;
+  const { payload } = messageData;
+  if (!payload) return false;
+  const { snapshots, baseCurrency, startDate, endDate, portfolioId } = payload;
+  if (!snapshots || !baseCurrency || !startDate || !endDate || !portfolioId)
+    return false;
   return true;
 }
 
@@ -93,33 +91,29 @@ function validate(messageData: MessageData) {
  * Process portfolio
  */
 async function processPortfolio(payload: ProcessPortfolioPayload) {
-  const { portfolio, startDate, endDate } = payload;
-  const { activities, currency } = portfolio;
+  const {
+    snapshots,
+    baseCurrency,
+    startDate,
+    endDate,
+    benchmark,
+    portfolioId,
+  } = payload;
 
   // Open DB
   const db = await getDB();
 
   // Find the tickers that have been held during the time frame
   const tickers = new Set<string>();
-  const activitiesIterator = getActivitiesIterator(activities);
-  let numShares: { [ticker: string]: number } = {};
-  iterateActivities(activitiesIterator, {
-    onActivity: (item) => {
-      numShares = collectHoldingsNumShares(item, numShares);
-    },
-    onDate: (date) => {
-      const day = dayjs(date);
-      if (day.isSameOrAfter(startDate) && day.isSameOrBefore(endDate)) {
-        Object.keys(numShares).forEach((ticker) => {
-          if (numShares[ticker]) {
-            tickers.add(ticker);
-          }
-        });
+  snapshots.forEach((snapshot) => {
+    Object.keys(snapshot.numShares).forEach((ticker) => {
+      if (snapshot.numShares[ticker]) {
+        tickers.add(ticker);
       }
-    },
+    });
   });
-  if (portfolio.benchmark) {
-    tickers.add(portfolio.benchmark);
+  if (benchmark) {
+    tickers.add(benchmark);
   }
 
   // Fetch stocks info and get required currency pairs
@@ -131,14 +125,13 @@ async function processPortfolio(payload: ProcessPortfolioPayload) {
         .filter((x) => !!x)
         .map((info) => {
           const normalized = normalizeForex(info.Currency);
-          if (normalized.currency !== currency) {
-            return normalized.currency;
-          }
-          return null;
+          return normalized.currency !== baseCurrency
+            ? normalized.currency
+            : null;
         })
         .filter(<T extends {}>(x: T | null): x is T => !!x)
         .map((normalizedCurrency) =>
-          getForexPair(normalizedCurrency, (currency as any) ?? 'GBP')
+          getForexPair(normalizedCurrency, baseCurrency)
         )
     ),
   ];
@@ -160,12 +153,15 @@ async function processPortfolio(payload: ProcessPortfolioPayload) {
 
   // Process portfolio
   const performance = calculatePerformance(
-    portfolio,
+    portfolioId,
+    snapshots,
+    baseCurrency,
     startDate,
     endDate,
     stocksInfo,
     stocksHistory,
-    stocksLivePrices
+    stocksLivePrices,
+    benchmark
   );
 
   // Clean up and return results
@@ -199,83 +195,63 @@ function mergeLivePricesIntoHistory(
  * Calculate portfolio performance
  */
 function calculatePerformance(
-  portfolio: Portfolio,
+  portfolioId: string,
+  snapshots: Snapshot[],
+  baseCurrency: string,
   startDate: Date,
   endDate: Date,
   stocksInfo: { [ticker: string]: StockInfo },
   stocksHistory: { [ticker: string]: StockHistory },
-  stocksLivePrice: { [ticker: string]: StockLivePrice }
+  stocksLivePrice: { [ticker: string]: StockLivePrice },
+  benchmark?: string
 ): PortfolioPerformance {
-  const { activities, currency } = portfolio;
-  const activitiesIterator = getActivitiesIterator(activities);
-
-  let ctx = {
-    numShares: {} as { [ticker: string]: number },
-    costs: {} as { [ticker: string]: number },
-    cash: 0,
-    cashFlow: 0,
-    lastCashFlow: null as null | readonly [Date, number],
-    benchmarkInitial: 0,
-  };
   const valueSeries = new TimeSeries();
   const gainSeries = new TimeSeries();
   const dailyTwrrSeries = new TimeSeries();
   const cashFlowSeries = new TimeSeries();
   const benchmarkSeries = new TimeSeries();
 
-  iterateActivities(activitiesIterator, {
-    onActivity: (item) => {
-      const cashFlow = collectCashFlow(item, ctx.cashFlow);
-      ctx = {
-        numShares: collectHoldingsNumShares(item, ctx.numShares),
-        costs: collectHoldingsCost(
-          item,
-          ctx,
-          stocksInfo,
-          stocksHistory,
-          currency
-        ),
-        cash: collectCash(item, ctx.cash),
-        cashFlow: cashFlow.totalCashFlow,
-        lastCashFlow: cashFlow.lastCashFlow,
-        benchmarkInitial: ctx.benchmarkInitial,
-      };
-    },
-    onDate: (date) => {
+  let benchmarkInitial = 0;
+  iterateSnapshots({
+    snapshots,
+    startDate,
+    endDate,
+    onDate: (date, snapshot, prevSnapshot) => {
       const { totalHoldingsValue } = calcHoldingsValues(
         date,
-        ctx.numShares,
+        snapshot.numShares,
         stocksInfo,
         stocksHistory,
-        currency
+        baseCurrency
       );
-      const totalValue = totalHoldingsValue + ctx.cash;
+      const totalValue = totalHoldingsValue + snapshot.cash;
       valueSeries.data.push([date, totalValue]);
 
-      const gain = calcGain(totalValue, ctx.cashFlow);
+      const gain = calcGain(totalValue, snapshot.cashFlow);
       gainSeries.data.push([date, gain]);
 
-      const dailyTwrr = calcDailyTwrr(date, valueSeries, ctx.lastCashFlow);
+      const dailyTwrr = calcDailyTwrr(date, valueSeries, [
+        snapshot.date,
+        snapshot.cashFlow - (prevSnapshot?.cashFlow ?? 0),
+      ]);
       dailyTwrrSeries.data.push([date, dailyTwrr]);
 
-      cashFlowSeries.data.push([date, ctx.cashFlow]);
+      cashFlowSeries.data.push([date, snapshot.cashFlow]);
 
-      if (portfolio.benchmark) {
+      if (benchmark) {
         const startDay = dayjs(startDate);
-        const benchmarkVal = stocksHistory[portfolio.benchmark].adjusted?.get(
-          date
-        );
+        const benchmarkVal = stocksHistory[benchmark].adjusted?.get(date);
         if (startDay.isSameOrBefore(date)) {
-          if (!ctx.benchmarkInitial && benchmarkVal) {
-            ctx.benchmarkInitial = benchmarkVal;
+          if (!benchmarkInitial && benchmarkVal) {
+            benchmarkInitial = benchmarkVal;
           }
           benchmarkSeries.data.push([
             date,
             calcBenchmarkReturn(
               date,
               stocksHistory,
-              ctx.benchmarkInitial,
-              portfolio.benchmark
+              benchmarkInitial,
+              benchmark
             ),
           ]);
         }
@@ -283,31 +259,32 @@ function calculatePerformance(
     },
   });
 
-  cutTimeSeries(valueSeries, startDate, endDate);
-  cutTimeSeries(gainSeries, startDate, endDate);
-  cutTimeSeries(cashFlowSeries, startDate, endDate);
-  cutTimeSeries(benchmarkSeries, startDate, endDate);
   const twrrSeries = accumulateDailyTwrr(dailyTwrrSeries, startDate, endDate);
 
+  if (gainSeries.data.length) {
+    const initialGain = gainSeries.data[0][1];
+    gainSeries.data = gainSeries.data.map((d) => [d[0], d[1] - initialGain]);
+  }
+
   const holdings = calcHoldings(
-    ctx.numShares,
-    ctx.costs,
+    snapshots[snapshots.length - 1]?.numShares,
     endDate,
-    currency,
+    baseCurrency,
     stocksInfo,
     stocksHistory,
     stocksLivePrice
   );
 
   return {
-    id: portfolio.id,
+    id: portfolioId,
     valueSeries,
     gainSeries,
     twrrSeries,
     cashFlowSeries,
-    cash: ctx.cash,
-    totalHoldingsValue: valueSeries.getLast() - ctx.cash,
+    lastSnapshot: snapshots[snapshots.length - 1],
+    totalHoldingsValue:
+      valueSeries.getLast() - (snapshots[snapshots.length - 1]?.cash ?? 0),
     holdings,
-    benchmarkSeries: portfolio.benchmark ? benchmarkSeries : undefined,
-  };
+    benchmarkSeries: benchmark ? benchmarkSeries : undefined,
+  } as PortfolioPerformance;
 }

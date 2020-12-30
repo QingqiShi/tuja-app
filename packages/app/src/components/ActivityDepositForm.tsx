@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { RiHandCoinLine, RiDeleteBinLine } from 'react-icons/ri';
-import { v4 as uuid } from 'uuid';
 import { Button, DateInput } from '@tuja/components';
 import type { ActivityFormProps } from '@tuja/libs';
 import CurrencyInput from './CurrencyInput';
@@ -26,7 +25,7 @@ function ActivityDepositForm({
         try {
           if (onSubmit) {
             await onSubmit({
-              id: initialActivity?.id ?? uuid(),
+              ...initialActivity,
               type: 'Deposit',
               date,
               amount,

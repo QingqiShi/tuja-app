@@ -1,21 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-		// Stocks available to read for everyone but only allows admins to edit
-    match /stocks/{ticker} {
-      allow read;
-      allow write: if request.auth != null
-        && request.auth.token.admin == true;
-
-      match /history/{year} {
-        allow read;
-        allow write: if request.auth != null
-          && request.auth.token.admin == true;
-      }
-    }
-
-    // Users data that allow read and write for logged in users
+    // Portfolio data that allow read and write for their owners
     match /portfolios/{portfolioId} {
       allow read, delete: if request.auth != null
         && resource != null
@@ -27,11 +13,16 @@ service cloud.firestore {
       allow update: if request.auth != null
         && request.auth.uid == request.resource.data.user
         && request.auth.uid == resource.data.user;
-    }
 
-    match /aggregation/{type} {
-      allow read;
-      allow write: if false;
+      match /activities/{activity} {
+        allow read, write: if request.auth != null
+          && get(/databases/$(database)/documents/portfolios/$(portfolioId)).data.user == request.auth.uid;
+      }
+
+      match /snapshots/{activity} {
+        allow read: if request.auth != null
+          && get(/databases/$(database)/documents/portfolios/$(portfolioId)).data.user == request.auth.uid;
+      }
     }
   }
 }

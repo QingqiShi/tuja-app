@@ -4,7 +4,7 @@ import { Table, TableRow, TableHeader, TableCell } from '@tuja/components';
 import { formatCurrency } from '@tuja/libs';
 import CurrencyInput from 'components/CurrencyInput';
 import usePortfolio from 'hooks/usePortfolio';
-import { PortfolioPerformance } from 'libs/portfolio';
+import { PortfolioPerformance } from 'libs/portfolioClient';
 import { CardMedia } from 'commonStyledComponents';
 import { theme } from 'theme';
 
@@ -28,7 +28,9 @@ function AutoInvest({ portfolioPerformance }: AutoInvestProps) {
   const holdings = portfolioPerformance.holdings;
   const allocationTickers = Object.keys(targetAllocations ?? {});
 
-  const [cash, setCash] = useState(portfolioPerformance.cash ?? 0);
+  const [cash, setCash] = useState(
+    portfolioPerformance.lastSnapshot?.cash ?? 0
+  );
 
   const stageOneCalcs = allocationTickers.map((ticker) => {
     const value = holdings[ticker]?.value ?? 0;
@@ -54,8 +56,8 @@ function AutoInvest({ portfolioPerformance }: AutoInvestProps) {
   );
 
   useEffect(() => {
-    setCash(portfolioPerformance.cash);
-  }, [portfolioPerformance.cash]);
+    setCash(portfolioPerformance.lastSnapshot?.cash ?? 0);
+  }, [portfolioPerformance.lastSnapshot?.cash]);
 
   return portfolio && targetAllocations ? (
     <div>

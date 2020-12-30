@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { Button, Chart, Type } from '@tuja/components';
 import { formatCurrency } from '@tuja/libs';
-import { PortfolioPerformance } from 'libs/portfolio';
+import { PortfolioPerformance } from 'libs/portfolioClient';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import useStartDate from 'hooks/useStartDate';
@@ -187,7 +187,12 @@ function InvestmentsListItem({
   }
 
   const { currency, aliases, targetAllocations } = portfolio;
-  const { value, gain, units, returns, info, livePrice } = holdingPerformance;
+  const { value, units, info, livePrice } = holdingPerformance;
+
+  const costBasis = portfolio.costBasis?.[ticker] ?? 0;
+  const totalCost = costBasis * units;
+  const gain = value - totalCost;
+  const returns = gain / value;
 
   return (
     <InvestmentContainer onClick={onToggle}>
@@ -304,9 +309,7 @@ function InvestmentsListItem({
           </div>
           <div>
             <Label>Est. cost per unit</Label>
-            <Type scale="body1">
-              {formatCurrency(currency, (value - gain) / units)}
-            </Type>
+            <Type scale="body1">{formatCurrency(currency, costBasis)}</Type>
           </div>
           <div>
             <Label>Today's change</Label>

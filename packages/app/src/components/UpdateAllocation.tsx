@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { RiCheckLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
 import { Button, FormattedInput } from '@tuja/components';
-import { updateHoldingAllocation } from 'libs/portfolio';
+import { updateHoldingAllocation } from 'libs/portfolioClient';
 import usePortfolio from 'hooks/usePortfolio';
 import { theme } from 'theme';
 
