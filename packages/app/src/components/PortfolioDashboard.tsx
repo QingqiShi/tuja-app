@@ -26,34 +26,38 @@ const DatePeriodContainer = styled.div`
   text-align: right;
 `;
 
-const ActionsContainer = styled.div`
+const ActionsRow = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  position: sticky;
-  top: 100px;
-  margin: ${theme.spacings('s')} 0;
+  margin: ${theme.spacings('s')} 0 ${theme.spacings('xs')};
 
-  > button {
-    margin-bottom: ${theme.spacings('xs')};
-    flex-grow: 1;
-    margin-right: ${theme.spacings('xs')};
+  &:last-child {
+    margin-bottom: ${theme.spacings('s')};
   }
 
-  > button:last-child:not(:first-child) {
-    flex-grow: 0;
+  > button {
+    margin-right: ${theme.spacings('xs')};
+    flex-grow: 1;
   }
 
   > button:last-child {
     margin-right: 0;
   }
+
+  > button:last-child:not(:first-child) {
+    flex-grow: 0;
+  }
 `;
 
 const WideAction = styled.div`
-  width: 100%;
+  margin-bottom: ${theme.spacings('s')};
 
-  > * {
+  > button {
     width: 100%;
+    margin-bottom: ${theme.spacings('xs')};
+  }
+
+  > button:last-child {
+    margin-bottom: 0;
   }
 `;
 
@@ -170,48 +174,51 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
           <>
             <PortfolioPieCard />
             {!isDemo && (
-              <ActionsContainer>
-                {!!activitiesStartDate && (
-                  <Button variant="shout" onClick={() => setShowBuyModal(true)}>
-                    Buy
-                  </Button>
-                )}
-                <Button
-                  variant={!!activitiesStartDate ? 'outline' : 'shout'}
-                  onClick={() => setShowDepositModal(true)}
-                >
-                  Deposit
-                </Button>
-                {!!activitiesStartDate && portfolio.costBasis && (
+              <div>
+                <ActionsRow>
+                  {!!activitiesStartDate && (
+                    <Button
+                      variant="shout"
+                      onClick={() => setShowBuyModal(true)}
+                    >
+                      Buy
+                    </Button>
+                  )}
                   <Button
-                    variant="primary"
-                    onClick={() => setShowMoreActions((val) => !val)}
-                    icon={showMoreActions ? <RiSubtractLine /> : <RiMoreLine />}
-                  />
-                )}
+                    variant={!!activitiesStartDate ? 'outline' : 'shout'}
+                    onClick={() => setShowDepositModal(true)}
+                  >
+                    Deposit
+                  </Button>
+                  {!!activitiesStartDate && portfolio.costBasis && (
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowMoreActions((val) => !val)}
+                      icon={
+                        showMoreActions ? <RiSubtractLine /> : <RiMoreLine />
+                      }
+                    />
+                  )}
+                </ActionsRow>
                 {showMoreActions &&
                   !!activitiesStartDate &&
                   portfolio.costBasis && (
                     <>
                       <WideAction>
                         <Button
-                          variant="primary"
+                          variant="outline"
                           onClick={() => setShowSellModal(true)}
                         >
                           Sell
                         </Button>
-                      </WideAction>
-                      <WideAction>
                         <Button
-                          variant="primary"
+                          variant="outline"
                           onClick={() => setShowDividendModal(true)}
                         >
                           Cash Dividend
                         </Button>
-                      </WideAction>
-                      <WideAction>
                         <Button
-                          variant="primary"
+                          variant="outline"
                           onClick={() => setShowStockDividendModal(true)}
                         >
                           Stock Dividend
@@ -219,14 +226,14 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                       </WideAction>
                     </>
                   )}
-              </ActionsContainer>
+              </div>
             )}
             {isDemo && onSignIn && (
-              <ActionsContainer>
+              <ActionsRow>
                 <Button variant="shout" onClick={onSignIn}>
                   Make Your Own
                 </Button>
-              </ActionsContainer>
+              </ActionsRow>
             )}
           </>
         }

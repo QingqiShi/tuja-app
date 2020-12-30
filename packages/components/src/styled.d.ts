@@ -12,6 +12,7 @@ declare module 'styled-components' {
     fontFamily: Theme['fontFamily'];
     breakpoints: Theme['breakpoints'];
     paddings: Theme['paddings'];
+    right: Theme['right'];
     backdropBlur: Theme['backdropBlur'];
     zIndex: Theme['zIndex'];
   }
