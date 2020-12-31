@@ -99,7 +99,7 @@ const commonTheme = {
       laptop: '0.5rem 0.8rem',
     },
   },
-  right: {
+  leftRight: {
     normal: {
       mobile: '1.5rem',
       tablet: '1.3rem',

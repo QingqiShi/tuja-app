@@ -111,21 +111,21 @@ const IconContainer = styled.div<{ isLead?: boolean }>`
   ${({ isLead }) =>
     isLead
       ? css`
-          left: ${({ theme }) => theme.paddings.normal.mobile};
+          left: ${({ theme }) => theme.leftRight.normal.mobile};
           @media (${({ theme }) => theme.breakpoints.minTablet}) {
-            left: ${({ theme }) => theme.paddings.normal.tablet};
+            left: ${({ theme }) => theme.leftRight.normal.tablet};
           }
           @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-            left: ${({ theme }) => theme.paddings.normal.laptop};
+            left: ${({ theme }) => theme.leftRight.normal.laptop};
           }
         `
       : css`
-          right: ${({ theme }) => theme.paddings.normal.mobile};
+          right: ${({ theme }) => theme.leftRight.normal.mobile};
           @media (${({ theme }) => theme.breakpoints.minTablet}) {
-            right: ${({ theme }) => theme.paddings.normal.tablet};
+            right: ${({ theme }) => theme.leftRight.normal.tablet};
           }
           @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-            right: ${({ theme }) => theme.paddings.normal.laptop};
+            right: ${({ theme }) => theme.leftRight.normal.laptop};
           }
         `}
 `;
