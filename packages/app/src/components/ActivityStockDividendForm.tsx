@@ -3,7 +3,7 @@ import { GiReceiveMoney } from 'react-icons/gi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { Button, DateInput, NumberInput, Select } from '@tuja/components';
 import type { ActivityFormProps } from '@tuja/libs';
-import { ActionsContainer, Field, Label } from 'commonStyledComponents';
+import { ActionsContainer } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
 
 function ActivityStockDividendForm({
@@ -57,21 +57,19 @@ function ActivityStockDividendForm({
       }}
     >
       <DateInput label="Date" value={date} onChange={setDate} required />
-      <Field>
-        <Label>From Investment*</Label>
-        <Select
-          options={[
-            {
-              label: 'Select Investment',
-              value: '',
-            },
-            ...availableStocks,
-          ]}
-          value={ticker}
-          onChange={(e) => setTicker(e.target.value)}
-          required
-        />
-      </Field>
+      <Select
+        label="From Investment"
+        options={[
+          {
+            label: 'Select Investment',
+            value: '',
+          },
+          ...availableStocks,
+        ]}
+        value={ticker}
+        onChange={(e) => setTicker(e.target.value)}
+        required
+      />
       <NumberInput
         label="Number of Shares Received"
         value={units}
