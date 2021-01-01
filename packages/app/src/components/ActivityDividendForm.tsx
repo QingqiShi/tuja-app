@@ -4,7 +4,7 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import { Button, DateInput, Select } from '@tuja/components';
 import type { ActivityFormProps } from '@tuja/libs';
 import CurrencyInput from './CurrencyInput';
-import { ActionsContainer, Field, Label } from 'commonStyledComponents';
+import { ActionsContainer } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
 
 function ActivityDividendForm({
@@ -55,21 +55,19 @@ function ActivityDividendForm({
       }}
     >
       <DateInput label="Date" value={date} onChange={setDate} required />
-      <Field>
-        <Label>From Investment*</Label>
-        <Select
-          options={[
-            {
-              label: 'Select Investment',
-              value: '',
-            },
-            ...availableStocks,
-          ]}
-          value={ticker}
-          onChange={(e) => setTicker(e.target.value)}
-          required
-        />
-      </Field>
+      <Select
+        label="From Investment"
+        options={[
+          {
+            label: 'Select Investment',
+            value: '',
+          },
+          ...availableStocks,
+        ]}
+        value={ticker}
+        onChange={(e) => setTicker(e.target.value)}
+        required
+      />
       <CurrencyInput
         label="Amount Received"
         value={amount}
