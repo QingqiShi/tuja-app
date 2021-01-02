@@ -13,6 +13,7 @@ declare module 'styled-components' {
     breakpoints: Theme['breakpoints'];
     paddings: Theme['paddings'];
     leftRight: Theme['leftRight'];
+    topBottom: Theme['topBottom'];
     backdropBlur: Theme['backdropBlur'];
     zIndex: Theme['zIndex'];
   }

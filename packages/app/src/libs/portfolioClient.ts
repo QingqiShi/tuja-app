@@ -136,11 +136,15 @@ export const updatePortfolioBenchmark = (
 
 export const getActivities = async (
   portfolioId: string,
-  fromDoc?: firebase.firestore.QueryDocumentSnapshot<any>
+  options?: {
+    filterType?: Activity['type'];
+    fromDoc?: firebase.firestore.QueryDocumentSnapshot<any>;
+  }
 ): Promise<{
   activities: Activity[];
   lastDoc?: firebase.firestore.QueryDocumentSnapshot<any>;
 }> => {
+  const { filterType, fromDoc } = options ?? {};
   const collectionRef = firebase
     .firestore()
     .collection(`/portfolios/${portfolioId}/activities`);
@@ -149,6 +153,9 @@ export const getActivities = async (
   let query = collectionRef
     .orderBy('date', 'desc')
     .limit(ACTIVITIES_PAGE_LIMIT);
+  if (filterType) {
+    query = query.where('type', '==', filterType);
+  }
   if (fromDoc) {
     query = query.startAfter(fromDoc);
   }

@@ -111,6 +111,18 @@ const commonTheme = {
       laptop: '0.8rem',
     },
   },
+  topBottom: {
+    normal: {
+      mobile: '1.3rem',
+      tablet: '1.1rem',
+      laptop: '0.8rem',
+    },
+    compact: {
+      mobile: '1rem',
+      tablet: '0.8rem',
+      laptop: '0.5rem',
+    },
+  },
   backdropBlur: '1.3rem',
   zIndex: {
     behind: -100,

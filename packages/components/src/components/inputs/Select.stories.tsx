@@ -49,3 +49,9 @@ Required.args = {
   options,
   required: true,
 };
+
+export const Compact = Template.bind({});
+Compact.args = {
+  options,
+  compact: true,
+};

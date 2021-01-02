@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "build",
     "declaration": true,
+    "declarationMap": true,
     "jsx": "react-jsx"
   },
   "exclude": ["**/*.stories.tsx"]

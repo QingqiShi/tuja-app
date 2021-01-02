@@ -37,7 +37,7 @@ const SelectContainer = styled.div`
   position: relative;
 `;
 
-const SelectBase = styled.select`
+const SelectBase = styled.select<{ compact?: boolean }>`
   ${inputFont}
   ${paddings}
   ${inputEndPadding}
@@ -49,6 +49,19 @@ const SelectBase = styled.select`
   transition: all 0.2s;
   width: 100%;
   appearance: none;
+
+  ${({ compact }) =>
+    compact &&
+    css`
+      border: none;
+      padding-right: 2rem;
+      @media (${({ theme }) => theme.breakpoints.minTablet}) {
+        padding-right: 2rem;
+      }
+      @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+        padding-right: 2rem;
+      }
+    `}
 
   &:focus {
     outline: none;
@@ -76,7 +89,10 @@ const SelectBase = styled.select`
   }
 `;
 
-const DropdownIcon = styled(RiArrowDownSLine)<{ disabled?: boolean }>`
+type DropdownIconProps = { disabled?: boolean; compact?: boolean };
+const DropdownIcon = styled(RiArrowDownSLine).withConfig({
+  shouldForwardProp: (prop) => !['compact'].includes(prop),
+})<DropdownIconProps>`
   position: absolute;
   height: 100%;
   width: 1.5em;
@@ -89,12 +105,21 @@ const DropdownIcon = styled(RiArrowDownSLine)<{ disabled?: boolean }>`
         transparentize(0.5, theme.colors.textOnBackground)};
     `}
 
-  right: ${({ theme }) => theme.leftRight.normal.mobile};
+  ${({ compact }) =>
+    compact &&
+    css`
+      width: 1em;
+    `}
+
+  right: ${({ theme, compact }) =>
+    compact ? '0.2rem' : theme.leftRight.normal.mobile};
   @media (${({ theme }) => theme.breakpoints.minTablet}) {
-    right: ${({ theme }) => theme.leftRight.normal.tablet};
+    right: ${({ theme, compact }) =>
+      compact ? '0.2rem' : theme.leftRight.normal.tablet};
   }
   @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-    right: ${({ theme }) => theme.leftRight.normal.laptop};
+    right: ${({ theme, compact }) =>
+      compact ? '0.2rem' : theme.leftRight.normal.laptop};
   }
 `;
 
@@ -102,6 +127,7 @@ interface SelectProps extends Omit<React.ComponentProps<'select'>, 'ref'> {
   options: { label: string; value: string }[];
   label?: string;
   helperText?: string;
+  compact?: boolean;
 }
 
 function Select({
@@ -110,11 +136,17 @@ function Select({
   helperText,
   required,
   disabled,
+  compact,
   ...props
 }: SelectProps) {
   const select = (
     <SelectContainer>
-      <SelectBase required={required} disabled={disabled} {...props}>
+      <SelectBase
+        required={required}
+        disabled={disabled}
+        compact={compact}
+        {...props}
+      >
         {options.map((option) => (
           <option
             value={option.value}
@@ -125,7 +157,7 @@ function Select({
           </option>
         ))}
       </SelectBase>
-      <DropdownIcon disabled={disabled} size="100%" />
+      <DropdownIcon disabled={disabled} size="100%" compact={compact} />
     </SelectContainer>
   );
 
