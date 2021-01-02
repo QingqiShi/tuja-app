@@ -12,6 +12,8 @@ declare module 'styled-components/macro' {
     fontFamily: Theme['fontFamily'];
     breakpoints: Theme['breakpoints'];
     paddings: Theme['paddings'];
+    leftRight: Theme['leftRight'];
+    topBottom: Theme['topBottom'];
     backdropBlur: Theme['backdropBlur'];
     zIndex: Theme['zIndex'];
   }

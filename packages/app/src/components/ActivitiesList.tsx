@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components/macro';
-import { ActivityItem, Modal, Type } from '@tuja/components';
+import { ActivityItem, Modal, Select, Type } from '@tuja/components';
 import { Activity } from '@tuja/libs';
 import useLoadingState from 'hooks/useLoadingState';
 import usePortfolio from 'hooks/usePortfolio';
@@ -26,6 +26,7 @@ const MonthTitle = styled(Type)`
   position: sticky;
   background-color: ${({ theme }) => theme.colors.backgroundMain};
   z-index: ${({ theme }) => theme.zIndex.raised};
+
   top: 4rem;
   @media (${({ theme }) => theme.breakpoints.minLaptop}) {
     top: 3.5rem;
@@ -47,6 +48,40 @@ const MonthTitle = styled(Type)`
   }
 `;
 
+const FilterContainer = styled.div`
+  float: right;
+  position: sticky;
+  z-index: ${({ theme }) => theme.zIndex.raised + 1};
+  box-sizing: content-box;
+  height: ${({ theme }) => theme.fonts.h6.size};
+  width: 40%;
+
+  top: 4rem;
+  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+    top: 3.5rem;
+  }
+
+  font-size: ${({ theme }) => theme.fonts.h6.size};
+  line-height: ${({ theme }) => theme.fonts.h6.height};
+  padding: ${({ theme }) => theme.spacings.s} 0;
+  @media (${({ theme }) => theme.breakpoints.minTablet}) {
+    padding: ${({ theme }) => theme.spacings.s} 0;
+  }
+  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+    padding: ${({ theme }) => theme.spacings.s} 0;
+  }
+
+  /* position: relative; */
+  > div {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    box-sizing: border-box;
+    width: auto;
+  }
+`;
+
 const NoActivityBanner = styled.div`
   display: grid;
   place-items: center;
@@ -64,6 +99,7 @@ function ActivitiesList() {
   const [updateActivityId, setUpdateActivityId] = useState('');
   const [showUpdateActivity, setShowUpdateActivity] = useState(false);
 
+  const [filterType, setFilterType] = useState<Activity['type'] | undefined>();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(false);
   const fetchActivities = useRef<
@@ -79,16 +115,18 @@ function ActivitiesList() {
       setLoadedOnce(true);
 
       setLoading(true);
-      const { activities, lastDoc } = await getActivities(portfolioId);
+      const { activities, lastDoc } = await getActivities(portfolioId, {
+        filterType,
+      });
       setActivities(activities);
       fetchActivities.current = lastDoc
-        ? () => getActivities(portfolioId, lastDoc)
+        ? () => getActivities(portfolioId, { fromDoc: lastDoc, filterType })
         : undefined;
 
       setHasMore(!!lastDoc);
       setLoading(false);
     })();
-  }, [loadedOnce, portfolioId, setLoading]);
+  }, [filterType, loadedOnce, portfolioId, setLoading]);
 
   // Set up intersection observer to load more activities
   const [loadMoreEl, setLoadMoreEl] = useState<HTMLDivElement | null>(null);
@@ -101,7 +139,8 @@ function ActivitiesList() {
         setLoading(true);
         const { activities, lastDoc } = await fetchActivities.current();
         setActivities((current) => [...current, ...activities]);
-        fetchActivities.current = () => getActivities(portfolioId, lastDoc);
+        fetchActivities.current = () =>
+          getActivities(portfolioId, { fromDoc: lastDoc, filterType });
         setHasMore(!!lastDoc);
         setLoading(false);
       };
@@ -115,7 +154,7 @@ function ActivitiesList() {
         observer.disconnect();
       };
     }
-  }, [loadMoreEl, portfolioId, setLoading]);
+  }, [filterType, loadMoreEl, portfolioId, setLoading]);
 
   if (!portfolio) {
     return null;
@@ -155,6 +194,24 @@ function ActivitiesList() {
 
   return (
     <div>
+      <FilterContainer>
+        <Select
+          options={[
+            { label: 'All', value: '' },
+            { label: 'Trades', value: 'Trade' },
+            { label: 'Deposits', value: 'Deposit' },
+            { label: 'Cash Dividends', value: 'Dividend' },
+            { label: 'Stock Dividends', value: 'StockDividend' },
+          ]}
+          value={filterType ?? ''}
+          onChange={(e) => {
+            setFilterType((e.target.value as any) || undefined);
+            setLoadedOnce(false);
+            window.scrollTo(0, 0);
+          }}
+          compact
+        />
+      </FilterContainer>
       {activities.map((activity) => {
         const monthTitle = dayjs(activity.date).format('MMMM YYYY');
         const shouldShowTitle = !monthTitles.has(monthTitle);
