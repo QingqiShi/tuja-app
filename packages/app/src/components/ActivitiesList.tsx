@@ -85,7 +85,14 @@ const FilterContainer = styled.div`
 const NoActivityBanner = styled.div`
   display: grid;
   place-items: center;
-  margin: ${({ theme }) => theme.spacings.m} 0;
+  clear: both;
+
+  > p {
+    margin: ${({ theme }) => theme.spacings.l} 0;
+    padding: ${({ theme }) => theme.spacings.m};
+    background-color: ${({ theme }) => theme.colors.backgroundRaised};
+    border-radius: ${({ theme }) => theme.spacings.xs};
+  }
 `;
 
 const LoadMoreDiv = styled.div`
@@ -184,56 +191,56 @@ function ActivitiesList() {
 
   const monthTitles = new Set();
 
-  if (!activities.length) {
-    return (
-      <NoActivityBanner>
-        <Type scale="body1">Create activities from the Portfolio page.</Type>
-      </NoActivityBanner>
-    );
-  }
-
   return (
     <div>
-      <FilterContainer>
-        <Select
-          options={[
-            { label: 'All', value: '' },
-            { label: 'Trades', value: 'Trade' },
-            { label: 'Deposits', value: 'Deposit' },
-            { label: 'Cash Dividends', value: 'Dividend' },
-            { label: 'Stock Dividends', value: 'StockDividend' },
-          ]}
-          value={filterType ?? ''}
-          onChange={(e) => {
-            setFilterType((e.target.value as any) || undefined);
-            setLoadedOnce(false);
-            window.scrollTo(0, 0);
-          }}
-          compact
-        />
-      </FilterContainer>
-      {activities.map((activity) => {
-        const monthTitle = dayjs(activity.date).format('MMMM YYYY');
-        const shouldShowTitle = !monthTitles.has(monthTitle);
-        monthTitles.add(monthTitle);
-        return (
-          <Fragment key={activity.id}>
-            {shouldShowTitle && (
-              <MonthTitle scale="h6">{monthTitle}</MonthTitle>
-            )}
-            <ActivityItem
-              activity={activity}
-              currency={portfolio.currency}
-              onClick={() => {
-                if (activity.id) {
-                  setUpdateActivityId(activity.id);
-                  setShowUpdateActivity(true);
-                }
-              }}
-            />
-          </Fragment>
-        );
-      })}
+      {(filterType !== undefined || !!activities.length) && (
+        <FilterContainer>
+          <Select
+            options={[
+              { label: 'All', value: '' },
+              { label: 'Trades', value: 'Trade' },
+              { label: 'Deposits', value: 'Deposit' },
+              { label: 'Cash Dividends', value: 'Dividend' },
+              { label: 'Stock Dividends', value: 'StockDividend' },
+            ]}
+            value={filterType ?? ''}
+            onChange={(e) => {
+              setFilterType((e.target.value as any) || undefined);
+              setLoadedOnce(false);
+              window.scrollTo(0, 0);
+            }}
+            compact
+          />
+        </FilterContainer>
+      )}
+      {!activities.length && (
+        <NoActivityBanner>
+          <Type scale="body1">Create activities from the Portfolio page.</Type>
+        </NoActivityBanner>
+      )}
+      {!!activities.length &&
+        activities.map((activity) => {
+          const monthTitle = dayjs(activity.date).format('MMMM YYYY');
+          const shouldShowTitle = !monthTitles.has(monthTitle);
+          monthTitles.add(monthTitle);
+          return (
+            <Fragment key={activity.id}>
+              {shouldShowTitle && (
+                <MonthTitle scale="h6">{monthTitle}</MonthTitle>
+              )}
+              <ActivityItem
+                activity={activity}
+                currency={portfolio.currency}
+                onClick={() => {
+                  if (activity.id) {
+                    setUpdateActivityId(activity.id);
+                    setShowUpdateActivity(true);
+                  }
+                }}
+              />
+            </Fragment>
+          );
+        })}
       {hasMore && <LoadMoreDiv ref={setLoadMoreEl} />}
 
       <Modal
