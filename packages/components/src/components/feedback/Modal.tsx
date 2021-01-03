@@ -81,7 +81,7 @@ function Modal({
   width,
   children,
 }: React.PropsWithChildren<ModalProps>) {
-  const ref = useBodyScrollLock(true);
+  const ref = useBodyScrollLock(open);
 
   return (
     <AnimatePresence>
