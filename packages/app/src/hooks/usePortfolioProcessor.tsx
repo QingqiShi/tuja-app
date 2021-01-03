@@ -57,8 +57,6 @@ export function PortfolioProcessorProvider({
     }
   }, [portfolioLastSnapshot, portfolioId, startDate]);
 
-  console.log(portfolioId, snapshots);
-
   const [
     portfolioPerformance,
     setPortfolioPerformance,
@@ -97,7 +95,6 @@ export function PortfolioProcessorProvider({
     const handler = (e: MessageEvent) => {
       const { type, payload } = e.data ?? {};
       if (type === 'process-portfolio') {
-        console.log('received from worker');
         setLoadingState(false);
         const newPortfolioPerformance = processPerformanceSeries(
           payload,
@@ -121,7 +118,6 @@ export function PortfolioProcessorProvider({
     if (portfolioId && snapshots?.length && startDate) {
       setLoadingState(true);
       setIsReady(false);
-      console.log('post to worker');
       loadCachedPerformance();
       worker.postMessage({
         type: 'process-portfolio',
@@ -135,7 +131,6 @@ export function PortfolioProcessorProvider({
         },
       });
     } else if (portfolioId) {
-      console.log('no snapshots');
       loadCachedPerformance();
     }
 

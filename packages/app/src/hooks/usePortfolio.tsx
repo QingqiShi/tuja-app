@@ -71,7 +71,6 @@ export function PortfolioProvider({
       return;
     }
 
-    console.log('testStartDate');
     setStartDate(
       defaultDate.isAfter(portfolioStartDate)
         ? defaultDate.toDate()
