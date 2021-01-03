@@ -91,7 +91,7 @@ function AutoInvest({ portfolioPerformance }: AutoInvestProps) {
                     <TableCell
                       secondary={
                         portfolio.aliases[ticker] ??
-                        holdings[ticker].info?.Name ??
+                        holdings[ticker]?.info?.Name ??
                         ticker
                       }
                     >
