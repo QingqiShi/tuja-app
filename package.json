@@ -41,7 +41,7 @@
     "@typescript-eslint/parser": "^4.11.1",
     "commitizen": "^4.2.2",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^7.16.0",
+    "eslint": "^7.17.0",
     "firebase": "^8.2.1",
     "firebase-tools": "^9.1.0",
     "husky": "^4.3.6",
