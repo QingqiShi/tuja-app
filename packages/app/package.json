@@ -35,7 +35,6 @@
     "@types/jest": "^26.0.19",
     "@types/react-router-dom": "^5.1.7",
     "@types/uuid": "^8.3.0",
-    "babel-loader": "^8.1.0",
     "react-scripts": "4.0.1",
     "source-map-explorer": "^2.5.1",
     "worker-loader": "^3.0.7"
