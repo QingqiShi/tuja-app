@@ -160,7 +160,7 @@ export const updateSnapshot = (
       ...prevSnapshot,
       date: activity.date,
       cash: new BigNumber(prevSnapshot.cash).plus(activity.amount).toNumber(),
-      dividend: dayjs(activity.date).isSame(prevSnapshot.date, 'day')
+      dividend: isSameDay
         ? prevSnapshot.dividend + activity.amount
         : activity.amount,
     };
