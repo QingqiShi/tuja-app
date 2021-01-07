@@ -18,7 +18,7 @@
     "@tuja/libs": "^0.0.0",
     "bignumber.js": "^9.0.1",
     "d3-scale": "^3.2.3",
-    "idb": "^5.0.8",
+    "idb": "^6.0.0",
     "polished": "^4.0.5",
     "react-helmet-async": "^1.0.7",
     "react-icons": "^4.1.0",
