@@ -89,6 +89,7 @@ export interface Snapshot {
   date: Date;
   cashFlow: number;
   cash: number;
+  dividend: number;
   numShares: { [ticker: string]: number };
 }
 
@@ -138,7 +139,11 @@ export const snapshotBatchFromDb = (
 /**
  * Use an activity to update an existing snapshot, then return the new snapshot.
  */
-export const updateSnapshot = (activity: Activity, prevSnapshot: Snapshot) => {
+export const updateSnapshot = (
+  activity: Activity,
+  prevSnapshot: Snapshot
+): Snapshot => {
+  const isSameDay = dayjs(activity.date).isSame(prevSnapshot.date, 'day');
   if (activity.type === 'Deposit') {
     return {
       ...prevSnapshot,
@@ -147,6 +152,7 @@ export const updateSnapshot = (activity: Activity, prevSnapshot: Snapshot) => {
         .plus(activity.amount)
         .toNumber(),
       cash: new BigNumber(prevSnapshot.cash).plus(activity.amount).toNumber(),
+      dividend: isSameDay ? prevSnapshot.dividend : 0,
     };
   }
   if (activity.type === 'Dividend') {
@@ -154,6 +160,9 @@ export const updateSnapshot = (activity: Activity, prevSnapshot: Snapshot) => {
       ...prevSnapshot,
       date: activity.date,
       cash: new BigNumber(prevSnapshot.cash).plus(activity.amount).toNumber(),
+      dividend: isSameDay
+        ? prevSnapshot.dividend + activity.amount
+        : activity.amount,
     };
   }
   if (activity.type === 'StockDividend') {
@@ -168,6 +177,7 @@ export const updateSnapshot = (activity: Activity, prevSnapshot: Snapshot) => {
           .plus(activity.units)
           .toNumber(),
       },
+      dividend: isSameDay ? prevSnapshot.dividend : 0,
     };
   }
   if (activity.type === 'Trade') {
@@ -175,6 +185,7 @@ export const updateSnapshot = (activity: Activity, prevSnapshot: Snapshot) => {
       ...prevSnapshot,
       date: activity.date,
       cash: new BigNumber(prevSnapshot.cash).minus(activity.cost).toNumber(),
+      dividend: isSameDay ? prevSnapshot.dividend : 0,
       numShares: { ...prevSnapshot.numShares },
     };
     activity.trades.forEach((trade) => {

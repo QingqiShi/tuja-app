@@ -11,6 +11,7 @@ const EMPTY_SNAPSHOT: Snapshot = {
   date: new Date(),
   cash: 0,
   cashFlow: 0,
+  dividend: 0,
   numShares: {},
 };
 
@@ -233,6 +234,100 @@ export const migrateActivities = functions
     res.send('Done');
   });
 
+export const migrateSnapshotsAddDividend = functions
+  .runWith({ memory: '1GB' })
+  .https.onRequest(async (_req, res) => {
+    // Lazy imports
+    const { default: dayjs } = await import('dayjs');
+    const {
+      activityFromDb,
+      batchSnapshots,
+      snapshotBatchToDb,
+      updateSnapshot,
+      portfolioFromDb,
+      portfolioToDb,
+    } = await import('@tuja/libs');
+
+    const db = admin.firestore();
+    const portfoliosRef = await db.collection('portfolios').listDocuments();
+
+    await Promise.all(
+      portfoliosRef.map(async (portfolioDocRef) => {
+        const portfolioId = portfolioDocRef.id;
+        const activitiesQuery = db
+          .collection(`portfolios/${portfolioId}/activities`)
+          .orderBy('date', 'asc');
+        const snapshotsCollection = db.collection(
+          `portfolios/${portfolioId}/snapshots`
+        );
+
+        await db.runTransaction(async (t) => {
+          // Get portfolio
+          const portfolioDoc = await portfolioDocRef.get();
+          const portfolio = portfolioFromDb(portfolioDoc.data() as DbPortfolio);
+          if (!portfolio) return;
+
+          // Get activities
+          const activityDocs = await t.get(activitiesQuery);
+          const activities = activityDocs.docs.map((doc) =>
+            activityFromDb(doc.data() as DbActivity)
+          );
+
+          // Calculate accumulation data and assign to snapshots
+          const snapshots: Snapshot[] = [];
+          for (const activity of activities) {
+            const prev = snapshots[snapshots.length - 1] ?? EMPTY_SNAPSHOT;
+
+            // New snapshot
+            const newSnapshot = updateSnapshot(activity, prev);
+
+            if (
+              snapshots.length &&
+              dayjs(snapshots[snapshots.length - 1].date).isSame(
+                activity.date,
+                'day'
+              )
+            ) {
+              // Same day, replace previous snapshot
+              snapshots[snapshots.length - 1] = newSnapshot;
+            } else {
+              // New day, push snapshot
+              snapshots.push(newSnapshot);
+            }
+          }
+
+          const snapshotBatches = batchSnapshots(snapshots);
+
+          // Clear existing snapshots
+          const snapshotDocs = await snapshotsCollection.listDocuments();
+          snapshotDocs.forEach((snapshotDoc) => t.delete(snapshotDoc));
+
+          // Store new batches
+          snapshotBatches.forEach((batch) => {
+            const doc = snapshotsCollection.doc();
+            t.set(doc, snapshotBatchToDb(batch));
+          });
+
+          // Update portfolio
+          const activitiesStartDate = snapshots.length
+            ? snapshots[0].date
+            : undefined;
+
+          t.set(
+            portfolioDocRef,
+            portfolioToDb({
+              ...portfolio,
+              activitiesStartDate,
+              latestSnapshot: snapshots[snapshots.length - 1],
+            })
+          );
+        });
+      })
+    );
+
+    res.send('Done');
+  });
+
 export const aggregateActivities = functions
   .runWith({ memory: '1GB' })
   .firestore.document('portfolios/{portfolioId}/activities/{activityId}')
@@ -307,7 +402,7 @@ export const aggregateActivities = functions
 
       // Clear existing snapshots
       const snapshotDocs = await snapshotsCollection.listDocuments();
-      snapshotDocs.forEach((activityDoc) => t.delete(activityDoc));
+      snapshotDocs.forEach((snapshotDoc) => t.delete(snapshotDoc));
 
       // Store new batches
       snapshotBatches.forEach((batch) => {

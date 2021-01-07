@@ -264,6 +264,7 @@ export const examplePortfolio: Portfolio = {
       'SGLN.LSE': 50,
       'VUSA.LSE': 50,
     },
+    dividend: 0,
   },
   costBasis: {
     'AAPL.US': 39.6925,
@@ -311,6 +312,7 @@ export const exampleSnapshots: Snapshot[] = [
     date: new Date('2019-07-01'),
     cash: 97.8,
     cashFlow: 5000,
+    dividend: 0,
     numShares: {
       'AAPL.US': 10,
       'SGLN.LSE': 50,
@@ -321,6 +323,7 @@ export const exampleSnapshots: Snapshot[] = [
     date: new Date('2020-08-31'),
     cash: 97.8,
     cashFlow: 5000,
+    dividend: 0,
     numShares: {
       'AAPL.US': 40,
       'SGLN.LSE': 50,

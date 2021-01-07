@@ -10,4 +10,7 @@ export {
   stocksInfo,
   stocksPrices,
 } from './functions/stocksData';
-export { aggregateActivities } from './functions/portfolio';
+export {
+  aggregateActivities,
+  migrateSnapshotsAddDividend,
+} from './functions/portfolio';
