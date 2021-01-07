@@ -35,6 +35,7 @@ export interface PortfolioPerformance {
       livePrice: StockLivePrice;
     };
   };
+  monthlyDividends: TimeSeries;
 }
 
 export interface MaybePortfolioPerformance extends PortfolioPerformance {
@@ -42,6 +43,7 @@ export interface MaybePortfolioPerformance extends PortfolioPerformance {
   twrrSeries: any;
   gainSeries: any;
   cashFlowSeries: any;
+  monthlyDividends: any;
   benchmarkSeries?: any;
 }
 
@@ -207,11 +209,13 @@ export const watchSnapshots = (
   startDate: Date,
   onSnap: (snapshots: Snapshot[]) => void
 ) => {
+  // Get the start of the calendar month of the startDate
+  const startOfMonth = dayjs(startDate).startOf('month');
   const query = firebase
     .firestore()
     .collection(`/portfolios/${portfolioId}/snapshots`)
     .orderBy('endDate', 'asc')
-    .startAt(dayjs(startDate).format('YYYY-MM-DD'));
+    .startAt(startOfMonth.format('YYYY-MM-DD'));
   return query.onSnapshot((snapshot) => {
     console.log('received snapshots update');
     const docs = snapshot.docs;
@@ -240,6 +244,7 @@ export function processPerformanceSeries<T>(
     benchmarkSeries:
       portfolioPerformance.benchmarkSeries &&
       handleTimeSeries(portfolioPerformance.benchmarkSeries),
+    monthlyDividends: handleTimeSeries(portfolioPerformance.monthlyDividends),
   };
 }
 
