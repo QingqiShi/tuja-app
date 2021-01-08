@@ -8,6 +8,7 @@
     "start": "run-p dev emulate",
     "dev": "lerna run dev --parallel",
     "build": "lerna run build",
+    "build:functions": "lerna run build --scope @tuja/libs --scope @tuja/functions",
     "lint": "lerna run lint",
     "emulate": "firebase emulators:start --only firestore,pubsub,functions --import=testData --inspect-functions",
     "emulator:export": "firebase emulators:export ./testData",
