@@ -11,7 +11,8 @@ import {
   portfolioFromDb,
   portfolioToDb,
   Snapshot,
-  StockInfo, StockLivePrice,
+  StockInfo,
+  StockLivePrice,
   DbSnapshotBatch,
   snapshotBatchFromDb,
 } from '@tuja/libs';

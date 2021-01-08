@@ -75,6 +75,10 @@
       "eslint",
       "prettier --single-quote --write"
     ],
+    "packages/workers/src/**/*.{ts}": [
+      "eslint",
+      "prettier --single-quote --write"
+    ],
     "packages/*/src/**/*.{json,css,scss,md}": [
       "prettier --single-quote --write"
     ],

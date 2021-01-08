@@ -10,7 +10,9 @@ import {
   TimeSeries,
   Portfolio,
   Snapshot,
-  StockHistory, StockInfo, StockLivePrice
+  StockHistory,
+  StockInfo,
+  StockLivePrice,
 } from '@tuja/libs';
 import type { PortfolioPerformance } from 'libs/portfolioClient';
 import {
