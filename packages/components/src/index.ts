@@ -8,6 +8,7 @@ export { default as NumberInput } from './components/inputs/NumberInput';
 export { default as SearchSuggest } from './components/inputs/SearchSuggest';
 export { default as Chart } from './components/display/Chart';
 export { default as Pie } from './components/display/Pie';
+export { default as Bars } from './components/display/Bars';
 export { default as Type } from './components/display/Type';
 export { default as StockListItem } from './components/display/StockListItem';
 export { default as ActivityItem } from './components/display/ActivityItem';

@@ -456,6 +456,7 @@ function Chart({
                 onTouchMove={handleTooltip}
                 onMouseMove={handleTooltip}
                 onMouseLeave={clearTooltip}
+                onTouchEnd={clearTooltip}
               />
               <g>
                 <line

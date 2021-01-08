@@ -244,7 +244,9 @@ export function processPerformanceSeries<T>(
     benchmarkSeries:
       portfolioPerformance.benchmarkSeries &&
       handleTimeSeries(portfolioPerformance.benchmarkSeries),
-    monthlyDividends: handleTimeSeries(portfolioPerformance.monthlyDividends),
+    monthlyDividends: portfolioPerformance.monthlyDividends
+      ? handleTimeSeries(portfolioPerformance.monthlyDividends)
+      : handleTimeSeries({ data: [] }),
   };
 }
 
