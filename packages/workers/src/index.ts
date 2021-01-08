@@ -1,7 +1,7 @@
 import type { StockInfo } from '@tuja/libs';
 
 // Get EodHistoricalData API token from firebase config
-const getToken = () => process.env.EOD_API_KEY ?? '';
+const getToken = () => EOD_API_KEY ?? '';
 
 const handleStockSearch = async (request: Request) => {
   const params = new URL(request.url).searchParams;

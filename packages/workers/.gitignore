@@ -13,6 +13,4 @@ typings/
 node_modules/
 
 # Others
-dist
-lib
-.env.local
+worker
