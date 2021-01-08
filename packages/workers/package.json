@@ -1,0 +1,33 @@
+{
+  "name": "@tuja/workers",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Backend functions code for Tuja app",
+  "author": "Qingqi Shi <qingqishi@live.com>",
+  "license": "MIT",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "yarn dev",
+    "dev": "wrangler dev",
+    "build": "wrangler build",
+    "lint": "eslint \"src/**/*\""
+  },
+  "dependencies": {
+    "@tuja/libs": "^0.0.0",
+    "d3-array": "^2.9.1",
+    "dayjs": "^1.10.2",
+    "escape-string-regexp": "^4.0.0",
+    "firebase-admin": "^9.4.2",
+    "node-cache": "^5.1.2",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^2.1.0",
+    "@cloudflare/wrangler": "^1.12.3",
+    "@types/node": "12",
+    "@types/node-cache": "^4.2.5",
+    "@types/node-fetch": "^2.5.7",
+    "dotenv-webpack": "^6.0.0",
+    "ts-loader": "^8.0.14"
+  }
+}

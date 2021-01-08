@@ -1,50 +1,11 @@
 import firebase from 'firebase/app';
 import dayjs from 'dayjs';
-import { TimeSeries } from '@tuja/libs';
-
-export interface StockInfo {
-  Ticker: string;
-  Code: string;
-  Name: string;
-  Country: string;
-  Exchange: string;
-  Currency: string;
-  Type?: string;
-}
-
-export interface StockHistory {
-  ticker: string;
-  close: TimeSeries;
-  adjusted: TimeSeries;
-  range: { startDate: Date; endDate: Date };
-}
-
-export interface StockLivePrice {
-  date: Date;
-  code: string;
-  close: number | 'NA';
-  previousClose: number;
-  timestamp?: number;
-  open?: number | 'NA';
-  high?: number | 'NA';
-  low?: number | 'NA';
-  volume?: number;
-  change?: number | 'NA';
-  change_p?: number | 'NA';
-}
-
-export interface StocksData {
-  [ticker: string]: {
-    info?: StockInfo;
-    livePrice?: StockLivePrice;
-    closeSeries?: TimeSeries;
-    adjustedSeries?: TimeSeries;
-    seriesRange?: {
-      startDate: Date;
-      endDate: Date;
-    };
-  };
-}
+import {
+  TimeSeries,
+  StockInfo,
+  StockHistory,
+  StockLivePrice,
+} from '@tuja/libs';
 
 export async function fetchStocksHistory(ticker: string, from: Date, to: Date) {
   const formattedFrom = dayjs(from).format('YYYY-MM-DD');

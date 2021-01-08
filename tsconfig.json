@@ -11,6 +11,7 @@
     { "path": "./packages/app/tsconfig.json" },
     { "path": "./packages/components/tsconfig.json" },
     { "path": "./packages/functions/tsconfig.json" },
-    { "path": "./packages/libs/tsconfig.json" }
+    { "path": "./packages/libs/tsconfig.json" },
+    { "path": "./packages/workers/tsconfig.json" }
   ]
 }

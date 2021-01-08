@@ -3,7 +3,7 @@ import { RiEdit2Line, RiPercentLine } from 'react-icons/ri';
 import styled, { css } from 'styled-components/macro';
 import { transparentize } from 'polished';
 import { Button, Chart, Type } from '@tuja/components';
-import { formatCurrency } from '@tuja/libs';
+import { formatCurrency, StockHistory } from '@tuja/libs';
 import { PortfolioPerformance } from 'libs/portfolioClient';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
@@ -11,7 +11,6 @@ import useStartDate from 'hooks/useStartDate';
 import { Card } from 'commonStyledComponents';
 import useAuth from 'hooks/useAuth';
 import { theme, getTheme } from 'theme';
-import { StockHistory } from 'libs/stocksClient';
 import { getDB, getStocksHistory } from 'libs/cachedStocksData';
 
 const InvestmentContainer = styled.div`

@@ -1,10 +1,11 @@
 import dayjs from 'dayjs';
-import { exchangeCurrency, TimeSeries } from '@tuja/libs';
-import type {
+import {
+  exchangeCurrency,
   StockHistory,
   StockInfo,
   StockLivePrice,
-} from 'libs/stocksClient';
+  TimeSeries,
+} from '@tuja/libs';
 import type { PortfolioPerformance } from 'libs/portfolioClient';
 
 export function calcHoldingsValues(

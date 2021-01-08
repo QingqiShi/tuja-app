@@ -26,6 +26,7 @@ import {
   ActivityFormProps,
   exchangeCurrency,
   formatCurrency,
+  StockInfo,
 } from '@tuja/libs';
 import CurrencyInput from './CurrencyInput';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
@@ -34,7 +35,6 @@ import {
   fetchStockSearch,
   fetchStocksInfo,
   fetchStocksPrices,
-  StockInfo,
 } from 'libs/stocksClient';
 import { PortfolioPerformance } from 'libs/portfolioClient';
 
