@@ -44,7 +44,7 @@
     "commitizen": "^4.2.2",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.17.0",
-    "firebase": "^8.2.1",
+    "firebase": "^8.2.2",
     "firebase-tools": "^9.1.2",
     "husky": "^4.3.7",
     "lerna": "^3.21.0",
