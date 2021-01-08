@@ -1,0 +1,10 @@
+name = "tuja"
+type = "webpack"
+account_id = "5fd1f1b9e3ade79e88fdf01ee8c23ded"
+webpack_config = "webpack.config.js"
+workers_dev = true
+
+[env.production]
+zone_id = "a3f93e3292eeedac2eb6f5209da32ac1"
+route = "api.tuja.app/*"
+workers_dev = false
