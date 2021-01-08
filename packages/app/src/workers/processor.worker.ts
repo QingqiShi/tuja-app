@@ -211,6 +211,26 @@ function calculatePerformance(
   const cashFlowSeries = new TimeSeries();
   const benchmarkSeries = new TimeSeries();
 
+  // Loop to get monthly dividends
+  const startOfMonth = dayjs(startDate).startOf('month');
+  const monthlyDividends = new TimeSeries();
+  snapshots.forEach((snapshot) => {
+    if (!snapshot.dividend || startOfMonth.isAfter(snapshot.date)) return;
+
+    const dividends = monthlyDividends.data;
+    if (
+      dividends.length &&
+      dayjs(snapshot.date).isSame(dividends[dividends.length - 1][0], 'month')
+    ) {
+      dividends[dividends.length - 1][1] += snapshot.dividend;
+    } else {
+      dividends.push([
+        dayjs(snapshot.date).startOf('month').toDate(),
+        snapshot.dividend,
+      ]);
+    }
+  });
+
   let benchmarkInitial = 0;
   iterateSnapshots({
     snapshots,
@@ -286,5 +306,6 @@ function calculatePerformance(
       valueSeries.getLast() - (snapshots[snapshots.length - 1]?.cash ?? 0),
     holdings,
     benchmarkSeries: benchmark ? benchmarkSeries : undefined,
+    monthlyDividends,
   } as PortfolioPerformance;
 }

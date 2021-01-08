@@ -82,6 +82,7 @@ export function PortfolioProcessorProvider({
         twrrSeries: new TimeSeries(),
         gainSeries: new TimeSeries(),
         cashFlowSeries: new TimeSeries(),
+        monthlyDividends: new TimeSeries(),
         totalHoldingsValue: 0,
         holdings: {},
       });
