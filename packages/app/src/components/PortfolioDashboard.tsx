@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { RiMoreLine, RiSubtractLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
-import { Button, ButtonGroup, Chart, Modal, Type } from '@tuja/components';
+import {
+  Bars,
+  Button,
+  ButtonGroup,
+  Chart,
+  Modal,
+  Type,
+} from '@tuja/components';
 import { Activity, formatCurrency } from '@tuja/libs';
 import DashboardLayout from 'components/DashboardLayout';
 import PortfolioOverview from 'components/PortfolioOverview';
@@ -94,6 +101,7 @@ const charts = [
   { label: 'Value', value: 'value' },
   { label: 'Gains', value: 'gains' },
   { label: 'Returns', value: 'returns' },
+  { label: 'Dividends', value: 'dividends' },
 ];
 
 interface PortfolioDashboardProps {
@@ -275,6 +283,14 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                     benchmark={portfolioPerformance?.benchmarkSeries?.data}
                     benchmarkLabel={portfolio.benchmark}
                     hideAxis
+                  />
+                )}
+                {selectedChart === 'dividends' && (
+                  <Bars
+                    data={portfolioPerformance?.monthlyDividends.data ?? []}
+                    formatValue={(val) =>
+                      formatCurrency(portfolio.currency, val)
+                    }
                   />
                 )}
               </CardMedia>
