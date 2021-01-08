@@ -11,10 +11,10 @@ import {
   portfolioFromDb,
   portfolioToDb,
   Snapshot,
+  StockInfo, StockLivePrice,
   DbSnapshotBatch,
   snapshotBatchFromDb,
 } from '@tuja/libs';
-import { StockInfo, StockLivePrice } from './stocksClient';
 
 const ACTIVITIES_PAGE_LIMIT = 10;
 
