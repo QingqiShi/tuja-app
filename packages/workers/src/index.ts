@@ -1,11 +1,13 @@
 import { handleSearch } from './handlers/handleSearch';
 import { handleLivePrices } from './handlers/handleLivePrices';
+import { handleHistoricEod } from './handlers/handleHistoricEod';
 
 const handleRequest = async (request: Request) => {
   const url = new URL(request.url);
 
   if (url.pathname === '/search') return handleSearch(request);
   if (url.pathname === '/livePrices') return handleLivePrices(request);
+  if (url.pathname === '/historicEod') return handleHistoricEod(request);
 
   return new Response('Not Found', { status: 404 });
 };
