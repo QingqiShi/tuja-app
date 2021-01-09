@@ -1,3 +1,5 @@
+import { getStocksClient } from '@tuja/libs';
+
 export const handleHistoricEod = async (
   request: Request
 ): Promise<Response> => {
@@ -11,12 +13,10 @@ export const handleHistoricEod = async (
   if (!to) return new Response('Missing to', { status: 400 });
   if (!EOD_API_KEY) return new Response('Missing API Key', { status: 500 });
 
-  const result = await fetch(
-    `https://eodhistoricaldata.com/api/eod/${ticker}?from=${from}&to=${to}&fmt=json&api_token=${EOD_API_KEY}`
-  );
-  const historicEod = await result.json();
+  const client = getStocksClient(fetch, EOD_API_KEY);
+  const history = await client.history(ticker, from, to);
 
-  return new Response(JSON.stringify(historicEod), {
+  return new Response(JSON.stringify(history), {
     headers: { 'content-type': 'application/json;charset=UTF-8' },
   });
 };
