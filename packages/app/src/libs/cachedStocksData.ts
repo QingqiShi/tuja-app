@@ -7,9 +7,9 @@ import {
   StockLivePrice,
 } from '@tuja/libs';
 import {
-  fetchStockLivePrice,
-  fetchStocksHistory,
-  fetchStocksInfo,
+  fetchStockLivePrices,
+  fetchStockHistories,
+  fetchStockInfos,
   getMissingStocksHistory,
 } from 'libs/stocksClient';
 
@@ -72,7 +72,7 @@ export async function getStocksInfo(db: Database, tickers: string[]) {
   const tickersToFetch = tickers.filter((ticker) => !(ticker in stocksInfo));
   if (tickersToFetch.length) {
     console.log('fetch info', tickersToFetch);
-    const fetchedStocksInfo = await fetchStocksInfo(tickersToFetch);
+    const fetchedStocksInfo = await fetchStockInfos(tickersToFetch);
 
     const writeTx = db.transaction(['stocksInfo'], 'readwrite');
     const writeStore = writeTx.objectStore('stocksInfo');
@@ -121,51 +121,49 @@ export async function getStocksHistory(
     startDate,
     endDate
   );
-  await Promise.all(
-    missingHistory.map(async (fetchInfo) => {
-      console.log(
-        'fetch history',
-        fetchInfo.ticker,
-        fetchInfo.startDate.toLocaleDateString(),
-        fetchInfo.endDate.toLocaleDateString()
-      );
-      const history = await fetchStocksHistory(
-        fetchInfo.ticker,
-        fetchInfo.startDate,
-        fetchInfo.endDate
-      );
-
-      if (!(fetchInfo.ticker in stocksHistory)) {
-        stocksHistory[fetchInfo.ticker] = {
-          ticker: fetchInfo.ticker,
-          close: history.closeSeries,
-          adjusted: history.adjustedSeries,
-          range: { startDate: fetchInfo.startDate, endDate: fetchInfo.endDate },
-        };
-      } else {
-        const current = stocksHistory[fetchInfo.ticker];
-        stocksHistory[current.ticker] = {
-          ticker: current.ticker,
-          close: current.close.mergeWith(history.closeSeries),
-          adjusted: current.adjusted.mergeWith(history.adjustedSeries),
-          range: {
-            startDate: dayjs
-              .min(dayjs(fetchInfo.startDate), dayjs(current.range.startDate))
-              .toDate(),
-            endDate: dayjs
-              .max(dayjs(fetchInfo.endDate), dayjs(current.range.endDate))
-              .toDate(),
-          },
-        };
-      }
-    })
+  const histories = await fetchStockHistories(
+    missingHistory.map((mh) => ({
+      ticker: mh.ticker,
+      from: mh.startDate,
+      to: mh.endDate,
+    }))
   );
+  histories.forEach(({ ticker, from, to, closeSeries, adjustedSeries }) => {
+    console.log(
+      'fetched history',
+      ticker,
+      from.toLocaleDateString(),
+      to.toLocaleDateString()
+    );
+
+    if (!(ticker in stocksHistory)) {
+      stocksHistory[ticker] = {
+        ticker: ticker,
+        close: closeSeries,
+        adjusted: adjustedSeries,
+        range: { startDate: from, endDate: to },
+      };
+    } else {
+      const current = stocksHistory[ticker];
+      stocksHistory[current.ticker] = {
+        ticker: current.ticker,
+        close: current.close.mergeWith(closeSeries),
+        adjusted: current.adjusted.mergeWith(adjustedSeries),
+        range: {
+          startDate: dayjs
+            .min(dayjs(from), dayjs(current.range.startDate))
+            .toDate(),
+          endDate: dayjs.max(dayjs(to), dayjs(current.range.endDate)).toDate(),
+        },
+      };
+    }
+  });
 
   const writeTx = db.transaction('stocksHistory', 'readwrite');
   const writeStore = writeTx.objectStore('stocksHistory');
 
   await Promise.all(
-    missingHistory.map(({ ticker }) => writeStore.put(stocksHistory[ticker]))
+    histories.map(({ ticker }) => writeStore.put(stocksHistory[ticker]))
   );
   await writeTx.done;
 
@@ -196,7 +194,7 @@ export async function getStocksLivePrice(db: Database, tickers: string[]) {
   );
   if (tickersToFetch.length) {
     console.log('fetch live prices', tickersToFetch);
-    const fetchedStocksLivePrice = await fetchStockLivePrice(tickersToFetch);
+    const fetchedStocksLivePrice = await fetchStockLivePrices(tickersToFetch);
 
     const writeTx = db.transaction(['stocksLivePrice'], 'readwrite');
     const writeStore = writeTx.objectStore('stocksLivePrice');

@@ -1,8 +1,6 @@
-import { getStocksClient } from '@tuja/libs';
+import { getStocksClient, getStockInfo } from '@tuja/libs';
 
-export const handleBulkLivePrices = async (
-  request: Request
-): Promise<Response> => {
+export const handleBulkInfos = async (request: Request): Promise<Response> => {
   const params = new URL(request.url).searchParams;
   const tickers = params.get('tickers')?.split(',');
 
@@ -12,12 +10,17 @@ export const handleBulkLivePrices = async (
     return new Response('No more than 6 tickers', { status: 400 });
   if (!EOD_API_KEY) return new Response('Missing API Key', { status: 500 });
 
-  const client = getStocksClient(fetch, EOD_API_KEY);
-  const livePrices = await Promise.all(
-    tickers.map((ticker) => client.livePrice(ticker))
+  // cache for 30 days
+  const client = getStocksClient(
+    (url: string) =>
+      fetch(url, { cf: { cacheTtl: 2592000, cacheEverything: true } }),
+    EOD_API_KEY
+  );
+  const infos = await Promise.all(
+    tickers.map((ticker) => getStockInfo(client, ticker))
   );
 
-  return new Response(JSON.stringify(livePrices), {
+  return new Response(JSON.stringify(infos), {
     headers: { 'content-type': 'application/json;charset=UTF-8' },
   });
 };

@@ -1,65 +1,49 @@
-import firebase from 'firebase/app';
 import dayjs from 'dayjs';
 import {
   TimeSeries,
   StockInfo,
+  StockPrice,
   StockHistory,
   StockLivePrice,
 } from '@tuja/libs';
 
-export async function fetchStocksHistory(ticker: string, from: Date, to: Date) {
-  const formattedFrom = dayjs(from).format('YYYY-MM-DD');
-  const formattedTo = dayjs(to).format('YYYY-MM-DD');
-  const stockHistory = firebase.functions().httpsCallable('stockHistory');
+const DATE_FORMAT = 'YYYY-MM-DD';
 
-  const result = await stockHistory({
-    ticker,
-    from: formattedFrom,
-    to: formattedTo,
-  });
-
-  const closeSeries = new TimeSeries();
-  const adjustedSeries = new TimeSeries();
-
-  closeSeries.handleData(
-    result.data.map(({ date, close }: { date: string; close: number }) => [
-      date,
-      close,
-    ])
-  );
-  adjustedSeries.handleData(
-    result.data.map(
-      ({ date, adjusted_close }: { date: string; adjusted_close: number }) => [
-        date,
-        adjusted_close,
-      ]
-    )
-  );
-
-  return { closeSeries, adjustedSeries };
-}
-
-export async function fetchStocksInfo(tickers: string[]) {
-  const stocksInfo = firebase.functions().httpsCallable('stocksInfo');
-
-  const result = await stocksInfo({ tickers });
-  return result.data as StockInfo[];
-}
-
-export async function fetchStockLivePrice(tickers: string[]) {
+const chunkTickers = <T>(tickers: T[]) => {
   const chunkSize = 6;
-  const tickerChunks: string[][] = [];
+  const tickerChunks: T[][] = [];
   for (let i = 0; i < tickers.length; i += chunkSize) {
     tickerChunks.push(tickers.slice(i, i + chunkSize));
   }
+  return tickerChunks;
+};
+
+const joinTickers = (tickers: string[]) =>
+  tickers.map((ticker) => encodeURIComponent(ticker)).join(',');
+
+export async function fetchStockInfos(tickers: string[]) {
+  const tickerChunks = chunkTickers(tickers);
+  const data = await Promise.all(
+    tickerChunks.map(async (chunk) =>
+      fetch(
+        `${process.env.REACT_APP_WORKERS_URL}/bulkInfos?tickers=${joinTickers(
+          chunk
+        )}`
+      ).then((res) => res.json())
+    )
+  );
+
+  return data.flatMap((chunk) => chunk) as StockInfo[];
+}
+
+export async function fetchStockLivePrices(tickers: string[]) {
+  const tickerChunks = chunkTickers(tickers);
   const data = await Promise.all(
     tickerChunks.map(async (chunk) =>
       fetch(
         `${
           process.env.REACT_APP_WORKERS_URL
-        }/bulkLivePrices?tickers=${chunk
-          .map((ticker) => encodeURIComponent(ticker))
-          .join(',')}`
+        }/bulkLivePrices?tickers=${joinTickers(chunk)}`
       ).then((res) => res.json())
     )
   );
@@ -71,11 +55,72 @@ export async function fetchStockLivePrice(tickers: string[]) {
   );
 }
 
-export async function fetchStockSearch(query: string) {
-  const searchStocks = firebase.functions().httpsCallable('searchStocks');
+export async function fetchStockHistories(
+  tickers: { ticker: string; from: Date; to: Date }[]
+) {
+  const tickerChunks = chunkTickers(tickers);
 
-  const result = await searchStocks({ query });
-  return result.data as StockInfo[];
+  const data = await Promise.all(
+    tickerChunks.map(async (chunk) => {
+      const response = await fetch(
+        `${
+          process.env.REACT_APP_WORKERS_URL
+        }/bulkEods?query=${encodeURIComponent(
+          JSON.stringify(
+            chunk.map(({ ticker, from, to }) => {
+              const formattedFrom = dayjs(from).format(DATE_FORMAT);
+              const formattedTo = dayjs(to).format(DATE_FORMAT);
+              return { ticker, from: formattedFrom, to: formattedTo };
+            })
+          )
+        )}`
+      );
+      const data = await response.json();
+      return data as any[];
+    })
+  );
+
+  return data.flatMap((chunk) =>
+    chunk.map(
+      ({
+        ticker,
+        from,
+        to,
+        history,
+      }: {
+        ticker: string;
+        from: string;
+        to: string;
+        history: { date: string; close: number; adjusted_close: number }[];
+      }) => {
+        const closeSeries = new TimeSeries();
+        const adjustedSeries = new TimeSeries();
+
+        closeSeries.handleData(history.map(({ date, close }) => [date, close]));
+        adjustedSeries.handleData(
+          history.map(({ date, adjusted_close }) => [date, adjusted_close])
+        );
+
+        return {
+          ticker,
+          from: dayjs(from, DATE_FORMAT).toDate(),
+          to: dayjs(to, DATE_FORMAT).toDate(),
+          closeSeries,
+          adjustedSeries,
+        };
+      }
+    )
+  );
+}
+
+export async function fetchStockSearch(query: string) {
+  const response = await fetch(
+    `${process.env.REACT_APP_WORKERS_URL}/search?query=${encodeURIComponent(
+      query
+    )}`
+  );
+  const data = await response.json();
+  return data as StockInfo[];
 }
 
 export async function fetchStocksPrices(
@@ -83,14 +128,22 @@ export async function fetchStocksPrices(
   date: Date,
   currency: string
 ) {
-  const stocksPrices = firebase.functions().httpsCallable('stocksPrices');
+  const data: StockPrice[] = await Promise.all(
+    tickers.map(async (ticker) =>
+      fetch(
+        `${
+          process.env.REACT_APP_WORKERS_URL
+        }/priceAt?ticker=${encodeURIComponent(ticker)}&at=${dayjs(date).format(
+          DATE_FORMAT
+        )}&currency=${currency}`
+      ).then((res) => res.json())
+    )
+  );
 
-  const result = await stocksPrices({
-    tickers,
-    date: dayjs(date).format('YYYY-MM-DD'),
-    currency,
-  });
-  return result.data as { [ticker: string]: number };
+  return data.reduce(
+    (obj, price) => ({ ...obj, [price.ticker]: price }),
+    {} as { [ticker: string]: StockPrice }
+  );
 }
 
 export function getMissingStocksHistory(

@@ -1,8 +1,7 @@
-import { handleInfo } from './handlers/handleInfo';
 import { handleSearch } from './handlers/handleSearch';
-import { handleLivePrice } from './handlers/handleLivePrice';
 import { handlePriceAt } from './handlers/handlePriceAt';
-import { handleHistoricEod } from './handlers/handleHistoricEod';
+import { handleBulkEods } from './handlers/handleBulkEods';
+import { handleBulkInfos } from './handlers/handleBulkInfos';
 import { handleBulkLivePrices } from './handlers/handleBulkLivePrices';
 
 const getResponse = async (
@@ -20,11 +19,10 @@ const getResponse = async (
 
 const handleRequest = async (request: Request) => {
   const response = await getResponse(request, {
-    '/info': handleInfo,
     '/search': handleSearch,
-    '/livePrice': handleLivePrice,
-    '/historicEod': handleHistoricEod,
     '/priceAt': handlePriceAt,
+    '/bulkEods': handleBulkEods,
+    '/bulkInfos': handleBulkInfos,
     '/bulkLivePrices': handleBulkLivePrices,
   });
 
