@@ -24,7 +24,6 @@ import {
 import {
   Activity,
   ActivityFormProps,
-  exchangeCurrency,
   formatCurrency,
   StockInfo,
 } from '@tuja/libs';
@@ -33,7 +32,7 @@ import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import { theme, getTheme } from 'theme';
 import {
   fetchStockSearch,
-  fetchStocksInfo,
+  fetchStockInfos,
   fetchStocksPrices,
 } from 'libs/stocksClient';
 import { PortfolioPerformance } from 'libs/portfolioClient';
@@ -202,16 +201,7 @@ function ActivityTradeForm({
             if (!info) {
               return total;
             }
-
-            return (
-              total +
-              exchangeCurrency(
-                prices[ticker] * quantities[ticker],
-                info.Currency,
-                currency,
-                (forexPair) => prices[forexPair]
-              )
-            );
+            return total + prices[ticker].priceInCurrency * quantities[ticker];
           }, 0)
         );
         setIsLoading(false);
@@ -226,7 +216,7 @@ function ActivityTradeForm({
     const fetch = async () => {
       if (initialActivity?.type === 'Trade') {
         setInitialLoading(true);
-        const stocksInfo = await fetchStocksInfo(
+        const stocksInfo = await fetchStockInfos(
           initialActivity.trades.map(({ ticker }) => ticker)
         );
         setSelectedTickers(stocksInfo);

@@ -31,6 +31,12 @@ export interface StockLivePrice {
   change_p?: number | 'NA';
 }
 
+export interface StockPrice {
+  ticker: string;
+  price: number;
+  priceInCurrency: number;
+}
+
 export const getStocksClient = (
   fetch: (url: string) => Promise<{ json: () => Promise<any> }>,
   apiKey: string

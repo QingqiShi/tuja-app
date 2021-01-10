@@ -138,19 +138,22 @@ async function processPortfolio(payload: ProcessPortfolioPayload) {
     ),
   ];
 
-  // Fetch historical data for tickers and currencies
-  const stocksHistory = await getStocksHistory(
-    db,
-    [...tickers, ...currencies],
-    startDate,
-    endDate
-  );
+  // Find the tickers are held at the end
+  const finalHoldings = new Set<string>();
+  Object.keys(snapshots[snapshots.length - 1]?.numShares).forEach((ticker) => {
+    if (snapshots[snapshots.length - 1].numShares[ticker]) {
+      finalHoldings.add(ticker);
+    }
+  });
+  if (benchmark) {
+    finalHoldings.add(benchmark);
+  }
 
-  // Fetch live prices and merge into stocksHistory
-  const stocksLivePrices = await getStocksLivePrice(db, [
-    ...tickers,
-    ...currencies,
+  const [stocksHistory, stocksLivePrices] = await Promise.all([
+    getStocksHistory(db, [...tickers, ...currencies], startDate, endDate),
+    getStocksLivePrice(db, [...finalHoldings, ...currencies]),
   ]);
+
   mergeLivePricesIntoHistory(stocksLivePrices, stocksHistory);
 
   // Process portfolio

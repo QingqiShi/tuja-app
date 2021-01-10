@@ -13,7 +13,7 @@ export const handleSearch = async (request: Request): Promise<Response> => {
       fetch(url, { cf: { cacheTtl: 2592000, cacheEverything: true } }),
     EOD_API_KEY
   );
-  const results = await client.search(query);
+  const results = await client.search(decodeURIComponent(query));
 
   const response = new Response(JSON.stringify(results), {
     headers: { 'content-type': 'application/json;charset=UTF-8' },
