@@ -5,19 +5,40 @@ import { handlePriceAt } from './handlers/handlePriceAt';
 import { handleHistoricEod } from './handlers/handleHistoricEod';
 import { handleBulkLivePrices } from './handlers/handleBulkLivePrices';
 
-const handleRequest = async (request: Request) => {
-  const url = new URL(request.url);
+const getResponse = async (
+  request: Request,
+  config: { [pathname: string]: (request: Request) => Promise<Response> }
+) => {
+  const pathname = new URL(request.url).pathname;
 
-  if (url.pathname === '/info') return handleInfo(request);
-  if (url.pathname === '/search') return handleSearch(request);
-  if (url.pathname === '/livePrice') return handleLivePrice(request);
-  if (url.pathname === '/historicEod') return handleHistoricEod(request);
-  if (url.pathname === '/priceAt') return handlePriceAt(request);
-  if (url.pathname === '/api/bulkLivePrices') return handleBulkLivePrices(request);
+  if (pathname in config) {
+    return config[pathname](request);
+  }
 
   return new Response('Not Found', { status: 404 });
 };
 
+const handleRequest = async (request: Request) => {
+  const response = await getResponse(request, {
+    '/info': handleInfo,
+    '/search': handleSearch,
+    '/livePrice': handleLivePrice,
+    '/historicEod': handleHistoricEod,
+    '/priceAt': handlePriceAt,
+    '/bulkLivePrices': handleBulkLivePrices,
+  });
+
+  response.headers.set(
+    'Access-Control-Allow-Origin',
+    ENVIRONMENT === 'production' ? 'https://tuja.app' : '*'
+  );
+  if (ENVIRONMENT === 'production') {
+    response.headers.set('Vary', 'Origin');
+  }
+  return response;
+};
+
 addEventListener('fetch', (event) => {
-  event.respondWith(handleRequest(event.request));
+  const request = event.request;
+  event.respondWith(handleRequest(request));
 });
