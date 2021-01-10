@@ -55,7 +55,9 @@ export async function fetchStockLivePrice(tickers: string[]) {
   const data = await Promise.all(
     tickerChunks.map(async (chunk) =>
       fetch(
-        `/api/bulkLivePrices?tickers=${chunk
+        `${
+          process.env.REACT_APP_WORKERS_URL
+        }/bulkLivePrices?tickers=${chunk
           .map((ticker) => encodeURIComponent(ticker))
           .join(',')}`
       ).then((res) => res.json())
