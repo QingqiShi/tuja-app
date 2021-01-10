@@ -1,7 +1,9 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import fetch from 'node-fetch';
 import type { Activity, DbActivity, DbPortfolio, Snapshot } from '@tuja/libs';
-import { _getStocksPrices, _getStockInfo } from './stocksData';
+
+const getToken = () => functions.config().eodhistoricaldata.token;
 
 interface CostBasis {
   [ticker: string]: number;
@@ -23,19 +25,17 @@ async function _getPricesInCurrency(
   currency: string,
   date: Date
 ) {
-  const { exchangeCurrency } = await import('@tuja/libs');
-  const infos = await Promise.all(tickers.map(_getStockInfo));
-  const prices = await _getStocksPrices(tickers, date, currency);
+  const { getStocksClient, getStockPriceAt } = await import('@tuja/libs');
 
-  return tickers.map((ticker, i) => {
-    const tickerCurrency = infos[i].Currency;
-    return exchangeCurrency(
-      prices[ticker],
-      tickerCurrency,
-      currency,
-      (forexPair) => prices[forexPair]
-    );
-  });
+  const client = getStocksClient(fetch, getToken());
+
+  const prices = await Promise.all(
+    tickers.map((ticker) =>
+      getStockPriceAt(client, client, ticker, date, currency)
+    )
+  );
+
+  return prices.map((price) => price.priceInCurrency);
 }
 
 /**

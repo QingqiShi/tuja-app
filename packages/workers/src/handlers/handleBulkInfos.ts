@@ -1,8 +1,6 @@
-import { getStocksClient } from '@tuja/libs';
+import { getStocksClient, getStockInfo } from '@tuja/libs';
 
-export const handleBulkInfos = async (
-  request: Request
-): Promise<Response> => {
+export const handleBulkInfos = async (request: Request): Promise<Response> => {
   const params = new URL(request.url).searchParams;
   const tickers = params.get('tickers')?.split(',');
 
@@ -19,12 +17,7 @@ export const handleBulkInfos = async (
     EOD_API_KEY
   );
   const infos = await Promise.all(
-    tickers.map(async (ticker) => {
-      const results = await client.search(ticker.split('.')[0]);
-      return results.find(
-        ({ Ticker }: { Ticker: string }) => Ticker === ticker
-      );
-    })
+    tickers.map((ticker) => getStockInfo(client, ticker))
   );
 
   return new Response(JSON.stringify(infos), {
