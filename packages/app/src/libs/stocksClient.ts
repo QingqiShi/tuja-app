@@ -47,13 +47,26 @@ export async function fetchStocksInfo(tickers: string[]) {
 }
 
 export async function fetchStockLivePrice(tickers: string[]) {
-  const stockLivePrice = firebase.functions().httpsCallable('stockLivePrice');
-
-  const result = await stockLivePrice({ tickers });
-  return result.data.map((data: any) => ({
-    ...data,
-    date: new Date(data.timestamp * 1000),
-  })) as StockLivePrice[];
+  const chunkSize = 6;
+  const tickerChunks: string[][] = [];
+  for (let i = 0; i < tickers.length; i += chunkSize) {
+    tickerChunks.push(tickers.slice(i, i + chunkSize));
+  }
+  const data = await Promise.all(
+    tickerChunks.map(async (chunk) =>
+      fetch(
+        `/api/bulkLivePrices?tickers=${chunk
+          .map((ticker) => encodeURIComponent(ticker))
+          .join(',')}`
+      ).then((res) => res.json())
+    )
+  );
+  return data.flatMap((chunk) =>
+    chunk.map(
+      (d: any) =>
+        ({ ...d, date: new Date(d.timestamp * 1000) } as StockLivePrice)
+    )
+  );
 }
 
 export async function fetchStockSearch(query: string) {

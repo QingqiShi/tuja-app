@@ -177,7 +177,7 @@ export async function getStocksLivePrice(db: Database, tickers: string[]) {
   const readTx = db.transaction(['stocksLivePrice'], 'readonly');
   const readStore = readTx.objectStore('stocksLivePrice');
   const timestamp = new Date().getTime();
-  const threshold = 180000; // 3 minutes
+  const threshold = 60000; // 1 minutes
 
   // Get stocks info from the cache db
   await Promise.all(
