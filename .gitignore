@@ -61,9 +61,6 @@ node_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-
 # Firebase functions config
 .runtimeconfig.json
 
