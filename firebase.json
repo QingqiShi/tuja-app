@@ -13,7 +13,7 @@
         "destination": "/index.html"
       },
       {
-        "src": "/api/**",
+        "source": "/api/**",
         "destination": "https://api.tuja.app"
       }
     ]
