@@ -61,9 +61,9 @@ export const handlePriceAt = async (request: Request): Promise<Response> => {
       (await getStockCurrency(ticker, currency, cachedClient.search))) ||
     {};
 
-  // return live price if today
+  // return live price if today or in the future
   const requestDate = dayjs(at, DATE_FORMAT);
-  if (dayjs().isSame(requestDate, 'date')) {
+  if (!requestDate.isBefore(dayjs(), 'date')) {
     const client = getStocksClient(fetch, EOD_API_KEY);
     const [price, forex] = await Promise.all([
       client.livePrice(ticker),
