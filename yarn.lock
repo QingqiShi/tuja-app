@@ -18029,10 +18029,10 @@ react-use-measure@2.0.1:
   dependencies:
     debounce "^1.2.0"
 
-react-use@^15.3.6:
-  version "15.3.6"
-  resolved "https://registry.yarnpkg.com/react-use/-/react-use-15.3.6.tgz#9c9845fcac7df333c46d0f1b4560094446a530a0"
-  integrity sha512-LlvFJK3FBEhiHmo1wXIIQGAke4U3vUHNQJmmjedLUbdXvG6SccF4CtwbL//SYF/pNaGr+3qtPQxEN0VwEQYQwg==
+react-use@^15.3.8:
+  version "15.3.8"
+  resolved "https://registry.yarnpkg.com/react-use/-/react-use-15.3.8.tgz#ca839ac7fb3d696e5ccbeabbc8dadc2698969d30"
+  integrity sha512-GeGcrmGuUvZrY5wER3Lnph9DSYhZt5nEjped4eKDq8BRGr2CnLf9bDQWG9RFc7oCPphnscUUdOovzq0E5F2c6Q==
   dependencies:
     "@types/js-cookie" "2.2.6"
     "@xobotyi/scrollbar-width" "1.9.5"
