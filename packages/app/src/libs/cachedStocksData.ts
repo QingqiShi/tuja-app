@@ -220,3 +220,19 @@ export async function clearCache(db: Database) {
   const clearStocksLivePriceTx = db.transaction('stocksLivePrice', 'readwrite');
   await clearStocksLivePriceTx.objectStore('stocksLivePrice').clear();
 }
+
+/**
+ * Merge live prices into stocks history
+ */
+export const mergeLivePriceIntoHistory = async (
+  livePrice: StockLivePrice,
+  stockHistory: StockHistory
+) => {
+  if (livePrice.close !== 'NA') {
+    const livePriceSeries = new TimeSeries({
+      data: [[livePrice.date, livePrice.close]],
+    });
+    stockHistory.close = stockHistory.close.mergeWith(livePriceSeries);
+    stockHistory.adjusted = stockHistory.adjusted.mergeWith(livePriceSeries);
+  }
+};
