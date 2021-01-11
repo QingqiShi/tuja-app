@@ -51,37 +51,35 @@ function InvestmentsList() {
 
   const value = valueSeries.getLast();
 
-  const sortedHoldings = [...Object.keys(holdings)]
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'VALUE':
-          return holdings[b].value - holdings[a].value;
-        case 'ALLOCATION':
-          return holdings[b].value / value - holdings[a].value / value;
-        case 'TODAY':
-          const livePriceA = holdings[a].livePrice;
-          const livePriceB = holdings[b].livePrice;
-          if (livePriceA.change_p === 'NA') {
-            return 1;
-          } else if (livePriceB.change_p === 'NA') {
-            return -1;
-          }
-          return (livePriceB.change_p ?? 0) - (livePriceA.change_p ?? 0);
-        case 'GAIN':
-        default: {
-          const costBasis = portfolio?.costBasis;
-          if (!costBasis) return 1;
-
-          const aGain =
-            holdings[a].value - (costBasis[a] ?? 0) * holdings[a].units;
-          const bGain =
-            holdings[b].value - (costBasis[b] ?? 0) * holdings[b].units;
-
-          return bGain - aGain;
+  const sortedHoldings = [...Object.keys(holdings)].sort((a, b) => {
+    switch (sortBy) {
+      case 'VALUE':
+        return holdings[b].value - holdings[a].value;
+      case 'ALLOCATION':
+        return holdings[b].value / value - holdings[a].value / value;
+      case 'TODAY':
+        const livePriceA = holdings[a].livePrice;
+        const livePriceB = holdings[b].livePrice;
+        if (livePriceA.change_p === 'NA') {
+          return 1;
+        } else if (livePriceB.change_p === 'NA') {
+          return -1;
         }
+        return (livePriceB.change_p ?? 0) - (livePriceA.change_p ?? 0);
+      case 'GAIN':
+      default: {
+        const costBasis = portfolio?.costBasis;
+        if (!costBasis) return 1;
+
+        const aGain =
+          holdings[a].value - (costBasis[a] ?? 0) * holdings[a].units;
+        const bGain =
+          holdings[b].value - (costBasis[b] ?? 0) * holdings[b].units;
+
+        return bGain - aGain;
       }
-    })
-    .filter((ticker) => !!holdings[ticker].units);
+    }
+  });
 
   return (
     <>

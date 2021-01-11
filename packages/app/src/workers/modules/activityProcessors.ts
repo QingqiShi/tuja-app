@@ -64,27 +64,29 @@ export function calcHoldings(
   stocksLivePrice: { [ticker: string]: StockLivePrice }
 ) {
   const holdings: PortfolioPerformance['holdings'] = {};
-  Object.keys(numShares).forEach((ticker) => {
-    const stockInfo = stocksInfo[ticker];
-    const stockHistory = stocksHistory[ticker];
-    if (!stockInfo || !stockHistory) return;
+  Object.keys(numShares)
+    .filter((ticker) => !!numShares[ticker])
+    .forEach((ticker) => {
+      const stockInfo = stocksInfo[ticker];
+      const stockHistory = stocksHistory[ticker];
+      if (!stockInfo || !stockHistory) return;
 
-    const units = numShares[ticker];
-    const price = exchangeCurrency(
-      stockHistory.close.get(endDate) ?? 0,
-      stockInfo.Currency ?? baseCurrency,
-      baseCurrency,
-      (forexPair) => stocksHistory[forexPair]?.close.get(endDate)
-    );
-    const value = units * price;
+      const units = numShares[ticker];
+      const price = exchangeCurrency(
+        stockHistory.close.get(endDate) ?? 0,
+        stockInfo.Currency ?? baseCurrency,
+        baseCurrency,
+        (forexPair) => stocksHistory[forexPair]?.close.get(endDate)
+      );
+      const value = units * price;
 
-    holdings[ticker] = {
-      units,
-      value,
-      info: stocksInfo[ticker],
-      livePrice: stocksLivePrice[ticker],
-    };
-  });
+      holdings[ticker] = {
+        units,
+        value,
+        info: stocksInfo[ticker],
+        livePrice: stocksLivePrice[ticker],
+      };
+    });
   return holdings;
 }
 
