@@ -20,6 +20,7 @@ import {
   getStocksHistory,
   getStocksInfo,
   getStocksLivePrice,
+  mergeLivePriceIntoHistory,
 } from 'libs/cachedStocksData';
 import { iterateSnapshots } from './modules/snapshotsIterator';
 import {
@@ -186,12 +187,8 @@ function mergeLivePricesIntoHistory(
   Object.keys(livePrices).forEach((ticker) => {
     const livePrice = livePrices[ticker];
     const stockHistory = stocksHistory[livePrice.code];
-    if (stockHistory && livePrice.close !== 'NA') {
-      const livePriceSeries = new TimeSeries({
-        data: [[livePrice.date, livePrice.close]],
-      });
-      stockHistory.close = stockHistory.close.mergeWith(livePriceSeries);
-      stockHistory.adjusted = stockHistory.adjusted.mergeWith(livePriceSeries);
+    if (stockHistory && livePrice) {
+      mergeLivePriceIntoHistory(livePrice, stockHistory);
     }
   });
 }

@@ -11,7 +11,12 @@ import useStartDate from 'hooks/useStartDate';
 import { Card } from 'commonStyledComponents';
 import useAuth from 'hooks/useAuth';
 import { theme, getTheme } from 'theme';
-import { getDB, getStocksHistory } from 'libs/cachedStocksData';
+import {
+  getDB,
+  getStocksHistory,
+  getStocksLivePrice,
+  mergeLivePriceIntoHistory,
+} from 'libs/cachedStocksData';
 
 const InvestmentContainer = styled.div`
   position: relative;
@@ -172,8 +177,16 @@ function InvestmentsListItem({
     const fetch = async () => {
       if (startDate) {
         const db = await getDB();
-        const result = await getStocksHistory(db, [ticker], startDate, endDate);
-        setStockHistory(result[ticker]);
+        const [histories, livePrices] = await Promise.all([
+          getStocksHistory(db, [ticker], startDate, endDate),
+          getStocksLivePrice(db, [ticker]),
+        ]);
+        const livePrice = livePrices[ticker];
+        const history = histories[ticker];
+        if (livePrice && history) {
+          mergeLivePriceIntoHistory(livePrice, history);
+          setStockHistory(history);
+        }
       }
     };
     if (isReady) {
