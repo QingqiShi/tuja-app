@@ -36,7 +36,7 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/uuid": "^8.3.0",
     "react-scripts": "4.0.1",
-    "source-map-explorer": "^2.5.1",
+    "source-map-explorer": "^2.5.2",
     "worker-loader": "^3.0.7"
   },
   "proxy": "http://127.0.0.1:8787",
