@@ -94,6 +94,7 @@ const axisDateFormat = 'YYYY-MM-DD';
 const formatTooltipDate = (d: Date) => dayjs(d).format('YYYY-MM-DD ddd');
 
 interface ChartProps {
+  id?: string;
   data?: DataPoint[];
   benchmark?: DataPoint[];
   hideAxis?: boolean;
@@ -104,6 +105,7 @@ interface ChartProps {
 }
 
 function Chart({
+  id = (Math.random() * Number.MAX_SAFE_INTEGER).toString(),
   data,
   benchmark,
   hideAxis,
@@ -356,15 +358,17 @@ function Chart({
   return (
     <Container ref={containerRef} className={className}>
       <svg width={width} height={height}>
-        <Group left={margin.left} top={margin.top}>
+        <defs>
           <LinearGradient
-            id="area-gradient"
+            id={`area-gradient-${id}`}
             from={colors.chartLine}
             fromOpacity={0.28}
             to={colors.chartGradientTo}
             toOpacity={0}
             toOffset="80%"
           />
+        </defs>
+        <Group left={margin.left} top={margin.top}>
           {!hideAxis && (
             <GridRows
               scale={valueScale}
@@ -381,7 +385,7 @@ function Chart({
                 x={(d) => dateScale(getDate(d)) || 0}
                 y={(d) => valueScale(getValue(d)) || 0}
                 yScale={valueScale}
-                fill="url(#area-gradient)"
+                fill={`url(#area-gradient-${id})`}
                 curve={curveMonotoneX}
               />
               <LinePath
