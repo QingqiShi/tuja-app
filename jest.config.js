@@ -1,6 +1,9 @@
 module.exports = {
-  projects: ['<rootDir>/packages/libs'],
-  roots: ['<rootDir>/packages/libs'],
-  collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.ts'],
+  projects: [
+    '<rootDir>/packages/libs',
+    '<rootDir>/packages/components',
+    '<rootDir>/packages/workers',
+    '<rootDir>/packages/functions',
+  ],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!**/*.stories.tsx', '!**/*.d.ts'],
 };
