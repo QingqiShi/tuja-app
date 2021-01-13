@@ -16,6 +16,5 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true
   },
-  "include": ["src"],
-  "exclude": ["src/**/*.test.{ts,tsx}"]
+  "include": ["src"]
 }
