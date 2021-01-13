@@ -8,9 +8,9 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn dev",
-    "dev": "tsc -w --preserveWatchOutput",
-    "build": "tsc",
-    "lint": "eslint \"src/**/*\"",
+    "dev": "tsc -w --preserveWatchOutput -p tsconfig-build.json",
+    "build": "tsc -p tsconfig-build.json",
+    "lint": "eslint \"src/**/*.ts\"",
     "predeploy": "node pre-deploy",
     "postdeploy": "node post-deploy"
   },
