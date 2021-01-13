@@ -13,6 +13,6 @@
     "esModuleInterop": true
   },
   "compileOnSave": true,
-  "include": ["src", "./node_modules/@cloudflare/workers-types/index.d.ts"],
+  "include": ["src/**/*.ts", "./node_modules/@cloudflare/workers-types/index.d.ts"],
   "exclude": ["node_modules/", "dist/"]
 }

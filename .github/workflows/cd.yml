@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v2.1.4
         with:
           node-version: '12.x'
@@ -22,15 +24,6 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      - run: yarn install
-      # - run: npm test -- --coverage --reporters="default" --reporters="jest-junit"
-      #   env:
-      #     CI: true
-      # - uses: codecov/codecov-action@v1
-      #   with:
-      #     flags: unittests
-      #     name: Coverage
-      #     fail_ci_if_error: true
       - uses: dorny/paths-filter@v2
         id: changes
         with:
@@ -48,7 +41,15 @@ jobs:
               - 'package.json'
               - 'firebase.json'
               - '.firebaserc'
+      - run: yarn install
       - run: yarn build
+      - run: yarn test:root:ci
+        env:
+          CI: true
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
       - name: Deploy to Firebase Hosting
         if: steps.changes.outputs.hosting == 'true' || steps.changes.outputs.root == 'true'
         uses: w9jds/firebase-action@master

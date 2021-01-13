@@ -10,7 +10,7 @@
     "start": "yarn dev",
     "dev": "wrangler dev",
     "build": "wrangler build --env production",
-    "lint": "eslint \"src/**/*\""
+    "lint": "eslint \"src/**/*.ts\""
   },
   "dependencies": {
     "@tuja/libs": "^0.0.0",
