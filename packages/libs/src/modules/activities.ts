@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import BigNumber from 'bignumber.js';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
-const BATCH_SIZE = 20;
+const DEFAULT_BATCH_SIZE = 20;
 
 export type DistributedOmit<T, K extends keyof any> = T extends any
   ? Omit<T, K>
@@ -166,19 +166,20 @@ export const updateSnapshot = (
     };
   }
   if (activity.type === 'StockDividend') {
-    return {
+    const newSnapshot = {
       ...prevSnapshot,
       date: activity.date,
-      numShares: {
-        ...prevSnapshot.numShares,
-        [activity.ticker]: new BigNumber(
-          prevSnapshot.numShares[activity.ticker] ?? 0
-        )
-          .plus(activity.units)
-          .toNumber(),
-      },
+      numShares: { ...prevSnapshot.numShares },
       dividend: isSameDay ? prevSnapshot.dividend : 0,
     };
+    if (activity.units) {
+      newSnapshot.numShares[activity.ticker] = new BigNumber(
+        newSnapshot.numShares[activity.ticker] ?? 0
+      )
+        .plus(activity.units)
+        .toNumber();
+    }
+    return newSnapshot;
   }
   if (activity.type === 'Trade') {
     const newSnapshot = {
@@ -189,11 +190,13 @@ export const updateSnapshot = (
       numShares: { ...prevSnapshot.numShares },
     };
     activity.trades.forEach((trade) => {
-      newSnapshot.numShares[trade.ticker] = new BigNumber(
-        newSnapshot.numShares[trade.ticker] ?? 0
-      )
-        .plus(trade.units)
-        .toNumber();
+      if (trade.units) {
+        newSnapshot.numShares[trade.ticker] = new BigNumber(
+          newSnapshot.numShares[trade.ticker] ?? 0
+        )
+          .plus(trade.units)
+          .toNumber();
+      }
     });
     return newSnapshot;
   }
@@ -203,11 +206,14 @@ export const updateSnapshot = (
 /**
  * Splits snapshots into batches so they can be stored into the db
  */
-export const batchSnapshots = (snapshots: Snapshot[]): SnapshotBatch[] => {
+export const batchSnapshots = (
+  snapshots: Snapshot[],
+  batchSize = DEFAULT_BATCH_SIZE
+): SnapshotBatch[] => {
   const batches: SnapshotBatch[] = [];
   const toBeBatched = [...snapshots];
   while (toBeBatched.length) {
-    const batch = toBeBatched.splice(0, BATCH_SIZE);
+    const batch = toBeBatched.splice(0, batchSize);
     batches.push({
       startDate: batch[0].date,
       endDate: batch[batch.length - 1].date,

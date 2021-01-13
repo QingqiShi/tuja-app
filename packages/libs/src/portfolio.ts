@@ -8,7 +8,7 @@ import {
   DbActivity,
   DbSnapshot,
   Snapshot,
-} from './activities';
+} from './modules/activities';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 

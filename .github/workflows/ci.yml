@@ -25,11 +25,10 @@ jobs:
       - run: yarn install
       - run: yarn build
       - run: yarn lint
-#       - run: npm test -- --coverage --reporters="default" --reporters="jest-junit"
-#         env:
-#           CI: true
-#       - uses: codecov/codecov-action@v1
-#         with:
-#           flags: unittests
-#           name: Coverage
-#           fail_ci_if_error: true
+      - run: yarn test:root:ci
+        env:
+          CI: true
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
