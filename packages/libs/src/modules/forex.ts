@@ -1,8 +1,17 @@
 import escapeRegexp from 'escape-string-regexp';
-import { normalizationMap } from './constants';
+
+// A map for special currency cases
+const normalizationMap: {
+  [currency: string]: { normalise: (x: number) => number; target: string };
+} = {
+  GBX: {
+    normalise: (x: number) => x / 100,
+    target: 'GBP',
+  },
+};
 
 /**
- * Convert non-standard currencies to more standard ones.
+ * Convert non-standard currencies to standard ones, optionally convert a value.
  * E.g. from GBX to GBP
  */
 export function normalizeForex(

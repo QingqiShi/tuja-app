@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import type { TimeSeries } from './timeSeries';
-import { getForexPair, normalizeForex, exchangeCurrency } from './forex';
+import { getForexPair, normalizeForex, exchangeCurrency } from './modules/forex';
 
 export interface StockInfo {
   Ticker: string;
