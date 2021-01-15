@@ -35,7 +35,7 @@
     "styled-components": "^5.2.1"
   },
   "devDependencies": {
-    "@cloudflare/wrangler": "^1.12.3",
+    "@cloudflare/wrangler": "^1.13.0",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@types/d3-array": "^2.8.0",
