@@ -256,13 +256,11 @@ export const examplePortfolio: Portfolio = {
   user: 'demo',
   name: 'Example Portfolio',
   currency: 'GBP',
-  tickers: ['AAPL.US', 'SGLN.LSE', 'VUSA.LSE'],
   aliases: {
     'AAPL.US': 'Apple',
     'SGLN.LSE': 'Gold ETC',
     'VUSA.LSE': 'S&P 500 ETF',
   },
-  activities: [],
   latestSnapshot: {
     date: new Date('2020-08-31'),
     cash: 97.8,

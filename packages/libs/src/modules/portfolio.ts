@@ -1,14 +1,10 @@
 import dayjs from 'dayjs';
 import {
-  Activity,
-  activityFromDb,
-  activityToDb,
   snapshotFromDb,
   snapshotToDb,
-  DbActivity,
   DbSnapshot,
   Snapshot,
-} from './modules/activities';
+} from './activities';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -26,11 +22,6 @@ export interface Portfolio {
   activitiesStartDate?: Date;
   benchmark?: string;
   latestSnapshot?: Snapshot;
-
-  /** @deprecated */
-  tickers: string[];
-  /** @deprecated */
-  activities: Activity[];
 }
 
 /**
@@ -45,11 +36,11 @@ export type DbPortfolio = Omit<
 > & {
   activitiesStartDate?: string;
   latestSnapshot?: DbSnapshot;
-
-  /** @deprecated */
-  activities: DbActivity[];
 };
 
+/**
+ * Convert dates into strings.
+ */
 export const portfolioToDb = (portfolio: Portfolio): DbPortfolio => {
   return {
     ...portfolio,
@@ -58,10 +49,12 @@ export const portfolioToDb = (portfolio: Portfolio): DbPortfolio => {
       dayjs(portfolio.activitiesStartDate).format(DATE_FORMAT),
     latestSnapshot:
       portfolio.latestSnapshot && snapshotToDb(portfolio.latestSnapshot),
-    activities: portfolio.activities?.map((a) => activityToDb(a)),
   };
 };
 
+/**
+ * Convert string dates into Date objects.
+ */
 export const portfolioFromDb = (dbPortfolio: DbPortfolio): Portfolio => {
   return {
     ...dbPortfolio,
@@ -71,7 +64,5 @@ export const portfolioFromDb = (dbPortfolio: DbPortfolio): Portfolio => {
     latestSnapshot: dbPortfolio.latestSnapshot
       ? snapshotFromDb(dbPortfolio.latestSnapshot)
       : undefined,
-    tickers: [],
-    activities: dbPortfolio.activities?.map(activityFromDb),
   };
 };
