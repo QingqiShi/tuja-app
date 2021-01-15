@@ -1760,10 +1760,10 @@
   resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-2.1.0.tgz#6e4f07567f4c914ad811c2d7a6172d0ae834c7f6"
   integrity sha512-VmXaHTq0lt6Xre4aK1hUK25hjZjuEUkHtdUEt0FJamv+NzQO54Gwp6Zr5Cfu6SP5EQ/tTmTMP/tK9npA8zhcCg==
 
-"@cloudflare/wrangler@^1.12.3":
-  version "1.12.3"
-  resolved "https://registry.yarnpkg.com/@cloudflare/wrangler/-/wrangler-1.12.3.tgz#291331b105a441fab925456e88f93391211de319"
-  integrity sha512-p1roGAuaxiXPmUG/m2qiaFfwxW5b7e4P5cw9jpWvKz2i+GyWxxyIdytX898kJorXPq5RnoypdHB9yjEjTNB0uA==
+"@cloudflare/wrangler@^1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@cloudflare/wrangler/-/wrangler-1.13.0.tgz#10ee1eb593d9f91d5f43aca469b8d28fb2a28769"
+  integrity sha512-D6oNE5ft2SvIYMCjHvOTReHfnNtf5spejJXAGJyOv/hYfLqph7/MBJcg3MRTFAhOV5yCdUTM6aATXzpxHKMh8w==
   dependencies:
     binary-install "0.0.1"
 
