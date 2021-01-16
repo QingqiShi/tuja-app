@@ -10,11 +10,10 @@ import {
   TimeSeries,
   Portfolio,
   Snapshot,
-  StockHistory,
   StockInfo,
-  StockLivePrice,
 } from '@tuja/libs';
 import type { PortfolioPerformance } from 'libs/portfolioClient';
+import type { StockHistory, ParsedLivePrice } from 'libs/stocksClient';
 import {
   getDB,
   getStocksHistory,
@@ -179,7 +178,7 @@ async function processPortfolio(payload: ProcessPortfolioPayload) {
  * Merge live prices into stocks history
  */
 function mergeLivePricesIntoHistory(
-  livePrices: { [ticker: string]: StockLivePrice },
+  livePrices: { [ticker: string]: ParsedLivePrice },
   stocksHistory: {
     [ticker: string]: StockHistory;
   }
@@ -204,7 +203,7 @@ function calculatePerformance(
   endDate: Date,
   stocksInfo: { [ticker: string]: StockInfo },
   stocksHistory: { [ticker: string]: StockHistory },
-  stocksLivePrice: { [ticker: string]: StockLivePrice },
+  stocksLivePrice: { [ticker: string]: ParsedLivePrice },
   benchmark?: string
 ): PortfolioPerformance {
   const valueSeries = new TimeSeries();
