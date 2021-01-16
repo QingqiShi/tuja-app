@@ -56,7 +56,6 @@ export async function fetchStockLivePrices(tickers: string[]) {
       ).then((res) => res.json())
     )
   );
-  console.log(data);
   return data.flatMap((chunk) =>
     chunk.map(
       (d: any) =>
