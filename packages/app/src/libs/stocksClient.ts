@@ -3,11 +3,20 @@ import {
   TimeSeries,
   StockInfo,
   StockPrice,
-  StockHistory,
+  StockHistoryItem,
   StockLivePrice,
 } from '@tuja/libs';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
+
+export type ParsedLivePrice = Omit<StockLivePrice, 'date'> & { date: Date };
+
+export interface StockHistory {
+  ticker: string;
+  close: TimeSeries;
+  adjusted: TimeSeries;
+  range: { startDate: Date; endDate: Date };
+}
 
 const chunkTickers = <T>(tickers: T[]) => {
   const chunkSize = 6;
@@ -38,7 +47,7 @@ export async function fetchStockInfos(tickers: string[]) {
 
 export async function fetchStockLivePrices(tickers: string[]) {
   const tickerChunks = chunkTickers(tickers);
-  const data = await Promise.all(
+  const data: StockLivePrice[][] = await Promise.all(
     tickerChunks.map(async (chunk) =>
       fetch(
         `${
@@ -47,10 +56,11 @@ export async function fetchStockLivePrices(tickers: string[]) {
       ).then((res) => res.json())
     )
   );
+  console.log(data);
   return data.flatMap((chunk) =>
     chunk.map(
       (d: any) =>
-        ({ ...d, date: new Date(d.timestamp * 1000) } as StockLivePrice)
+        ({ ...d, date: new Date(d.timestamp * 1000) } as ParsedLivePrice)
     )
   );
 }
@@ -60,7 +70,12 @@ export async function fetchStockHistories(
 ) {
   const tickerChunks = chunkTickers(tickers);
 
-  const data = await Promise.all(
+  const data: {
+    ticker: string;
+    from: string;
+    to: string;
+    history: StockHistoryItem[];
+  }[][] = await Promise.all(
     tickerChunks.map(async (chunk) => {
       const response = await fetch(
         `${
@@ -81,35 +96,23 @@ export async function fetchStockHistories(
   );
 
   return data.flatMap((chunk) =>
-    chunk.map(
-      ({
+    chunk.map(({ ticker, from, to, history }) => {
+      const closeSeries = new TimeSeries();
+      const adjustedSeries = new TimeSeries();
+
+      closeSeries.handleData(history.map(({ date, close }) => [date, close]));
+      adjustedSeries.handleData(
+        history.map(({ date, adjusted_close }) => [date, adjusted_close])
+      );
+
+      return {
         ticker,
-        from,
-        to,
-        history,
-      }: {
-        ticker: string;
-        from: string;
-        to: string;
-        history: { date: string; close: number; adjusted_close: number }[];
-      }) => {
-        const closeSeries = new TimeSeries();
-        const adjustedSeries = new TimeSeries();
-
-        closeSeries.handleData(history.map(({ date, close }) => [date, close]));
-        adjustedSeries.handleData(
-          history.map(({ date, adjusted_close }) => [date, adjusted_close])
-        );
-
-        return {
-          ticker,
-          from: dayjs(from, DATE_FORMAT).toDate(),
-          to: dayjs(to, DATE_FORMAT).toDate(),
-          closeSeries,
-          adjustedSeries,
-        };
-      }
-    )
+        from: dayjs(from, DATE_FORMAT).toDate(),
+        to: dayjs(to, DATE_FORMAT).toDate(),
+        closeSeries,
+        adjustedSeries,
+      };
+    })
   );
 }
 

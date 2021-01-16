@@ -25,17 +25,15 @@ async function _getPricesInCurrency(
   currency: string,
   date: Date
 ) {
-  const { getStocksClient, getStockPriceAt } = await import('@tuja/libs');
+  const { stocksClient } = await import('@tuja/libs');
 
-  const client = getStocksClient(fetch, getToken());
+  const client = stocksClient({ fetch, apiKey: getToken() });
 
   const prices = await Promise.all(
-    tickers.map((ticker) =>
-      getStockPriceAt(client, client, ticker, date, currency)
-    )
+    tickers.map((ticker) => client.priceAt(ticker, date, currency))
   );
 
-  return prices.map((price) => price.priceInCurrency);
+  return prices.map((price) => price?.priceInCurrency);
 }
 
 /**
@@ -94,8 +92,9 @@ async function _updateCosts(
             )
           : null;
       beforeActivity.trades.forEach((trade, i) => {
-        const tradeValue = prices
-          ? new BigNumber(prices[i]).multipliedBy(trade.units).toNumber()
+        const price = prices && prices[i];
+        const tradeValue = price
+          ? new BigNumber(price).multipliedBy(trade.units).toNumber()
           : beforeActivity.cost;
         const currentCost = newCost[trade.ticker] ?? 0;
         const currentHolding = prevSnapshot.numShares[trade.ticker] ?? 0;
@@ -125,8 +124,9 @@ async function _updateCosts(
             )
           : null;
       afterActivity.trades.forEach((trade, i) => {
-        const tradeValue = prices
-          ? new BigNumber(prices[i]).multipliedBy(trade.units).toNumber()
+        const price = prices && prices[i];
+        const tradeValue = price
+          ? new BigNumber(price).multipliedBy(trade.units).toNumber()
           : afterActivity.cost;
         const cost = newCost[trade.ticker] ?? 0;
         const numShare =

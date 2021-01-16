@@ -1,4 +1,4 @@
-import { getStocksClient, getStockPriceAt } from '@tuja/libs';
+import { stocksClient } from '@tuja/libs';
 
 export const handlePriceAt = async (request: Request): Promise<Response> => {
   const params = new URL(request.url).searchParams;
@@ -10,21 +10,15 @@ export const handlePriceAt = async (request: Request): Promise<Response> => {
   if (!at) return new Response('Missing at', { status: 400 });
   if (!EOD_API_KEY) return new Response('Missing API Key', { status: 500 });
 
-  const client = getStocksClient(fetch, EOD_API_KEY);
-  const cachedClient = getStocksClient(
-    (url: string) =>
+  const client = stocksClient({
+    fetch,
+    cachedFetch: (url: string) =>
       // cache for 30 days
       fetch(url, { cf: { cacheTtl: 2592000, cacheEverything: true } }),
-    EOD_API_KEY
-  );
+    apiKey: EOD_API_KEY,
+  });
 
-  const price = await getStockPriceAt(
-    client,
-    cachedClient,
-    ticker,
-    at,
-    currency ?? undefined
-  );
+  const price = await client.priceAt(ticker, at, currency ?? undefined);
   return new Response(JSON.stringify(price), {
     headers: { 'content-type': 'application/json;charset=UTF-8' },
   });

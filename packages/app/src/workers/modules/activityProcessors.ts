@@ -1,12 +1,7 @@
 import dayjs from 'dayjs';
-import {
-  exchangeCurrency,
-  StockHistory,
-  StockInfo,
-  StockLivePrice,
-  TimeSeries,
-} from '@tuja/libs';
+import { exchangeCurrency, StockInfo, TimeSeries } from '@tuja/libs';
 import type { PortfolioPerformance } from 'libs/portfolioClient';
+import type { StockHistory, ParsedLivePrice } from 'libs/stocksClient';
 
 export function calcHoldingsValues(
   date: Date,
@@ -61,7 +56,7 @@ export function calcHoldings(
   baseCurrency: string,
   stocksInfo: { [ticker: string]: StockInfo },
   stocksHistory: { [ticker: string]: StockHistory },
-  stocksLivePrice: { [ticker: string]: StockLivePrice }
+  stocksLivePrice: { [ticker: string]: ParsedLivePrice }
 ) {
   const holdings: PortfolioPerformance['holdings'] = {};
   Object.keys(numShares)

@@ -1,12 +1,9 @@
 import dayjs from 'dayjs';
 import { IDBPDatabase, DBSchema, openDB } from 'idb';
+import { TimeSeries, StockInfo } from '@tuja/libs';
 import {
-  TimeSeries,
   StockHistory,
-  StockInfo,
-  StockLivePrice,
-} from '@tuja/libs';
-import {
+  ParsedLivePrice,
   fetchStockLivePrices,
   fetchStockHistories,
   fetchStockInfos,
@@ -24,7 +21,7 @@ interface DBSchemaV3 extends DBSchema {
   };
   stocksLivePrice: {
     key: string;
-    value: { timestamp: number; livePrice: StockLivePrice };
+    value: { timestamp: number; livePrice: ParsedLivePrice };
   };
 }
 
@@ -171,7 +168,7 @@ export async function getStocksHistory(
 }
 
 export async function getStocksLivePrice(db: Database, tickers: string[]) {
-  const stocksLivePrice: { [ticker: string]: StockLivePrice } = {};
+  const stocksLivePrice: { [ticker: string]: ParsedLivePrice } = {};
   const readTx = db.transaction(['stocksLivePrice'], 'readonly');
   const readStore = readTx.objectStore('stocksLivePrice');
   const timestamp = new Date().getTime();
@@ -225,7 +222,7 @@ export async function clearCache(db: Database) {
  * Merge live prices into stocks history
  */
 export const mergeLivePriceIntoHistory = async (
-  livePrice: StockLivePrice,
+  livePrice: ParsedLivePrice,
   stockHistory: StockHistory
 ) => {
   if (livePrice.close !== 'NA') {

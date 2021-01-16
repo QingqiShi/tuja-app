@@ -12,10 +12,10 @@ import {
   portfolioToDb,
   Snapshot,
   StockInfo,
-  StockLivePrice,
   DbSnapshotBatch,
   snapshotBatchFromDb,
 } from '@tuja/libs';
+import type { ParsedLivePrice } from 'libs/stocksClient';
 
 const ACTIVITIES_PAGE_LIMIT = 10;
 
@@ -33,7 +33,7 @@ export interface PortfolioPerformance {
       value: number;
       units: number;
       info: StockInfo;
-      livePrice: StockLivePrice;
+      livePrice: ParsedLivePrice;
     };
   };
   monthlyDividends: TimeSeries;

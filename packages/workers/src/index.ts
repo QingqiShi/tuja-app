@@ -26,6 +26,8 @@ const handleRequest = async (request: Request) => {
     '/bulkLivePrices': handleBulkLivePrices,
   });
 
+  console.log(ENVIRONMENT);
+
   response.headers.set(
     'Access-Control-Allow-Origin',
     ENVIRONMENT === 'production' ? 'https://tuja.app' : '*'
