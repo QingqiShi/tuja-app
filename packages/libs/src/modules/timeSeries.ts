@@ -17,20 +17,6 @@ export class TimeSeries {
     }
   }
 
-  handleData(data: [string, number][]) {
-    this.data = [];
-
-    data.forEach(([date, val]) => {
-      const parsedDate = dayjs(date, 'YYYY-MM-DD');
-      if (parsedDate.isValid()) {
-        this.data.push([parsedDate.toDate(), val]);
-      }
-    });
-
-    this.data = [...this.data].sort((a, b) => a[0].getTime() - b[0].getTime());
-    return this;
-  }
-
   toPlainObject() {
     return {
       data: this.data.map(
@@ -39,19 +25,33 @@ export class TimeSeries {
     };
   }
 
+  handleData(data: [string, number][]) {
+    this.data = [];
+
+    data.forEach(([date, val]) => {
+      const parsedDate = dayjs(date, 'YYYY-MM-DD', true);
+      if (parsedDate.isValid()) {
+        this.data.push([parsedDate.toDate(), val]);
+      }
+    });
+
+    this.data.sort((a, b) => a[0].getTime() - b[0].getTime());
+    return this;
+  }
+
   mergeWith(series: TimeSeries) {
     const merged = new TimeSeries();
 
     if (!series.data.length) {
-      merged.data = this.data;
+      merged.data = [...this.data];
       return merged;
     }
 
+    // Assume both TimeSeries are dense, filter out the time range covered by series
     const seriesDateRange = {
       start: dayjs(series.data[0][0]),
       end: dayjs(series.data[series.data.length - 1][0]),
     };
-
     const filteredData = this.data.filter(
       (dataPoint) =>
         seriesDateRange.start.isAfter(dataPoint[0], 'day') ||
@@ -70,9 +70,10 @@ export class TimeSeries {
     const index = bisectDate(this.data, date) - 1;
     if (index >= 0 && index < this.data.length) {
       return this.data[index][1];
-    } else if (index >= this.data.length) {
-      return this.data[this.data.length - 1][1];
     }
+
+    // There's no scenario where index would be greater than data length
+    // So here only the case where index < 0 is handled
     return this.data[0][1];
   }
 
