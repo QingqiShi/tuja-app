@@ -14,6 +14,10 @@ const getResponse = async (
     return config[pathname](request);
   }
 
+  if (pathname === '/_ready') {
+    return new Response('OK', { status: 200 });
+  }
+
   return new Response('Not Found', { status: 404 });
 };
 

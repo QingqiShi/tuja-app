@@ -10,9 +10,9 @@
     "build": "lerna run build",
     "build:functions": "lerna run build --scope @tuja/libs --scope @tuja/functions",
     "lint": "lerna run lint",
-    "test:root": "jest --watch --coverage",
+    "test:root": "start-server-and-test 'cd packages/workers && yarn start' http://127.0.0.1:8787/_ready 'jest --watch --coverage'",
     "test:app": "cd packages/app && yarn test",
-    "test:root:ci": "CI=true jest --coverage",
+    "test:root:ci": "CI=true start-server-and-test 'cd packages/workers && yarn start' http://127.0.0.1:8787/_ready 'jest --coverage'",
     "emulate": "firebase emulators:start --only firestore,pubsub,functions --import=testData --inspect-functions",
     "emulator:export": "firebase emulators:export ./testData",
     "shell": "firebase functions:shell",
@@ -54,6 +54,7 @@
     "lint-staged": "^10.5.3",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
+    "start-server-and-test": "^1.11.7",
     "typescript": "^4.1.3"
   },
   "resolutions": {
