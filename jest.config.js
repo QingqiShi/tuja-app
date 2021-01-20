@@ -1,9 +1,10 @@
 module.exports = {
-  projects: [
-    '<rootDir>/packages/libs',
-    '<rootDir>/packages/components',
-    '<rootDir>/packages/workers',
-    '<rootDir>/packages/functions',
+  testPathIgnorePatterns: ['<rootDir>/packages/app'],
+  resetMocks: true,
+  collectCoverageFrom: [
+    '**/*.{ts,tsx}',
+    '!**/*.stories.tsx',
+    '!**/*.d.ts',
+    '!packages/app/**/*',
   ],
-  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!**/*.stories.tsx', '!**/*.d.ts'],
 };
