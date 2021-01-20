@@ -19,25 +19,35 @@ declare const global: { [key: string]: unknown };
 beforeAll(async () => {
   global.addEventListener = jest.fn();
   global.Response = Response;
-  await import('./index');
 });
 
 // Reset default environment
-beforeEach(() => {
+beforeEach(async () => {
   global.ENVIRONMENT = 'testing';
 });
 
+// Callback
+let sendFetchEvent: (event: {
+  request: Request;
+  respondWith: () => void;
+}) => void;
+
+// This test must come first
 test('register fetch event listener', async () => {
+  await import('./index');
   expect(global.addEventListener).toHaveBeenCalledWith(
     'fetch',
     expect.any(Function)
   );
+
+  // Set up callback for future tests
+  sendFetchEvent = (global.addEventListener as jest.Mock).mock.calls[0][1];
 });
 
 test('handle unknown request with not found', async () => {
   // Send an unknown request
   const responseHandler = jest.fn();
-  (global.addEventListener as jest.Mock).mock.calls[0][1]({
+  sendFetchEvent({
     request: new Request('http://localhost/unknown'),
     respondWith: responseHandler,
   });
@@ -52,7 +62,7 @@ test('allow cross origin for development', async () => {
   // Send an unknown request with development environment
   global.ENVIRONMENT = 'development';
   const responseHandler = jest.fn();
-  (global.addEventListener as jest.Mock).mock.calls[0][1]({
+  sendFetchEvent({
     request: new Request('http://localhost/unknown'),
     respondWith: responseHandler,
   });
@@ -67,7 +77,7 @@ test('allow cross origin for development', async () => {
   // Send an unknown request with development environment
   global.ENVIRONMENT = 'production';
   const responseHandler = jest.fn();
-  (global.addEventListener as jest.Mock).mock.calls[0][1]({
+  sendFetchEvent({
     request: new Request('https://api.tuja.app/unknown'),
     respondWith: responseHandler,
   });
@@ -92,7 +102,7 @@ test.each`
 
   // Send an unknown request with development environment
   const responseHandler = jest.fn();
-  (global.addEventListener as jest.Mock).mock.calls[0][1]({
+  sendFetchEvent({
     request: new Request(`http://localhost${endpoint}`),
     respondWith: responseHandler,
   });
