@@ -37,7 +37,7 @@ test('search', async () => {
   expect(response.status).toBe(200);
 });
 
-test('missing query', async () => {
+test('error when missing query', async () => {
   // Given
   const request = new Request('http://localhost/search');
 
@@ -50,7 +50,7 @@ test('missing query', async () => {
   expect(response.status).toBe(400);
 });
 
-test('missing api key', async () => {
+test('error when missing api key', async () => {
   // Given
   global.EOD_API_KEY = '';
   const request = new Request('http://localhost/search?query=test');
