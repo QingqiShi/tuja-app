@@ -6,17 +6,24 @@ export const handleBulkEods = async (request: Request): Promise<Response> => {
 
   if (!query) return new Response('Missing query', { status: 400 });
   let parsedQuery: { ticker: string; from: string; to: string }[] | null = null;
+
+  // Parse query as JSON and validate it
   try {
     parsedQuery = JSON.parse(decodeURIComponent(query));
+    if (
+      !parsedQuery ||
+      !Array.isArray(parsedQuery) ||
+      parsedQuery.some((q) => !q.ticker || !q.from || !q.to)
+    ) {
+      throw new Error();
+    }
+    if (parsedQuery.length > 6) {
+      return new Response('No more than 6 eods', { status: 400 });
+    }
   } catch {
     return new Response('Invalid query', { status: 400 });
   }
-  if (
-    !parsedQuery ||
-    !Array.isArray(parsedQuery) ||
-    parsedQuery.some((q) => !q.ticker || !q.from || !q.to)
-  )
-    return new Response('Invalid query', { status: 400 });
+
   if (!EOD_API_KEY) return new Response('Missing API Key', { status: 500 });
 
   // cache for 30 days
