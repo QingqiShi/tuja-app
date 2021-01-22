@@ -4,7 +4,10 @@ export const handleBulkLivePrices = async (
   request: Request
 ): Promise<Response> => {
   const params = new URL(request.url).searchParams;
-  const tickers = params.get('tickers')?.split(',');
+  const tickers = params
+    .get('tickers')
+    ?.split(',')
+    .filter((t) => !!t);
 
   if (!tickers || !tickers.length)
     return new Response('Missing tickers', { status: 400 });
