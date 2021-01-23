@@ -6,7 +6,7 @@ export const handlePriceAt = async (request: Request): Promise<Response> => {
   const at = params.get('at');
   const currency = params.get('currency');
 
-  if (!ticker) return new Response('Missing tickers', { status: 400 });
+  if (!ticker) return new Response('Missing ticker', { status: 400 });
   if (!at) return new Response('Missing at', { status: 400 });
   if (!EOD_API_KEY) return new Response('Missing API Key', { status: 500 });
 
