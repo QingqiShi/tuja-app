@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useDebounce } from 'react-use';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import firebase from 'firebase/app';
 import styled from 'styled-components/macro';
 import { Button, TextInput } from '@tuja/components';
 import { ActionsContainer, Card, CardMedia } from 'commonStyledComponents';
+import { fetchStockSearch } from 'libs/stocksClient';
 
 const SearchContainer = styled.div`
   position: relative;
@@ -74,9 +74,8 @@ function SetBenchmarkForm({
   >([]);
   useEffect(() => {
     const fetch = async () => {
-      const searchStocks = firebase.functions().httpsCallable('searchStocks');
-      const result = await searchStocks({ query: debouncedSearchQuery });
-      setSearchSuggestions(result.data);
+      const result = await fetchStockSearch(debouncedSearchQuery);
+      setSearchSuggestions(result);
     };
 
     if (debouncedSearchQuery) {
