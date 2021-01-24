@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDebounce } from 'react-use';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import firebase from 'firebase/app';
 import styled from 'styled-components/macro';
 import { Button, TextInput } from '@tuja/components';
 import { ActionsContainer, Card, CardMedia } from 'commonStyledComponents';
