@@ -6,6 +6,7 @@
 !.eslintrc.js
 !pre-deploy.js
 !post-deploy.js
+!jest.config.js
 
 # TypeScript v1 declaration files
 typings/
