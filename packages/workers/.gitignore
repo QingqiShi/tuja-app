@@ -5,6 +5,7 @@
 # Except the ESLint config file
 !.eslintrc.js
 !webpack.config.js
+!jest.config.js
 
 # TypeScript v1 declaration files
 typings/
