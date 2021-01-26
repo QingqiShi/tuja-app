@@ -50,7 +50,7 @@ export type Activity =
 /**
  * The data type stored into the database, the difference between this one and
  * the normal Activity type is that date is formated as 'YYYY-MM-DD', and there's
- * an additional flag `shouldTrigger` that can be used to disable Firestore
+ * an additional flag `skipTrigger` that can be used to disable Firestore
  * triggerred Cloud Function from running.
  */
 export type DbActivity = DistributedOmit<
