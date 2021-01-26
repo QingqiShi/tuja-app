@@ -11,7 +11,7 @@ updates:
     versioning-strategy: increase
     ignore:
       - dependency-name: '@types/node'
-        versions: ['>14']
+        versions: ['>12']
 
   - package-ecosystem: 'github-actions'
     directory: '/'
