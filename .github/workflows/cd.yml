@@ -43,7 +43,7 @@ jobs:
               - '.firebaserc'
       - run: yarn install
       - run: yarn build
-      - run: yarn test:root:ci
+      - run: yarn test:ci
         env:
           CI: true
       - uses: codecov/codecov-action@v1
