@@ -1,0 +1,148 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`add new trade activity to clear holdings and costs 1`] = `
+Object {
+  "AAPL.US": 0,
+  "HMCH.LSE": 8.026445817894404,
+  "IUS3.XETRA": 50.31748859651136,
+  "IUSA.LSE": 26.838623591801067,
+  "IWDP.LSE": 17.98286489135723,
+  "MSFT.US": 162.907668,
+  "NG.LSE": 0,
+  "SGLN.LSE": 27.452687390548178,
+  "TSLA.US": 200,
+  "UAA.US": 0,
+  "VVAL.LSE": 22.415,
+}
+`;
+
+exports[`add new trade activity to clear holdings and costs 2`] = `
+Object {
+  "cash": 3.0100000000003,
+  "cashFlow": 5366,
+  "date": "2020-12-14",
+  "dividend": 0.24,
+  "numShares": Object {
+    "AAPL.US": 2.3911587,
+    "HMCH.LSE": 156.4841695,
+    "IUS3.XETRA": 26.849018,
+    "IUSA.LSE": 61.66455879,
+    "IWDP.LSE": 30.56189978,
+    "MSFT.US": 0,
+    "NG.LSE": 0,
+    "SGLN.LSE": 16.60623021,
+    "UAA.US": 0,
+    "VVAL.LSE": 0,
+  },
+}
+`;
+
+exports[`add new trade activity with multiple tickers 1`] = `
+Object {
+  "AAPL.US": 94.33666662534584,
+  "HMCH.LSE": 8.026445817894404,
+  "IUS3.XETRA": 50.31748859651136,
+  "IUSA.LSE": 26.838623591801067,
+  "IWDP.LSE": 17.98286489135723,
+  "MSFT.US": 162.907668,
+  "NG.LSE": 0,
+  "SGLN.LSE": 27.452687390548178,
+  "TSLA.US": 200,
+  "UAA.US": 0,
+  "VVAL.LSE": 22.415,
+}
+`;
+
+exports[`add new trade activity with multiple tickers 2`] = `
+Object {
+  "cash": 3.0100000000003,
+  "cashFlow": 5366,
+  "date": "2020-12-14",
+  "dividend": 0.24,
+  "numShares": Object {
+    "AAPL.US": 2.3911587,
+    "HMCH.LSE": 156.4841695,
+    "IUS3.XETRA": 26.849018,
+    "IUSA.LSE": 61.66455879,
+    "IWDP.LSE": 30.56189978,
+    "MSFT.US": 0,
+    "NG.LSE": 0,
+    "SGLN.LSE": 16.60623021,
+    "UAA.US": 0,
+    "VVAL.LSE": 0,
+  },
+}
+`;
+
+exports[`add new trade activity with single ticker 1`] = `
+Object {
+  "AAPL.US": 91.96821932209735,
+  "HMCH.LSE": 8.026445817894404,
+  "IUS3.XETRA": 50.31748859651136,
+  "IUSA.LSE": 26.838623591801067,
+  "IWDP.LSE": 17.98286489135723,
+  "MSFT.US": 162.907668,
+  "NG.LSE": 0,
+  "SGLN.LSE": 27.452687390548178,
+  "TSLA.US": 300,
+  "UAA.US": 0,
+  "VVAL.LSE": 22.415,
+}
+`;
+
+exports[`add new trade activity with single ticker 2`] = `
+Object {
+  "cash": 3.0100000000003,
+  "cashFlow": 5366,
+  "date": "2020-12-14",
+  "dividend": 0.24,
+  "numShares": Object {
+    "AAPL.US": 2.3911587,
+    "HMCH.LSE": 156.4841695,
+    "IUS3.XETRA": 26.849018,
+    "IUSA.LSE": 61.66455879,
+    "IWDP.LSE": 30.56189978,
+    "MSFT.US": 0,
+    "NG.LSE": 0,
+    "SGLN.LSE": 16.60623021,
+    "UAA.US": 0,
+    "VVAL.LSE": 0,
+  },
+}
+`;
+
+exports[`skip triggered function based on activity field 1`] = `
+Object {
+  "AAPL.US": 91.96821932209735,
+  "HMCH.LSE": 8.026445817894404,
+  "IUS3.XETRA": 50.31748859651136,
+  "IUSA.LSE": 26.838623591801067,
+  "IWDP.LSE": 17.98286489135723,
+  "MSFT.US": 162.907668,
+  "NG.LSE": 0,
+  "SGLN.LSE": 27.452687390548178,
+  "UAA.US": 0,
+  "VVAL.LSE": 22.415,
+}
+`;
+
+exports[`skip triggered function based on activity field 2`] = `
+Object {
+  "cash": 3.0100000000003,
+  "cashFlow": 5366,
+  "date": "2020-12-14",
+  "dividend": 0.24,
+  "numShares": Object {
+    "AAPL.US": 2.3911587,
+    "HMCH.LSE": 156.4841695,
+    "IUS3.XETRA": 26.849018,
+    "IUSA.LSE": 61.66455879,
+    "IWDP.LSE": 30.56189978,
+    "MSFT.US": 0,
+    "NG.LSE": 0,
+    "SGLN.LSE": 16.60623021,
+    "UAA.US": 0,
+    "VVAL.LSE": 0,
+  },
+}
+`;
