@@ -90,6 +90,20 @@ test('allow cross origin for development', async () => {
   expect(response.headers.get('Vary')).toBe('Origin');
 });
 
+test('health check endpoint', async () => {
+  // Send an unknown request with development environment
+  global.ENVIRONMENT = 'production';
+  const responseHandler = jest.fn();
+  sendFetchEvent({
+    request: new Request('https://api.tuja.app/_health'),
+    respondWith: responseHandler,
+  });
+
+  // Responds headers
+  const response: Response = await responseHandler.mock.calls[0][0];
+  expect(response.status).toBe(200);
+});
+
 test.each`
   endpoint             | handler
   ${'/search'}         | ${handleSearch}
