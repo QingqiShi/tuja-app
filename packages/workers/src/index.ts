@@ -24,6 +24,7 @@ const handleRequest = async (request: Request) => {
     '/bulkEods': handleBulkEods,
     '/bulkInfos': handleBulkInfos,
     '/bulkLivePrices': handleBulkLivePrices,
+    '/_health': async () => new Response('OK', { status: 200 }),
   });
 
   response.headers.set(

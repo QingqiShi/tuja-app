@@ -1,9 +1,7 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import fetch from 'node-fetch';
 import type { Activity, DbActivity, DbPortfolio, Snapshot } from '@tuja/libs';
 
-const getToken = () => functions.config().eodhistoricaldata.token;
+const apiUrl = 'https://api.tuja.app';
 
 interface CostBasis {
   [ticker: string]: number;
@@ -25,12 +23,18 @@ async function _getPricesInCurrency(
   currency: string,
   date: Date
 ) {
-  const { stocksClient } = await import('@tuja/libs');
-
-  const client = stocksClient({ fetch, apiKey: getToken() });
+  const { default: fetch } = await import('node-fetch');
+  const { default: dayjs } = await import('dayjs');
 
   const prices = await Promise.all(
-    tickers.map((ticker) => client.priceAt(ticker, date, currency))
+    tickers.map(async (ticker) => {
+      const res = await fetch(
+        `${apiUrl}/priceAt?ticker=${ticker}&at=${dayjs(date).format(
+          'YYYY-MM-DD'
+        )}&currency=${currency}`
+      );
+      return res.json();
+    })
   );
 
   return prices.map((price) => price?.priceInCurrency);
@@ -176,6 +180,7 @@ export const aggregateActivities = functions
       portfolioFromDb,
       portfolioToDb,
     } = await import('@tuja/libs');
+    const admin = await import('firebase-admin');
 
     const { portfolioId } = context.params;
     const db = admin.firestore();
