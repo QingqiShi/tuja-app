@@ -3,7 +3,6 @@ module.exports = {
     '**/*.{ts,tsx}',
     '!**/*.stories.tsx',
     '!**/*.d.ts',
-    '!packages/app/**/*',
   ],
   projects: ['<rootDir>/packages/*'],
 };
