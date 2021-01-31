@@ -145,6 +145,7 @@ function TopBar({ links, endLinks, menu, logo }: TopBarProps) {
         {!!menu?.length && (
           <div>
             <Button
+              data-testid="top-bar-menu"
               icon={<RiMenuLine />}
               onClick={() => setShowMenu((val) => !val)}
               compact
