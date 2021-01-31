@@ -13,5 +13,6 @@ module.exports = {
     false
   ),
   displayName: 'app',
+  resetMocks: true,
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
 };

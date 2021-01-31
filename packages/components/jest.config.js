@@ -14,4 +14,5 @@ module.exports = {
   ),
   displayName: 'components',
   resetMocks: true,
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
 };

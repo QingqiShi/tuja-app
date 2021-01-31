@@ -28,9 +28,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.3",
-    "@testing-library/user-event": "^12.6.2",
     "@types/body-scroll-lock": "^2.6.1",
     "@types/jest": "^26.0.20",
     "@types/react-router-dom": "^5.1.7",
