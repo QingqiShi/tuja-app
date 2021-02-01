@@ -9,6 +9,10 @@ const Name = styled.div`
   overflow: hidden;
 `;
 
+const Seperator = styled.span`
+  margin: 0 ${({ theme }) => theme.spacings.xs};
+`;
+
 function decodeHtml(html: string) {
   var txt = document.createElement('textarea');
   txt.innerHTML = html;
@@ -28,9 +32,9 @@ function StockListItem({ code, exchange, name }: StockListItemProps) {
         <Type scale="body1" noMargin as="span" weight={800}>
           {code}
         </Type>
+        <Seperator>·</Seperator>
         <Type scale="body1" noMargin as="span">
-          {' '}
-          · {exchange}
+          {exchange}
         </Type>
       </div>
       <Type scale="body2" noMargin as={Name}>
