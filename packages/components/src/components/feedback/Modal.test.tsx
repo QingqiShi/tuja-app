@@ -18,12 +18,12 @@ test('render toggle open', () => {
 
 test('max width max width', () => {
   const { getByText } = render(
-    <Modal open minWidth={200} maxWidth={500}>
+    <Modal open minWidth={10} maxWidth={15}>
       test
     </Modal>
   );
   expect(getByText('test')).toHaveStyle(`
-    max-width: 500px;
-    min-width: 200px;
+    max-width: 15rem;
+    min-width: min(10rem,100%);
   `);
 });
