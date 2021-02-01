@@ -26,7 +26,7 @@ test('render cash dividend type', () => {
     <ActivityItem
       activity={{
         id: 'a',
-        date: new Date(),
+        date: DATE,
         type: 'Dividend',
         ticker: 'IWDP.LSE',
         amount: 1.53,
@@ -46,7 +46,7 @@ test('render stock dividend type', () => {
     <ActivityItem
       activity={{
         id: 'a',
-        date: new Date(),
+        date: DATE,
         type: 'StockDividend',
         ticker: 'AAPL.US',
         units: 3,
@@ -66,7 +66,7 @@ test('render buy type', () => {
     <ActivityItem
       activity={{
         id: 'a',
-        date: new Date(),
+        date: DATE,
         type: 'Trade',
         cost: 123.45,
         trades: [{ ticker: 'IWDP.LSE', units: 1 }],
@@ -87,7 +87,7 @@ test('render sell type', () => {
     <ActivityItem
       activity={{
         id: 'a',
-        date: new Date(),
+        date: DATE,
         type: 'Trade',
         cost: -123.45,
         trades: [
