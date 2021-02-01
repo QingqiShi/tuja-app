@@ -78,6 +78,7 @@ function ButtonGroup<T>({ buttons, value, onChange }: ButtonGroupProps<T>) {
         <Button
           key={button.label}
           isActive={(value ?? internalValue) === button.value}
+          disabled={(value ?? internalValue) === button.value}
           onClick={() => (onChange ?? setInternalValue)(button.value)}
           tabIndex={(value ?? internalValue) === button.value ? -1 : undefined}
         >

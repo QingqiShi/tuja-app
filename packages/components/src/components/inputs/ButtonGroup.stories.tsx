@@ -17,7 +17,6 @@ const Template: Story<React.ComponentProps<typeof ButtonGroup>> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
-  value: '3M',
   buttons: [
     { label: '1W', value: '1W' },
     { label: '1M', value: '1M' },
