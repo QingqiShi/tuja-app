@@ -22,7 +22,7 @@ ActLikeTextInput.args = {
 export const FormatValue = Template.bind({});
 FormatValue.args = {
   label: 'Number',
-  format: (x: number) => x.toString(),
+  format: (x: any) => x.toString(),
   parse: (raw: string) => {
     const parsed = Number(raw);
     if (isNaN(parsed)) return null;
@@ -33,7 +33,7 @@ FormatValue.args = {
 export const ExternalValue = Template.bind({});
 ExternalValue.args = {
   value: 12345,
-  format: (x: number) => x.toString(),
+  format: (x: any) => x.toString(),
   parse: (raw: string) => {
     const parsed = Number(raw);
     if (isNaN(parsed)) return null;
