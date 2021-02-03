@@ -32,7 +32,7 @@ function FormattedInput<T>({
 
   // Update input value based on value prop
   useEffect(() => {
-    if (!isFocused && format && typeof value === 'number') {
+    if (!isFocused && format && typeof value !== 'undefined') {
       const formatted = format(value);
       if (formatted !== inputValue) {
         setInputValue(formatted);
