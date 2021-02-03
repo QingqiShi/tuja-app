@@ -27,7 +27,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
+    "@babel/core": "^7.12.13",
     "@types/body-scroll-lock": "^2.6.1",
     "@types/jest": "^26.0.20",
     "@types/react-router-dom": "^5.1.7",
