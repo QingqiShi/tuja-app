@@ -25,7 +25,7 @@ function FormattedInput<T>({
   const [isFocused, setIsFocused] = useState(false);
   const [internalVal, setInternalVal] = useState(value);
   const [inputValue, setInputValue] = useState(
-    (format && value && format(value)) ||
+    (format && typeof value !== 'undefined' && format(value)) ||
       (typeof value === 'string' && value) ||
       ''
   );
