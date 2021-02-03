@@ -6,14 +6,14 @@ type BaseProps = Omit<
   'value' | 'onChange'
 >;
 
-interface CurrencyInputProps<T> extends BaseProps {
-  value?: T;
-  onChange?: (num: T) => void;
-  format?: (val: T) => string;
-  parse?: (raw: string) => T | null;
+interface CurrencyInputProps extends BaseProps {
+  value?: number | string;
+  onChange?: (num: number) => void;
+  format?: (val: number) => string;
+  parse?: (raw: string) => number | null;
 }
 
-function FormattedInput<T>({
+function FormattedInput({
   value,
   format,
   parse,
@@ -21,18 +21,18 @@ function FormattedInput<T>({
   onBlur,
   onFocus,
   ...props
-}: CurrencyInputProps<T>) {
+}: CurrencyInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [internalVal, setInternalVal] = useState(value);
   const [inputValue, setInputValue] = useState(
-    (format && value && format(value)) ||
+    (format && typeof value === 'number' && format(value)) ||
       (typeof value === 'string' && value) ||
       ''
   );
 
   // Update input value based on value prop
   useEffect(() => {
-    if (!isFocused && format && typeof value !== 'undefined') {
+    if (!isFocused && format && typeof value === 'number') {
       const formatted = format(value);
       if (formatted !== inputValue) {
         setInputValue(formatted);
