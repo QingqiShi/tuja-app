@@ -33,3 +33,20 @@ test('render suggestions', async () => {
   fireEvent.click(getByText('b'));
   expect(handleClick).toHaveBeenCalledWith(1);
 });
+
+test('debounce search calls', async () => {
+  const handleSearch = jest.fn(async () => {});
+  const { getByPlaceholderText } = render(
+    <SearchSuggest onSearch={handleSearch} suggestions={[]} />
+  );
+  fireEvent.change(getByPlaceholderText('Search'), {
+    target: { value: 'testA' },
+  });
+  fireEvent.change(getByPlaceholderText('Search'), {
+    target: { value: 'testB' },
+  });
+  await act(async () => {
+    jest.runAllTimers();
+  });
+  expect(handleSearch).toHaveBeenCalledWith('testB');
+});
