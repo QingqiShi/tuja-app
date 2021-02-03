@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useDebounce } from 'react-use';
+import { useState, useEffect } from 'react';
 import { RiSearchLine } from 'react-icons/ri';
+import { useDebouncedCallback } from 'use-debounce';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 import { border, paddings } from '../../mixins';
@@ -51,16 +51,12 @@ function SearchSuggest({
   maxSuggestHeight,
 }: SearchSuggestProps) {
   const [query, setQuery] = useState('');
+  const debouncedSearch = useDebouncedCallback(async (q: string) => {
+    setIsLoading(true);
+    await onSearch(q);
+    setIsLoading(false);
+  }, 300);
   const [isLoading, setIsLoading] = useState(false);
-  useDebounce(
-    async () => {
-      setIsLoading(true);
-      await onSearch(query);
-      setIsLoading(false);
-    },
-    300,
-    [query]
-  );
 
   return (
     <div>
@@ -68,7 +64,11 @@ function SearchSuggest({
         placeholder="Search"
         leadIcon={<RiSearchLine size="100%" />}
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => {
+          const searchQuery = e.target.value;
+          setQuery(searchQuery);
+          debouncedSearch.callback(searchQuery);
+        }}
       />
       {!!suggestions.length && (
         <SuggestionsContainer maxHeight={maxSuggestHeight}>

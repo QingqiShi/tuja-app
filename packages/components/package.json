@@ -21,7 +21,8 @@
     "@visx/visx": "^1.4.0",
     "body-scroll-lock": "^3.1.5",
     "framer-motion": "^3.3.0",
-    "react-use": "^17.1.0"
+    "react-use": "^17.1.0",
+    "use-debounce": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",
