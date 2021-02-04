@@ -115,37 +115,52 @@ export async function fetchStockHistories(
   );
 }
 
-export async function fetchStockSearch(query: string) {
-  const response = await fetch(
-    `${process.env.REACT_APP_WORKERS_URL}/search?query=${encodeURIComponent(
-      query
-    )}`
-  );
-  const data = await response.json();
-  return data as StockInfo[];
+export function fetchStockSearch(query: string) {
+  const controller = new AbortController();
+  const signal = controller.signal;
+  return {
+    fetch: async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_WORKERS_URL}/search?query=${encodeURIComponent(
+          query
+        )}`,
+        { signal }
+      );
+      return (await response.json()) as StockInfo[];
+    },
+    cancel: () => controller.abort(),
+  };
 }
 
-export async function fetchStocksPrices(
+export function fetchStocksPrices(
   tickers: string[],
   date: Date,
   currency: string
 ) {
-  const data: StockPrice[] = await Promise.all(
-    tickers.map(async (ticker) =>
-      fetch(
-        `${
-          process.env.REACT_APP_WORKERS_URL
-        }/priceAt?ticker=${encodeURIComponent(ticker)}&at=${dayjs(date).format(
-          DATE_FORMAT
-        )}&currency=${currency}`
-      ).then((res) => res.json())
-    )
-  );
+  const controller = new AbortController();
+  const signal = controller.signal;
+  return {
+    fetch: async () => {
+      const data: StockPrice[] = await Promise.all(
+        tickers.map(async (ticker) =>
+          fetch(
+            `${
+              process.env.REACT_APP_WORKERS_URL
+            }/priceAt?ticker=${encodeURIComponent(ticker)}&at=${dayjs(
+              date
+            ).format(DATE_FORMAT)}&currency=${currency}`,
+            { signal }
+          ).then((res) => res.json())
+        )
+      );
 
-  return data.reduce(
-    (obj, price) => ({ ...obj, [price.ticker]: price }),
-    {} as { [ticker: string]: StockPrice }
-  );
+      return data.reduce(
+        (obj, price) => ({ ...obj, [price.ticker]: price }),
+        {} as { [ticker: string]: StockPrice }
+      );
+    },
+    cancel: () => controller.abort(),
+  };
 }
 
 export function getMissingStocksHistory(
