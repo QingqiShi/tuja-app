@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   RiDeleteBinLine,
   RiCheckboxCircleFill,
@@ -152,15 +152,24 @@ function ActivityTradeForm({
   const [searchSuggestions, setSearchSuggestions] = useState<StockInfo[]>(
     getPortfolioSuggestions(portfolioPerformance)
   );
+  const cancelSearchRef = useRef(() => {});
   const search = async (query: string) => {
+    if (cancelSearchRef.current) cancelSearchRef.current();
+
     if (query) {
-      const searchResult = await fetchStockSearch(query);
-      setSearchSuggestions([
-        ...searchResult,
-        ...selectedTickers.filter(
-          ({ Ticker }) => !searchResult.find((s) => s.Ticker === Ticker)
-        ),
-      ]);
+      try {
+        const fetchStockSearchController = fetchStockSearch(query);
+        cancelSearchRef.current = fetchStockSearchController.cancel;
+        const searchResult = await fetchStockSearchController.fetch();
+        setSearchSuggestions([
+          ...searchResult,
+          ...selectedTickers.filter(
+            ({ Ticker }) => !searchResult.find((s) => s.Ticker === Ticker)
+          ),
+        ]);
+      } catch {
+        // do nothing
+      }
     } else {
       const portfolioHoldings = getPortfolioSuggestions(portfolioPerformance);
       setSearchSuggestions([
@@ -185,26 +194,42 @@ function ActivityTradeForm({
   const [showTotalValueInput, setShowTotalValueInput] = useState(
     !!initialActivity
   );
+  const cancelPriceRef = useRef(() => {});
   useEffect(() => {
     const fetch = async () => {
       const tickers = Object.keys(quantities);
       if (tickers.length && !showTotalValueInput) {
-        setIsLoading(true);
+        if (cancelPriceRef.current) cancelPriceRef.current();
 
-        const prices = await fetchStocksPrices(tickers, date, currency);
+        try {
+          setIsLoading(true);
+          const fetchStocksPricesController = fetchStocksPrices(
+            tickers,
+            date,
+            currency
+          );
+          cancelPriceRef.current = fetchStocksPricesController.cancel;
+          const prices = await fetchStocksPricesController.fetch();
 
-        setTotalValue(
-          tickers.reduce((total, ticker) => {
-            const info = selectedTickers.find(
-              ({ Ticker }) => Ticker === ticker
-            );
-            if (!info) {
-              return total;
-            }
-            return total + prices[ticker].priceInCurrency * quantities[ticker];
-          }, 0)
-        );
-        setIsLoading(false);
+          setTotalValue(
+            tickers.reduce((total, ticker) => {
+              const info = selectedTickers.find(
+                ({ Ticker }) => Ticker === ticker
+              );
+              if (!info) {
+                return total;
+              }
+              return (
+                total + prices[ticker].priceInCurrency * quantities[ticker]
+              );
+            }, 0)
+          );
+          setIsLoading(false);
+        } catch (e) {
+          if (e.name !== 'AbortError') {
+            setIsLoading(false);
+          }
+        }
       }
     };
     fetch();

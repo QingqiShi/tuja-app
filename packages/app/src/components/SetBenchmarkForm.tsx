@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDebounce } from 'react-use';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
@@ -72,10 +72,15 @@ function SetBenchmarkForm({
   const [searchSuggestions, setSearchSuggestions] = useState<
     { Code: string; Exchange: string; Name: string }[]
   >([]);
+  const cancelRef = useRef(() => {});
   useEffect(() => {
     const fetch = async () => {
-      const result = await fetchStockSearch(debouncedSearchQuery);
-      setSearchSuggestions(result);
+      if (cancelRef.current) cancelRef.current();
+
+      const fetchStockSearchController = fetchStockSearch(debouncedSearchQuery);
+      cancelRef.current = fetchStockSearchController.cancel;
+      const data = await fetchStockSearchController.fetch();
+      setSearchSuggestions(data);
     };
 
     if (debouncedSearchQuery) {
