@@ -115,10 +115,9 @@ function Chart({
   formatValue,
 }: ChartProps) {
   // bounds
-  const [
-    containerRef,
-    { width = 400, height = 300 },
-  ] = useMeasure<HTMLDivElement>();
+  const [containerRef, { width = 400, height = 300 }] = useMeasure<
+    HTMLDivElement
+  >();
   const [leftAxisRef, leftAxisRect] = useMeasure<any>();
   const margin = {
     top: hideAxis ? 0 : 20,
@@ -213,7 +212,7 @@ function Chart({
         tooltipContainerRef.current.style.opacity = '1';
         tooltipContainerRef.current.style.transform = `translate3d(${tooltipX}px, 0, 0)`;
       }
-      if (benchTooltipRect.width && tooltipBenchContainerRef.current) {
+      if (tooltipBenchContainerRef.current) {
         const w = benchTooltipRect.width;
         const r = w / 2;
         let tooltipX = x - r;
@@ -223,19 +222,20 @@ function Chart({
         tooltipBenchContainerRef.current.style.transform = `translate3d(${tooltipX}px, 0, 0)`;
       }
       if (tooltipDateSpanRef.current) {
-        tooltipDateSpanRef.current.innerText = formatTooltipDate(date);
+        tooltipDateSpanRef.current.textContent = formatTooltipDate(date);
       }
       if (tooltipValueSpanRef.current) {
-        tooltipValueSpanRef.current.innerText = formatValue
+        tooltipValueSpanRef.current.textContent = formatValue
           ? formatValue(dataValue)
           : dataValue.toFixed(2);
       }
-      if (benchTooltipRect.width && tooltipBenchLabelSpanRef.current) {
-        tooltipBenchLabelSpanRef.current.innerText =
+      if (tooltipBenchLabelSpanRef.current) {
+        console.log(benchmarkLabel);
+        tooltipBenchLabelSpanRef.current.textContent =
           benchmarkLabel ?? formatTooltipDate(date);
       }
-      if (benchTooltipRect.width && tooltipBenchSpanRef.current) {
-        tooltipBenchSpanRef.current.innerText = formatValue
+      if (tooltipBenchSpanRef.current) {
+        tooltipBenchSpanRef.current.textContent = formatValue
           ? formatValue(benchmarkValue)
           : benchmarkValue.toFixed(2);
       }
@@ -461,6 +461,7 @@ function Chart({
                 onMouseMove={handleTooltip}
                 onMouseLeave={clearTooltip}
                 onTouchEnd={clearTooltip}
+                data-testid="chart-tooltip-events"
               />
               <g>
                 <line
