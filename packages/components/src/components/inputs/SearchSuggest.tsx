@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { RiSearchLine } from 'react-icons/ri';
 import { useDebouncedCallback } from 'use-debounce';
 import styled, { css } from 'styled-components';
