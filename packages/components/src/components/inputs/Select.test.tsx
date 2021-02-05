@@ -1,8 +1,6 @@
-import { fireEvent, act } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import { render } from '../../testUtils';
 import Select from './Select';
-
-jest.useFakeTimers('modern');
 
 test('render label', async () => {
   const { getByLabelText } = render(<Select label="Test Label" options={[]} />);
