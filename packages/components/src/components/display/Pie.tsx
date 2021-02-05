@@ -36,10 +36,9 @@ interface PieProps {
 
 function Pie({ className, data, primaryText, secondaryText }: PieProps) {
   // Bounds
-  const [
-    containerRef,
-    { width = 400, height = 300 },
-  ] = useMeasure<HTMLDivElement>();
+  const [containerRef, { width = 400, height = 300 }] = useMeasure<
+    HTMLDivElement
+  >();
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
   const radius = Math.min(innerWidth, innerHeight) / 2;
@@ -132,6 +131,7 @@ function PiePieces({
       {arcs.map((arc, i) => (
         <g key={arc.data.label}>
           <Path
+            data-testid={`pie-piece-${arc.data.label}`}
             d={
               path
                 .outerRadius(hovering === i ? outerRadius + 5 : outerRadius)
