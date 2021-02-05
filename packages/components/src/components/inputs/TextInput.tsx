@@ -178,7 +178,7 @@ function TextInput({
         required={required}
         {...rest}
       />
-      {helperText && <HelperText>{helperText}</HelperText>}
+      {endIcon && <IconContainer>{endIcon}</IconContainer>}
     </InputContainer>
   );
 }

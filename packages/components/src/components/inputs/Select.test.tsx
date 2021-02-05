@@ -14,7 +14,7 @@ test('render helper text', async () => {
   expect(getByText('Test helper text')).toBeInTheDocument();
 });
 
-test('use internal state', async () => {
+test('use internal state', () => {
   const { getByRole } = render(
     <Select
       options={[
@@ -27,12 +27,29 @@ test('use internal state', async () => {
   expect(getByRole('combobox')).toHaveValue('b');
 });
 
-test('render compact', async () => {
+test('use external state', () => {
+  const handleChange = jest.fn();
+  const { getByRole } = render(
+    <Select
+      value="b"
+      onChange={(e) => handleChange(e.target.value)}
+      options={[
+        { label: 'Test', value: 'a' },
+        { label: 'Test', value: 'b' },
+      ]}
+    />
+  );
+  expect(getByRole('combobox')).toHaveValue('b');
+  fireEvent.change(getByRole('combobox'), { target: { value: 'a' } });
+  expect(handleChange).toHaveBeenCalledWith('a');
+});
+
+test('render compact', () => {
   const { getByRole } = render(<Select options={[]} compact />);
   expect(getByRole('combobox')).toHaveStyle('padding: 1rem 2rem 1rem 1.2rem;');
 });
 
-test('render disabled', async () => {
+test('render disabled', () => {
   const { getByRole } = render(<Select options={[]} disabled />);
   expect(getByRole('combobox')).toHaveStyle('opacity: 0.5;');
 });
