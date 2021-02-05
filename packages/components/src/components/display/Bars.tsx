@@ -78,10 +78,9 @@ interface ChartProps {
 
 function Bars({ data, className, formatValue }: ChartProps) {
   // bounds
-  const [
-    containerRef,
-    { width = 400, height = 300 },
-  ] = useMeasure<HTMLDivElement>();
+  const [containerRef, { width = 400, height = 300 }] = useMeasure<
+    HTMLDivElement
+  >();
   const margin = { top: 10, left: 10, bottom: 10, right: 10 };
   const xMax = Math.max(width - margin.left - margin.right, 0);
   const yMax = Math.max(height - margin.top - margin.bottom, 0);
@@ -144,10 +143,10 @@ function Bars({ data, className, formatValue }: ChartProps) {
         tooltipContainerRef.current.style.transform = `translate3d(${tooltipX}px, ${tooltipY}px, 0)`;
       }
       if (tooltipDateSpanRef.current) {
-        tooltipDateSpanRef.current.innerText = formatTooltipDate(d[0]);
+        tooltipDateSpanRef.current.textContent = formatTooltipDate(d[0]);
       }
       if (tooltipValueSpanRef.current) {
-        tooltipValueSpanRef.current.innerText = formatValue
+        tooltipValueSpanRef.current.textContent = formatValue
           ? formatValue(d[1])
           : d[1].toFixed(2);
       }
@@ -193,7 +192,8 @@ function Bars({ data, className, formatValue }: ChartProps) {
             const barY = yMax - barHeight;
             return (
               <Bar
-                key={`bar-${d[0].toDateString()}`}
+                key={`bar-${d[0].getTime()}`}
+                data-testid={`bar-${d[0].getTime()}`}
                 fill="url(#bar-gradient)"
                 x={barX}
                 y={barY}
@@ -211,6 +211,7 @@ function Bars({ data, className, formatValue }: ChartProps) {
         </Group>
       </svg>
       <TooltipContainer
+        data-testid="bars-tooltip"
         ref={tooltipContainerRef}
         left={margin.left}
         top={margin.top + 1}
