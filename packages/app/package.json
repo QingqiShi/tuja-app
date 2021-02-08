@@ -21,7 +21,7 @@
     "idb": "^6.0.0",
     "polished": "^4.1.0",
     "react-helmet-async": "^1.0.7",
-    "react-icons": "^4.1.0",
+    "react-icons": "^4.2.0",
     "react-router-dom": "^5.2.0",
     "react-use": "^17.1.0",
     "uuid": "^8.3.2"
