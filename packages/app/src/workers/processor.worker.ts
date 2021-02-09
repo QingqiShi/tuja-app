@@ -156,18 +156,6 @@ async function processPortfolio(payload: ProcessPortfolioPayload) {
 
   mergeLivePricesIntoHistory(stocksLivePrices, stocksHistory);
 
-  console.log(
-    portfolioId,
-    snapshots,
-    baseCurrency,
-    startDate,
-    endDate,
-    stocksInfo,
-    stocksHistory,
-    stocksLivePrices,
-    benchmark
-  );
-
   // Process portfolio
   const performance = calculatePerformance(
     portfolioId,

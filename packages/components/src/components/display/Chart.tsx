@@ -115,9 +115,10 @@ function Chart({
   formatValue,
 }: ChartProps) {
   // bounds
-  const [containerRef, { width = 400, height = 300 }] = useMeasure<
-    HTMLDivElement
-  >();
+  const [
+    containerRef,
+    { width = 400, height = 300 },
+  ] = useMeasure<HTMLDivElement>();
   const [leftAxisRef, leftAxisRect] = useMeasure<any>();
   const margin = {
     top: hideAxis ? 0 : 20,
@@ -230,7 +231,6 @@ function Chart({
           : dataValue.toFixed(2);
       }
       if (tooltipBenchLabelSpanRef.current) {
-        console.log(benchmarkLabel);
         tooltipBenchLabelSpanRef.current.textContent =
           benchmarkLabel ?? formatTooltipDate(date);
       }
