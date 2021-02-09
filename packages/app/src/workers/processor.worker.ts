@@ -71,9 +71,7 @@ addEventListener('message', async (event) => {
     return;
   }
 
-  if (messageData.type === 'process-portfolio') {
-    await processPortfolio(messageData.payload);
-  }
+  await processPortfolio(messageData.payload);
 });
 
 /**
@@ -140,11 +138,13 @@ async function processPortfolio(payload: ProcessPortfolioPayload) {
 
   // Find the tickers are held at the end
   const finalHoldings = new Set<string>();
-  Object.keys(snapshots[snapshots.length - 1]?.numShares).forEach((ticker) => {
-    if (snapshots[snapshots.length - 1].numShares[ticker]) {
-      finalHoldings.add(ticker);
+  Object.keys(snapshots[snapshots.length - 1]?.numShares ?? {}).forEach(
+    (ticker) => {
+      if (snapshots[snapshots.length - 1].numShares[ticker]) {
+        finalHoldings.add(ticker);
+      }
     }
-  });
+  );
   if (benchmark) {
     finalHoldings.add(benchmark);
   }
@@ -288,7 +288,7 @@ function calculatePerformance(
   }
 
   const holdings = calcHoldings(
-    snapshots[snapshots.length - 1]?.numShares,
+    snapshots[snapshots.length - 1]?.numShares ?? {},
     endDate,
     baseCurrency,
     stocksInfo,
