@@ -35,7 +35,7 @@
     "fake-indexeddb": "^3.1.2",
     "react-scripts": "4.0.2",
     "source-map-explorer": "^2.5.2",
-    "worker-loader": "^3.0.7"
+    "worker-loader": "^3.0.8"
   },
   "proxy": "http://127.0.0.1:8787",
   "eslintConfig": {
