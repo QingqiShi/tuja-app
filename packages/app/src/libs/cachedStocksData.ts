@@ -68,7 +68,6 @@ export async function getStocksInfo(db: Database, tickers: string[]) {
   // Fetch missing stocks info and write to cache
   const tickersToFetch = tickers.filter((ticker) => !(ticker in stocksInfo));
   if (tickersToFetch.length) {
-    console.log('fetch info', tickersToFetch);
     const fetchedStocksInfo = await fetchStockInfos(tickersToFetch);
 
     const writeTx = db.transaction(['stocksInfo'], 'readwrite');
@@ -126,13 +125,6 @@ export async function getStocksHistory(
     }))
   );
   histories.forEach(({ ticker, from, to, closeSeries, adjustedSeries }) => {
-    console.log(
-      'fetched history',
-      ticker,
-      from.toLocaleDateString(),
-      to.toLocaleDateString()
-    );
-
     if (!(ticker in stocksHistory)) {
       stocksHistory[ticker] = {
         ticker: ticker,
@@ -190,7 +182,6 @@ export async function getStocksLivePrice(db: Database, tickers: string[]) {
     (ticker) => !(ticker in stocksLivePrice)
   );
   if (tickersToFetch.length) {
-    console.log('fetch live prices', tickersToFetch);
     const fetchedStocksLivePrice = await fetchStockLivePrices(tickersToFetch);
 
     const writeTx = db.transaction(['stocksLivePrice'], 'readwrite');
