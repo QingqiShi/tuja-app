@@ -21,7 +21,7 @@ function decodeHtml(html: string) {
 
 interface StockListItemProps {
   code: string;
-  exchange: string;
+  exchange?: string;
   name: string;
 }
 
@@ -32,10 +32,14 @@ function StockListItem({ code, exchange, name }: StockListItemProps) {
         <Type scale="body1" noMargin as="span" weight={800}>
           {code}
         </Type>
-        <Seperator>·</Seperator>
-        <Type scale="body1" noMargin as="span">
-          {exchange}
-        </Type>
+        {exchange && (
+          <>
+            <Seperator>·</Seperator>
+            <Type scale="body1" noMargin as="span">
+              {exchange}
+            </Type>
+          </>
+        )}
       </div>
       <Type scale="body2" noMargin as={Name}>
         {decodeHtml(name)}

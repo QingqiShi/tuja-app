@@ -17,7 +17,7 @@ const Side = styled.div`
 
   @media (${theme.breakpoints.minTablet}) {
     margin-bottom: 0;
-    width: 16rem;
+    width: 18rem;
     position: sticky;
     max-height: calc(100vh - 5rem);
     padding: 1px;

@@ -4,6 +4,7 @@ import { handlePriceAt } from './handlers/handlePriceAt';
 import { handleBulkEods } from './handlers/handleBulkEods';
 import { handleBulkInfos } from './handlers/handleBulkInfos';
 import { handleBulkLivePrices } from './handlers/handleBulkLivePrices';
+import { handleStockLogo } from './handlers/handleStockLogo';
 
 jest.mock('./handlers/handleSearch', () => ({ handleSearch: jest.fn() }));
 jest.mock('./handlers/handlePriceAt', () => ({ handlePriceAt: jest.fn() }));
@@ -12,6 +13,7 @@ jest.mock('./handlers/handleBulkInfos', () => ({ handleBulkInfos: jest.fn() }));
 jest.mock('./handlers/handleBulkLivePrices', () => ({
   handleBulkLivePrices: jest.fn(),
 }));
+jest.mock('./handlers/handleStockLogo', () => ({ handleStockLogo: jest.fn() }));
 
 declare const global: { [key: string]: unknown };
 
@@ -111,6 +113,7 @@ test.each`
   ${'/bulkEods'}       | ${handleBulkEods}
   ${'/bulkInfos'}      | ${handleBulkInfos}
   ${'/bulkLivePrices'} | ${handleBulkLivePrices}
+  ${'/stockLogo'}      | ${handleStockLogo}
 `('handler for $endpoint', async ({ endpoint, handler }) => {
   (handler as jest.Mock).mockReturnValue(new Response());
 

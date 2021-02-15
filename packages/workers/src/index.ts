@@ -3,6 +3,7 @@ import { handlePriceAt } from './handlers/handlePriceAt';
 import { handleBulkEods } from './handlers/handleBulkEods';
 import { handleBulkInfos } from './handlers/handleBulkInfos';
 import { handleBulkLivePrices } from './handlers/handleBulkLivePrices';
+import { handleStockLogo } from './handlers/handleStockLogo';
 
 const getResponse = async (
   request: Request,
@@ -24,6 +25,7 @@ const handleRequest = async (request: Request) => {
     '/bulkEods': handleBulkEods,
     '/bulkInfos': handleBulkInfos,
     '/bulkLivePrices': handleBulkLivePrices,
+    '/stockLogo': handleStockLogo,
     '/_health': async () => new Response('OK', { status: 200 }),
   });
 

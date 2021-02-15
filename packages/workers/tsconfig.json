@@ -10,9 +10,13 @@
     "rootDir": "src",
     "types": ["@cloudflare/workers-types", "jest"],
     "lib": ["esnext", "WebWorker"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
   "compileOnSave": true,
-  "include": ["src/**/*.ts", "./node_modules/@cloudflare/workers-types/index.d.ts"],
+  "include": [
+    "src/**/*.ts",
+    "./node_modules/@cloudflare/workers-types/index.d.ts"
+  ],
   "exclude": ["node_modules/", "dist/"]
 }

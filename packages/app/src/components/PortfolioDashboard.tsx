@@ -74,9 +74,15 @@ const ChartActionsContainer = styled.div`
 `;
 
 const ChartCard = styled(Card)`
-  height: 25rem;
   max-height: 80vh;
   margin-bottom: ${theme.spacings('s')};
+  height: 15rem;
+  @media (${({ theme }) => theme.breakpoints.minTablet}) {
+    height: 20rem;
+  }
+  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+    height: 25rem;
+  }
 `;
 
 const ModalContainer = styled.div`
