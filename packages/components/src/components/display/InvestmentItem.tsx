@@ -129,13 +129,17 @@ function InvestmentItem({
   return (
     <Container onClick={onClick}>
       <IconContainer>
-        {icon ? <img src={icon} alt={code} /> : code}
+        {icon ? (
+          <img src={icon} alt={code} data-testid="investment-logo" />
+        ) : (
+          code
+        )}
       </IconContainer>
       <NameContainer>
         <StockListItem code={code} name={name} />
       </NameContainer>
       {chartData && (
-        <ChartContainer>
+        <ChartContainer data-testid="investment-chart">
           <Chart data={chartData} hideAxis hideTooltip />
         </ChartContainer>
       )}
@@ -143,7 +147,7 @@ function InvestmentItem({
         <DataContainer>
           <ChangeTag change={changePercentage}>
             <Type scale="body2" weight={800} noMargin>
-              {`${(changePercentage ?? 0) >= 0 ? '+' : ''}${(
+              {`${(changePercentage ?? 0) > 0 ? '+' : ''}${(
                 changePercentage ?? 0
               ).toFixed(2)}%`}
             </Type>
