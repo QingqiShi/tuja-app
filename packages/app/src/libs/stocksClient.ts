@@ -208,3 +208,32 @@ export function getMissingStocksHistory(
     return missingData;
   });
 }
+
+const convertBlobToBase64 = (blob: Blob) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+    reader.readAsDataURL(blob);
+  });
+
+export async function fetchStockLogo(ticker: string, name?: string) {
+  try {
+    const result = await fetch(
+      `${
+        process.env.REACT_APP_WORKERS_URL
+      }/stockLogo?ticker=${ticker}&name=${encodeURIComponent(
+        name ?? ''
+      )}&size=54`
+    );
+    if (result.status !== 200) {
+      return '';
+    }
+    const blob = await result.blob();
+    return convertBlobToBase64(blob);
+  } catch {
+    return '';
+  }
+}

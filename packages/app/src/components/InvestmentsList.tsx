@@ -4,7 +4,6 @@ import { Modal, Select } from '@tuja/components';
 import UpdateAlias from 'components/UpdateAlias';
 import UpdateAllocation from 'components/UpdateAllocation';
 import InvestmentsListItem from 'components/InvestmentsListItem';
-import useColors from 'hooks/useColors';
 import { theme } from 'theme';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
@@ -44,10 +43,8 @@ function InvestmentsList() {
   const [showAllocation, setShowAllocation] = useState(false);
   const [currentTicker, setCurrentTicker] = useState('');
   const [sortBy, setSortBy] = useState<
-    'GAIN' | 'VALUE' | 'ALLOCATION' | 'TODAY' | 'CHART'
-  >('CHART');
-
-  const getColor = useColors();
+    'TODAY' | 'GAIN' | 'VALUE' | 'ALLOCATION'
+  >('TODAY');
 
   const value = valueSeries.getLast();
 
@@ -83,17 +80,20 @@ function InvestmentsList() {
     })
     .filter((ticker) => !!holdings[ticker].units);
 
+  if (!sortedHoldings.length) {
+    return null;
+  }
+
   return (
     <>
       <SortByContainer>
         <Select
           label="Sort by"
           options={[
-            { label: 'Chart', value: 'CHART' },
+            { label: "Today's change", value: 'TODAY' },
             { label: 'Gain', value: 'GAIN' },
             { label: 'Current value', value: 'VALUE' },
             { label: 'Allocation', value: 'ALLOCATION' },
-            { label: "Today's change", value: 'TODAY' },
           ]}
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as any)}
@@ -108,7 +108,6 @@ function InvestmentsList() {
             portfolioValue={value}
             showDetails={showMore === ticker}
             mode={sortBy}
-            color={getColor(ticker)}
             onToggle={() => setShowMore(showMore === ticker ? '' : ticker)}
             onSetAlias={() => {
               setCurrentTicker(ticker);

@@ -140,6 +140,8 @@ const lightPallete = {
   accent: '#5218FA',
   error: '#FA0011',
   ordinals: ['#556480', '#CF9F97', '#9DAECC', '#B8CC89', '#75805C'],
+  gain: '#49c569',
+  loss: '#f74b3c',
 };
 
 const darkPallete = {
@@ -148,6 +150,8 @@ const darkPallete = {
   accent: '#774AFB',
   error: '#FF2331',
   ordinals: ['#5B6A87', '#D6A59C', '#A3B4D4', '#BFD48E', '#7C8761'],
+  gain: '#49c569',
+  loss: '#f74b3c',
 };
 
 const themes = {
@@ -165,6 +169,9 @@ const themes = {
       error: lightPallete.error,
       disabled: darken(0.3, lightPallete.primary),
       ordinals: lightPallete.ordinals,
+      gain: lightPallete.gain,
+      loss: lightPallete.loss,
+      textOnGainLoss: '#ffffff',
     },
     shadows: {
       none: '0 0 1rem 0 rgba(0, 0, 0, 0)',
@@ -185,6 +192,9 @@ const themes = {
       error: darkPallete.error,
       disabled: lighten(0.3, darkPallete.primary),
       ordinals: darkPallete.ordinals,
+      gain: darkPallete.gain,
+      loss: darkPallete.loss,
+      textOnGainLoss: '#ffffff',
     },
     shadows: {
       none: '0 0 1rem 0 rgba(0, 0, 0, 0)',
