@@ -60,7 +60,6 @@ interface InvestmentsListItemProps {
   mode?: 'GAIN' | 'VALUE' | 'ALLOCATION' | 'TODAY';
   onToggle?: () => void;
   onSetAlias?: () => void;
-  onSetAllocation?: () => void;
 }
 
 const endDate = new Date();
@@ -73,7 +72,6 @@ function InvestmentsListItem({
   mode,
   onToggle,
   onSetAlias,
-  onSetAllocation,
 }: InvestmentsListItemProps) {
   const { state } = useAuth();
   const { portfolio } = usePortfolio();

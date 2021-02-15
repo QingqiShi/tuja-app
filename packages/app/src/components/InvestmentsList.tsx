@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components/macro';
 import { Modal, Select } from '@tuja/components';
 import UpdateAlias from 'components/UpdateAlias';
-import UpdateAllocation from 'components/UpdateAllocation';
 import InvestmentsListItem from 'components/InvestmentsListItem';
 import { theme } from 'theme';
 import usePortfolio from 'hooks/usePortfolio';
@@ -40,7 +39,6 @@ function InvestmentsList() {
 
   const [showMore, setShowMore] = useState('');
   const [showAlias, setShowAlias] = useState(false);
-  const [showAllocation, setShowAllocation] = useState(false);
   const [currentTicker, setCurrentTicker] = useState('');
   const [sortBy, setSortBy] = useState<
     'TODAY' | 'GAIN' | 'VALUE' | 'ALLOCATION'
@@ -113,10 +111,6 @@ function InvestmentsList() {
               setCurrentTicker(ticker);
               setShowAlias(true);
             }}
-            onSetAllocation={() => {
-              setCurrentTicker(ticker);
-              setShowAllocation(true);
-            }}
           />
         );
       })}
@@ -126,15 +120,6 @@ function InvestmentsList() {
           <UpdateAlias
             ticker={currentTicker}
             onClose={() => setShowAlias(false)}
-          />
-        </Modal>
-      )}
-
-      {currentTicker && (
-        <Modal onClose={() => setShowAllocation(false)} open={showAllocation}>
-          <UpdateAllocation
-            ticker={currentTicker}
-            onClose={() => setShowAllocation(false)}
           />
         </Modal>
       )}
