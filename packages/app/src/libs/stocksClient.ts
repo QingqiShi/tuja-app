@@ -226,7 +226,7 @@ export async function fetchStockLogo(ticker: string, name?: string) {
         process.env.REACT_APP_WORKERS_URL
       }/stockLogo?ticker=${ticker}&name=${encodeURIComponent(
         name ?? ''
-      )}&size=54`
+      )}&size=108`
     );
     if (result.status !== 200) {
       return '';
