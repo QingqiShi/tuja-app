@@ -36,13 +36,13 @@ const IconContainer = styled.div`
   height: 2.5rem;
   width: 2.5rem;
   min-width: 2.5rem;
-  font-size: 0.3rem;
+  font-size: 0.6rem;
   margin-right: ${({ theme }) => theme.spacings.s};
   @media (${({ theme }) => theme.breakpoints.minTablet}) {
     height: 3rem;
     width: 3rem;
     min-width: 3rem;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     margin-right: ${({ theme }) => theme.spacings.m};
   }
 
