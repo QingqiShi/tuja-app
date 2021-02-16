@@ -14,6 +14,9 @@ module.exports = {
   ),
   displayName: 'app',
   resetMocks: true,
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  setupFilesAfterEnv: ['jsdom-worker', '<rootDir>/src/setupTests.ts'],
   moduleDirectories: ['node_modules', 'src'],
+  moduleNameMapper: {
+    '^worker-loader\\?filename=processor\\.worker\\.js\\!workers/processor\\.worker$': '<rootDir>/src/workers/__mocks__/mock.worker.ts',
+  },
 };

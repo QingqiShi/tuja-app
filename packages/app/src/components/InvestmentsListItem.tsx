@@ -18,6 +18,7 @@ import {
   mergeLivePriceIntoHistory,
 } from 'libs/cachedStocksData';
 import type { StockHistory } from 'libs/stocksClient';
+import dayjs from 'dayjs';
 
 const Label = styled.div`
   font-size: ${theme.fonts.labelSize};
@@ -107,7 +108,6 @@ function InvestmentsListItem({
   useEffect(() => {
     const fetch = async () => {
       if (info?.Name) {
-        console.log(ticker, info.Name);
         const base64 = await fetchStockLogo(ticker, info.Name);
         setStockLogo(base64);
       }
@@ -141,12 +141,16 @@ function InvestmentsListItem({
     <>
       <InvestmentItem
         code={info.Code ?? ''}
-        name={aliases[ticker] ?? info?.Name ?? ticker}
+        name={aliases?.[ticker] ?? info?.Name ?? ticker}
         icon={stockLogo}
         chartData={stockHistory?.adjusted?.data.filter(
           (dp) => startDate && dp[0] >= startDate
         )}
-        changePercentage={livePrice.change_p === 'NA' ? 0 : livePrice.change_p}
+        changePercentage={
+          livePrice.change_p === 'NA' || !dayjs().isSame(livePrice.date, 'day')
+            ? 0
+            : livePrice.change_p
+        }
         additional={additional}
         onClick={onToggle}
       />
