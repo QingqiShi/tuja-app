@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { getContrast } from 'polished';
+import { getContrast, transparentize, lighten } from 'polished';
 import { shadow, ctaFont } from '../../mixins';
 
 const getContrastColor = (bg: string, colors: string[]) => {
@@ -24,6 +24,8 @@ const ButtonBase = styled.button<{ bgColor?: string }>`
   justify-content: center;
   background-color: ${({ bgColor, theme }) =>
     bgColor ?? theme.colors.backgroundRaised};
+  border: 1px solid
+    ${({ bgColor, theme }) => bgColor ?? theme.colors.backgroundRaised};
   color: ${({ bgColor, theme }) =>
     getContrastColor(bgColor ?? theme.colors.backgroundRaised, [
       theme.colors.textOnBackground,
@@ -31,9 +33,9 @@ const ButtonBase = styled.button<{ bgColor?: string }>`
     ])};
   border-radius: ${({ theme }) => theme.spacings.xs};
   padding: 0 ${({ theme }) => theme.spacings.l} 0 0;
-  border: none;
   min-width: 15rem;
   overflow: hidden;
+  outline: none;
   cursor: pointer;
 
   height: 3.9rem;
@@ -43,9 +45,31 @@ const ButtonBase = styled.button<{ bgColor?: string }>`
   @media (${({ theme }) => theme.breakpoints.minLaptop}) {
     height: 2.8rem;
   }
+
+  &:hover {
+    background-color: ${({ bgColor, theme }) =>
+      transparentize(0.1, bgColor ?? theme.colors.backgroundRaised)};
+  }
+
+  &:focus {
+    box-shadow: 0 0 0.2rem 0
+      ${({ bgColor, theme }) =>
+        lighten(0.15, bgColor ?? theme.colors.backgroundRaised)};
+  }
+
+  &:disabled {
+    color: ${({ theme }) => theme.colors.disabled};
+    background-color: ${({ bgColor, theme }) =>
+      transparentize(0.95, bgColor ?? theme.colors.backgroundRaised)};
+    border: 1px solid
+      ${({ bgColor, theme }) =>
+        transparentize(0.9, bgColor ?? theme.colors.backgroundRaised)};
+    box-shadow: none;
+    pointer-events: none;
+  }
 `;
 
-const IconContainer = styled.span<{ bgColor?: string; color?: string }>`
+const IconContainer = styled.span<{ bgColor?: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,12 +84,10 @@ const IconContainer = styled.span<{ bgColor?: string; color?: string }>`
       border-radius: ${({ theme }) => theme.spacings.xs} 0 0
         ${({ theme }) => theme.spacings.xs};
       background-color: ${bgColor};
-    `}
-  ${({ bgColor, color }) =>
-    bgColor &&
-    color &&
-    css`
-      border: 1px solid ${color};
+
+      button:hover & {
+        background-color: ${transparentize(0.1, bgColor)};
+      }
     `}
 
   @media (${({ theme }) => theme.breakpoints.minTablet}) {
@@ -97,6 +119,7 @@ interface SignInButtonProps {
   shortText?: string;
   bgColor?: string;
   iconBgColor?: string;
+  disabled?: boolean;
   onClick?: React.MouseEventHandler;
 }
 
@@ -106,13 +129,17 @@ function SignInButton({
   icon,
   bgColor,
   iconBgColor,
+  disabled,
   onClick,
 }: React.PropsWithChildren<SignInButtonProps>) {
   return (
-    <ButtonBase onClick={onClick} bgColor={bgColor} type="button">
-      <IconContainer bgColor={iconBgColor} color={bgColor}>
-        {icon}
-      </IconContainer>
+    <ButtonBase
+      onClick={onClick}
+      bgColor={bgColor}
+      type="button"
+      disabled={disabled}
+    >
+      <IconContainer bgColor={iconBgColor}>{icon}</IconContainer>
       <LongText>{children}</LongText>
       <ShortText>{shortText || children}</ShortText>
     </ButtonBase>

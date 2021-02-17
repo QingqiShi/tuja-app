@@ -176,9 +176,13 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
               <SignInButton
                 icon={<GoogleLogo />}
                 bgColor="#FFFFFF"
-                iconBgColor="#FFFFFF"
-                onClick={signInWithGoogle}
+                onClick={async () => {
+                  setIsLoading(true);
+                  await signInWithGoogle();
+                  setIsLoading(false);
+                }}
                 shortText="Google"
+                disabled={isLoading}
               >
                 Sign in with Google
               </SignInButton>
