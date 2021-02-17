@@ -52,7 +52,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.20.0",
     "firebase": "^8.2.7",
-    "firebase-tools": "^9.3.0",
+    "firebase-tools": "^9.4.0",
     "husky": "^5.0.9",
     "lerna": "^3.21.0",
     "lint-staged": "^10.5.4",
