@@ -222,6 +222,9 @@ async function mockFetch(url: string, config: any) {
       };
     }
 
+    case 'blob:http://localhost/7cde14af-cabf-4a97-849b-cf46f2c0d223':
+      return { blob: async () => {} };
+
     default: {
       throw new Error(`Unhandled request: ${url}`);
     }
