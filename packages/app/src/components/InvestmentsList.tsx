@@ -1,16 +1,25 @@
 import { useState } from 'react';
+import { RiRefreshLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
-import { Modal, Select } from '@tuja/components';
+import { Button, Modal, Select } from '@tuja/components';
 import UpdateAlias from 'components/UpdateAlias';
 import InvestmentsListItem from 'components/InvestmentsListItem';
-import { theme } from 'theme';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 
 const SortByContainer = styled.div`
-  @media (${theme.breakpoints.minTablet}) {
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+
+  > button {
+    margin: calc(
+        ${({ theme }) => theme.spacings.s} + ${({ theme }) => theme.spacings.xs}
+      )
+      0 ${({ theme }) => theme.spacings.s} ${({ theme }) => theme.spacings.s};
+  }
+
+  @media (${({ theme }) => theme.breakpoints.minTablet}) {
+    flex-direction: row-reverse;
+    justify-content: space-between;
 
     > label {
       width: 300px;
@@ -21,19 +30,23 @@ const SortByContainer = styled.div`
       > span {
         width: auto;
         white-space: nowrap;
-        margin: 0 ${theme.spacings('xs')} 0 0;
+        margin: 0 ${({ theme }) => theme.spacings.xs} 0 0;
       }
 
       > div {
         flex-grow: 1;
       }
     }
+
+    > button {
+      margin: 0 0 ${({ theme }) => theme.spacings.s} 0;
+    }
   }
 `;
 
 function InvestmentsList() {
   const { portfolio } = usePortfolio();
-  const { portfolioPerformance } = usePortfolioProcessor();
+  const { portfolioPerformance, refresh } = usePortfolioProcessor();
 
   const { holdings, valueSeries } = portfolioPerformance!;
 
@@ -95,6 +108,11 @@ function InvestmentsList() {
           ]}
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as any)}
+        />
+        <Button
+          icon={<RiRefreshLine data-testid="refresh-btn" />}
+          onClick={refresh}
+          variant="outline"
         />
       </SortByContainer>
       {sortedHoldings.map((ticker) => {

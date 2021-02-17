@@ -127,7 +127,7 @@ function InvestmentItem({
   onClick,
 }: InvestmentItemProps) {
   return (
-    <Container onClick={onClick}>
+    <Container onClick={onClick} data-testid="investment-item">
       <IconContainer>
         {icon ? (
           <img src={icon} alt={code} data-testid="investment-logo" />

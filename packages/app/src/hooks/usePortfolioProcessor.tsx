@@ -15,6 +15,7 @@ import {
   watchSnapshots,
   exampleSnapshots,
 } from 'libs/portfolioClient';
+import { animationInterval } from 'libs/timer';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Processor from 'worker-loader?filename=processor.worker.js!workers/processor.worker';
@@ -23,13 +24,17 @@ export const PortfolioProcessorContext = createContext({
   portfolioPerformance: null as PortfolioPerformance | null,
   isReady: false,
   resetSnapshots: () => {},
+  refresh: () => {},
 });
+
+const initialEndDate = new Date();
 
 export function PortfolioProcessorProvider({
   children,
 }: React.PropsWithChildren<{}>) {
   const [, setLoadingState] = useLoadingState();
   const [startDate] = useStartDate();
+  const [endDate, setEndDate] = useState(initialEndDate);
   const { portfolio } = usePortfolio();
   const [snapshots, setSnapshots] = useState<Snapshot[]>([]);
 
@@ -89,9 +94,12 @@ export function PortfolioProcessorProvider({
     }
   }, [portfolioId]);
 
+  const refresh = useCallback(() => {
+    setEndDate(new Date());
+  }, []);
+
   useEffect(() => {
     const worker = new Processor();
-    const endDate = new Date();
 
     const handler = (e: MessageEvent) => {
       const { type, payload } = e.data ?? {};
@@ -142,6 +150,7 @@ export function PortfolioProcessorProvider({
   }, [
     baseCurrency,
     benchmark,
+    endDate,
     loadCachedPerformance,
     portfolioId,
     setLoadingState,
@@ -149,12 +158,24 @@ export function PortfolioProcessorProvider({
     startDate,
   ]);
 
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+    animationInterval(120000, signal, () => {
+      refresh();
+    });
+    return () => {
+      abortController.abort();
+    };
+  }, [refresh]);
+
   return (
     <PortfolioProcessorContext.Provider
       value={{
         portfolioPerformance,
         isReady,
         resetSnapshots: () => setSnapshots([]),
+        refresh,
       }}
     >
       {children}
