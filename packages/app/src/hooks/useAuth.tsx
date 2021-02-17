@@ -27,6 +27,7 @@ export const AuthContext = createContext({
   signOut: () => {},
   confirmEmail: (_email: string) => {},
   reset: () => {},
+  signInWithGoogle: async () => {},
   state: 'SIGNED_OUT' as AuthState,
   currentUser: null as firebase.User | null | undefined,
   isAdmin: false,
@@ -115,6 +116,22 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
     setPendingEmail('');
   }, []);
 
+  const signInWithGoogle = useCallback(async () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    try {
+      const result = await firebase.auth().signInWithPopup(provider);
+
+      // Analytics
+      if (result.additionalUserInfo?.isNewUser) {
+        logEvent('sign_up', { method: 'email_link' });
+      }
+      logEvent('login', { method: 'email_link' });
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -122,6 +139,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
         signOut,
         confirmEmail,
         reset,
+        signInWithGoogle,
         state,
         currentUser,
         isAdmin,

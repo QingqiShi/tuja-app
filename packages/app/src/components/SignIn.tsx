@@ -2,10 +2,11 @@ import { forwardRef, useState, useMemo } from 'react';
 import styled from 'styled-components/macro';
 import { RiMailSendLine } from 'react-icons/ri';
 import { FaMagic, FaRegQuestionCircle } from 'react-icons/fa';
-import { Button, TextInput, Type } from '@tuja/components';
+import { Button, SignInButton, TextInput, Type } from '@tuja/components';
 import { theme } from 'theme';
 import useAuth from 'hooks/useAuth';
 import { Center } from 'commonStyledComponents';
+import { ReactComponent as GoogleLogo } from 'assets/google.svg';
 
 const Container = styled.div`
   max-width: calc(425px - ${theme.spacings('m')} * 2 - ${theme.spacings('s')});
@@ -21,7 +22,7 @@ const Container = styled.div`
     );
   }
 
-  > form {
+  form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -34,11 +35,47 @@ const LargeIcon = styled.div`
   font-size: 3rem;
 `;
 
+const Seperator = styled.div`
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  margin: ${({ theme }) => theme.spacings.l} 0;
+  color: ${({ theme }) => theme.colors.textSecondaryOnBackground};
+
+  &:before {
+    content: '';
+    flex-grow: 1;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.disabled};
+    margin-right: ${({ theme }) => theme.spacings.m};
+  }
+
+  &:after {
+    content: '';
+    flex-grow: 1;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.disabled};
+    margin-left: ${({ theme }) => theme.spacings.m};
+  }
+`;
+
+const ThirdPartySignInContainers = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
+
 const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { state, signOut, signIn, reset, confirmEmail } = useAuth();
+  const {
+    state,
+    signOut,
+    signIn,
+    reset,
+    confirmEmail,
+    signInWithGoogle,
+  } = useAuth();
 
   const content = useMemo(() => {
     switch (state) {
@@ -103,36 +140,62 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
         );
       default:
         return (
-          <form
-            method="POST"
-            onSubmit={async (e) => {
-              e.preventDefault();
-              setIsLoading(true);
-              await signIn(email);
-              setIsLoading(false);
-            }}
-          >
-            <TextInput
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              label="Email"
-              placeholder="hi@example.com"
-              helperText="Sign in or create new account with a magic link sent to your email, no password needed!"
-              required
-              autoFocus
-            />
-            <Button
-              variant="shout"
-              endIcon={<RiMailSendLine />}
-              disabled={isLoading}
+          <div>
+            <Type scale="h4">Sign in with Email</Type>
+            <form
+              method="POST"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setIsLoading(true);
+                await signIn(email);
+                setIsLoading(false);
+              }}
             >
-              Get Sign In Link
-            </Button>
-          </form>
+              <TextInput
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                label="Email"
+                placeholder="hi@example.com"
+                helperText="Sign in or create new account with a magic link sent to your email, no password needed!"
+                required
+                autoFocus
+              />
+              <Button
+                variant="shout"
+                endIcon={<RiMailSendLine />}
+                disabled={isLoading}
+              >
+                Get Sign In Link
+              </Button>
+            </form>
+
+            <Seperator>Or</Seperator>
+
+            <ThirdPartySignInContainers>
+              <SignInButton
+                icon={<GoogleLogo />}
+                bgColor="#FFFFFF"
+                iconBgColor="#FFFFFF"
+                onClick={signInWithGoogle}
+                shortText="Google"
+              >
+                Sign in with Google
+              </SignInButton>
+            </ThirdPartySignInContainers>
+          </div>
         );
     }
-  }, [confirmEmail, email, isLoading, reset, signIn, signOut, state]);
+  }, [
+    confirmEmail,
+    email,
+    isLoading,
+    reset,
+    signIn,
+    signInWithGoogle,
+    signOut,
+    state,
+  ]);
 
   return <Container ref={ref}>{content}</Container>;
 });
