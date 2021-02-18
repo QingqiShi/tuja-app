@@ -74,7 +74,6 @@ const IconContainer = styled.span<{ bgColor?: string }>`
   justify-content: center;
   height: 3.9rem;
   width: 3.9rem;
-  padding: 0.65rem;
   margin-right: ${({ theme }) => theme.spacings.s};
 
   ${({ bgColor }) =>
@@ -89,11 +88,14 @@ const IconContainer = styled.span<{ bgColor?: string }>`
       }
     `}
 
+  padding: 1.2rem;
   @media (${({ theme }) => theme.breakpoints.minTablet}) {
+    padding: 1rem;
     height: 3.5rem;
     width: 3.5rem;
   }
   @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+    padding: 0.8rem;
     height: 2.8rem;
     width: 2.8rem;
   }

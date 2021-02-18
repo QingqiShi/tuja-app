@@ -1,7 +1,8 @@
+import { waitFor } from '@testing-library/react';
 import InvestmentsListItem from './InvestmentsListItem';
 import { render } from 'testUtils';
 
-test('render live price is not the same day', () => {
+test('render live price is not the same day', async () => {
   const { getByText } = render(
     <InvestmentsListItem
       ticker="AAPL.US"
@@ -20,11 +21,12 @@ test('render live price is not the same day', () => {
       mode="TODAY"
     />
   );
+  await waitFor(() => {});
   expect(getByText('Apple')).toBeInTheDocument();
   expect(getByText('+1.23%')).toBeInTheDocument();
 });
 
-test('disable change percentage given previous live price', () => {
+test('disable change percentage given previous live price', async () => {
   const { getByText } = render(
     <InvestmentsListItem
       ticker="AAPL.US"
@@ -43,5 +45,6 @@ test('disable change percentage given previous live price', () => {
       mode="TODAY"
     />
   );
+  await waitFor(() => {});
   expect(getByText('0.00%')).toBeInTheDocument();
 });

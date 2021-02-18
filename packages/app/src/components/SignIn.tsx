@@ -6,6 +6,7 @@ import { Button, SignInButton, TextInput, Type } from '@tuja/components';
 import useAuth from 'hooks/useAuth';
 import { Center } from 'commonStyledComponents';
 import { ReactComponent as GoogleLogo } from 'assets/google.svg';
+import { ReactComponent as GithubLogo } from 'assets/github.svg';
 
 const Container = styled.div`
   max-width: ${({ theme }) =>
@@ -62,6 +63,10 @@ const ThirdPartySignInContainers = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+
+  > * {
+    margin-bottom: ${({ theme }) => theme.spacings.s};
+  }
 `;
 
 const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
@@ -75,6 +80,7 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
     reset,
     confirmEmail,
     signInWithGoogle,
+    signInWithGithub,
   } = useAuth();
 
   const content = useMemo(() => {
@@ -176,15 +182,28 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
               <SignInButton
                 icon={<GoogleLogo />}
                 bgColor="#FFFFFF"
+                shortText="Google"
+                disabled={isLoading}
                 onClick={async () => {
                   setIsLoading(true);
                   await signInWithGoogle();
                   setIsLoading(false);
                 }}
-                shortText="Google"
-                disabled={isLoading}
               >
                 Sign in with Google
+              </SignInButton>
+              <SignInButton
+                icon={<GithubLogo />}
+                bgColor="#161b22"
+                shortText="Github"
+                disabled={isLoading}
+                onClick={async () => {
+                  setIsLoading(true);
+                  await signInWithGithub();
+                  setIsLoading(false);
+                }}
+              >
+                Sign in with Github
               </SignInButton>
             </ThirdPartySignInContainers>
           </div>

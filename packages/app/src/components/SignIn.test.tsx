@@ -4,8 +4,12 @@ import SignIn from './SignIn';
 
 test('render', async () => {
   const mockSignInWithGoogle = jest.fn();
+  const mockSignInWithGithub = jest.fn();
   const { getByText } = render(<SignIn />, {
-    auth: { signInWithGoogle: mockSignInWithGoogle },
+    auth: {
+      signInWithGoogle: mockSignInWithGoogle,
+      signInWithGithub: mockSignInWithGithub,
+    },
   });
   expect(getByText('Sign in with Email')).toBeInTheDocument();
   expect(getByText('Sign in with Google')).toBeInTheDocument();
@@ -13,4 +17,8 @@ test('render', async () => {
   fireEvent.click(getByText('Sign in with Google'));
   await waitFor(() => {});
   expect(mockSignInWithGoogle).toHaveBeenCalled();
+
+  fireEvent.click(getByText('Sign in with Github'));
+  await waitFor(() => {});
+  expect(mockSignInWithGithub).toHaveBeenCalled();
 });

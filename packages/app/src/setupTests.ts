@@ -18,9 +18,10 @@ Object.defineProperty(window, 'matchMedia', {
   }),
 });
 
-const TEST_API = 'http://api.test.com';
+const TEST_API = 'http://localhost';
 (process.env as any).REACT_APP_WORKERS_URL = TEST_API;
 
+const actualFetch = fetch;
 async function mockFetch(url: string, config: any) {
   switch (url) {
     case `${TEST_API}/bulkInfos?tickers=MSFT.US,AAPL.US`: {
@@ -222,11 +223,13 @@ async function mockFetch(url: string, config: any) {
       };
     }
 
-    case 'blob:http://localhost/7cde14af-cabf-4a97-849b-cf46f2c0d223':
-      return { blob: async () => {} };
-
     default: {
-      throw new Error(`Unhandled request: ${url}`);
+      if (url.startsWith(`${TEST_API}/stockLogo`)) {
+        return { ok: true, status: 200, blob: () => new Blob() };
+      }
+
+      // console.warn(`Unhandled request: ${url}`);
+      return actualFetch(url, config);
     }
   }
 }

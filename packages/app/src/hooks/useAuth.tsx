@@ -28,6 +28,7 @@ export const AuthContext = createContext({
   confirmEmail: (_email: string) => {},
   reset: () => {},
   signInWithGoogle: async () => {},
+  signInWithGithub: async () => {},
   state: 'SIGNED_OUT' as AuthState,
   currentUser: null as firebase.User | null | undefined,
   isAdmin: false,
@@ -132,6 +133,22 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
     }
   }, []);
 
+  const signInWithGithub = useCallback(async () => {
+    const provider = new firebase.auth.GithubAuthProvider();
+
+    try {
+      const result = await firebase.auth().signInWithPopup(provider);
+
+      // Analytics
+      if (result.additionalUserInfo?.isNewUser) {
+        logEvent('sign_up', { method: 'email_link' });
+      }
+      logEvent('login', { method: 'email_link' });
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -140,6 +157,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
         confirmEmail,
         reset,
         signInWithGoogle,
+        signInWithGithub,
         state,
         currentUser,
         isAdmin,

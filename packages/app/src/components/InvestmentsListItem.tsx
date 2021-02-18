@@ -106,13 +106,19 @@ function InvestmentsListItem({
 
   const [stockLogo, setStockLogo] = useState('');
   useEffect(() => {
+    let mounted = true;
     const fetch = async () => {
       if (info?.Name) {
         const base64 = await fetchStockLogo(ticker, info.Name);
-        setStockLogo(base64);
+        if (mounted) {
+          setStockLogo(base64);
+        }
       }
     };
     fetch();
+    return () => {
+      mounted = false;
+    };
   }, [info?.Name, ticker]);
 
   if (!portfolio || portfolioValue === 0) {

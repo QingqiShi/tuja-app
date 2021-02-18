@@ -1,9 +1,10 @@
-import InvestmentsList from './InvestmentsList';
-import { fireEvent, getByText } from '@testing-library/react';
+import { fireEvent, getByText, waitFor } from '@testing-library/react';
 import { render, defaultPortfolioPerformance } from 'testUtils';
+import InvestmentsList from './InvestmentsList';
 
-test('sort by today', () => {
+test('sort by today', async () => {
   const { getAllByTestId, getByLabelText } = render(<InvestmentsList />);
+  await waitFor(() => {});
 
   fireEvent.change(getByLabelText('Sort by'), { target: { value: 'TODAY' } });
 
@@ -23,8 +24,9 @@ test('sort by today', () => {
   ).toBeInTheDocument();
 });
 
-test('sort by gain', () => {
+test('sort by gain', async () => {
   const { getAllByTestId, getByLabelText } = render(<InvestmentsList />);
+  await waitFor(() => {});
 
   fireEvent.change(getByLabelText('Sort by'), { target: { value: 'GAIN' } });
 
@@ -44,8 +46,9 @@ test('sort by gain', () => {
   ).toBeInTheDocument();
 });
 
-test('sort by value', () => {
+test('sort by value', async () => {
   const { getAllByTestId, getByLabelText } = render(<InvestmentsList />);
+  await waitFor(() => {});
 
   fireEvent.change(getByLabelText('Sort by'), { target: { value: 'VALUE' } });
 
@@ -65,8 +68,9 @@ test('sort by value', () => {
   ).toBeInTheDocument();
 });
 
-test('sort by allocation', () => {
+test('sort by allocation', async () => {
   const { getAllByTestId, getByLabelText } = render(<InvestmentsList />);
+  await waitFor(() => {});
 
   fireEvent.change(getByLabelText('Sort by'), {
     target: { value: 'ALLOCATION' },
@@ -88,13 +92,14 @@ test('sort by allocation', () => {
   ).toBeInTheDocument();
 });
 
-test('manual refresh', () => {
+test('manual refresh', async () => {
   const mockRefresh = jest.fn();
   const { getByTestId } = render(<InvestmentsList />, {
     portfolioPerformance: {
       refresh: mockRefresh,
     },
   });
+  await waitFor(() => {});
 
   fireEvent.click(getByTestId('refresh-btn'));
   expect(mockRefresh).toHaveBeenCalled();

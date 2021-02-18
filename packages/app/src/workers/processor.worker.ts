@@ -2,8 +2,6 @@ import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import minMax from 'dayjs/plugin/minMax';
-import firebase from 'firebase/app';
-import 'firebase/functions';
 import {
   normalizeForex,
   getForexPair,
@@ -30,17 +28,6 @@ import {
   calcHoldings,
   calcHoldingsValues,
 } from './modules/activityProcessors';
-
-firebase.initializeApp({
-  apiKey: 'AIzaSyBHHoqcowFL7iaC2LP6QrP-pQyxUCqB3QM',
-  authDomain: 'portfolio-mango.firebaseapp.com',
-  databaseURL: 'https://portfolio-mango.firebaseio.com',
-  projectId: 'portfolio-mango',
-  storageBucket: 'portfolio-mango.appspot.com',
-  messagingSenderId: '145026996121',
-  appId: '1:145026996121:web:55ed0fda14434ae6656508',
-  measurementId: 'G-EFQ8TK3ZR3',
-});
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);

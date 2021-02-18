@@ -145,7 +145,9 @@ export function PortfolioProcessorProvider({
 
     return () => {
       worker.removeEventListener('message', handler);
-      worker.terminate();
+      try {
+        worker.terminate();
+      } catch {}
     };
   }, [
     baseCurrency,
