@@ -3,23 +3,23 @@ import styled from 'styled-components/macro';
 import { RiMailSendLine } from 'react-icons/ri';
 import { FaMagic, FaRegQuestionCircle } from 'react-icons/fa';
 import { Button, SignInButton, TextInput, Type } from '@tuja/components';
-import { theme } from 'theme';
 import useAuth from 'hooks/useAuth';
 import { Center } from 'commonStyledComponents';
 import { ReactComponent as GoogleLogo } from 'assets/google.svg';
 
 const Container = styled.div`
-  max-width: calc(425px - ${theme.spacings('m')} * 2 - ${theme.spacings('s')});
+  max-width: ${({ theme }) =>
+    `calc(425px - ${theme.spacings.m} * 2 - ${theme.spacings.s})`};
   width: 100%;
-  background-color: ${theme.colors.backgroundRaised};
-  padding: ${theme.spacings('l')} ${theme.spacings('m')} ${theme.spacings('m')};
-  border-radius: ${theme.spacings('xs')};
-  box-shadow: 0 0 ${theme.spacings('s')} 0 rgba(0, 0, 0, 0.1);
+  background-color: ${({ theme }) => theme.colors.backgroundRaised};
+  padding: ${({ theme }) =>
+    `${theme.spacings.l} ${theme.spacings.m} ${theme.spacings.m}`};
+  border-radius: ${({ theme }) => theme.spacings.xs};
+  box-shadow: 0 0 ${({ theme }) => theme.spacings.s} 0 rgba(0, 0, 0, 0.1);
 
-  @media (${theme.breakpoints.minDesktop}) {
-    max-width: calc(
-      600px - ${theme.spacings('m')} * 2 - ${theme.spacings('s')}
-    );
+  @media (${({ theme }) => theme.breakpoints.minDesktop}) {
+    max-width: ${({ theme }) =>
+      `calc(600px - ${theme.spacings.m} * 2 - ${theme.spacings.s})`};
   }
 
   form {

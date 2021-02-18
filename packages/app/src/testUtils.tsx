@@ -4,12 +4,14 @@ import { getTheme } from '@tuja/components';
 import { TimeSeries } from '@tuja/libs';
 import { PortfolioContext } from './hooks/usePortfolio';
 import { PortfolioProcessorContext } from './hooks/usePortfolioProcessor';
+import { AuthContext } from './hooks/useAuth';
 
 interface RenderOptions {
   portfolio?: Partial<React.ContextType<typeof PortfolioContext>>;
   portfolioPerformance?: Partial<
     React.ContextType<typeof PortfolioProcessorContext>
   >;
+  auth?: Partial<React.ContextType<typeof AuthContext>>;
 }
 
 export const defaultPortfolio = {
@@ -74,55 +76,70 @@ export const defaultPortfolioPerformance = {
   monthlyDividends: new TimeSeries(),
 };
 
+export const defaultAuth = {
+  signIn: async (_email: string) => {},
+  signOut: () => {},
+  confirmEmail: (_email: string) => {},
+  reset: () => {},
+  signInWithGoogle: async () => {},
+  state: 'SIGNED_OUT' as const,
+  currentUser: null,
+  isAdmin: false,
+};
+
 export const render = (ui: React.ReactElement, options?: RenderOptions) => {
-  const { portfolio, portfolioPerformance } = options ?? {};
+  const { portfolio, portfolioPerformance, auth } = options ?? {};
   const results = rtlRender(
-    <PortfolioContext.Provider
-      value={{
-        portfolio: defaultPortfolio,
-        portfolios: [defaultPortfolio],
-        loaded: true,
-        ...portfolio,
-      }}
-    >
-      <PortfolioProcessorContext.Provider
+    <AuthContext.Provider value={{ ...defaultAuth, ...auth }}>
+      <PortfolioContext.Provider
         value={{
-          portfolioPerformance: defaultPortfolioPerformance as any,
-          isReady: true,
-          resetSnapshots: () => {},
-          refresh: () => {},
-          ...portfolioPerformance,
+          portfolio: defaultPortfolio,
+          portfolios: [defaultPortfolio],
+          loaded: true,
+          ...portfolio,
         }}
       >
-        <ThemeProvider theme={getTheme('light')}>{ui}</ThemeProvider>
-      </PortfolioProcessorContext.Provider>
-    </PortfolioContext.Provider>
+        <PortfolioProcessorContext.Provider
+          value={{
+            portfolioPerformance: defaultPortfolioPerformance as any,
+            isReady: true,
+            resetSnapshots: () => {},
+            refresh: () => {},
+            ...portfolioPerformance,
+          }}
+        >
+          <ThemeProvider theme={getTheme('light')}>{ui}</ThemeProvider>
+        </PortfolioProcessorContext.Provider>
+      </PortfolioContext.Provider>
+    </AuthContext.Provider>
   );
   return {
     ...results,
     rerender: (ui: React.ReactElement, options?: RenderOptions) => {
-      const { portfolio } = options ?? {};
+      const { portfolio, portfolioPerformance, auth } = options ?? {};
       return results.rerender(
-        <PortfolioContext.Provider
-          value={{
-            portfolio: defaultPortfolio,
-            portfolios: [defaultPortfolio],
-            loaded: true,
-            ...portfolio,
-          }}
-        >
-          <PortfolioProcessorContext.Provider
+        <AuthContext.Provider value={{ ...defaultAuth, ...auth }}>
+          <PortfolioContext.Provider
             value={{
-              portfolioPerformance: defaultPortfolioPerformance as any,
-              isReady: true,
-              resetSnapshots: () => {},
-              refresh: () => {},
-              ...portfolioPerformance,
+              portfolio: defaultPortfolio,
+              portfolios: [defaultPortfolio],
+              loaded: true,
+              ...portfolio,
             }}
           >
-            <ThemeProvider theme={getTheme('light')}>{ui}</ThemeProvider>
-          </PortfolioProcessorContext.Provider>
-        </PortfolioContext.Provider>
+            <PortfolioProcessorContext.Provider
+              value={{
+                portfolioPerformance: defaultPortfolioPerformance as any,
+                isReady: true,
+                resetSnapshots: () => {},
+                refresh: () => {},
+                ...portfolioPerformance,
+              }}
+            >
+              <ThemeProvider theme={getTheme('light')}>{ui}</ThemeProvider>
+            </PortfolioProcessorContext.Provider>
+          </PortfolioContext.Provider>
+        </AuthContext.Provider>
       );
     },
   };
