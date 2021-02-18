@@ -215,6 +215,7 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
     isLoading,
     reset,
     signIn,
+    signInWithGithub,
     signInWithGoogle,
     signOut,
     state,
