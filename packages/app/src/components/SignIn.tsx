@@ -17,9 +17,9 @@ const Container = styled.div`
   border-radius: ${({ theme }) => theme.spacings.xs};
   box-shadow: 0 0 ${({ theme }) => theme.spacings.s} 0 rgba(0, 0, 0, 0.1);
 
-  @media (${({ theme }) => theme.breakpoints.minDesktop}) {
+  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
     max-width: ${({ theme }) =>
-      `calc(600px - ${theme.spacings.m} * 2 - ${theme.spacings.s})`};
+      `calc(500px - ${theme.spacings.m} * 2 - ${theme.spacings.s})`};
   }
 
   form {
