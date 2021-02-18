@@ -12,7 +12,7 @@ const commonTheme = {
   },
   fonts: {
     cta: {
-      size: '1rem',
+      size: '0.9rem',
       height: '1.2em',
       weight: 600,
       spacing: '0.028em',
