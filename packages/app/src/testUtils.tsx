@@ -82,6 +82,7 @@ export const defaultAuth = {
   confirmEmail: (_email: string) => {},
   reset: () => {},
   signInWithGoogle: async () => {},
+  signInWithGithub: async () => {},
   state: 'SIGNED_OUT' as const,
   currentUser: null,
   isAdmin: false,
