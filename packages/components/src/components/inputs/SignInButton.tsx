@@ -7,7 +7,6 @@ const getContrastColor = (bg: string, colors: string[]) => {
   let contrastColor: string = '';
   colors.forEach((color) => {
     const contrast = getContrast(bg, color);
-    console.log(contrast, color);
     if (contrast > maxContrast) {
       maxContrast = contrast;
       contrastColor = color;
