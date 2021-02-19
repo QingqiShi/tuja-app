@@ -8,7 +8,7 @@ import {
   useCallback,
 } from 'react';
 import firebase from 'firebase/app';
-import { logEvent } from 'libs/analytics';
+import { logEvent, setAnalyticsUser } from 'libs/analytics';
 
 const STORAGE_KEY = 'pendingSignInEmail';
 
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
 
       // Analytics
       if (user) {
-        firebase.analytics().setUserId(user.uid);
+        setAnalyticsUser(user);
       }
     });
   }, [receivedState]);
@@ -136,17 +136,13 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
   const signInWithGithub = useCallback(async () => {
     const provider = new firebase.auth.GithubAuthProvider();
 
-    try {
-      const result = await firebase.auth().signInWithPopup(provider);
+    const result = await firebase.auth().signInWithPopup(provider);
 
-      // Analytics
-      if (result.additionalUserInfo?.isNewUser) {
-        logEvent('sign_up', { method: 'email_link' });
-      }
-      logEvent('login', { method: 'email_link' });
-    } catch (e) {
-      console.error(e);
+    // Analytics
+    if (result.additionalUserInfo?.isNewUser) {
+      logEvent('sign_up', { method: 'email_link' });
     }
+    logEvent('login', { method: 'email_link' });
   }, []);
 
   return (

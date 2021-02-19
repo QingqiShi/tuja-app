@@ -8,6 +8,7 @@ import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/performance';
 import './index.css';
+import { setAnalyticsSupport } from './libs/analytics';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
@@ -29,12 +30,20 @@ firebase.initializeApp({
   measurementId: 'G-EFQ8TK3ZR3',
 });
 
-if (window.location.hostname === 'localhost') {
-  firebase.analytics().setAnalyticsCollectionEnabled(false);
-} else {
-  firebase.analytics();
-  firebase.performance();
-}
+(async () => {
+  const isAnalyticsSupported = await firebase.analytics.isSupported();
+  setAnalyticsSupport(isAnalyticsSupported);
+  if (window.location.hostname === 'localhost') {
+    if (isAnalyticsSupported) {
+      firebase.analytics().setAnalyticsCollectionEnabled(false);
+    }
+  } else {
+    if (isAnalyticsSupported) {
+      firebase.analytics();
+    }
+    firebase.performance();
+  }
+})();
 
 ReactDOM.render(
   <StrictMode>
