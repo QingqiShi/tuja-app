@@ -17,6 +17,7 @@ Sentry.init({
     'https://de80755a62ab40938ee851877d57417e@o527329.ingest.sentry.io/5643505',
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
+  environment: process.env.NODE_ENV,
 });
 
 firebase.initializeApp({
