@@ -20,6 +20,9 @@ test('render', () => {
     'background-color: #FFFFFF;'
   );
   expect(getByText('logo')).toHaveStyle('background-color: #000000;');
+  expect(getByText('Test').closest('button')).toHaveStyle(
+    'color: rgb(33, 26, 29);'
+  );
 });
 
 test('render dark button', () => {
@@ -28,6 +31,27 @@ test('render dark button', () => {
       Test
     </SignInButton>
   );
+  expect(getByText('Test').closest('button')).toHaveStyle('color: #FFFFFF;');
+});
 
+test('render light button in dark mode', () => {
+  const { getByText } = render(
+    <SignInButton icon={<>logo</>} shortText="Short" bgColor="#FFFFFF">
+      Test
+    </SignInButton>,
+    { theme: 'dark' }
+  );
+  expect(getByText('Test').closest('button')).toHaveStyle(
+    'color: rgb(33, 26, 29);'
+  );
+});
+
+test('render dark button in dark mode', () => {
+  const { getByText } = render(
+    <SignInButton icon={<>logo</>} shortText="Short" bgColor="#000">
+      Test
+    </SignInButton>,
+    { theme: 'dark' }
+  );
   expect(getByText('Test').closest('button')).toHaveStyle('color: #FFFFFF;');
 });
