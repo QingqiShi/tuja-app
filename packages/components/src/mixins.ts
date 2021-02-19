@@ -1,5 +1,5 @@
 import { css } from 'styled-components';
-import { transparentize } from 'polished';
+import { transparentize, readableColor } from 'polished';
 
 export const paddings = css<{ compact?: boolean }>`
   ${({ compact }) =>
@@ -113,4 +113,18 @@ export const inputEndPadding = css`
   @media (${({ theme }) => theme.breakpoints.minLaptop}) {
     padding-right: 3rem;
   }
+`;
+
+export const dynamicColor = (color: string) => css`
+  color: ${({ theme }) =>
+    readableColor(
+      color,
+      theme.mode === 'light'
+        ? theme.colors.textOnBackground
+        : theme.colors.backgroundMain,
+      theme.mode === 'light'
+        ? theme.colors.backgroundMain
+        : theme.colors.textOnBackground,
+      false
+    )};
 `;

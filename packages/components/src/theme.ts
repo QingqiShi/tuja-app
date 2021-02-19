@@ -138,20 +138,20 @@ const lightPallete = {
   primary: '#FFFFFF',
   secondary: '#211A1D',
   accent: '#5218FA',
-  error: '#FA0011',
+  error: '#fb2125',
   ordinals: ['#556480', '#CF9F97', '#9DAECC', '#B8CC89', '#75805C'],
-  gain: '#49c569',
-  loss: '#f74b3c',
+  gain: '#30c048',
+  loss: '#fb2125',
 };
 
 const darkPallete = {
   primary: '#211A1D',
   secondary: '#FFFFFF',
   accent: '#774AFB',
-  error: '#FF2331',
+  error: '#F74B3C',
   ordinals: ['#5B6A87', '#D6A59C', '#A3B4D4', '#BFD48E', '#7C8761'],
   gain: '#49c569',
-  loss: '#f74b3c',
+  loss: '#F74B3C',
 };
 
 const themes = {
@@ -167,11 +167,12 @@ const themes = {
       textOnCallToAction: lightPallete.primary,
       callToActionText: lightPallete.accent,
       error: lightPallete.error,
+      textOnError: lightPallete.primary,
       disabled: darken(0.3, lightPallete.primary),
       ordinals: lightPallete.ordinals,
       gain: lightPallete.gain,
       loss: lightPallete.loss,
-      textOnGainLoss: '#ffffff',
+      textOnGainLoss: lightPallete.primary,
     },
     shadows: {
       none: '0 0 1rem 0 rgba(0, 0, 0, 0)',
@@ -190,11 +191,12 @@ const themes = {
       textOnCallToAction: darkPallete.secondary,
       callToActionText: lighten(0.07, darkPallete.accent),
       error: darkPallete.error,
+      textOnError: darkPallete.primary,
       disabled: lighten(0.3, darkPallete.primary),
       ordinals: darkPallete.ordinals,
       gain: darkPallete.gain,
       loss: darkPallete.loss,
-      textOnGainLoss: '#ffffff',
+      textOnGainLoss: darkPallete.primary,
     },
     shadows: {
       none: '0 0 1rem 0 rgba(0, 0, 0, 0)',

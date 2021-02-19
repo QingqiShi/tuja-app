@@ -1,23 +1,12 @@
 import styled, { css } from 'styled-components';
-import { getContrast, transparentize, lighten } from 'polished';
-import { shadow, ctaFont } from '../../mixins';
-
-const getContrastColor = (bg: string, colors: string[]) => {
-  let maxContrast: number = 0;
-  let contrastColor: string = '';
-  colors.forEach((color) => {
-    const contrast = getContrast(bg, color);
-    if (contrast > maxContrast) {
-      maxContrast = contrast;
-      contrastColor = color;
-    }
-  });
-  return contrastColor;
-};
+import { transparentize, lighten } from 'polished';
+import { shadow, ctaFont, dynamicColor } from '../../mixins';
 
 const ButtonBase = styled.button<{ bgColor?: string }>`
   ${shadow}
   ${ctaFont}
+  ${({ bgColor, theme }) =>
+    dynamicColor(bgColor ?? theme.colors.backgroundRaised)}
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,11 +14,6 @@ const ButtonBase = styled.button<{ bgColor?: string }>`
     bgColor ?? theme.colors.backgroundRaised};
   border: 1px solid
     ${({ bgColor, theme }) => bgColor ?? theme.colors.backgroundRaised};
-  color: ${({ bgColor, theme }) =>
-    getContrastColor(bgColor ?? theme.colors.backgroundRaised, [
-      theme.colors.textOnBackground,
-      theme.colors.backgroundRaised,
-    ])};
   border-radius: ${({ theme }) => theme.spacings.xs};
   padding: 0 ${({ theme }) => theme.spacings.l} 0 0;
   min-width: 15rem;

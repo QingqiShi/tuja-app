@@ -24,7 +24,7 @@ const BannerContainer = styled.div<{ variant: BannerVariant }>`
     switch (variant) {
       case 'error':
         return css`
-          color: ${({ theme }) => theme.colors.backgroundMain};
+          color: ${({ theme }) => theme.colors.textOnError};
           background-color: ${({ theme }) => theme.colors.error};
         `;
       default:
