@@ -2,12 +2,22 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
 import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/performance';
 import './index.css';
+import { setAnalyticsSupport } from './libs/analytics';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+
+Sentry.init({
+  dsn:
+    'https://de80755a62ab40938ee851877d57417e@o527329.ingest.sentry.io/5643505',
+  integrations: [new Integrations.BrowserTracing()],
+  tracesSampleRate: 1.0,
+});
 
 firebase.initializeApp({
   apiKey: 'AIzaSyBHHoqcowFL7iaC2LP6QrP-pQyxUCqB3QM',
@@ -20,20 +30,30 @@ firebase.initializeApp({
   measurementId: 'G-EFQ8TK3ZR3',
 });
 
-if (window.location.hostname === 'localhost') {
-  firebase.analytics().setAnalyticsCollectionEnabled(false);
-} else {
-  firebase.analytics();
-  firebase.performance();
-}
+(async () => {
+  const isAnalyticsSupported = await firebase.analytics.isSupported();
+  setAnalyticsSupport(isAnalyticsSupported);
+  if (window.location.hostname === 'localhost') {
+    if (isAnalyticsSupported) {
+      firebase.analytics().setAnalyticsCollectionEnabled(false);
+    }
+  } else {
+    if (isAnalyticsSupported) {
+      firebase.analytics();
+    }
+    firebase.performance();
+  }
+})();
 
 ReactDOM.render(
   <StrictMode>
-    <HelmetProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </HelmetProvider>
+    <Sentry.ErrorBoundary fallback={'An error has occurred'}>
+      <HelmetProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </HelmetProvider>
+    </Sentry.ErrorBoundary>
   </StrictMode>,
   document.getElementById('root')
 );
