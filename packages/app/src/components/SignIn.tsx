@@ -2,7 +2,13 @@ import { forwardRef, useState, useMemo } from 'react';
 import styled from 'styled-components/macro';
 import { RiMailSendLine } from 'react-icons/ri';
 import { FaMagic, FaRegQuestionCircle } from 'react-icons/fa';
-import { Button, SignInButton, TextInput, Type } from '@tuja/components';
+import {
+  Banner,
+  Button,
+  SignInButton,
+  TextInput,
+  Type,
+} from '@tuja/components';
 import useAuth from 'hooks/useAuth';
 import { Center } from 'commonStyledComponents';
 import { ReactComponent as GoogleLogo } from 'assets/google.svg';
@@ -75,6 +81,7 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
 
   const {
     state,
+    authError,
     signOut,
     signIn,
     reset,
@@ -95,9 +102,12 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
         );
       case 'SIGNING_IN':
         return (
-          <Center>
-            <Type scale="body1">Signing in...</Type>
-          </Center>
+          <>
+            <Center>
+              <Type scale="body1">Signing in...</Type>
+            </Center>
+            {authError && <Banner variant="error">{authError}</Banner>}
+          </>
         );
       case 'CONFIRM_EMAIL':
         return (
@@ -124,6 +134,8 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
             <Button variant="shout" disabled={isLoading}>
               Confirm Sign In
             </Button>
+
+            {authError && <Banner variant="error">{authError}</Banner>}
           </form>
         );
       case 'EMAIL_SENT':
@@ -206,10 +218,13 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
                 Sign in with Github
               </SignInButton>
             </ThirdPartySignInContainers>
+
+            {authError && <Banner variant="error">{authError}</Banner>}
           </div>
         );
     }
   }, [
+    authError,
     confirmEmail,
     email,
     isLoading,
