@@ -32,6 +32,7 @@ export const AuthContext = createContext({
   state: 'SIGNED_OUT' as AuthState,
   currentUser: null as firebase.User | null | undefined,
   isAdmin: false,
+  authError: '',
 });
 
 export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
@@ -45,6 +46,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
   >(undefined);
   const receivedState = useRef(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [authError, setAuthError] = useState('');
 
   useEffect(() => {
     return firebase.auth().onAuthStateChanged(async (user) => {
@@ -54,6 +56,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
       setCurrentUser(user);
       const idTokenResult = await user?.getIdTokenResult();
       setIsAdmin(!!idTokenResult?.claims.admin);
+      setAuthError('');
 
       // Analytics
       if (user) {
@@ -64,10 +67,13 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
 
   useEffect(() => {
     if (isEmailLink && pendingEmail) {
-      firebase
-        .auth()
-        .signInWithEmailLink(pendingEmail, window.location.href)
-        .then((result) => {
+      (async () => {
+        setAuthError('');
+        try {
+          const result = await firebase
+            .auth()
+            .signInWithEmailLink(pendingEmail, window.location.href);
+
           window.localStorage.removeItem(STORAGE_KEY);
           window.location.search = '';
 
@@ -76,7 +82,16 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
             logEvent('sign_up', { method: 'email_link' });
           }
           logEvent('login', { method: 'email_link' });
-        });
+        } catch (error) {
+          switch (error.code) {
+            case 'auth/expired-action-code':
+            case 'auth/invalid-email':
+            case 'auth/user-disabled':
+            default:
+              setAuthError(error.message);
+          }
+        }
+      })();
     }
   }, [isEmailLink, pendingEmail]);
 
@@ -91,6 +106,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
 
   const signIn = useCallback(async (email: string) => {
     try {
+      setAuthError('');
       await firebase.auth().sendSignInLinkToEmail(email, {
         url: window.location.href,
         handleCodeInApp: true,
@@ -100,8 +116,18 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
 
       // Analytics
       logEvent('send_sign_in_link');
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      switch (error.code) {
+        case 'auth/argument-error':
+        case 'auth/invalid-email':
+        case 'auth/missing-android-pkg-name':
+        case 'auth/missing-continue-uri':
+        case 'auth/missing-ios-bundle-id':
+        case 'auth/invalid-continue-uri':
+        case 'auth/unauthorized-continue-uri':
+        default:
+          setAuthError(error.message);
+      }
     }
   }, []);
 
@@ -119,6 +145,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
 
   const signInWithGoogle = useCallback(async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
+    setAuthError('');
 
     try {
       const result = await firebase.auth().signInWithPopup(provider);
@@ -128,21 +155,48 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
         logEvent('sign_up', { method: 'email_link' });
       }
       logEvent('login', { method: 'email_link' });
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      switch (error.code) {
+        case 'auth/account-exists-with-different-credential':
+        case 'auth/auth-domain-config-required':
+        case 'auth/cancelled-popup-request':
+        case 'auth/operation-not-allowed':
+        case 'auth/operation-not-supported-in-this-environment':
+        case 'auth/popup-blocked':
+        case 'auth/popup-closed-by-user':
+        case 'auth/unauthorized-domain':
+        default:
+          setAuthError(error.message);
+      }
     }
   }, []);
 
   const signInWithGithub = useCallback(async () => {
     const provider = new firebase.auth.GithubAuthProvider();
+    setAuthError('');
 
-    const result = await firebase.auth().signInWithPopup(provider);
+    try {
+      const result = await firebase.auth().signInWithPopup(provider);
 
-    // Analytics
-    if (result.additionalUserInfo?.isNewUser) {
-      logEvent('sign_up', { method: 'email_link' });
+      // Analytics
+      if (result.additionalUserInfo?.isNewUser) {
+        logEvent('sign_up', { method: 'email_link' });
+      }
+      logEvent('login', { method: 'email_link' });
+    } catch (error) {
+      switch (error.code) {
+        case 'auth/account-exists-with-different-credential':
+        case 'auth/auth-domain-config-required':
+        case 'auth/cancelled-popup-request':
+        case 'auth/operation-not-allowed':
+        case 'auth/operation-not-supported-in-this-environment':
+        case 'auth/popup-blocked':
+        case 'auth/popup-closed-by-user':
+        case 'auth/unauthorized-domain':
+        default:
+          setAuthError(error.message);
+      }
     }
-    logEvent('login', { method: 'email_link' });
   }, []);
 
   return (
@@ -157,6 +211,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
         state,
         currentUser,
         isAdmin,
+        authError,
       }}
     >
       {children}

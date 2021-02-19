@@ -86,6 +86,7 @@ export const defaultAuth = {
   state: 'SIGNED_OUT' as const,
   currentUser: null,
   isAdmin: false,
+  authError: '',
 };
 
 export const render = (ui: React.ReactElement, options?: RenderOptions) => {
