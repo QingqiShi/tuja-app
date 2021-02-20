@@ -22,3 +22,20 @@ test('render', async () => {
   await waitFor(() => {});
   expect(mockSignInWithGithub).toHaveBeenCalled();
 });
+
+test('email sign in error', async () => {
+  const mockReset = jest.fn();
+  const { getByText } = render(<SignIn />, {
+    auth: {
+      state: 'SIGNING_IN',
+      authError: 'Expired',
+      reset: mockReset,
+    },
+    initialRoute: '/demo?signingin',
+  });
+  expect(getByText('Signing in...')).toBeInTheDocument();
+  expect(getByText('Expired')).toBeInTheDocument();
+
+  fireEvent.click(getByText('Start again'));
+  expect(mockReset).toHaveBeenCalled();
+});

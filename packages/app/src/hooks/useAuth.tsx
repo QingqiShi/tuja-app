@@ -36,11 +36,6 @@ export const AuthContext = createContext({
 });
 
 export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
-  const isEmailLink = useMemo(
-    () => firebase.auth().isSignInWithEmailLink(window.location.href),
-    []
-  );
-  const [pendingEmail, setPendingEmail] = useState(initialPendingEmail ?? '');
   const [currentUser, setCurrentUser] = useState<
     firebase.User | null | undefined
   >(undefined);
@@ -48,6 +43,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [authError, setAuthError] = useState('');
 
+  // Auth state listener
   useEffect(() => {
     return firebase.auth().onAuthStateChanged(async (user) => {
       if (!receivedState.current) {
@@ -65,6 +61,13 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
     });
   }, [receivedState]);
 
+  // Handle email sign in
+  const href = window.location.href;
+  const isEmailLink = useMemo(
+    () => firebase.auth().isSignInWithEmailLink(href),
+    [href]
+  );
+  const [pendingEmail, setPendingEmail] = useState(initialPendingEmail ?? '');
   useEffect(() => {
     if (isEmailLink && pendingEmail) {
       (async () => {
@@ -141,6 +144,7 @@ export function AuthProvider({ children }: React.PropsWithChildren<{}>) {
   const reset = useCallback(() => {
     window.localStorage.removeItem(STORAGE_KEY);
     setPendingEmail('');
+    setAuthError('');
   }, []);
 
   const signInWithGoogle = useCallback(async () => {

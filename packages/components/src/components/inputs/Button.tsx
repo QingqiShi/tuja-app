@@ -83,40 +83,42 @@ const ButtonBase = styled.button.withConfig<ButtonBaseProps>({
           }
 
           &:disabled {
-            color: ${({ theme }) => theme.colors.disabled};
-            background-color: ${({ theme }) =>
-              transparentize(0.95, theme.colors.textOnBackground)};
+            color: ${theme.colors.disabled};
+            background-color: ${transparentize(
+              0.95,
+              theme.colors.textOnBackground
+            )};
             border: 1px solid
               ${transparentize(0.9, theme.colors.textOnBackground)};
             ${active &&
             css`
-              color: ${({ theme }) => theme.colors.textSecondaryOnBackground};
+              color: ${theme.colors.textSecondaryOnBackground};
             `}
           }
         `;
       case 'outline':
         return css`
-          background-color: ${({ theme }) =>
-            transparentize(
-              theme.mode === 'light' ? 1 : 0.95,
-              theme.colors.textOnBackground
-            )};
+          background-color: ${transparentize(
+            theme.mode === 'light' ? 1 : 0.95,
+            theme.colors.textOnBackground
+          )};
           border: 1px solid
             ${transparentize(0.9, theme.colors.textOnBackground)};
           color: ${theme.colors.textOnBackground};
 
           &:hover {
-            background-color: ${({ theme }) =>
-              transparentize(
-                theme.mode === 'light' ? 0.95 : 0.85,
-                theme.colors.callToActionText
-              )};
+            background-color: ${transparentize(
+              theme.mode === 'light' ? 0.95 : 0.85,
+              theme.colors.callToActionText
+            )};
             border: 1px solid ${theme.colors.callToActionText};
           }
 
           &:disabled {
-            background-color: ${({ theme }) =>
-              transparentize(0.95, theme.colors.textOnBackground)};
+            background-color: ${transparentize(
+              0.95,
+              theme.colors.textOnBackground
+            )};
           }
         `;
     }

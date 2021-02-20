@@ -20,3 +20,22 @@ Error.args = {
   children: 'This is banner to display some error message',
   variant: 'error',
 };
+
+export const InformationalWithAction = Template.bind({});
+InformationalWithAction.args = {
+  children: 'This is some informational banner message',
+  action: {
+    label: 'Acknowledge',
+    onClick: () => {},
+  },
+};
+
+export const ErrorWithAction = Template.bind({});
+ErrorWithAction.args = {
+  children: 'This is banner to display some error message',
+  variant: 'error',
+  action: {
+    label: 'Dismiss',
+    onClick: () => {},
+  },
+};

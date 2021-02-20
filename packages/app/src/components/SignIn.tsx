@@ -1,7 +1,8 @@
 import { forwardRef, useState, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import { useHistory } from 'react-router-dom';
 import { RiMailSendLine } from 'react-icons/ri';
 import { FaMagic, FaRegQuestionCircle } from 'react-icons/fa';
+import styled from 'styled-components/macro';
 import {
   Banner,
   Button,
@@ -79,6 +80,8 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const history = useHistory();
+
   const {
     state,
     authError,
@@ -106,7 +109,20 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
             <Center>
               <Type scale="body1">Signing in...</Type>
             </Center>
-            {authError && <Banner variant="error">{authError}</Banner>}
+            {authError && (
+              <Banner
+                variant="error"
+                action={{
+                  label: 'Start again',
+                  onClick: () => {
+                    reset();
+                    history.push('/demo');
+                  },
+                }}
+              >
+                {authError}
+              </Banner>
+            )}
           </>
         );
       case 'CONFIRM_EMAIL':
