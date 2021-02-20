@@ -240,16 +240,17 @@ const SignInPopOut = forwardRef<HTMLDivElement>((_, ref) => {
         );
     }
   }, [
+    history,
     authError,
-    confirmEmail,
     email,
+    state,
     isLoading,
+    confirmEmail,
     reset,
     signIn,
     signInWithGithub,
     signInWithGoogle,
     signOut,
-    state,
   ]);
 
   return <Container ref={ref}>{content}</Container>;
