@@ -1,4 +1,5 @@
 import { render as rtlRender } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { getTheme } from '@tuja/components';
 import { TimeSeries } from '@tuja/libs';
@@ -12,6 +13,7 @@ interface RenderOptions {
     React.ContextType<typeof PortfolioProcessorContext>
   >;
   auth?: Partial<React.ContextType<typeof AuthContext>>;
+  initialRoute?: string;
 }
 
 export const defaultPortfolio = {
@@ -90,7 +92,10 @@ export const defaultAuth = {
 };
 
 export const render = (ui: React.ReactElement, options?: RenderOptions) => {
-  const { portfolio, portfolioPerformance, auth } = options ?? {};
+  const { portfolio, portfolioPerformance, auth, initialRoute } = options ?? {};
+  if (initialRoute) {
+    window.history.pushState({}, 'Test page', initialRoute);
+  }
   const results = rtlRender(
     <AuthContext.Provider value={{ ...defaultAuth, ...auth }}>
       <PortfolioContext.Provider
@@ -113,7 +118,8 @@ export const render = (ui: React.ReactElement, options?: RenderOptions) => {
           <ThemeProvider theme={getTheme('light')}>{ui}</ThemeProvider>
         </PortfolioProcessorContext.Provider>
       </PortfolioContext.Provider>
-    </AuthContext.Provider>
+    </AuthContext.Provider>,
+    initialRoute ? { wrapper: BrowserRouter } : undefined
   );
   return {
     ...results,
