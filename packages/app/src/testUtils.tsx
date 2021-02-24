@@ -79,16 +79,10 @@ export const defaultPortfolioPerformance = {
 };
 
 export const defaultAuth = {
-  signIn: async (_email: string) => {},
   signOut: () => {},
-  confirmEmail: (_email: string) => {},
-  reset: () => {},
-  signInWithGoogle: async () => {},
-  signInWithGithub: async () => {},
   state: 'SIGNED_OUT' as const,
   currentUser: null,
   isAdmin: false,
-  authError: '',
 };
 
 export const render = (ui: React.ReactElement, options?: RenderOptions) => {

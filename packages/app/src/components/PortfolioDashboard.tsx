@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { RiMoreLine, RiSubtractLine } from 'react-icons/ri';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
 import {
@@ -112,10 +113,9 @@ const charts = [
 
 interface PortfolioDashboardProps {
   isDemo?: boolean;
-  onSignIn?: () => void;
 }
 
-function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
+function PortfolioDashboard({ isDemo }: PortfolioDashboardProps) {
   // Context data
   const [startDate, setStartDate] = useStartDate();
   const { portfolio } = usePortfolio();
@@ -242,9 +242,13 @@ function PortfolioDashboard({ isDemo, onSignIn }: PortfolioDashboardProps) {
                   )}
               </div>
             )}
-            {isDemo && onSignIn && (
+            {isDemo && (
               <ActionsRow>
-                <Button variant="shout" onClick={onSignIn}>
+                <Button
+                  variant="shout"
+                  as={Link}
+                  otherProps={{ to: '/signin' }}
+                >
                   Make Your Own
                 </Button>
               </ActionsRow>

@@ -27,11 +27,10 @@ const Container = styled.div`
 `;
 
 interface PortfolioProps {
-  onSignIn: () => void;
   isDemo?: boolean;
 }
 
-function Portfolio({ onSignIn, isDemo }: PortfolioProps) {
+function Portfolio({ isDemo }: PortfolioProps) {
   useScrollToTopOnMount();
   return (
     <Container>
@@ -42,7 +41,7 @@ function Portfolio({ onSignIn, isDemo }: PortfolioProps) {
         <Type scale="h3">Portfolio</Type>
       </TitleRow>
       <PortfolioProcessorProvider>
-        <PortfolioDashboard isDemo={isDemo} onSignIn={onSignIn} />
+        <PortfolioDashboard isDemo={isDemo} />
       </PortfolioProcessorProvider>
     </Container>
   );

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense } from 'react';
 import { Switch, Route, Redirect, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
@@ -20,6 +20,7 @@ import { theme } from 'theme';
 const Portfolio = lazy(() => import('views/App/Portfolio'));
 const Activities = lazy(() => import('views/App/Activities'));
 const Create = lazy(() => import('views/App/Create'));
+const SignIn = lazy(() => import('views/App/SignIn'));
 
 if (window.location.hostname === 'localhost') {
   if (!window.firestoreConfigured) {
@@ -45,27 +46,27 @@ const Container = styled.div`
 `;
 
 function AppShell() {
-  const [showSignIn, setShowSignIn] = useState(false);
   const { state } = useAuth();
   const { portfolio, portfolios, loaded: portfolioLoaded } = usePortfolio();
 
   return (
     <Container>
-      <NavBar showSignIn={showSignIn} setShowSignIn={setShowSignIn} />
+      <NavBar />
 
       <Suspense fallback={<TopLinearLoader />}>
-        {state !== 'SIGNED_IN' &&
-          state !== 'SIGNING_IN' &&
-          state !== 'UNKNOWN' && (
-            <Switch>
-              <Route path="/demo" exact>
-                <Portfolio onSignIn={() => setShowSignIn(true)} isDemo />
-              </Route>
-              <Route>
-                <Redirect to="/demo" />
-              </Route>
-            </Switch>
-          )}
+        {state !== 'SIGNED_IN' && state !== 'UNKNOWN' && (
+          <Switch>
+            <Route path="/demo" exact>
+              <Portfolio isDemo />
+            </Route>
+            <Route path="/signin" exact>
+              <SignIn />
+            </Route>
+            <Route>
+              <Redirect to="/demo" />
+            </Route>
+          </Switch>
+        )}
 
         {state === 'SIGNED_IN' &&
           portfolioLoaded &&
@@ -94,7 +95,7 @@ function AppShell() {
           !!portfolios.length && (
             <Switch>
               <Route path="/portfolio/:portfolioId" exact>
-                <Portfolio onSignIn={() => setShowSignIn(true)} />
+                <Portfolio />
               </Route>
               <Route path="/portfolio/:portfolioId/activities" exact>
                 <Activities />
