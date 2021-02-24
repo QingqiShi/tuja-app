@@ -50,6 +50,15 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          environment: production
+          sourcemaps: './packages/app/build/js'
       - name: Deploy to Firebase Hosting
         if: steps.changes.outputs.hosting == 'true' || steps.changes.outputs.root == 'true'
         uses: w9jds/firebase-action@master
