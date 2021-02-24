@@ -33,7 +33,10 @@ if (window.location.hostname === 'localhost') {
   }
   firebase.functions().useEmulator('localhost', 5001);
 } else {
-  firebase.firestore().settings({ ignoreUndefinedProperties: true });
+  firebase.firestore().settings({
+    ignoreUndefinedProperties: true,
+    experimentalAutoDetectLongPolling: true,
+  });
 }
 
 dayjs.extend(isSameOrBefore);
