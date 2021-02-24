@@ -4,7 +4,7 @@ import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion';
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 import { card } from '../../mixins';
 
-const Container = motion.custom(styled.div`
+const Container = motion(styled.div`
   position: fixed;
   top: 0;
   right: 0;
@@ -29,7 +29,7 @@ const Backdrop = styled.div`
     transparentize(0.1, theme.colors.backgroundMain)};
 `;
 
-const ModalCard = motion.custom(styled.div<{
+const ModalCard = motion(styled.div<{
   padding?: boolean;
   minWidth?: number;
   maxWidth?: number;
