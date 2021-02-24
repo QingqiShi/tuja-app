@@ -51,6 +51,7 @@ function UserSignUp() {
               firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
           },
           firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          firebase.auth.FacebookAuthProvider.PROVIDER_ID,
           firebase.auth.GithubAuthProvider.PROVIDER_ID,
         ],
       };
