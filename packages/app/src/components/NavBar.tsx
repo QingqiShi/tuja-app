@@ -24,12 +24,7 @@ const ModalContainer = styled.div`
   position: relative;
 `;
 
-interface NavBarProps {
-  showSignIn?: boolean;
-  setShowSignIn?: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
+function NavBar() {
   const { state, signOut } = useAuth();
   const { portfolio } = usePortfolio();
   const location = useLocation();
@@ -60,11 +55,13 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
   }
 
   if (state === 'SIGNED_IN') {
-    menu.push({
-      children: 'Set benchmark',
-      startIcon: <RiArrowLeftRightLine />,
-      onClick: () => setShowBenchmarkModal(true),
-    });
+    if (portfolio) {
+      menu.push({
+        children: 'Set benchmark',
+        startIcon: <RiArrowLeftRightLine />,
+        onClick: () => setShowBenchmarkModal(true),
+      });
+    }
     menu.push({
       children: 'Create portfolio',
       startIcon: <RiMenuAddLine />,
