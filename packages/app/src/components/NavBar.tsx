@@ -1,6 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useClickAway } from 'react-use';
 import styled from 'styled-components/macro';
 import { FaUserCircle } from 'react-icons/fa';
 import {
@@ -11,53 +10,12 @@ import {
   RiDeleteBinLine,
   RiArrowLeftRightLine,
 } from 'react-icons/ri';
-import { Modal, TopBar, Type } from '@tuja/components';
-import { theme } from 'theme';
+import { Logo, Modal, TopBar, Type } from '@tuja/components';
 import useAuth from 'hooks/useAuth';
 import usePortfolio from 'hooks/usePortfolio';
 import { updatePortfolioBenchmark } from 'libs/portfolioClient';
 import { getDB, clearCache } from 'libs/cachedStocksData';
-import SignIn from './SignIn';
 import SetBenchmarkForm from './SetBenchmarkForm';
-
-const PopOut = styled.div`
-  position: fixed;
-  z-index: 200;
-  top: calc(4rem + ${theme.spacings('xs')});
-  right: ${theme.spacings('xs')};
-
-  @media (${theme.breakpoints.minTablet}) {
-    right: ${theme.spacings('s')};
-  }
-  @media (${theme.breakpoints.minLaptop}) {
-    top: calc(3.5rem + ${theme.spacings('xs')});
-    right: ${theme.spacings('m')};
-  }
-  @media (${theme.breakpoints.minDesktop}) {
-    right: ${theme.spacings('l')};
-  }
-`;
-
-const Title = styled(Type)`
-  position: relative;
-  display: inline-block;
-  margin-right: 2em;
-  font-weight: 800;
-  user-select: none;
-  color: ${theme.colors.textOnBackground};
-`;
-
-const BetaBadge = styled.span`
-  font-size: 0.5em;
-  font-weight: ${theme.fonts.ctaWeight};
-  line-height: ${theme.fonts.ctaHeight};
-  letter-spacing: ${theme.fonts.ctaSpacing};
-  text-transform: uppercase;
-  position: absolute;
-  right: -0.3em;
-  top: 0;
-  width: 0;
-`;
 
 const ModalContainer = styled.div`
   width: 400px;
@@ -75,21 +33,6 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
   const { state, signOut } = useAuth();
   const { portfolio } = usePortfolio();
   const location = useLocation();
-
-  const [internalShow, setInternalShow] = useState(false);
-
-  const popOutRef = useRef<HTMLDivElement>(null);
-  useClickAway(popOutRef, () => (setShowSignIn ?? setInternalShow)(false));
-
-  useEffect(() => {
-    if (
-      state === 'CONFIRM_EMAIL' ||
-      state === 'SIGNING_IN' ||
-      state === 'EMAIL_SENT'
-    ) {
-      (setShowSignIn ?? setInternalShow)(true);
-    }
-  }, [setShowSignIn, state]);
 
   const [showBenchmarkModal, setShowBenchmarkModal] = useState(false);
 
@@ -158,7 +101,10 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
       children: 'Sign in',
       startIcon: <FaUserCircle />,
       variant: 'shout',
-      onClick: () => (setShowSignIn ?? setInternalShow)((val) => !val),
+      as: Link as any,
+      otherProps: {
+        to: '/signin',
+      },
     });
   }
 
@@ -166,21 +112,14 @@ function NavBar({ showSignIn, setShowSignIn }: NavBarProps) {
     <>
       <TopBar
         links={links}
-        endLinks={endLinks}
+        endLinks={location.pathname !== '/signin' ? endLinks : []}
         menu={menu}
         logo={
           <Link to="/">
-            <Title scale="h6" noMargin>
-              Tuja <BetaBadge>beta</BetaBadge>
-            </Title>
+            <Logo />
           </Link>
         }
       />
-      {(showSignIn ?? internalShow) && (
-        <PopOut>
-          <SignIn ref={popOutRef} />
-        </PopOut>
-      )}
       {portfolio && (
         <Modal
           onClose={() => setShowBenchmarkModal(false)}
