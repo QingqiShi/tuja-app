@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { RiMoreLine, RiSubtractLine } from 'react-icons/ri';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import dayjs from 'dayjs';
 import {
