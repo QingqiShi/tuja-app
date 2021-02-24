@@ -31,6 +31,24 @@ firebase.initializeApp({
   measurementId: 'G-EFQ8TK3ZR3',
 });
 
+const firebaseToSentryLevel = {
+  error: 'error' as const,
+  warn: 'warning' as const,
+  info: 'info' as const,
+  debug: 'debug' as const,
+  verbose: 'log' as const,
+  silent: 'log' as const,
+};
+
+firebase.onLog(
+  ({ args, level }) => {
+    Sentry.captureException(args, {
+      level: Sentry.Severity.fromString(firebaseToSentryLevel[level]),
+    });
+  },
+  { level: 'warn' }
+);
+
 (async () => {
   const isAnalyticsSupported = await firebase.analytics.isSupported();
   setAnalyticsSupport(isAnalyticsSupported);
