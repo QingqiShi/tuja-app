@@ -39,6 +39,40 @@ test('get stocks live prices', async () => {
   expect(response.status).toBe(200);
 });
 
+test('correct previous close and change amount', async () => {
+  // Given
+  (global.fetch as jest.Mock).mockReturnValueOnce({
+    json: async () => ({
+      date: '2021-01-22',
+      code: 'VUKE.LSE',
+      close: 6,
+      previousClose: 400,
+    }),
+  });
+  const request = new Request(
+    'http://localhost/bulkLivePrices?tickers=VUKE.LSE'
+  );
+
+  // When
+  const response = await handleBulkLivePrices(request as never);
+
+  // Then
+  expect(global.fetch as jest.Mock).toHaveBeenCalledWith(
+    'https://eodhistoricaldata.com/api/real-time/VUKE.LSE?fmt=json&api_token=test-api'
+  );
+  expect(await response.json()).toEqual([
+    {
+      date: '2021-01-22',
+      code: 'VUKE.LSE',
+      close: 6,
+      previousClose: 4,
+      change: 2,
+      change_p: 50,
+    },
+  ]);
+  expect(response.status).toBe(200);
+});
+
 test('error when missing tickers', async () => {
   // Given
   const request = new Request('http://localhost/bulkLivePrices');

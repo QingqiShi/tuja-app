@@ -1,4 +1,6 @@
 import { stocksClient } from '@tuja/libs';
+import { correctPrice } from '../utils/correctPrice';
+import priceCorrection from '../constants/priceCorrection.json';
 
 export const handleBulkLivePrices = async (
   request: Request
@@ -17,7 +19,25 @@ export const handleBulkLivePrices = async (
 
   const client = stocksClient({ fetch, apiKey: EOD_API_KEY });
   const livePrices = await Promise.all(
-    tickers.map((ticker) => client.livePrice(ticker))
+    tickers.map(async (ticker) => {
+      const livePrice = await client.livePrice(ticker);
+
+      const correction =
+        priceCorrection[ticker as keyof typeof priceCorrection];
+
+      if (correction && livePrice) {
+        const previousClose = correctPrice(livePrice.previousClose, correction);
+        const change =
+          livePrice.close !== 'NA' ? livePrice.close - previousClose : 0;
+        return {
+          ...livePrice,
+          previousClose,
+          change,
+          change_p: (change / previousClose) * 100,
+        };
+      }
+      return livePrice;
+    })
   );
 
   return new Response(JSON.stringify(livePrices), {

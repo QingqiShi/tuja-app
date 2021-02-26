@@ -67,6 +67,36 @@ test('get price of ticker at current date', async () => {
   expect(response.status).toBe(200);
 });
 
+test('correct price at historic date', async () => {
+  // Given
+  (global.fetch as jest.Mock).mockReturnValueOnce({
+    json: async () => [
+      { date: '2021-01-01', close: 5000 },
+      { date: '2021-01-02', close: 10000 },
+    ],
+  });
+  const request = new Request(
+    'http://localhost/priceAt?ticker=VUCP.LSE&at=2021-01-02'
+  );
+
+  // When
+  const response = await handlePriceAt(request as never);
+
+  // Then
+  expect(
+    global.fetch as jest.Mock
+  ).toHaveBeenCalledWith(
+    'https://eodhistoricaldata.com/api/eod/VUCP.LSE?from=2020-12-28&to=2021-01-02&fmt=json&api_token=test-api',
+    { cf: { cacheEverything: true, cacheTtl: 2592000 } }
+  );
+  expect(await response.json()).toEqual({
+    price: 100,
+    priceInCurrency: 100,
+    ticker: 'VUCP.LSE',
+  });
+  expect(response.status).toBe(200);
+});
+
 test('get price of ticker with currency conversion', async () => {
   // Given
   const date = dayjs().format('YYYY-MM-DD');

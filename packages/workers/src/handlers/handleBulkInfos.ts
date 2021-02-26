@@ -1,4 +1,6 @@
 import { stocksClient } from '@tuja/libs';
+import { correctPrice } from '../utils/correctPrice';
+import priceCorrection from '../constants/priceCorrection.json';
 
 export const handleBulkInfos = async (request: Request): Promise<Response> => {
   const params = new URL(request.url).searchParams;
@@ -20,7 +22,22 @@ export const handleBulkInfos = async (request: Request): Promise<Response> => {
       fetch(url, { cf: { cacheTtl: 2592000, cacheEverything: true } }),
     apiKey: EOD_API_KEY,
   });
-  const infos = await Promise.all(tickers.map((ticker) => client.info(ticker)));
+  const infos = await Promise.all(
+    tickers.map(async (ticker) => {
+      const info = await client.info(ticker);
+
+      const correction =
+        priceCorrection[ticker as keyof typeof priceCorrection];
+
+      if (correction && info) {
+        return {
+          ...info,
+          previousClose: correctPrice(info.previousClose, correction),
+        };
+      }
+      return info;
+    })
+  );
 
   return new Response(JSON.stringify(infos), {
     headers: { 'content-type': 'application/json;charset=UTF-8' },

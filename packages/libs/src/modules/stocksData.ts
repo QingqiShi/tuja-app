@@ -9,6 +9,7 @@ export interface StockInfo {
   Type: string;
   Country: string;
   Currency: string;
+  previousClose: number;
 }
 
 export interface StockHistoryItem {
@@ -95,7 +96,8 @@ const info = async (ticker: string) => {
 const priceAt = async (
   ticker: string,
   at: string | Date,
-  currency?: string
+  currency?: string,
+  correctPrice = (price: number) => price
 ) => {
   const DATE_FORMAT = 'YYYY-MM-DD';
   const requestDate =
@@ -146,7 +148,7 @@ const priceAt = async (
       forexPair ? livePrice(forexPair) : undefined,
     ]);
     if (!price) return undefined;
-    const close = getClosePrice(price, tickerCurrency);
+    const close = correctPrice(getClosePrice(price, tickerCurrency));
     return {
       ticker,
       price: close,
@@ -172,7 +174,7 @@ const priceAt = async (
   const price = tickerHistory[tickerHistory.length - 1];
   const forex = forexHistory && forexHistory[forexHistory.length - 1];
 
-  const close = getClosePrice(price, tickerCurrency);
+  const close = correctPrice(getClosePrice(price, tickerCurrency));
   return {
     ticker,
     price: close,
