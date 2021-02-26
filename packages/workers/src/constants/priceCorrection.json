@@ -1,0 +1,18 @@
+{
+  "VWRL.LSE": {
+    "above": 1000,
+    "factor": 0.01
+  },
+  "IHHG.LSE": {
+    "above": 100,
+    "factor": 0.01
+  },
+  "VUKE.LSE": {
+    "above": 100,
+    "factor": 0.01
+  },
+  "VUCP.LSE": {
+    "above": 100,
+    "factor": 0.01
+  }
+}

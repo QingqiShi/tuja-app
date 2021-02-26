@@ -53,6 +53,37 @@ test('get stocks infos', async () => {
   expect(response.status).toBe(200);
 });
 
+test('correct previous close price', async () => {
+  // Given
+  (global.fetch as jest.Mock).mockReturnValue({
+    json: async () => [
+      { Code: 'IHHG', Exchange: 'LSE', Currency: 'GBP', previousClose: 200 },
+    ],
+  });
+  const request = new Request('http://localhost/bulkInfos?tickers=IHHG.LSE');
+
+  // When
+  const response = await handleBulkInfos(request as never);
+
+  // Then
+  expect(
+    global.fetch as jest.Mock
+  ).toHaveBeenCalledWith(
+    'https://eodhistoricaldata.com/api/search/IHHG?api_token=test-api',
+    { cf: { cacheEverything: true, cacheTtl: 2592000 } }
+  );
+  expect(await response.json()).toEqual([
+    {
+      Ticker: 'IHHG.LSE',
+      Code: 'IHHG',
+      Exchange: 'LSE',
+      Currency: 'GBP',
+      previousClose: 2,
+    },
+  ]);
+  expect(response.status).toBe(200);
+});
+
 test('error when missing tickers', async () => {
   // Given
   const request = new Request('http://localhost/bulkInfos');

@@ -72,6 +72,46 @@ test('get stocks historic eods', async () => {
   expect(response.status).toBe(200);
 });
 
+test('correct eod prices', async () => {
+  // Given
+  (global.fetch as jest.Mock).mockReturnValueOnce({
+    json: async () => [
+      { date: '2021-01-20', close: 5000 },
+      { date: '2021-01-21', close: 6000 },
+    ],
+  });
+  const request = new Request(
+    `http://localhost/bulkEods?query=${encodeURIComponent(
+      JSON.stringify([
+        { ticker: 'VWRL.LSE', from: '2021-01-20', to: '2021-01-22' },
+      ])
+    )}`
+  );
+
+  // When
+  const response = await handleBulkEods(request as never);
+
+  // Then
+  expect(
+    global.fetch as jest.Mock
+  ).toHaveBeenCalledWith(
+    'https://eodhistoricaldata.com/api/eod/VWRL.LSE?from=2021-01-20&to=2021-01-22&fmt=json&api_token=test-api',
+    { cf: { cacheEverything: true, cacheTtl: 2592000 } }
+  );
+  expect(await response.json()).toEqual([
+    {
+      ticker: 'VWRL.LSE',
+      from: '2021-01-20',
+      to: '2021-01-22',
+      history: [
+        { date: '2021-01-20', close: 50 },
+        { date: '2021-01-21', close: 60 },
+      ],
+    },
+  ]);
+  expect(response.status).toBe(200);
+});
+
 test('error when missing query', async () => {
   // Given
   const request = new Request('http://localhost/bulkEods');
