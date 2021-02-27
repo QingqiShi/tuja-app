@@ -8,11 +8,15 @@
     "factor": 0.01
   },
   "VUKE.LSE": {
-    "above": 100,
+    "above": 300,
     "factor": 0.01
   },
   "VUCP.LSE": {
-    "above": 100,
+    "above": 600,
+    "factor": 0.01
+  },
+  "VVAL.LSE": {
+    "above": 500,
     "factor": 0.01
   }
 }
