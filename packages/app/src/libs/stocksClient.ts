@@ -153,7 +153,6 @@ export function fetchStocksPrices(
           ).then((res) => res.json())
         )
       );
-
       return data.reduce(
         (obj, price) => ({ ...obj, [price.ticker]: price }),
         {} as { [ticker: string]: StockPrice }

@@ -167,8 +167,10 @@ function ActivityTradeForm({
             ({ Ticker }) => !searchResult.find((s) => s.Ticker === Ticker)
           ),
         ]);
-      } catch {
-        // do nothing
+      } catch (e) {
+        if (e !== 'AbortError') {
+          throw e;
+        }
       }
     } else {
       const portfolioHoldings = getPortfolioSuggestions(portfolioPerformance);
