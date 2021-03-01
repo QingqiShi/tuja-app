@@ -79,8 +79,14 @@ function SetBenchmarkForm({
 
       const fetchStockSearchController = fetchStockSearch(debouncedSearchQuery);
       cancelRef.current = fetchStockSearchController.cancel;
-      const data = await fetchStockSearchController.fetch();
-      setSearchSuggestions(data);
+      try {
+        const data = await fetchStockSearchController.fetch();
+        setSearchSuggestions(data);
+      } catch (e) {
+        if (e.name !== 'AbortError') {
+          throw e;
+        }
+      }
     };
 
     if (debouncedSearchQuery) {

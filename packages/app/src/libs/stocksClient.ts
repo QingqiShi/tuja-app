@@ -120,19 +120,13 @@ export function fetchStockSearch(query: string) {
   const signal = controller.signal;
   return {
     fetch: async () => {
-      try {
-        const response = await fetch(
-          `${
-            process.env.REACT_APP_WORKERS_URL
-          }/search?query=${encodeURIComponent(query)}`,
-          { signal }
-        );
-        return (await response.json()) as StockInfo[];
-      } catch (e) {
-        if (e.name !== 'AbortError') {
-          throw e;
-        }
-      }
+      const response = await fetch(
+        `${process.env.REACT_APP_WORKERS_URL}/search?query=${encodeURIComponent(
+          query
+        )}`,
+        { signal }
+      );
+      return (await response.json()) as StockInfo[];
     },
     cancel: () => controller.abort(),
   };
@@ -147,28 +141,22 @@ export function fetchStocksPrices(
   const signal = controller.signal;
   return {
     fetch: async () => {
-      try {
-        const data: StockPrice[] = await Promise.all(
-          tickers.map(async (ticker) =>
-            fetch(
-              `${
-                process.env.REACT_APP_WORKERS_URL
-              }/priceAt?ticker=${encodeURIComponent(ticker)}&at=${dayjs(
-                date
-              ).format(DATE_FORMAT)}&currency=${currency}`,
-              { signal }
-            ).then((res) => res.json())
-          )
-        );
-        return data.reduce(
-          (obj, price) => ({ ...obj, [price.ticker]: price }),
-          {} as { [ticker: string]: StockPrice }
-        );
-      } catch (e) {
-        if (e.name !== 'AbortError') {
-          throw e;
-        }
-      }
+      const data: StockPrice[] = await Promise.all(
+        tickers.map(async (ticker) =>
+          fetch(
+            `${
+              process.env.REACT_APP_WORKERS_URL
+            }/priceAt?ticker=${encodeURIComponent(ticker)}&at=${dayjs(
+              date
+            ).format(DATE_FORMAT)}&currency=${currency}`,
+            { signal }
+          ).then((res) => res.json())
+        )
+      );
+      return data.reduce(
+        (obj, price) => ({ ...obj, [price.ticker]: price }),
+        {} as { [ticker: string]: StockPrice }
+      );
     },
     cancel: () => controller.abort(),
   };
