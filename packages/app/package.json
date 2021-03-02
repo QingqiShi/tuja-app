@@ -14,7 +14,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "@sentry/react": "^6.2.0",
+    "@sentry/react": "^6.2.1",
     "@sentry/tracing": "^6.2.1",
     "@tuja/components": "^0.0.0",
     "@tuja/libs": "^0.0.0",
