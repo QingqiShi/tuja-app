@@ -1,5 +1,4 @@
 import 'fake-indexeddb/auto';
-import { MdDescription } from 'react-icons/md';
 import type { MessageData } from './processor.worker';
 
 let listenerType: string;

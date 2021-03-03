@@ -38,14 +38,6 @@ const Holdings = styled.div`
   grid-area: holdings;
 `;
 
-const AutoInvest = styled(Card)`
-  grid-area: autoInvest;
-  h6 {
-    margin-top: 0;
-    margin-bottom: 1em;
-  }
-`;
-
 interface PortfolioListLayoutProps {
   overview: React.ReactNode;
   holdings: React.ReactNode;
