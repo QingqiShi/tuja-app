@@ -49,7 +49,8 @@ function PortfolioPieCard(_props: PortfolioPieCardProps) {
   const { portfolio } = usePortfolio();
   const { portfolioPerformance } = usePortfolioProcessor();
 
-  const portfolioValue = portfolioPerformance?.valueSeries.getLast() ?? 0;
+  const portfolioValue =
+    portfolioPerformance?.portfolio.valueSeries.getLast() ?? 0;
 
   const getColor = useColors();
   const pieData = portfolioPerformance

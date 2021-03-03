@@ -267,8 +267,12 @@ function PortfolioDashboard({ isDemo }: PortfolioDashboardProps) {
               <CardMedia>
                 {selectedChart === 'value' && (
                   <Chart
-                    data={portfolioPerformance?.valueSeries.data ?? []}
-                    benchmark={portfolioPerformance?.cashFlowSeries.data ?? []}
+                    data={
+                      portfolioPerformance?.portfolio.valueSeries.data ?? []
+                    }
+                    benchmark={
+                      portfolioPerformance?.portfolio.cashFlowSeries.data ?? []
+                    }
                     formatValue={(val) =>
                       formatCurrency(portfolio.currency, val)
                     }
@@ -278,7 +282,7 @@ function PortfolioDashboard({ isDemo }: PortfolioDashboardProps) {
                 )}
                 {selectedChart === 'gains' && (
                   <Chart
-                    data={portfolioPerformance?.gainSeries.data ?? []}
+                    data={portfolioPerformance?.portfolio.gainSeries.data ?? []}
                     formatValue={(val) =>
                       formatCurrency(portfolio.currency, val)
                     }
@@ -298,7 +302,10 @@ function PortfolioDashboard({ isDemo }: PortfolioDashboardProps) {
                 )}
                 {selectedChart === 'dividends' && (
                   <Bars
-                    data={portfolioPerformance?.monthlyDividends.data ?? []}
+                    data={
+                      portfolioPerformance?.portfolio.monthlyDividends.data ??
+                      []
+                    }
                     formatValue={(val) =>
                       formatCurrency(portfolio.currency, val)
                     }
@@ -306,7 +313,7 @@ function PortfolioDashboard({ isDemo }: PortfolioDashboardProps) {
                 )}
               </CardMedia>
             </ChartCard>
-            {portfolioPerformance && <InvestmentsList />}
+            {portfolioPerformance?.portfolio && <InvestmentsList />}
           </div>
         }
       />
