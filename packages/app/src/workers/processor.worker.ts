@@ -101,6 +101,7 @@ async function process(payload: ProcessPortfolioPayload) {
       calculatePerformance(portfolioId, payload, stocksData)
     )
   );
+  console.log(performances);
 
   const aggregated = aggregatePerformances(performances, payload);
 
