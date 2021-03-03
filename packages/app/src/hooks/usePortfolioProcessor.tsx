@@ -85,7 +85,7 @@ export function PortfolioProcessorProvider({
     console.log('loaded performance cache');
     const saved = localStorage.getItem(`performance-${portfolioIds}`);
     const parsed = saved && JSON.parse(saved);
-    if (parsed) {
+    if (parsed && 'portfolio' in parsed) {
       setPortfolioPerformance(
         processPerformanceSeries(
           parsed,
