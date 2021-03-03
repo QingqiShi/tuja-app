@@ -34,15 +34,21 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(minMax);
 
 interface ProcessPortfolioPayload {
-  snapshots: Snapshot[];
+  snapshots: { [portfolioId: string]: Snapshot[] };
   startDate: Date;
   endDate: Date;
   baseCurrency: Portfolio['currency'];
-  benchmark: Portfolio['benchmark'];
-  portfolioId: Portfolio['id'];
+  portfolioId?: Portfolio['id'];
+  benchmark?: Portfolio['benchmark'];
 }
 
-type MessageData = {
+interface StocksData {
+  stocksInfo: { [ticker: string]: StockInfo };
+  stocksHistory: { [ticker: string]: StockHistory };
+  stocksLivePrices: { [ticker: string]: ParsedLivePrice };
+}
+
+export type MessageData = {
   type: 'process-portfolio';
   payload: ProcessPortfolioPayload;
 };
@@ -58,7 +64,16 @@ addEventListener('message', async (event) => {
     return;
   }
 
-  await processPortfolio(messageData.payload);
+  messageData.payload.startDate.setHours(0);
+  messageData.payload.startDate.setMinutes(0);
+  messageData.payload.startDate.setSeconds(0);
+  messageData.payload.startDate.setMilliseconds(0);
+  messageData.payload.endDate.setHours(0);
+  messageData.payload.endDate.setMinutes(0);
+  messageData.payload.endDate.setSeconds(0);
+  messageData.payload.endDate.setMilliseconds(0);
+
+  await process(messageData.payload);
 });
 
 /**
@@ -68,40 +83,57 @@ function validate(messageData: MessageData) {
   if (messageData.type !== 'process-portfolio') return false;
   const { payload } = messageData;
   if (!payload) return false;
-  const { snapshots, baseCurrency, startDate, endDate, portfolioId } = payload;
-  if (!snapshots || !baseCurrency || !startDate || !endDate || !portfolioId)
-    return false;
+  const { snapshots, baseCurrency, startDate, endDate } = payload;
+  if (!snapshots || !baseCurrency || !startDate || !endDate) return false;
   return true;
 }
 
 /**
- * Process portfolio
+ * Process payload and get performance
  */
-async function processPortfolio(payload: ProcessPortfolioPayload) {
-  const {
-    snapshots,
-    baseCurrency,
-    startDate,
-    endDate,
-    benchmark,
-    portfolioId,
-  } = payload;
+async function process(payload: ProcessPortfolioPayload) {
+  const { snapshots, portfolioId } = payload;
 
-  // Open DB
-  const db = await getDB();
+  const stocksData = await fetchStocksData(payload);
+
+  const performances = await Promise.all(
+    Object.keys(snapshots).map((portfolioId) =>
+      calculatePerformance(portfolioId, payload, stocksData)
+    )
+  );
+
+  const aggregated = aggregatePerformances(performances, payload);
+
+  postMessage({
+    type: 'process-portfolio',
+    payload: {
+      ...aggregated,
+      portfolio:
+        performances.find((performance) => performance.id === portfolioId) ??
+        performances[0],
+    },
+  });
+}
+
+async function fetchStocksData(payload: ProcessPortfolioPayload) {
+  const { snapshots, benchmark, baseCurrency, startDate, endDate } = payload;
 
   // Find the tickers that have been held during the time frame
   const tickers = new Set<string>();
-  snapshots.forEach((snapshot) => {
-    Object.keys(snapshot.numShares).forEach((ticker) => {
-      if (snapshot.numShares[ticker]) {
-        tickers.add(ticker);
-      }
+  Object.values(snapshots)
+    .flatMap((snapshot) => snapshot)
+    .forEach((snapshot) => {
+      Object.keys(snapshot.numShares).forEach((ticker) => {
+        if (snapshot.numShares[ticker]) {
+          tickers.add(ticker);
+        }
+      });
     });
-  });
   if (benchmark) {
     tickers.add(benchmark);
   }
+
+  const db = await getDB();
 
   // Fetch stocks info and get required currency pairs
   const stocksInfo = await getStocksInfo(db, [...tickers]);
@@ -125,40 +157,27 @@ async function processPortfolio(payload: ProcessPortfolioPayload) {
 
   // Find the tickers are held at the end
   const finalHoldings = new Set<string>();
-  Object.keys(snapshots[snapshots.length - 1]?.numShares ?? {}).forEach(
-    (ticker) => {
-      if (snapshots[snapshots.length - 1].numShares[ticker]) {
+  Object.values(snapshots).forEach((snaps) => {
+    Object.keys(snaps[snaps.length - 1]?.numShares ?? {}).forEach((ticker) => {
+      if (snaps[snaps.length - 1]?.numShares[ticker]) {
         finalHoldings.add(ticker);
       }
-    }
-  );
+    });
+  });
   if (benchmark) {
     finalHoldings.add(benchmark);
   }
 
+  // Fetch data required
   const [stocksHistory, stocksLivePrices] = await Promise.all([
     getStocksHistory(db, [...tickers, ...currencies], startDate, endDate),
     getStocksLivePrice(db, [...finalHoldings, ...currencies]),
   ]);
 
-  mergeLivePricesIntoHistory(stocksLivePrices, stocksHistory);
-
-  // Process portfolio
-  const performance = calculatePerformance(
-    portfolioId,
-    snapshots,
-    baseCurrency,
-    startDate,
-    endDate,
-    stocksInfo,
-    stocksHistory,
-    stocksLivePrices,
-    benchmark
-  );
-
-  // Clean up and return results
   db.close();
-  postMessage({ type: 'process-portfolio', payload: performance });
+
+  mergeLivePricesIntoHistory(stocksLivePrices, stocksHistory);
+  return { stocksInfo, stocksHistory, stocksLivePrices };
 }
 
 /**
@@ -184,15 +203,13 @@ function mergeLivePricesIntoHistory(
  */
 function calculatePerformance(
   portfolioId: string,
-  snapshots: Snapshot[],
-  baseCurrency: string,
-  startDate: Date,
-  endDate: Date,
-  stocksInfo: { [ticker: string]: StockInfo },
-  stocksHistory: { [ticker: string]: StockHistory },
-  stocksLivePrice: { [ticker: string]: ParsedLivePrice },
-  benchmark?: string
-): PortfolioPerformance {
+  payload: ProcessPortfolioPayload,
+  stocksData: StocksData
+): PortfolioPerformance['portfolio'] {
+  const { snapshots, startDate, endDate, baseCurrency, benchmark } = payload;
+  const { stocksInfo, stocksHistory, stocksLivePrices } = stocksData;
+  const snaps = snapshots[portfolioId] ?? [];
+
   const valueSeries = new TimeSeries();
   const gainSeries = new TimeSeries();
   const dailyTwrrSeries = new TimeSeries();
@@ -202,7 +219,7 @@ function calculatePerformance(
   // Loop to get monthly dividends
   const startOfMonth = dayjs(startDate).startOf('month');
   const monthlyDividends = new TimeSeries();
-  snapshots.forEach((snapshot) => {
+  snaps.forEach((snapshot) => {
     if (!snapshot.dividend || startOfMonth.isAfter(snapshot.date)) return;
 
     const dividends = monthlyDividends.data;
@@ -221,7 +238,7 @@ function calculatePerformance(
 
   let benchmarkInitial = 0;
   iterateSnapshots({
-    snapshots,
+    snapshots: snaps,
     startDate,
     endDate,
     onDate: (date, snapshot, prevSnapshot) => {
@@ -275,12 +292,12 @@ function calculatePerformance(
   }
 
   const holdings = calcHoldings(
-    snapshots[snapshots.length - 1]?.numShares ?? {},
+    snaps[snaps.length - 1]?.numShares ?? {},
     endDate,
     baseCurrency,
     stocksInfo,
     stocksHistory,
-    stocksLivePrice
+    stocksLivePrices
   );
 
   return {
@@ -289,11 +306,87 @@ function calculatePerformance(
     gainSeries,
     twrrSeries,
     cashFlowSeries,
-    lastSnapshot: snapshots[snapshots.length - 1],
+    lastSnapshot: snaps[snaps.length - 1],
     totalHoldingsValue:
-      valueSeries.getLast() - (snapshots[snapshots.length - 1]?.cash ?? 0),
+      valueSeries.getLast() - (snaps[snaps.length - 1]?.cash ?? 0),
     holdings,
     benchmarkSeries: benchmark ? benchmarkSeries : undefined,
     monthlyDividends,
-  } as PortfolioPerformance;
+  };
+}
+
+function sumSeries(
+  performances: PortfolioPerformance['portfolio'][],
+  seriesName:
+    | 'valueSeries'
+    | 'gainSeries'
+    | 'cashFlowSeries'
+    | 'monthlyDividends',
+  date: Date
+) {
+  return [
+    date,
+    performances.reduce(
+      (sum, performance) => sum + performance[seriesName].get(date),
+      0
+    ),
+  ] as [Date, number];
+}
+
+function aggregatePerformances(
+  performances: PortfolioPerformance['portfolio'][],
+  payload: ProcessPortfolioPayload
+) {
+  const { snapshots, startDate, endDate } = payload;
+
+  let valueSeries = new TimeSeries();
+  let gainSeries = new TimeSeries();
+  let cashFlowSeries = new TimeSeries();
+  let monthlyDividends = new TimeSeries();
+
+  if (Object.values(snapshots).every((snaps) => !snaps.length)) {
+    return { valueSeries, gainSeries, cashFlowSeries, monthlyDividends };
+  }
+
+  const minStartDate = Math.min(
+    ...Object.values(snapshots)
+      .filter((snaps) => !!snaps.length)
+      .map((snaps) => snaps[0].date.getTime())
+  );
+  const startDay = dayjs(Math.max(startDate.getTime(), minStartDate));
+  const endDay = dayjs(endDate);
+
+  for (
+    let day = startDay;
+    day.isSameOrBefore(endDay, 'day');
+    day = day.add(1, 'day')
+  ) {
+    valueSeries.data.push(sumSeries(performances, 'valueSeries', day.toDate()));
+    gainSeries.data.push(sumSeries(performances, 'gainSeries', day.toDate()));
+    cashFlowSeries.data.push(
+      sumSeries(performances, 'cashFlowSeries', day.toDate())
+    );
+  }
+
+  // Loop to get monthly dividends
+  const startOfMonth = dayjs(startDate).startOf('month');
+  for (
+    let day = startOfMonth;
+    day.isSameOrBefore(endDay, 'month');
+    day = day.add(1, 'month')
+  ) {
+    const dividends = performances.reduce(
+      (sum, performance) =>
+        sum +
+        (performance.monthlyDividends.data.find((d) =>
+          day.isSame(d[0], 'month')
+        )?.[1] ?? 0),
+      0
+    );
+    if (dividends) {
+      monthlyDividends.data.push([day.toDate(), dividends]);
+    }
+  }
+
+  return { valueSeries, gainSeries, cashFlowSeries, monthlyDividends };
 }

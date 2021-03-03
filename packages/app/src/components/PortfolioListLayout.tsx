@@ -48,15 +48,10 @@ const AutoInvest = styled(Card)`
 
 interface PortfolioListLayoutProps {
   overview: React.ReactNode;
-  autoInvest: React.ReactNode;
   holdings: React.ReactNode;
 }
 
-function PortfolioListLayout({
-  overview,
-  autoInvest,
-  holdings,
-}: PortfolioListLayoutProps) {
+function PortfolioListLayout({ overview, holdings }: PortfolioListLayoutProps) {
   return (
     <LayoutGrid>
       <Overview>{overview}</Overview>
@@ -64,10 +59,6 @@ function PortfolioListLayout({
         <Type scale="h6">Investments</Type>
         {holdings}
       </Holdings>
-      <AutoInvest>
-        <Type scale="h6">Auto Invest</Type>
-        {autoInvest}
-      </AutoInvest>
     </LayoutGrid>
   );
 }

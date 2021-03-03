@@ -55,7 +55,7 @@ const ActionsContainer = styled.div`
 
 interface InvestmentsListItemProps {
   ticker: string;
-  holdingPerformance: PortfolioPerformance['holdings'][''];
+  holdingPerformance: PortfolioPerformance['portfolio']['holdings'][''];
   portfolioValue: number;
   showDetails?: boolean;
   mode?: 'GAIN' | 'VALUE' | 'ALLOCATION' | 'TODAY';

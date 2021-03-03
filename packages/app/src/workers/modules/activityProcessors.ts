@@ -58,7 +58,7 @@ export function calcHoldings(
   stocksHistory: { [ticker: string]: StockHistory },
   stocksLivePrice: { [ticker: string]: ParsedLivePrice }
 ) {
-  const holdings: PortfolioPerformance['holdings'] = {};
+  const holdings: PortfolioPerformance['portfolio']['holdings'] = {};
   Object.keys(numShares)
     .filter((ticker) => !!numShares[ticker])
     .forEach((ticker) => {

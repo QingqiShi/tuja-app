@@ -48,7 +48,7 @@ function InvestmentsList() {
   const { portfolio } = usePortfolio();
   const { portfolioPerformance, refresh } = usePortfolioProcessor();
 
-  const { holdings, valueSeries } = portfolioPerformance!;
+  const { holdings, valueSeries } = portfolioPerformance!.portfolio;
 
   const [showMore, setShowMore] = useState('');
   const [showAlias, setShowAlias] = useState(false);

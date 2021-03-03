@@ -29,53 +29,59 @@ export const defaultPortfolio = {
 };
 
 export const defaultPortfolioPerformance = {
-  id: 'test-portfolio',
-  totalHoldingsValue: 150,
-  holdings: {
-    'AAPL.US': {
-      value: 100,
-      units: 1,
-      info: {
-        Ticker: 'AAPL.US',
-        Code: 'AAPL',
-        Name: 'Apple Inc',
-        Currency: 'USD',
-      },
-      livePrice: {
-        date: new Date(),
-        code: 'AAPL.US',
-        close: 100,
-        previousClose: 100,
-        timestamp: new Date().getTime(),
-        change: 2.3,
-        change_p: 2.3,
-      },
-    },
-    'IUSA.LSE': {
-      value: 50,
-      units: 1,
-      info: {
-        Ticker: 'IUSA.LSE',
-        Code: 'IUSA',
-        Name: 'iShares S&P 500',
-        Currency: 'GBP',
-      },
-      livePrice: {
-        date: new Date(),
-        code: 'IUSA.LSE',
-        close: 50,
-        previousClose: 50,
-        times5p: new Date().getTime(),
-        change: 3.5,
-        change_p: 7,
-      },
-    },
-  },
   valueSeries: new TimeSeries({ data: [[new Date(), 150]] }),
   twrrSeries: new TimeSeries(),
   gainSeries: new TimeSeries(),
   cashFlowSeries: new TimeSeries(),
-  monthlyDividends: new TimeSeries(),
+  portfolio: {
+    id: 'test-portfolio',
+    totalHoldingsValue: 150,
+    holdings: {
+      'AAPL.US': {
+        value: 100,
+        units: 1,
+        info: {
+          Ticker: 'AAPL.US',
+          Code: 'AAPL',
+          Name: 'Apple Inc',
+          Currency: 'USD',
+        },
+        livePrice: {
+          date: new Date(),
+          code: 'AAPL.US',
+          close: 100,
+          previousClose: 100,
+          timestamp: new Date().getTime(),
+          change: 2.3,
+          change_p: 2.3,
+        },
+      },
+      'IUSA.LSE': {
+        value: 50,
+        units: 1,
+        info: {
+          Ticker: 'IUSA.LSE',
+          Code: 'IUSA',
+          Name: 'iShares S&P 500',
+          Currency: 'GBP',
+        },
+        livePrice: {
+          date: new Date(),
+          code: 'IUSA.LSE',
+          close: 50,
+          previousClose: 50,
+          times5p: new Date().getTime(),
+          change: 3.5,
+          change_p: 7,
+        },
+      },
+    },
+    valueSeries: new TimeSeries({ data: [[new Date(), 150]] }),
+    twrrSeries: new TimeSeries(),
+    gainSeries: new TimeSeries(),
+    cashFlowSeries: new TimeSeries(),
+    monthlyDividends: new TimeSeries(),
+  },
 };
 
 export const defaultAuth = {

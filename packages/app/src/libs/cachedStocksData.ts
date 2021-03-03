@@ -75,7 +75,7 @@ export async function getStocksInfo(db: Database, tickers: string[]) {
     await Promise.all(
       fetchedStocksInfo.map((stockInfo) => {
         stocksInfo[stockInfo.Ticker] = stockInfo;
-        return writeStore.add(stockInfo);
+        return writeStore.put(stockInfo);
       })
     );
     await writeTx.done;
