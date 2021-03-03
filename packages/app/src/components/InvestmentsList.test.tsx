@@ -13,13 +13,13 @@ test('sort by today', async () => {
   expect(
     getByText(
       investmentItems[0],
-      defaultPortfolioPerformance.holdings['IUSA.LSE'].info.Name
+      defaultPortfolioPerformance.portfolio.holdings['IUSA.LSE'].info.Name
     )
   ).toBeInTheDocument();
   expect(
     getByText(
       investmentItems[1],
-      defaultPortfolioPerformance.holdings['AAPL.US'].info.Name
+      defaultPortfolioPerformance.portfolio.holdings['AAPL.US'].info.Name
     )
   ).toBeInTheDocument();
 });
@@ -35,13 +35,13 @@ test('sort by gain', async () => {
   expect(
     getByText(
       investmentItems[0],
-      defaultPortfolioPerformance.holdings['IUSA.LSE'].info.Name
+      defaultPortfolioPerformance.portfolio.holdings['IUSA.LSE'].info.Name
     )
   ).toBeInTheDocument();
   expect(
     getByText(
       investmentItems[1],
-      defaultPortfolioPerformance.holdings['AAPL.US'].info.Name
+      defaultPortfolioPerformance.portfolio.holdings['AAPL.US'].info.Name
     )
   ).toBeInTheDocument();
 });
@@ -57,13 +57,13 @@ test('sort by value', async () => {
   expect(
     getByText(
       investmentItems[0],
-      defaultPortfolioPerformance.holdings['AAPL.US'].info.Name
+      defaultPortfolioPerformance.portfolio.holdings['AAPL.US'].info.Name
     )
   ).toBeInTheDocument();
   expect(
     getByText(
       investmentItems[1],
-      defaultPortfolioPerformance.holdings['IUSA.LSE'].info.Name
+      defaultPortfolioPerformance.portfolio.holdings['IUSA.LSE'].info.Name
     )
   ).toBeInTheDocument();
 });
@@ -81,13 +81,13 @@ test('sort by allocation', async () => {
   expect(
     getByText(
       investmentItems[0],
-      defaultPortfolioPerformance.holdings['AAPL.US'].info.Name
+      defaultPortfolioPerformance.portfolio.holdings['AAPL.US'].info.Name
     )
   ).toBeInTheDocument();
   expect(
     getByText(
       investmentItems[1],
-      defaultPortfolioPerformance.holdings['IUSA.LSE'].info.Name
+      defaultPortfolioPerformance.portfolio.holdings['IUSA.LSE'].info.Name
     )
   ).toBeInTheDocument();
 });

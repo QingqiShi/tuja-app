@@ -117,8 +117,8 @@ const getInitialCost = (activity?: Activity) => {
 const getPortfolioSuggestions = (
   portfolioPerformance?: PortfolioPerformance | null
 ) =>
-  Object.keys(portfolioPerformance?.holdings ?? {})
-    .map((ticker) => portfolioPerformance?.holdings?.[ticker].info)
+  Object.keys(portfolioPerformance?.portfolio.holdings ?? {})
+    .map((ticker) => portfolioPerformance?.portfolio.holdings?.[ticker].info)
     .filter((info): info is StockInfo => !!info);
 
 function decodeHtml(html: string) {

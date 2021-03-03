@@ -53,18 +53,20 @@ function PortfolioPieCard(_props: PortfolioPieCardProps) {
 
   const getColor = useColors();
   const pieData = portfolioPerformance
-    ? Object.keys(portfolioPerformance.holdings)
+    ? Object.keys(portfolioPerformance.portfolio.holdings)
         .map((ticker) => ({
           label: ticker,
           percentage: portfolioValue
-            ? portfolioPerformance.holdings[ticker].value / portfolioValue
+            ? portfolioPerformance.portfolio.holdings[ticker].value /
+              portfolioValue
             : 0,
           color: getColor(ticker),
         }))
         .concat({
           label: 'Cash',
           percentage: portfolioValue
-            ? (portfolioPerformance.lastSnapshot?.cash ?? 0) / portfolioValue
+            ? (portfolioPerformance.portfolio.lastSnapshot?.cash ?? 0) /
+              portfolioValue
             : 0,
           color: getColor('Cash'),
         })

@@ -10,7 +10,7 @@ function useColors() {
   const { portfolioPerformance } = usePortfolioProcessor();
 
   const getColor = useMemo(() => {
-    const holdings = portfolioPerformance?.holdings;
+    const holdings = portfolioPerformance?.portfolio.holdings;
     const domain = holdings
       ? Object.keys(holdings ?? {})
           .map((ticker) => ticker)
@@ -26,7 +26,7 @@ function useColors() {
         .ordinals({ theme: styledTheme })
         .map((color) => transparentize(0.6, color)),
     ]);
-  }, [portfolioPerformance?.holdings, styledTheme]);
+  }, [portfolioPerformance?.portfolio.holdings, styledTheme]);
   return getColor;
 }
 

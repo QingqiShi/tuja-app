@@ -16,36 +16,50 @@ import {
   snapshotBatchFromDb,
 } from '@tuja/libs';
 import type { ParsedLivePrice } from 'libs/stocksClient';
+import { logEvent } from 'libs/analytics';
 
 const ACTIVITIES_PAGE_LIMIT = 10;
 
 export interface PortfolioPerformance {
-  id: string;
   valueSeries: TimeSeries;
-  twrrSeries: TimeSeries;
-  gainSeries: TimeSeries;
   cashFlowSeries: TimeSeries;
-  benchmarkSeries?: TimeSeries;
-  lastSnapshot?: Snapshot;
-  totalHoldingsValue: number;
-  holdings: {
-    [ticker: string]: {
-      value: number;
-      units: number;
-      info: StockInfo;
-      livePrice: ParsedLivePrice;
-    };
-  };
+  gainSeries: TimeSeries;
   monthlyDividends: TimeSeries;
+  // twrrSeries: TimeSeries;
+  portfolio: {
+    id: string;
+    valueSeries: TimeSeries;
+    cashFlowSeries: TimeSeries;
+    twrrSeries: TimeSeries;
+    gainSeries: TimeSeries;
+    monthlyDividends: TimeSeries;
+    benchmarkSeries?: TimeSeries;
+    totalHoldingsValue: number;
+    holdings: {
+      [ticker: string]: {
+        value: number;
+        units: number;
+        info: StockInfo;
+        livePrice: ParsedLivePrice;
+      };
+    };
+    lastSnapshot?: Snapshot;
+  };
 }
 
 export interface MaybePortfolioPerformance extends PortfolioPerformance {
   valueSeries: any;
-  twrrSeries: any;
   gainSeries: any;
   cashFlowSeries: any;
-  monthlyDividends: any;
-  benchmarkSeries?: any;
+
+  portfolio: PortfolioPerformance['portfolio'] & {
+    valueSeries: any;
+    gainSeries: any;
+    cashFlowSeries: any;
+    twrrSeries: any;
+    monthlyDividends: any;
+    benchmarkSeries?: any;
+  };
 }
 
 export const createPortfolio = async (
@@ -77,7 +91,8 @@ export const watchPortfolios = (
     .collection(`/portfolios`)
     .where('user', '==', uid);
   return collectionRef.onSnapshot((collection) => {
-    console.log('received portfolio update');
+    // Analytics
+    logEvent('receive_portfolio');
     const docs = collection.docs;
     if (collection.empty || docs.length <= 0) {
       onSnap([]);
@@ -206,30 +221,37 @@ export const updateActivity = async (
 };
 
 export const watchSnapshots = (
-  portfolioId: string,
+  portfolioIds: string[],
   startDate: Date,
-  onSnap: (snapshots: Snapshot[]) => void
+  onSnap: (portfolioId: string, snapshots: Snapshot[]) => void
 ) => {
   // Get the start of the calendar month of the startDate
   const startOfMonth = dayjs(startDate).startOf('month');
-  const query = firebase
-    .firestore()
-    .collection(`/portfolios/${portfolioId}/snapshots`)
-    .orderBy('endDate', 'asc')
-    .startAt(startOfMonth.format('YYYY-MM-DD'));
-  return query.onSnapshot((snapshot) => {
-    console.log('received snapshots update');
-    const docs = snapshot.docs;
-    if (snapshot.empty || docs.length <= 0) {
-      onSnap([]);
-      return;
-    }
-    onSnap(
-      docs.flatMap(
-        (doc) => snapshotBatchFromDb(doc.data() as DbSnapshotBatch).snapshots
-      )
-    );
+  const cleanupFns = portfolioIds.map((id) => {
+    const query = firebase
+      .firestore()
+      .collection(`/portfolios/${id}/snapshots`)
+      .orderBy('endDate', 'asc')
+      .startAt(startOfMonth.format('YYYY-MM-DD'));
+    return query.onSnapshot((snapshot) => {
+      // Analytics
+      logEvent('receive_snapshots');
+      const docs = snapshot.docs;
+      if (snapshot.empty || docs.length <= 0) {
+        onSnap(id, []);
+        return;
+      }
+      onSnap(
+        id,
+        docs.flatMap(
+          (doc) => snapshotBatchFromDb(doc.data() as DbSnapshotBatch).snapshots
+        )
+      );
+    });
   });
+  return () => {
+    cleanupFns.forEach((cleanup) => cleanup());
+  };
 };
 
 export function processPerformanceSeries<T>(
@@ -239,15 +261,23 @@ export function processPerformanceSeries<T>(
   return {
     ...portfolioPerformance,
     valueSeries: handleTimeSeries(portfolioPerformance.valueSeries),
-    twrrSeries: handleTimeSeries(portfolioPerformance.twrrSeries),
     gainSeries: handleTimeSeries(portfolioPerformance.gainSeries),
     cashFlowSeries: handleTimeSeries(portfolioPerformance.cashFlowSeries),
-    benchmarkSeries:
-      portfolioPerformance.benchmarkSeries &&
-      handleTimeSeries(portfolioPerformance.benchmarkSeries),
-    monthlyDividends: portfolioPerformance.monthlyDividends
-      ? handleTimeSeries(portfolioPerformance.monthlyDividends)
-      : handleTimeSeries({ data: [] }),
+    portfolio: {
+      ...portfolioPerformance.portfolio,
+      valueSeries: handleTimeSeries(portfolioPerformance.portfolio.valueSeries),
+      gainSeries: handleTimeSeries(portfolioPerformance.portfolio.gainSeries),
+      cashFlowSeries: handleTimeSeries(
+        portfolioPerformance.portfolio.cashFlowSeries
+      ),
+      twrrSeries: handleTimeSeries(portfolioPerformance.portfolio.twrrSeries),
+      benchmarkSeries:
+        portfolioPerformance.portfolio.benchmarkSeries &&
+        handleTimeSeries(portfolioPerformance.portfolio.benchmarkSeries),
+      monthlyDividends: portfolioPerformance.portfolio.monthlyDividends
+        ? handleTimeSeries(portfolioPerformance.portfolio.monthlyDividends)
+        : handleTimeSeries({ data: [] }),
+    },
   };
 }
 

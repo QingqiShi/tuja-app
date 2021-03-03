@@ -14,6 +14,7 @@ import {
   processPerformanceSeries,
   watchSnapshots,
   exampleSnapshots,
+  examplePortfolio,
 } from 'libs/portfolioClient';
 import { animationInterval } from 'libs/timer';
 
@@ -35,32 +36,44 @@ export function PortfolioProcessorProvider({
   const [, setLoadingState] = useLoadingState();
   const [startDate] = useStartDate();
   const [endDate, setEndDate] = useState(initialEndDate);
-  const { portfolio } = usePortfolio();
-  const [snapshots, setSnapshots] = useState<Snapshot[]>([]);
+  const { portfolio, portfolios } = usePortfolio();
+  const [snapshots, setSnapshots] = useState<{
+    [portfolioId: string]: Snapshot[];
+  }>({});
 
   const portfolioId = portfolio?.id;
-  const portfolioLastSnapshot = portfolio?.latestSnapshot;
+  const portfolioIds = portfolios.map(({ id }) => id).join('-');
   const benchmark = portfolio?.benchmark;
   const baseCurrency = portfolio?.currency;
 
   useEffect(() => {
-    if (portfolioId === 'example-portfolio') {
-      setSnapshots(exampleSnapshots);
+    if (portfolios.length === 1 && portfolios[0].id === examplePortfolio.id) {
+      setSnapshots({ [portfolios[0].id]: exampleSnapshots });
       return;
     }
 
-    if (portfolioId && startDate) {
-      return watchSnapshots(portfolioId, startDate, (newSnapshots) => {
-        if (newSnapshots.length) {
-          setSnapshots(newSnapshots);
-        } else if (portfolioLastSnapshot) {
-          setSnapshots([portfolioLastSnapshot]);
-        } else {
-          setSnapshots([]);
-        }
-      });
+    if (!portfolios.length) {
+      setSnapshots({});
+      return;
     }
-  }, [portfolioLastSnapshot, portfolioId, startDate]);
+
+    if (startDate) {
+      return watchSnapshots(
+        portfolios.map(({ id }) => id),
+        startDate,
+        (portfolioId, newSnapshots) => {
+          if (newSnapshots.length) {
+            setSnapshots((current) => ({
+              ...current,
+              [portfolioId]: newSnapshots,
+            }));
+          } else {
+            setSnapshots(({ [portfolioId]: _, ...current }) => current);
+          }
+        }
+      );
+    }
+  }, [portfolios, startDate]);
 
   const [
     portfolioPerformance,
@@ -70,7 +83,7 @@ export function PortfolioProcessorProvider({
 
   const loadCachedPerformance = useCallback(() => {
     console.log('loaded performance cache');
-    const saved = localStorage.getItem(`performance-${portfolioId}`);
+    const saved = localStorage.getItem(`performance-${portfolioIds}`);
     const parsed = saved && JSON.parse(saved);
     if (parsed) {
       setPortfolioPerformance(
@@ -80,19 +93,25 @@ export function PortfolioProcessorProvider({
             new TimeSeries().handleData(series.data)
         )
       );
-    } else if (portfolioId) {
+    } else if (portfolios.length && portfolioId) {
       setPortfolioPerformance({
-        id: portfolioId,
         valueSeries: new TimeSeries(),
-        twrrSeries: new TimeSeries(),
         gainSeries: new TimeSeries(),
         cashFlowSeries: new TimeSeries(),
         monthlyDividends: new TimeSeries(),
-        totalHoldingsValue: 0,
-        holdings: {},
+        portfolio: {
+          id: portfolioId,
+          valueSeries: new TimeSeries(),
+          gainSeries: new TimeSeries(),
+          cashFlowSeries: new TimeSeries(),
+          monthlyDividends: new TimeSeries(),
+          twrrSeries: new TimeSeries(),
+          totalHoldingsValue: 0,
+          holdings: {},
+        },
       });
     }
-  }, [portfolioId]);
+  }, [portfolioId, portfolioIds, portfolios.length]);
 
   const refresh = useCallback(() => {
     setEndDate(new Date());
@@ -110,7 +129,7 @@ export function PortfolioProcessorProvider({
           (series: { data: [Date, number][] }) => new TimeSeries(series)
         );
         localStorage.setItem(
-          `performance-${portfolioId}`,
+          `performance-${portfolioIds}`,
           JSON.stringify(
             processPerformanceSeries(
               newPortfolioPerformance,
@@ -124,7 +143,7 @@ export function PortfolioProcessorProvider({
     };
     worker.addEventListener('message', handler);
 
-    if (portfolioId && snapshots?.length && startDate) {
+    if (Object.keys(snapshots ?? {}).length && startDate) {
       setLoadingState(true);
       setIsReady(false);
       loadCachedPerformance();
@@ -139,7 +158,7 @@ export function PortfolioProcessorProvider({
           baseCurrency,
         },
       });
-    } else if (portfolioId) {
+    } else if (portfolios.length) {
       loadCachedPerformance();
     }
 
@@ -155,6 +174,8 @@ export function PortfolioProcessorProvider({
     endDate,
     loadCachedPerformance,
     portfolioId,
+    portfolioIds,
+    portfolios.length,
     setLoadingState,
     snapshots,
     startDate,
@@ -176,7 +197,7 @@ export function PortfolioProcessorProvider({
       value={{
         portfolioPerformance,
         isReady,
-        resetSnapshots: () => setSnapshots([]),
+        resetSnapshots: () => setSnapshots({}),
         refresh,
       }}
     >

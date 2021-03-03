@@ -166,9 +166,9 @@ function PortfolioOverview({ className, isDemo }: PortfolioOverviewProps) {
         <div>
           <Label>Return</Label>
           <Value>
-            {((portfolioPerformance?.twrrSeries.getLast() ?? 0) * 100).toFixed(
-              2
-            )}
+            {(
+              (portfolioPerformance?.portfolio.twrrSeries.getLast() ?? 0) * 100
+            ).toFixed(2)}
             %
           </Value>
         </div>

@@ -20,7 +20,6 @@ import ActivityTradeForm from 'components/ActivityTradeForm';
 import ActivityDepositForm from 'components/ActivityDepositForm';
 import ActivityDividendForm from 'components/ActivityDividendForm';
 import ActivityStockDividendForm from 'components/ActivityStockDividendForm';
-import AutoInvest from 'components/AutoInvest';
 import { Card, CardMedia } from 'commonStyledComponents';
 import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
@@ -288,9 +287,11 @@ function PortfolioDashboard({ isDemo }: PortfolioDashboardProps) {
                 )}
                 {selectedChart === 'returns' && (
                   <Chart
-                    data={portfolioPerformance?.twrrSeries.data ?? []}
+                    data={portfolioPerformance?.portfolio.twrrSeries.data ?? []}
                     formatValue={(val) => `${(val * 100).toFixed(1)}%`}
-                    benchmark={portfolioPerformance?.benchmarkSeries?.data}
+                    benchmark={
+                      portfolioPerformance?.portfolio.benchmarkSeries?.data
+                    }
                     benchmarkLabel={portfolio.benchmark}
                     hideAxis
                   />
@@ -306,13 +307,6 @@ function PortfolioDashboard({ isDemo }: PortfolioDashboardProps) {
               </CardMedia>
             </ChartCard>
             {portfolioPerformance && <InvestmentsList />}
-            {portfolioPerformance &&
-              !!Object.keys(portfolio.targetAllocations ?? {}).length && (
-                <Card>
-                  <Type scale="h5">Auto Invest</Type>
-                  <AutoInvest portfolioPerformance={portfolioPerformance} />
-                </Card>
-              )}
           </div>
         }
       />
