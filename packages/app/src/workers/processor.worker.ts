@@ -73,7 +73,11 @@ addEventListener('message', async (event) => {
   messageData.payload.endDate.setSeconds(0);
   messageData.payload.endDate.setMilliseconds(0);
 
-  await process(messageData.payload);
+  try {
+    await process(messageData.payload);
+  } catch {
+    postMessage(null);
+  }
 });
 
 /**
@@ -101,7 +105,6 @@ async function process(payload: ProcessPortfolioPayload) {
       calculatePerformance(portfolioId, payload, stocksData)
     )
   );
-  console.log(performances);
 
   const aggregated = aggregatePerformances(performances, payload);
 
@@ -285,7 +288,7 @@ function calculatePerformance(
     },
   });
 
-  const twrrSeries = accumulateDailyTwrr(dailyTwrrSeries, startDate, endDate);
+  const twrrSeries = accumulateDailyTwrr(dailyTwrrSeries);
 
   if (gainSeries.data.length) {
     const initialGain = gainSeries.data[0][1];

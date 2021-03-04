@@ -85,27 +85,18 @@ export function calcHoldings(
   return holdings;
 }
 
-export function accumulateDailyTwrr(
-  dailyTwrrSeries: TimeSeries,
-  startDate: Date,
-  endDate: Date
-) {
-  // Filter dates, and get daily return by multiplying previous days
-  const startDay = dayjs(startDate);
-  const endDay = dayjs(endDate);
+export function accumulateDailyTwrr(dailyTwrrSeries: TimeSeries) {
   const timeWeightedReturns = new TimeSeries({
-    data: dailyTwrrSeries.data
-      .filter((d) => startDay.isSameOrBefore(d[0]) && endDay.isAfter(d[0]))
-      .reduce((seriesData, d) => {
-        if (seriesData.length) {
-          seriesData.push([
-            d[0],
-            (1 + seriesData[seriesData.length - 1][1]) * (1 + d[1]) - 1,
-          ]);
-          return seriesData;
-        }
-        return [[d[0], 0]];
-      }, [] as [Date, number][]),
+    data: dailyTwrrSeries.data.reduce((seriesData, d) => {
+      if (seriesData.length) {
+        seriesData.push([
+          d[0],
+          (1 + seriesData[seriesData.length - 1][1]) * (1 + d[1]) - 1,
+        ]);
+        return seriesData;
+      }
+      return [[d[0], 0]];
+    }, [] as [Date, number][]),
   });
 
   return timeWeightedReturns;
