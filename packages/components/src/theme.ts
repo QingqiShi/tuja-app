@@ -1,6 +1,20 @@
 import { useTheme as useStyledTheme } from 'styled-components';
 import { lighten, darken, transparentize } from 'polished';
 
+export const v = {
+  backgroundMain: 'var(--background-main, #211a1d)',
+  backgroundRaised: 'var(--background-raised, #272023)',
+  backgroundOverlay: 'var(--background-overlay, #2a2728)',
+  textMain: 'var(--text-main, #ffffff)',
+  textSecondary: 'var(--text-secondary, #9e9e9e)',
+  textGain: 'var(--text-gain, #49c569)',
+  textLoss: 'var(--text-loss, #f74b3c)',
+  fontFamily: "var(--font-family, 'Inter', sans-serif)",
+  minTablet: 'var(--min-tablet, min-width: 706px)',
+  minLaptop: 'var(--min-laptop, min-width: 1025px)',
+  minDesktop: 'var(--min-desktop, min-width: 1441px',
+};
+
 const commonTheme = {
   spacings: {
     xs: '0.5rem',

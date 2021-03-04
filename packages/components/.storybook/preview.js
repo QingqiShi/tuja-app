@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { addDecorator } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../src/globalStyle';
@@ -29,8 +30,14 @@ addDecorator((storyFn) => (
   </>
 ));
 
-addDecorator((storyFn, context) => (
-  <ThemeProvider theme={getTheme(context.globals.theme)}>
-    {storyFn()}
-  </ThemeProvider>
-));
+addDecorator((storyFn, context) => {
+  useEffect(() => {
+    document.body.setAttribute('data-theme', context.globals.theme);
+  }, [context.globals.theme]);
+
+  return (
+    <ThemeProvider theme={getTheme(context.globals.theme)}>
+      {storyFn()}
+    </ThemeProvider>
+  );
+});
