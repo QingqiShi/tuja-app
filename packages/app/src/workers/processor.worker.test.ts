@@ -121,7 +121,12 @@ describe('happy path', () => {
           valueSeries,
           cashFlowSeries,
           gainSeries,
-          twrrSeries: { data: [[new Date('2021-02-08T00:00:00.000Z'), 0]] },
+          twrrSeries: {
+            data: [
+              [new Date('2021-02-08T00:00:00.000Z'), 0],
+              [new Date('2021-02-09T00:00:00.000Z'), -0.001012344066357751],
+            ],
+          },
           monthlyDividends,
           totalHoldingsValue: 28.238749999999996,
           lastSnapshot: snapshots[0],

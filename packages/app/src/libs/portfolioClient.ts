@@ -220,38 +220,66 @@ export const updateActivity = async (
   return docRef.set(activityToDb({ ...activity, updatedAt: new Date() }));
 };
 
-export const watchSnapshots = (
-  portfolioIds: string[],
+export const watchSnapshots = async (
+  portfolios: Portfolio[],
+  selectedPortfolioId: string,
   startDate: Date,
-  onSnap: (portfolioId: string, snapshots: Snapshot[]) => void
+  onSnap: (snapshots: { [id: string]: Snapshot[] }) => void
 ) => {
-  // Get the start of the calendar month of the startDate
-  const startOfMonth = dayjs(startDate).startOf('month');
-  const cleanupFns = portfolioIds.map((id) => {
-    const query = firebase
-      .firestore()
+  // Construct query to get snapshots, need to get at least before the
+  // startDate's begining of month so that monthly dividends can be calculated
+  const db = firebase.firestore();
+  const startOfMonth = dayjs(startDate).startOf('month').format('YYYY-MM-DD');
+  const getQuery = (id: string) =>
+    db
       .collection(`/portfolios/${id}/snapshots`)
       .orderBy('endDate', 'asc')
-      .startAt(startOfMonth.format('YYYY-MM-DD'));
-    return query.onSnapshot((snapshot) => {
-      // Analytics
-      logEvent('receive_snapshots');
-      const docs = snapshot.docs;
-      if (snapshot.empty || docs.length <= 0) {
-        onSnap(id, []);
-        return;
-      }
-      onSnap(
-        id,
-        docs.flatMap(
-          (doc) => snapshotBatchFromDb(doc.data() as DbSnapshotBatch).snapshots
-        )
+      .startAt(startOfMonth);
+
+  // Filter out the selected portfolio so we can do a single fetch for the
+  // remaining portfolios
+  const unselectedPortfolios = portfolios.filter(
+    ({ id }) => id !== selectedPortfolioId
+  );
+
+  // Do a single fetch to get all the snapshots from unselectedPortfolios
+  const snapshotsList = await Promise.all(
+    unselectedPortfolios.map(async ({ id }) => {
+      const result = await getQuery(id).get();
+      return result.docs.flatMap(
+        (doc) => snapshotBatchFromDb(doc.data() as DbSnapshotBatch).snapshots
       );
+    })
+  );
+
+  // Convert the fetched list of snapshots into a map from portfolio ids to the
+  // snapshots, if snapshots are empty attempt to use the portfolio's lastSnapshot
+  const snapshotsUnselected = snapshotsList.reduce((map, snaps, i) => {
+    const portfolio = unselectedPortfolios[i];
+    if (!snaps.length && portfolio.latestSnapshot) {
+      return { ...map, [portfolio.id]: [portfolio.latestSnapshot] };
+    }
+    return { ...map, [portfolio.id]: snaps };
+  }, {} as { [id: string]: Snapshot[] });
+
+  // Setup watcher for the selected snapshot
+  return getQuery(selectedPortfolioId).onSnapshot((snapshot) => {
+    const docs = snapshot.docs;
+    const portfolio = portfolios.find((p) => p.id === selectedPortfolioId);
+    if (!docs.length && portfolio?.latestSnapshot) {
+      onSnap({
+        ...snapshotsUnselected,
+        [selectedPortfolioId]: [portfolio.latestSnapshot],
+      });
+      return;
+    }
+    onSnap({
+      ...snapshotsUnselected,
+      [selectedPortfolioId]: docs.flatMap(
+        (doc) => snapshotBatchFromDb(doc.data() as DbSnapshotBatch).snapshots
+      ),
     });
   });
-  return () => {
-    cleanupFns.forEach((cleanup) => cleanup());
-  };
 };
 
 export function processPerformanceSeries<T>(

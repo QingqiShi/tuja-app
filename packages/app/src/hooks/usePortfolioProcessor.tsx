@@ -47,33 +47,36 @@ export function PortfolioProcessorProvider({
   const baseCurrency = portfolio?.currency;
 
   useEffect(() => {
-    if (portfolios.length === 1 && portfolios[0].id === examplePortfolio.id) {
-      setSnapshots({ [portfolios[0].id]: exampleSnapshots });
-      return;
-    }
-
-    if (!portfolios.length) {
+    if (!portfolioId || !portfolios.length) {
       setSnapshots({});
       return;
     }
 
-    if (startDate) {
-      return watchSnapshots(
-        portfolios.map(({ id }) => id),
-        startDate,
-        (portfolioId, newSnapshots) => {
-          if (newSnapshots.length) {
-            setSnapshots((current) => ({
-              ...current,
-              [portfolioId]: newSnapshots,
-            }));
-          } else {
-            setSnapshots(({ [portfolioId]: _, ...current }) => current);
-          }
-        }
-      );
+    if (portfolioId === examplePortfolio.id) {
+      setSnapshots({ [portfolios[0].id]: exampleSnapshots });
+      return;
     }
-  }, [portfolios, startDate]);
+
+    if (startDate) {
+      let mounted = true;
+      let cleanup: () => void | undefined;
+      (async () => {
+        cleanup = await watchSnapshots(
+          portfolios,
+          portfolioId,
+          startDate,
+          (newSnapshots) => {
+            if (!mounted) return;
+            setSnapshots(newSnapshots);
+          }
+        );
+      })();
+      return () => {
+        mounted = false;
+        if (cleanup) cleanup();
+      };
+    }
+  }, [portfolioId, portfolios, startDate]);
 
   const [
     portfolioPerformance,
@@ -158,8 +161,6 @@ export function PortfolioProcessorProvider({
           baseCurrency,
         },
       });
-    } else if (portfolios.length) {
-      loadCachedPerformance();
     }
 
     return () => {
@@ -175,7 +176,6 @@ export function PortfolioProcessorProvider({
     loadCachedPerformance,
     portfolioId,
     portfolioIds,
-    portfolios.length,
     setLoadingState,
     snapshots,
     startDate,
