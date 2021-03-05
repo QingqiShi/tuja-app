@@ -32,7 +32,7 @@ addDecorator((storyFn) => (
 
 addDecorator((storyFn, context) => {
   useEffect(() => {
-    document.body.setAttribute('data-theme', context.globals.theme);
+    document.documentElement.setAttribute('data-theme', context.globals.theme);
   }, [context.globals.theme]);
 
   return (

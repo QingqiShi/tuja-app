@@ -1,28 +1,32 @@
-import { createGlobalStyle } from 'styled-components';
+import { css, createGlobalStyle } from 'styled-components';
 import dark from './themes/dark';
 import light from './themes/light';
 import { v } from './theme';
 
-export const GlobalStyle = createGlobalStyle`
-  body {
+const commonProperties = css`
+  --font-family: 'Inter', sans-serif;
+  --min-tablet: min-width: 706px;
+  --min-laptop: min-width: 1025px;
+  --min-desktop: min-width: 1441px;
+`;
+
+const globalCss = css`
+  html {
     ${dark}
 
     @media (prefers-color-scheme: light) {
       ${light}
     }
 
-    &[data-theme=light] {
+    &[data-theme='light'] {
       ${light}
     }
 
-    &[data-theme=dark] {
+    &[data-theme='dark'] {
       ${dark}
     }
 
-    --font-family: 'Inter', sans-serif;
-    --min-tablet: min-width: 706px;
-    --min-laptop: min-width: 1025px;
-    --min-desktop: min-width: 1441px;
+    ${commonProperties}
   }
 
   body {
@@ -39,10 +43,25 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  html, body {
+  html,
+  body {
     font-size: 16px;
     @media (${v.minLaptop}) {
       font-size: 18px;
     }
   }
+
+  :root {
+    ${'color-scheme: dark light;'}
+  }
+
+  [data-theme='light'] {
+    ${'color-scheme: light;'}
+  }
+
+  [data-theme='dark'] {
+    ${'color-scheme: dark;'}
+  }
 `;
+
+export const GlobalStyle = createGlobalStyle`${globalCss}`;
