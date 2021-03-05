@@ -5,15 +5,15 @@
   "private": true,
   "scripts": {
     "commit": "yarn run git-cz",
-    "start": "run-p dev emulate",
+    "start": "firebase emulators:exec --only firestore,functions --import=testData --inspect-functions --ui 'yarn dev'",
     "dev": "lerna run dev --parallel",
     "build": "lerna run build",
     "build:functions": "lerna run build --scope @tuja/libs --scope @tuja/functions",
     "lint": "lerna run lint",
-    "test": "start-test 'firebase emulators:start --only firestore --import=testData' 4000 test:dev",
-    "test:ci": "start-test 'firebase emulators:start --only firestore --import=testData' 4000 'CI=true jest --coverage'",
+    "test": "firebase emulators:exec --only firestore --import=testData 'yarn test:dev'",
+    "test:ci": "firebase emulators:exec --only firestore --import=testData 'CI=true jest --coverage'",
     "test:dev": "jest --no-cache --watch --coverage",
-    "emulate": "firebase emulators:start --only firestore,pubsub,functions --import=testData --inspect-functions",
+    "emulate": "firebase emulators:start --only firestore,functions --import=testData --inspect-functions",
     "emulator:export": "firebase emulators:export ./testData",
     "shell": "firebase functions:shell",
     "analyze": "lerna run analyze",
@@ -59,7 +59,6 @@
     "lint-staged": "^10.5.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
-    "start-server-and-test": "^1.12.0",
     "typescript": "^4.2.3"
   },
   "resolutions": {
