@@ -8,6 +8,11 @@ const Container = styled.div`
     display: grid;
     grid-template-columns: 40% 60%;
   }
+  @media (${v.minDesktop}) {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding-left: 6rem;
+  }
 `;
 
 const Primary = styled.div`
