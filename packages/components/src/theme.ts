@@ -2,6 +2,7 @@ import { useTheme as useStyledTheme } from 'styled-components';
 import { lighten, darken, transparentize } from 'polished';
 
 export const v = {
+  // Colors
   backgroundMain: 'var(--background-main, #211a1d)',
   backgroundRaised: 'var(--background-raised, #272023)',
   backgroundOverlay: 'var(--background-overlay, #2a2728)',
@@ -9,7 +10,11 @@ export const v = {
   textSecondary: 'var(--text-secondary, #9e9e9e)',
   textGain: 'var(--text-gain, #49c569)',
   textLoss: 'var(--text-loss, #f74b3c)',
-  fontFamily: "var(--font-family, 'Inter', sans-serif)",
+
+  // Fonts
+  fontFamily: "'Inter', sans-serif",
+
+  // Breakpoints
   minTablet: 'min-width: 706px',
   minLaptop: 'min-width: 1024px',
   minDesktop: 'min-width: 1440px',
