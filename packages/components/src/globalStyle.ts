@@ -3,13 +3,6 @@ import dark from './themes/dark';
 import light from './themes/light';
 import { v } from './theme';
 
-const commonProperties = css`
-  --font-family: 'Inter', sans-serif;
-  --min-tablet: min-width: 706px;
-  --min-laptop: min-width: 1025px;
-  --min-desktop: min-width: 1441px;
-`;
-
 const globalCss = css`
   html {
     ${dark}
@@ -25,8 +18,6 @@ const globalCss = css`
     &[data-theme='dark'] {
       ${dark}
     }
-
-    ${commonProperties}
   }
 
   body {
