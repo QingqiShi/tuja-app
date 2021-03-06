@@ -10,9 +10,9 @@ export const v = {
   textGain: 'var(--text-gain, #49c569)',
   textLoss: 'var(--text-loss, #f74b3c)',
   fontFamily: "var(--font-family, 'Inter', sans-serif)",
-  minTablet: 'var(--min-tablet, min-width: 706px)',
-  minLaptop: 'var(--min-laptop, min-width: 1025px)',
-  minDesktop: 'var(--min-desktop, min-width: 1441px',
+  minTablet: 'min-width: 706px',
+  minLaptop: 'min-width: 1024px',
+  minDesktop: 'min-width: 1440px',
 };
 
 const commonTheme = {
