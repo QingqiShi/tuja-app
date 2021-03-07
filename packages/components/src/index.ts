@@ -17,6 +17,7 @@ export { default as ActivityItem } from './components/display/ActivityItem';
 export { default as Banner } from './components/display/Banner';
 export { default as Logo } from './components/display/Logo';
 export { default as PageTitle } from './components/display/PageTitle';
+export { default as OverviewStats } from './components/display/OverviewStats';
 export * from './components/display/Table';
 export { default as TopLinearLoader } from './components/feedback/TopLinearLoader';
 export { default as LinearLoader } from './components/feedback/LinearLoader';
