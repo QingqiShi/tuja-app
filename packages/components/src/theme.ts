@@ -10,14 +10,27 @@ export const v = {
   textSecondary: 'var(--text-secondary, #9e9e9e)',
   textGain: 'var(--text-gain, #49c569)',
   textLoss: 'var(--text-loss, #f74b3c)',
+  accentMain: 'var(--accent-main, #774afb)',
+  accentHover: 'var(--accent-hover, #aa8dff)',
 
   // Fonts
   fontFamily: "'Inter', sans-serif",
+  fontSemiBold: 600,
+  fontBold: 700,
+  fontExtraBold: 800,
 
   // Breakpoints
   minTablet: 'min-width: 706px',
   minLaptop: 'min-width: 1024px',
   minDesktop: 'min-width: 1440px',
+
+  // Spacings
+  spacerXS: '0.5rem',
+  spacerS: '1rem',
+  spacerM: '2rem',
+  spacerL: '3rem',
+  spacerXL: '5rem',
+  spacerXXL: '8rem',
 };
 
 const commonTheme = {

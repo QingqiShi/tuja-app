@@ -8,4 +8,6 @@ export default css`
   --text-secondary: #9e9e9e;
   --text-gain: #49c569;
   --text-loss: #f74b3c;
+  --accent-main: #774afb;
+  --accent-hover: #aa8dff;
 `;

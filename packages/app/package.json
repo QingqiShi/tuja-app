@@ -22,6 +22,7 @@
     "d3-scale": "^3.2.3",
     "firebaseui": "^4.7.3",
     "idb": "^6.0.0",
+    "phosphor-react": "^1.1.2",
     "polished": "^4.1.1",
     "react-helmet-async": "^1.0.9",
     "react-icons": "^4.2.0",
