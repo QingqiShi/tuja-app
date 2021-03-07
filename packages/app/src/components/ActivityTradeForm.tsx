@@ -168,7 +168,7 @@ function ActivityTradeForm({
           ),
         ]);
       } catch (e) {
-        if (e !== 'AbortError') {
+        if (e.name !== 'AbortError') {
           throw e;
         }
       }
