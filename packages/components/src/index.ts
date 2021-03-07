@@ -21,8 +21,9 @@ export { default as TopLinearLoader } from './components/feedback/TopLinearLoade
 export { default as LinearLoader } from './components/feedback/LinearLoader';
 export { default as Modal } from './components/feedback/Modal';
 export { default as TopBar } from './components/controls/TopBar';
+export { default as EdgePadding } from './components/layout/EdgePadding';
 
 export { GlobalStyle } from './globalStyle';
-export { getTheme } from './theme';
+export { getTheme, v } from './theme';
 
 export * from 'framer-motion';
