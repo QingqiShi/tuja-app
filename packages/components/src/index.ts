@@ -16,11 +16,13 @@ export { default as StockListItem } from './components/display/StockListItem';
 export { default as ActivityItem } from './components/display/ActivityItem';
 export { default as Banner } from './components/display/Banner';
 export { default as Logo } from './components/display/Logo';
+export { default as PageTitle } from './components/display/PageTitle';
 export * from './components/display/Table';
 export { default as TopLinearLoader } from './components/feedback/TopLinearLoader';
 export { default as LinearLoader } from './components/feedback/LinearLoader';
 export { default as Modal } from './components/feedback/Modal';
 export { default as TopBar } from './components/controls/TopBar';
+export { default as ResponsiveSplit } from './components/layout/ResponsiveSplit';
 export { default as EdgePadding } from './components/layout/EdgePadding';
 
 export { GlobalStyle } from './globalStyle';
