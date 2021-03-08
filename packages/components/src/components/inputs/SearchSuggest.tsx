@@ -67,7 +67,7 @@ function SearchSuggest({
         onChange={(e) => {
           const searchQuery = e.target.value;
           setQuery(searchQuery);
-          debouncedSearch.callback(searchQuery);
+          debouncedSearch(searchQuery);
         }}
       />
       {!!suggestions.length && (
