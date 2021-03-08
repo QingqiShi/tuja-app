@@ -5,7 +5,7 @@ import React from 'react';
 const Title = styled.h2`
   font-size: 1.125rem;
   font-weight: ${v.fontSemiBold};
-  margin: 0;
+  margin: 0 0 ${v.spacerS};
 `;
 
 function SectionTitle({ children }: React.PropsWithChildren<{}>) {

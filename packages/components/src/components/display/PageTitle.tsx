@@ -6,7 +6,7 @@ import React from 'react';
 const Title = styled.h1`
   font-size: 1.5rem;
   font-weight: ${v.fontSemiBold};
-  margin: 0;
+  margin: 0 0 ${v.spacerS};
 `;
 
 const BackButton = styled.a`
