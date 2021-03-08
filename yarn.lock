@@ -16602,10 +16602,10 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-phosphor-react@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/phosphor-react/-/phosphor-react-1.1.2.tgz#b2b8ab079153026f5d7d044e255c8990e2096d1c"
-  integrity sha512-Mxif13TOfdnc8MZFeaN3r2h2LC0EOUg9iYaLz+jLEThFsloVasg10f8LexeYyChJyOjuoxtrQt5Rc6LmGdFMlw==
+phosphor-react@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/phosphor-react/-/phosphor-react-1.2.0.tgz#e7d501394b697c80899a823064eed42d502d7955"
+  integrity sha512-EE+VIZC+ZpfVWXb+8xw9zS8S+1bpYUt39MPDE9A8QkMneHUdtqlMG593r11GO6dvouy6xO50Z2Cp9OQeSyQRmg==
 
 picomatch@^2.0.4, picomatch@^2.0.5, picomatch@^2.2.1, picomatch@^2.2.2:
   version "2.2.2"
