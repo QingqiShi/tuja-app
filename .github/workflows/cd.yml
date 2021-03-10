@@ -24,7 +24,7 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      - uses: dorny/paths-filter@v2.9.1
+      - uses: dorny/paths-filter@v2.9.2
         id: changes
         with:
           filters: |
