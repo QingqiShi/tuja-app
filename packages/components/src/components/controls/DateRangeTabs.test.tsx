@@ -28,5 +28,7 @@ test('render date range options', () => {
   expect(getByText('3M')).toBeDisabled();
 
   fireEvent.click(getByText('6M'));
-  expect(handleChange).toHaveBeenCalledWith(new Date(1599692400000));
+  const date = new Date();
+  date.setMonth(date.getMonth() - 3);
+  expect(handleChange).toHaveBeenCalledWith(date);
 });
