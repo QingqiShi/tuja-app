@@ -1,5 +1,4 @@
-import { fireEvent } from '@testing-library/react';
-import { render } from '../../testUtils';
+import { fireEvent, render } from '@testing-library/react';
 import ButtonTertiary from './ButtonTertiary';
 
 test('normal button', () => {

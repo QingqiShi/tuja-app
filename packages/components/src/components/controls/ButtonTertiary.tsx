@@ -15,16 +15,18 @@ const Button = styled(ButtonBase)`
 
 interface ButtonTertiaryProps {
   href?: string;
+  disabled?: boolean;
   onClick?: (e: React.MouseEvent) => void;
 }
 
 function ButtonTertiary({
   children,
   href,
+  disabled,
   onClick,
 }: React.PropsWithChildren<ButtonTertiaryProps>) {
   return (
-    <Button href={href} onClick={onClick}>
+    <Button href={href} onClick={onClick} disabled={disabled}>
       {children}
     </Button>
   );
