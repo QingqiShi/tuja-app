@@ -3,7 +3,10 @@ import styled, { css } from 'styled-components';
 import useKeyboardFocus from '../../hooks/useKeyboardFocus';
 import { v } from '../../theme';
 
-const Button = styled.button<{ isTabFocused?: boolean; disabled?: boolean }>`
+interface ButtonProps {
+  isTabFocused?: boolean;
+}
+const Button = styled.button<ButtonProps & React.ComponentProps<'button'>>`
   border: 0;
   border-radius: 50rem;
   font-family: inherit;
@@ -50,6 +53,7 @@ interface ButtonBaseProps {
   className?: string;
   href?: string;
   disabled?: boolean;
+  autoFocus?: boolean;
   onClick?: (e: React.MouseEvent) => void;
 }
 
@@ -58,9 +62,10 @@ function ButtonBase({
   href,
   disabled,
   children,
+  autoFocus,
   onClick,
 }: React.PropsWithChildren<ButtonBaseProps>) {
-  const [ref, isTabFocused] = useKeyboardFocus();
+  const [ref, isTabFocused] = useKeyboardFocus(autoFocus);
   return (
     <Button
       ref={ref}
@@ -73,6 +78,7 @@ function ButtonBase({
       className={className}
       isTabFocused={isTabFocused}
       disabled={disabled}
+      autoFocus={autoFocus}
     >
       {children}
     </Button>

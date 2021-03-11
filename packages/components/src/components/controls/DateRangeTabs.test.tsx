@@ -10,10 +10,18 @@ test('render default', () => {
 
 test('render date range options', () => {
   const handleChange = jest.fn();
+
+  const threeMonth = new Date();
+  threeMonth.setMonth(threeMonth.getMonth() - 3);
+  threeMonth.setHours(0);
+  threeMonth.setMinutes(0);
+  threeMonth.setSeconds(0);
+  threeMonth.setMilliseconds(0);
+
   const { getByText } = render(
     <DateRangeTabs
       maxDate={new Date(1555332950299)}
-      value={new Date(1607558400000)}
+      value={threeMonth}
       onChange={handleChange}
     />
   );
@@ -28,11 +36,11 @@ test('render date range options', () => {
   expect(getByText('3M')).toBeDisabled();
 
   fireEvent.click(getByText('6M'));
-  const date = new Date();
-  date.setMonth(date.getMonth() - 6);
-  date.setHours(0);
-  date.setMinutes(0);
-  date.setSeconds(0);
-  date.setMilliseconds(0);
-  expect(handleChange).toHaveBeenCalledWith(date);
+  const sixMonth = new Date();
+  sixMonth.setMonth(sixMonth.getMonth() - 6);
+  sixMonth.setHours(0);
+  sixMonth.setMinutes(0);
+  sixMonth.setSeconds(0);
+  sixMonth.setMilliseconds(0);
+  expect(handleChange).toHaveBeenCalledWith(sixMonth);
 });

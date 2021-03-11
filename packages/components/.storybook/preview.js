@@ -3,6 +3,7 @@ import { addDecorator } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../src/globalStyle';
 import { getTheme } from '../src/theme';
+import { KeyboardFocusProvider } from '../src/hooks/useKeyboardFocus';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -36,8 +37,10 @@ addDecorator((storyFn, context) => {
   }, [context.globals.theme]);
 
   return (
-    <ThemeProvider theme={getTheme(context.globals.theme)}>
-      {storyFn()}
-    </ThemeProvider>
+    <KeyboardFocusProvider>
+      <ThemeProvider theme={getTheme(context.globals.theme)}>
+        {storyFn()}
+      </ThemeProvider>
+    </KeyboardFocusProvider>
   );
 });
