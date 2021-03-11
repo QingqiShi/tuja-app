@@ -6,6 +6,7 @@ export const v = {
   backgroundMain: 'var(--background-main, #211a1d)',
   backgroundRaised: 'var(--background-raised, #272023)',
   backgroundOverlay: 'var(--background-overlay, #2a2728)',
+  backgroundHover: 'var(--background-hover, rgba(255, 255, 255, 0.1))',
   textMain: 'var(--text-main, #ffffff)',
   textSecondary: 'var(--text-secondary, #9e9e9e)',
   textGain: 'var(--text-gain, #49c569)',
@@ -24,6 +25,13 @@ export const v = {
   minLaptop: 'min-width: 1024px',
   minDesktop: 'min-width: 1440px',
 
+  // Z-index
+  zBackground: 0,
+  zRaised: 100,
+  zFixed: 200,
+  zBackdrop: 300,
+  zModal: 400,
+
   // Spacings
   spacerXS: '0.5rem',
   spacerS: '1rem',
@@ -31,6 +39,18 @@ export const v = {
   spacerL: '3rem',
   spacerXL: '5rem',
   spacerXXL: '8rem',
+
+  // Shadows
+  shadowPressed:
+    'var(--shadow-pressed, 0 0.1rem 0.5rem rgba(0, 0, 0, 0.15), 0 0.2rem 0.2rem rgba(0, 0, 0, 0.2))',
+  shadowRaised:
+    'var(--shadow-raised, 0 0.5rem 0.75rem rgba(0, 0, 0, 0.15), 0 0.375rem 0.5rem rgba(0, 0, 0, 0.2))',
+  shadowOverlay:
+    'var(--shadow-overlay, 0 1rem 1.22rem rgba(0, 0, 0, 0.15), 0 0.55rem 0.61rem rgba(0, 0, 0, 0.2))',
+
+  // Border-radius
+  radiusCard: '1rem',
+  radiusMedia: '0.5rem',
 };
 
 const commonTheme = {
