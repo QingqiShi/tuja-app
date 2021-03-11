@@ -3,6 +3,22 @@ import dark from './themes/dark';
 import light from './themes/light';
 import { v } from './theme';
 
+const customProperties = css`
+  --edge-padding: 1rem;
+
+  @media (${v.minTablet}) {
+    --edge-padding: 2rem;
+  }
+
+  @media (${v.minLaptop}) {
+    --edge-padding: 3.5rem;
+  }
+
+  @media (${v.minDesktop}) {
+    --edge-padding: 4rem;
+  }
+`;
+
 const globalCss = css`
   html {
     ${dark}
@@ -18,6 +34,8 @@ const globalCss = css`
     &[data-theme='dark'] {
       ${dark}
     }
+
+    ${customProperties}
   }
 
   body {
