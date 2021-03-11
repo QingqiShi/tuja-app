@@ -25,7 +25,9 @@ export { default as LinearLoader } from './components/feedback/LinearLoader';
 export { default as Modal } from './components/feedback/Modal';
 export { default as TopBar } from './components/controls/TopBar';
 export { default as DateRangeTabs } from './components/controls/DateRangeTabs';
+export { default as ButtonSecondary } from './components/controls/ButtonSecondary';
 export { default as ButtonTertiary } from './components/controls/ButtonTertiary';
+export { default as DropdownMenu } from './components/controls/DropdownMenu';
 export { default as ResponsiveSplit } from './components/layout/ResponsiveSplit';
 export { default as EdgePadding } from './components/layout/EdgePadding';
 

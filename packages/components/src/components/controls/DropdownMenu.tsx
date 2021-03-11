@@ -24,12 +24,15 @@ const Menu = styled.div<{ align?: MenuAlign }>`
   background-color: ${v.backgroundOverlay};
   box-shadow: ${v.shadowOverlay};
   padding: ${v.spacerXS};
+  z-index: ${v.zFixed};
 
   ${({ align }) => (align === 'right' ? 'right: 0;' : 'left: 0;')}
 `;
 
 const MenuItem = styled(ButtonBase)`
   display: block;
+  width: 100%;
+  text-align: left;
   border-radius: ${v.radiusMedia};
   padding: ${v.spacerS} ${v.spacerM};
 
