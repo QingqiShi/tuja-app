@@ -26,7 +26,6 @@ test('render date range options', () => {
     />
   );
 
-  expect(getByText('1W')).toBeInTheDocument();
   expect(getByText('1M')).toBeInTheDocument();
   expect(getByText('3M')).toBeInTheDocument();
   expect(getByText('6M')).toBeInTheDocument();

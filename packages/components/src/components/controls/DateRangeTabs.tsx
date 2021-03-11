@@ -44,7 +44,6 @@ const Item = styled(ButtonBase)`
 `;
 
 const defaultPeriods = [
-  { label: '1W', val: 7, unit: 'day' as const },
   { label: '1M', val: 1, unit: 'month' as const },
   { label: '3M', val: 3, unit: 'month' as const },
   { label: '6M', val: 6, unit: 'month' as const },
