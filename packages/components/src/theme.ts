@@ -39,6 +39,7 @@ export const v = {
   spacerL: '3rem',
   spacerXL: '5rem',
   spacerXXL: '8rem',
+  edgePadding: 'var(--edge-padding, 1rem)',
 
   // Shadows
   shadowPressed:
