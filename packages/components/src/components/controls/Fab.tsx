@@ -5,7 +5,7 @@ import { v } from '../../theme';
 
 const Container = styled.div`
   position: fixed;
-  bottom: calc(2rem + env(safe-area-inset-bottom));
+  bottom: calc(${v.edgePadding} + env(safe-area-inset-bottom));
   left: 0;
   right: 0;
   pointer-events: none;
