@@ -6,7 +6,6 @@ const Button = styled(ButtonBase)`
   color: ${v.accentMain};
   background-color: ${v.backgroundRaised};
   box-shadow: ${v.shadowRaised};
-  transition: box-shadow 0.2s, color 0.2s, background 0.2s;
 
   &:hover {
     color: ${v.accentHover};

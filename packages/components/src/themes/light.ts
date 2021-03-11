@@ -7,6 +7,7 @@ export default css`
   --background-hover: rgba(0, 0, 0, 0.05);
   --text-main: #211a1d;
   --text-secondary: #382e32;
+  --text-on-accent: #ffffff;
   --text-gain: #49c569;
   --text-loss: #f74b3c;
   --accent-main: #5218fa;

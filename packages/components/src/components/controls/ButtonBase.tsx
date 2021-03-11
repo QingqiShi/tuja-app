@@ -22,6 +22,7 @@ const Button = styled.button<ButtonProps & React.ComponentProps<'button'>>`
   font-weight: ${v.fontSemiBold};
   display: inline-flex;
   align-items: center;
+  transition: box-shadow 0.2s, color 0.2s, background 0.2s;
 
   &:hover {
     background-color: ${v.backgroundRaised};

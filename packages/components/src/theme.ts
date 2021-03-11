@@ -9,6 +9,7 @@ export const v = {
   backgroundHover: 'var(--background-hover, rgba(255, 255, 255, 0.1))',
   textMain: 'var(--text-main, #ffffff)',
   textSecondary: 'var(--text-secondary, #9e9e9e)',
+  textOnAccent: 'var(--text-on-accent, #ffffff)',
   textGain: 'var(--text-gain, #49c569)',
   textLoss: 'var(--text-loss, #f74b3c)',
   accentMain: 'var(--accent-main, #774afb)',
