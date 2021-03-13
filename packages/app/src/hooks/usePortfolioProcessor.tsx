@@ -161,6 +161,27 @@ export function PortfolioProcessorProvider({
           baseCurrency,
         },
       });
+    } else {
+      setPortfolioPerformance(
+        portfolioId
+          ? {
+              valueSeries: new TimeSeries(),
+              gainSeries: new TimeSeries(),
+              cashFlowSeries: new TimeSeries(),
+              monthlyDividends: new TimeSeries(),
+              portfolio: {
+                id: portfolioId,
+                valueSeries: new TimeSeries(),
+                gainSeries: new TimeSeries(),
+                cashFlowSeries: new TimeSeries(),
+                monthlyDividends: new TimeSeries(),
+                twrrSeries: new TimeSeries(),
+                totalHoldingsValue: 0,
+                holdings: {},
+              },
+            }
+          : null
+      );
     }
 
     return () => {

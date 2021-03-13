@@ -2,13 +2,14 @@ import { useRef, useState } from 'react';
 import { useIntersection, useClickAway } from 'react-use';
 import { RiMenuLine } from 'react-icons/ri';
 import styled, { css } from 'styled-components';
-import { transparentize } from 'polished';
 import Button from '../inputs/Button';
+import EdgePadding from '../layout/EdgePadding';
 import { shadow, card, translucent } from '../../mixins';
+import { v } from '../../theme';
 
 const Placeholder = styled.div`
   height: 4rem;
-  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+  @media (${v.minLaptop}) {
     height: 3.5rem;
   }
 `;
@@ -18,11 +19,8 @@ const Bar = styled.header<{ isAtTop: boolean }>`
   top: 0;
   left: 0;
   width: 100%;
-  display: flex;
-  align-items: center;
-  z-index: ${({ theme }) => theme.zIndex.fixed};
-  background-color: ${({ theme }) =>
-    transparentize(1, theme.colors.backgroundRaised)};
+  z-index: ${v.zFixed};
+  background-color: transparent;
   transition: box-shadow 0.2s, background-color 0.2s;
 
   ${({ isAtTop }) =>
@@ -33,38 +31,33 @@ const Bar = styled.header<{ isAtTop: boolean }>`
     `}
 
   height: 4rem;
-  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
+  @media (${v.minLaptop}) {
     height: 3.5rem;
-  }
-
-  padding: 0 ${({ theme }) => theme.spacings.xs};
-  @media (${({ theme }) => theme.breakpoints.minTablet}) {
-    padding: 0 ${({ theme }) => theme.spacings.s};
-  }
-  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-    padding: 0 ${({ theme }) => theme.spacings.m};
-  }
-  @media (${({ theme }) => theme.breakpoints.minDesktop}) {
-    padding: 0 ${({ theme }) => theme.spacings.l};
   }
 `;
 
-const LogoContainer = styled.div`
-  margin-right: ${({ theme }) => theme.spacings.s};
+const BarWrapper = styled(EdgePadding)`
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  > :not(:first-child) {
+    margin-left: ${v.spacerS};
+  }
+  @media (${v.minTablet}) {
+    > :not(:first-child) {
+      margin-left: ${v.spacerM};
+    }
+  }
 `;
 
 const Nav = styled.nav`
   display: flex;
   flex-grow: 1;
 
-  &:not(:first-child) {
-    @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-      margin-left: ${({ theme }) => theme.spacings.m};
-    }
-  }
-
-  > * {
-    margin-right: ${({ theme }) => theme.spacings.xs};
+  > :not(:last-child) {
+    margin-right: ${v.spacerXS};
   }
 
   > :last-child {
@@ -76,28 +69,33 @@ const EndNav = styled(Nav)`
   flex-grow: 0;
 `;
 
+const OverlayContainer = styled(EdgePadding)`
+  position: fixed;
+  top: calc(4rem + ${v.spacerXS});
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+  z-index: ${v.zFixed};
+
+  @media (${v.minLaptop}) {
+    top: calc(3.5rem + ${v.spacerXS});
+  }
+`;
+
 const Overlay = styled.div`
   ${card}
   ${translucent}
+  pointer-events:all;
   display: flex;
   flex-direction: column;
-  position: fixed;
-  padding: ${({ theme }) => theme.spacings.xs};
-  z-index: ${({ theme }) => theme.zIndex.fixed};
-  top: calc(4rem + ${({ theme }) => theme.spacings.xs});
-  min-width: calc(100vw - ${({ theme }) => theme.spacings.xs} * 2);
-  right: ${({ theme }) => theme.spacings.xs};
+  padding: ${v.spacerXS};
+  width: 100%;
 
-  @media (${({ theme }) => theme.breakpoints.minTablet}) {
+  @media (${v.minTablet}) {
+    width: auto;
     min-width: 15rem;
-    right: ${({ theme }) => theme.spacings.s};
-  }
-  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-    top: calc(3.5rem + ${({ theme }) => theme.spacings.xs});
-    right: ${({ theme }) => theme.spacings.m};
-  }
-  @media (${({ theme }) => theme.breakpoints.minDesktop}) {
-    right: ${({ theme }) => theme.spacings.l};
   }
 `;
 
@@ -119,20 +117,10 @@ function TopBar({ links, endLinks, menu, logo }: TopBarProps) {
   return (
     <Placeholder ref={placeholderRef}>
       <Bar isAtTop={!!intersection?.isIntersecting}>
-        {logo && <LogoContainer>{logo}</LogoContainer>}
-        <Nav>
-          {links?.map((buttonProps, i) => (
-            <Button
-              key={`nav-${i}`}
-              compact
-              hideTextOnMobile
-              {...buttonProps}
-            />
-          ))}
-        </Nav>
-        {!!endLinks?.length && (
-          <EndNav>
-            {endLinks.map((buttonProps, i) => (
+        <BarWrapper>
+          {logo && <div>{logo}</div>}
+          <Nav>
+            {links?.map((buttonProps, i) => (
               <Button
                 key={`nav-${i}`}
                 compact
@@ -140,34 +128,48 @@ function TopBar({ links, endLinks, menu, logo }: TopBarProps) {
                 {...buttonProps}
               />
             ))}
-          </EndNav>
-        )}
-        {!!menu?.length && (
-          <div>
-            <Button
-              data-testid="top-bar-menu"
-              icon={<RiMenuLine />}
-              onClick={() => setShowMenu((val) => !val)}
-              compact
-            />
-          </div>
-        )}
+          </Nav>
+          {!!endLinks?.length && (
+            <EndNav>
+              {endLinks.map((buttonProps, i) => (
+                <Button
+                  key={`nav-${i}`}
+                  compact
+                  hideTextOnMobile
+                  {...buttonProps}
+                />
+              ))}
+            </EndNav>
+          )}
+          {!!menu?.length && (
+            <EndNav>
+              <Button
+                data-testid="top-bar-menu"
+                icon={<RiMenuLine />}
+                onClick={() => setShowMenu((val) => !val)}
+                compact
+              />
+            </EndNav>
+          )}
+        </BarWrapper>
       </Bar>
       {menu && showMenu && (
-        <Overlay ref={flyoutRef}>
-          {menu.map((menuItem, i) => (
-            <Button
-              key={`nav-menu-${i}`}
-              align="start"
-              compact
-              {...menuItem}
-              onClick={(e) => {
-                setShowMenu(false);
-                menuItem.onClick?.(e);
-              }}
-            />
-          ))}
-        </Overlay>
+        <OverlayContainer>
+          <Overlay ref={flyoutRef}>
+            {menu.map((menuItem, i) => (
+              <Button
+                key={`nav-menu-${i}`}
+                align="start"
+                compact
+                {...menuItem}
+                onClick={(e) => {
+                  setShowMenu(false);
+                  menuItem.onClick?.(e);
+                }}
+              />
+            ))}
+          </Overlay>
+        </OverlayContainer>
       )}
     </Placeholder>
   );

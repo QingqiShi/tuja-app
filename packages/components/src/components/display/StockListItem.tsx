@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Type from './Type';
+import { v } from '../../theme';
 
 const Name = styled.div`
   min-width: 100%;
@@ -7,10 +8,16 @@ const Name = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  font-size: 0.9rem;
+  color: ${v.textSecondary};
+`;
+
+const Ticker = styled.span`
+  font-weight: ${v.fontBold};
 `;
 
 const Seperator = styled.span`
-  margin: 0 ${({ theme }) => theme.spacings.xs};
+  margin: 0 ${v.spacerXS};
 `;
 
 function decodeHtml(html: string) {
@@ -29,21 +36,15 @@ function StockListItem({ code, exchange, name }: StockListItemProps) {
   return (
     <div>
       <div>
-        <Type scale="body1" noMargin as="span" weight={800}>
-          {code}
-        </Type>
+        <Ticker>{code}</Ticker>
         {exchange && (
           <>
             <Seperator>·</Seperator>
-            <Type scale="body1" noMargin as="span">
-              {exchange}
-            </Type>
+            <span>{exchange}</span>
           </>
         )}
       </div>
-      <Type scale="body2" noMargin as={Name}>
-        {decodeHtml(name)}
-      </Type>
+      <Name>{decodeHtml(name)}</Name>
     </div>
   );
 }

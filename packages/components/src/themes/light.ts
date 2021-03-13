@@ -10,6 +10,7 @@ export default css`
   --text-on-accent: #ffffff;
   --text-gain: #49c569;
   --text-loss: #f74b3c;
+  --text-no-change: #b3b3b3;
   --accent-main: #5218fa;
   --accent-hover: #774afb;
   --ordinal-1: #556480;

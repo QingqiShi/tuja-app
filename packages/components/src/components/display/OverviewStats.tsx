@@ -20,7 +20,7 @@ const ReturnsStat = styled.span<{ val: number }>`
     } else if (val < 0) {
       return v.textLoss;
     }
-    return v.textSecondary;
+    return v.textNoChange;
   }};
 
   ${SecondaryRow} &:not(:last-child) {
