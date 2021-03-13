@@ -2,7 +2,6 @@ import { Helmet } from 'react-helmet-async';
 import { EdgePadding } from '@tuja/components';
 import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
 import { PortfolioProcessorProvider } from 'hooks/usePortfolioProcessor';
-// import PortfolioDashboard from 'components/PortfolioDashboard';
 import Portfolio from './Portfolio';
 
 function Overview() {
