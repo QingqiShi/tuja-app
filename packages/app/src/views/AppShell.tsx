@@ -17,7 +17,7 @@ import { StartDateProvider } from 'hooks/useStartDate';
 import { LoadingStateProvider } from 'hooks/useLoadingState';
 import { theme } from 'theme';
 
-const Portfolio = lazy(() => import('views/App/Portfolio'));
+const Overview = lazy(() => import('views/App/Overview'));
 const Activities = lazy(() => import('views/App/Activities'));
 const Create = lazy(() => import('views/App/Create'));
 const SignIn = lazy(() => import('views/App/SignIn'));
@@ -60,7 +60,7 @@ function AppShell() {
         {state !== 'SIGNED_IN' && state !== 'UNKNOWN' && (
           <Switch>
             <Route path="/demo" exact>
-              <Portfolio isDemo />
+              <Overview />
             </Route>
             <Route path="/signin" exact>
               <SignIn />
@@ -98,7 +98,7 @@ function AppShell() {
           !!portfolios.length && (
             <Switch>
               <Route path="/portfolio/:portfolioId" exact>
-                <Portfolio />
+                <Overview />
               </Route>
               <Route path="/portfolio/:portfolioId/activities" exact>
                 <Activities />

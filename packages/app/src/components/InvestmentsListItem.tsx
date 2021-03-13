@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { RiEdit2Line } from 'react-icons/ri';
 import styled from 'styled-components/macro';
 import { transparentize } from 'polished';
+import dayjs from 'dayjs';
 import { Button, Type, InvestmentItem, Modal } from '@tuja/components';
 import { formatCurrency } from '@tuja/libs';
 import { PortfolioPerformance } from 'libs/portfolioClient';
@@ -10,7 +11,6 @@ import usePortfolio from 'hooks/usePortfolio';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import useStartDate from 'hooks/useStartDate';
 import useAuth from 'hooks/useAuth';
-import { theme, getTheme } from 'theme';
 import {
   getDB,
   getStocksHistory,
@@ -18,7 +18,8 @@ import {
   mergeLivePriceIntoHistory,
 } from 'libs/cachedStocksData';
 import type { StockHistory } from 'libs/stocksClient';
-import dayjs from 'dayjs';
+import UpdateAlias from 'components/UpdateAlias';
+import { theme, getTheme } from 'theme';
 
 const Label = styled.div`
   font-size: ${theme.fonts.labelSize};
@@ -57,10 +58,7 @@ interface InvestmentsListItemProps {
   ticker: string;
   holdingPerformance: PortfolioPerformance['portfolio']['holdings'][''];
   portfolioValue: number;
-  showDetails?: boolean;
   mode?: 'GAIN' | 'VALUE' | 'ALLOCATION' | 'TODAY';
-  onToggle?: () => void;
-  onSetAlias?: () => void;
 }
 
 const endDate = new Date();
@@ -69,15 +67,16 @@ function InvestmentsListItem({
   ticker,
   holdingPerformance,
   portfolioValue,
-  showDetails,
   mode,
-  onToggle,
-  onSetAlias,
 }: InvestmentsListItemProps) {
   const { state } = useAuth();
   const { portfolio } = usePortfolio();
   const { isReady } = usePortfolioProcessor();
   const [startDate] = useStartDate();
+
+  // Modals
+  const [showDetails, setShowDetails] = useState(false);
+  const [showAlias, setShowAlias] = useState(false);
 
   // Load stock history from cache so we can display chart
   const [stockHistory, setStockHistory] = useState<StockHistory | null>(null);
@@ -158,9 +157,13 @@ function InvestmentsListItem({
             : livePrice.change_p
         }
         additional={additional}
-        onClick={onToggle}
+        onClick={() => setShowDetails(true)}
       />
-      <Modal width={30} open={showDetails} onClose={onToggle}>
+      <Modal
+        width={30}
+        open={showDetails}
+        onClose={() => setShowDetails(false)}
+      >
         <DataRow>
           <div>
             <Label>Ticker</Label>
@@ -221,16 +224,19 @@ function InvestmentsListItem({
         </DataRow>
         {state === 'SIGNED_IN' && (
           <ActionsContainer>
-            <Button onClick={onToggle}>Close</Button>
+            <Button onClick={() => setShowDetails(false)}>Close</Button>
             <Button
               variant="primary"
               startIcon={<RiEdit2Line />}
-              onClick={onSetAlias}
+              onClick={() => setShowAlias(true)}
             >
               Set Alias
             </Button>
           </ActionsContainer>
         )}
+      </Modal>
+      <Modal onClose={() => setShowAlias(false)} open={showAlias}>
+        <UpdateAlias ticker={ticker} onClose={() => setShowAlias(false)} />
       </Modal>
     </>
   );

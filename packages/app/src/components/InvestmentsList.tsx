@@ -50,7 +50,7 @@ function InvestmentsList() {
 
   const { holdings, valueSeries } = portfolioPerformance!.portfolio;
 
-  const [showMore, setShowMore] = useState('');
+  // const [showMore, setShowMore] = useState('');
   const [showAlias, setShowAlias] = useState(false);
   const [currentTicker, setCurrentTicker] = useState('');
   const [sortBy, setSortBy] = useState<
@@ -122,13 +122,7 @@ function InvestmentsList() {
             ticker={ticker}
             holdingPerformance={holdings[ticker]}
             portfolioValue={value}
-            showDetails={showMore === ticker}
             mode={sortBy}
-            onToggle={() => setShowMore(showMore === ticker ? '' : ticker)}
-            onSetAlias={() => {
-              setCurrentTicker(ticker);
-              setShowAlias(true);
-            }}
           />
         );
       })}

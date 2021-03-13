@@ -12,6 +12,7 @@ export const v = {
   textOnAccent: 'var(--text-on-accent, #ffffff)',
   textGain: 'var(--text-gain, #49c569)',
   textLoss: 'var(--text-loss, #f74b3c)',
+  textNoChange: 'var(--text-no-change, #775d68)',
   accentMain: 'var(--accent-main, #774afb)',
   accentHover: 'var(--accent-hover, #aa8dff)',
   ordinal1: 'var(--ordinal-1, #5b6a87)',
@@ -22,6 +23,7 @@ export const v = {
 
   // Fonts
   fontFamily: "'Inter', sans-serif",
+  fontRegular: 400,
   fontSemiBold: 600,
   fontBold: 700,
   fontExtraBold: 800,

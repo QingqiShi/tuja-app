@@ -1,33 +1,35 @@
 import styled from 'styled-components';
-import { transparentize } from 'polished';
+import ButtonBase from '../controls/ButtonBase';
 import StockListItem from './StockListItem';
 import Chart from './Chart';
 import Type from './Type';
-import { card } from '../../mixins';
+import { v } from '../../theme';
 
-const Container = styled.div`
-  ${card}
-  cursor: pointer;
-  margin-bottom: ${({ theme }) => theme.spacings.s};
-  transition: transform 0.2s;
+const Container = styled(ButtonBase)`
+  box-shadow: ${v.shadowRaised};
+  border-radius: ${v.radiusCard};
+  background-color: ${v.backgroundRaised};
+  margin-bottom: ${v.spacerS};
   display: flex;
   align-items: center;
+  width: 100%;
+  text-align: left;
 
-  padding: ${({ theme }) => theme.spacings.xs};
-  @media (${({ theme }) => theme.breakpoints.minTablet}) {
-    padding: ${({ theme }) => theme.spacings.s};
+  padding: ${v.spacerXS};
+  @media (${v.minTablet}) {
+    padding: ${v.spacerS};
   }
 
   &:hover {
-    transform: scale(1.01);
+    background-color: ${v.backgroundOverlay};
+    box-shadow: ${v.shadowOverlay};
   }
 `;
 
 const IconContainer = styled.div`
-  border-radius: ${({ theme }) => theme.spacings.xs};
-  background-color: ${({ theme }) =>
-    transparentize(0.9, theme.colors.textOnBackground)};
-  color: ${({ theme }) => transparentize(0.7, theme.colors.textOnBackground)};
+  border-radius: ${v.radiusMedia};
+  background-color: ${v.backgroundOverlay};
+  color: ${v.textSecondary};
   display: grid;
   place-items: center;
   place-content: center;
@@ -37,13 +39,13 @@ const IconContainer = styled.div`
   width: 2.5rem;
   min-width: 2.5rem;
   font-size: 0.6rem;
-  margin-right: ${({ theme }) => theme.spacings.s};
-  @media (${({ theme }) => theme.breakpoints.minTablet}) {
+  margin-right: ${v.spacerS};
+  @media (${v.minTablet}) {
     height: 3rem;
     width: 3rem;
     min-width: 3rem;
     font-size: 0.8rem;
-    margin-right: ${({ theme }) => theme.spacings.m};
+    margin-right: ${v.spacerM};
   }
 
   img {
@@ -54,11 +56,12 @@ const IconContainer = styled.div`
 
 const NameContainer = styled.div`
   flex-grow: 1;
+  font-weight: ${v.fontRegular};
 
   &:not(:last-child) {
-    margin-right: ${({ theme }) => theme.spacings.xs};
-    @media (${({ theme }) => theme.breakpoints.minTablet}) {
-      margin-right: ${({ theme }) => theme.spacings.s};
+    margin-right: ${v.spacerXS};
+    @media (${v.minTablet}) {
+      margin-right: ${v.spacerS};
     }
   }
 `;
@@ -69,9 +72,9 @@ const ChartContainer = styled.div`
   width: 20%;
 
   &:not(:last-child) {
-    margin-right: ${({ theme }) => theme.spacings.xs};
-    @media (${({ theme }) => theme.breakpoints.minTablet}) {
-      margin-right: ${({ theme }) => theme.spacings.s};
+    margin-right: ${v.spacerXS};
+    @media (${v.minTablet}) {
+      margin-right: ${v.spacerS};
     }
   }
 `;
@@ -89,17 +92,17 @@ const DataContainer = styled.div`
 `;
 
 const ChangeTag = styled.div<{ change?: number }>`
-  color: ${({ theme }) => theme.colors.textOnGainLoss};
-  padding: 0 ${({ theme }) => theme.spacings.xs};
-  border-radius: ${({ theme }) => theme.spacings.xs};
+  color: ${v.backgroundMain};
+  padding: 0 ${v.spacerXS};
+  border-radius: ${v.radiusMedia};
 
-  background-color: ${({ change, theme }) => {
+  background-color: ${({ change }) => {
     if (!change) {
-      return theme.colors.disabled;
+      return v.textNoChange;
     } else if (change > 0) {
-      return theme.colors.gain;
+      return v.textGain;
     }
-    return theme.colors.loss;
+    return v.textLoss;
   }};
 `;
 

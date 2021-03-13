@@ -153,7 +153,6 @@ function Chart({
         minVal - paddingBottom - (maxVal - minVal) * 0.1,
         maxVal + paddingTop + (maxVal - minVal) * 0.1,
       ],
-      nice: true,
     });
   }, [benchmark, data, hideTooltip, yMax]);
 
