@@ -14,6 +14,11 @@ export const v = {
   textLoss: 'var(--text-loss, #f74b3c)',
   accentMain: 'var(--accent-main, #774afb)',
   accentHover: 'var(--accent-hover, #aa8dff)',
+  ordinal1: 'var(--ordinal-1, #5b6a87)',
+  ordinal2: 'var(--ordinal-2, #d6a59c)',
+  ordinal3: 'var(--ordinal-3, #a3b4d4)',
+  ordinal4: 'var(--ordinal-4, #bfd48e)',
+  ordinal5: 'var(--ordinal-5, #7c8761)',
 
   // Fonts
   fontFamily: "'Inter', sans-serif",

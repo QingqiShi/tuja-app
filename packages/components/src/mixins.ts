@@ -1,5 +1,12 @@
 import { css } from 'styled-components';
 import { transparentize, readableColor } from 'polished';
+import { v } from './theme';
+
+export const ordinalBackgroundColor = css<{ index?: number }>`
+  background-color: ${({ index }) =>
+    v[`ordinal${((index ?? 0) % 5) + 1}` as keyof typeof v]};
+  opacity: ${({ index }) => 0.6 ** Math.floor((index ?? 0) / 5)};
+`;
 
 export const paddings = css<{ compact?: boolean }>`
   ${({ compact }) =>
