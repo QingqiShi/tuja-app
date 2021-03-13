@@ -42,7 +42,7 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(minMax);
 
 const Container = styled.div`
-  padding-bottom: calc(3.5rem + ${v.spacerM} + env(safe-area-inset-bottom));
+  padding-bottom: calc(${v.spacerS} + env(safe-area-inset-bottom));
 `;
 
 function AppShell() {
