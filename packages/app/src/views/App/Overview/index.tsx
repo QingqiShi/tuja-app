@@ -4,7 +4,11 @@ import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
 import { PortfolioProcessorProvider } from 'hooks/usePortfolioProcessor';
 import Portfolio from './Portfolio';
 
-function Overview() {
+interface OverviewProps {
+  isDemo?: boolean;
+}
+
+function Overview({ isDemo }: OverviewProps) {
   useScrollToTopOnMount();
   return (
     <EdgePadding>
@@ -12,7 +16,7 @@ function Overview() {
         <title>Portfolio | Tuja App</title>
       </Helmet>
       <PortfolioProcessorProvider>
-        <Portfolio />
+        <Portfolio isDemo={isDemo} />
       </PortfolioProcessorProvider>
     </EdgePadding>
   );

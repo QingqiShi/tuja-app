@@ -60,7 +60,7 @@ function AppShell() {
         {state !== 'SIGNED_IN' && state !== 'UNKNOWN' && (
           <Switch>
             <Route path="/demo" exact>
-              <Overview />
+              <Overview isDemo />
             </Route>
             <Route path="/signin" exact>
               <SignIn />

@@ -95,7 +95,11 @@ const getSortedHoldings = (
     });
 };
 
-function Portfolio() {
+interface PortfolioProps {
+  isDemo?: boolean;
+}
+
+function Portfolio({ isDemo }: PortfolioProps) {
   const history = useHistory();
 
   const { portfolio, portfolios } = usePortfolio();
@@ -230,7 +234,7 @@ function Portfolio() {
         </>
       )}
 
-      <Fab onClick={() => setShowAddActivities(true)} />
+      {!isDemo && <Fab onClick={() => setShowAddActivities(true)} />}
 
       <ActivitySelect
         showAddActivities={showAddActivities}
