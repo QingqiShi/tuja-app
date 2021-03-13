@@ -243,18 +243,23 @@ function Chart({
   const clearTooltip = () => {
     if (tooltipLineRef.current) {
       tooltipLineRef.current.style.opacity = '0';
+      tooltipLineRef.current.style.transform = `translate3d(0, 0, 0)`;
     }
     if (tooltipDotRef.current) {
       tooltipDotRef.current.style.opacity = '0';
+      tooltipDotRef.current.style.transform = `translate3d(0, 0, 0)`;
     }
     if (tooltipBenchDotRef.current) {
       tooltipBenchDotRef.current.style.opacity = '0';
+      tooltipBenchDotRef.current.style.transform = `translate3d(0, 0, 0)`;
     }
     if (tooltipContainerRef.current) {
       tooltipContainerRef.current.style.opacity = '0';
+      tooltipContainerRef.current.style.transform = `translate3d(0, 0, 0)`;
     }
     if (tooltipBenchContainerRef.current) {
       tooltipBenchContainerRef.current.style.opacity = '0';
+      tooltipBenchContainerRef.current.style.transform = `translate3d(0, 0, 0)`;
     }
   };
   useEffect(() => {
