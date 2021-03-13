@@ -12,6 +12,11 @@ export default css`
   --text-loss: #f74b3c;
   --accent-main: #5218fa;
   --accent-hover: #774afb;
+  --ordinal-1: #556480;
+  --ordinal-2: #cf9f97;
+  --ordinal-3: #9daecc;
+  --ordinal-4: #b8cc89;
+  --ordinal-5: #75805c;
 
   --shadow-pressed: 0 0.1rem 0.5rem rgba(0, 0, 0, 0.05),
     0 0.2rem 0.2rem rgba(0, 0, 0, 0.1);
