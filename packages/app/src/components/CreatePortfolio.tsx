@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components/macro';
 import { RiBriefcaseLine, RiAddLine } from 'react-icons/ri';
-import { Button, Select, TextInput, Type } from '@tuja/components';
+import { Button, Select, TextInput, Type, v } from '@tuja/components';
 import { Center } from 'commonStyledComponents';
-import { theme } from 'theme';
 
 const LargeIcon = styled.div`
   display: block;
@@ -16,11 +15,11 @@ const CreateContainer = styled.div`
   max-width: 300px;
   margin: 0 auto;
 
-  @media (${theme.breakpoints.minTablet}) {
+  @media (${v.minTablet}) {
     max-width: 400px;
   }
 
-  @media (${theme.breakpoints.minLaptop}) {
+  @media (${v.minLaptop}) {
     max-width: 450px;
   }
 
@@ -29,7 +28,7 @@ const CreateContainer = styled.div`
   }
 
   > div {
-    padding: ${theme.spacings('m')};
+    padding: ${v.spacerM};
   }
 `;
 

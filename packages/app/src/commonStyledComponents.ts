@@ -1,6 +1,5 @@
 import styled from 'styled-components/macro';
-import { transparentize } from 'polished';
-import { theme, getTheme } from 'theme';
+import { v } from '@tuja/components';
 
 export const Center = styled.div`
   min-height: 100%;
@@ -19,18 +18,15 @@ export const Card = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: ${theme.colors.backgroundRaised};
-  box-shadow: 0 0 0 1px
-    ${getTheme(theme.colors.textOnBackground, (color) =>
-      transparentize(0.9, color)
-    )};
-  border-radius: ${theme.spacings('xs')};
-  padding: ${theme.spacings('s')};
-  @media (${theme.breakpoints.minTablet}) {
-    padding: ${theme.spacings('m')} ${theme.spacings('s')};
+  background-color: ${v.backgroundRaised};
+  box-shadow: ${v.shadowOverlay};
+  border-radius: ${v.radiusCard};
+  padding: ${v.spacerS};
+  @media (${v.minTablet}) {
+    padding: ${v.spacerM} ${v.spacerS};
   }
-  @media (${theme.breakpoints.minLaptop}) {
-    padding: ${theme.spacings('m')};
+  @media (${v.minLaptop}) {
+    padding: ${v.spacerM};
   }
 `;
 
@@ -39,13 +35,13 @@ export const CardMedia = styled.div`
   overflow: auto;
   display: flex;
   flex-direction: column;
-  margin: -${theme.spacings('s')};
+  margin: -${v.spacerS};
 
-  @media (${theme.breakpoints.minTablet}) {
-    margin: -${theme.spacings('m')} -${theme.spacings('s')};
+  @media (${v.minTablet}) {
+    margin: -${v.spacerM} -${v.spacerS};
   }
-  @media (${theme.breakpoints.minLaptop}) {
-    margin: -${theme.spacings('m')};
+  @media (${v.minLaptop}) {
+    margin: -${v.spacerM};
   }
 
   &:not(:first-child) {
@@ -73,7 +69,7 @@ export const TitleRow = styled.div`
     }
   }
 
-  @media (${theme.breakpoints.minLaptop}) {
+  @media (${v.minLaptop}) {
     display: flex;
     align-items: center;
 
@@ -94,29 +90,29 @@ export const ActionsContainer = styled.div`
   flex-direction: row-reverse;
   justify-content: space-between;
   position: sticky;
-  background-color: ${theme.colors.backgroundRaised};
-  bottom: -${theme.spacings('s')};
-  padding: ${theme.spacings('s')};
-  margin: 0 -${theme.spacings('s')};
-  @media (${theme.breakpoints.minTablet}) {
-    bottom: -${theme.spacings('m')};
-    margin: 0 -${theme.spacings('s')};
+  background-color: ${v.backgroundRaised};
+  bottom: -${v.spacerS};
+  padding: ${v.spacerS};
+  margin: 0 -${v.spacerS};
+  @media (${v.minTablet}) {
+    bottom: -${v.spacerM};
+    margin: 0 -${v.spacerS};
   }
-  @media (${theme.breakpoints.minLaptop}) {
-    bottom: -${theme.spacings('m')};
-    margin: 0 -${theme.spacings('m')};
+  @media (${v.minLaptop}) {
+    bottom: -${v.spacerM};
+    margin: 0 -${v.spacerM};
   }
 `;
 
 export const Field = styled.div`
-  margin-top: calc(1.08rem + ${({ theme }) => theme.spacings.xs});
+  margin-top: calc(1.08rem + ${v.spacerXS});
 `;
 
 export const Label = styled.label`
-  font-size: ${theme.fonts.labelSize};
-  line-height: ${theme.fonts.labelHeight};
-  font-weight: ${theme.fonts.labelWeight};
-  margin-bottom: ${theme.spacings('xs')};
+  font-size: 0.9rem;
+  line-height: 1.2em;
+  font-weight: ${v.fontSemiBold};
+  margin-bottom: ${v.spacerXS};
   display: block;
   text-align: left;
 `;

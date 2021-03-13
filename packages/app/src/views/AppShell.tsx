@@ -8,14 +8,13 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/functions';
-import { TopLinearLoader } from '@tuja/components';
+import { TopLinearLoader, v } from '@tuja/components';
 import NavBar from 'components/NavBar';
 import GlobalLoader from 'components/GlobalLoader';
 import useAuth, { AuthProvider } from 'hooks/useAuth';
 import usePortfolio, { PortfolioProvider } from 'hooks/usePortfolio';
 import { StartDateProvider } from 'hooks/useStartDate';
 import { LoadingStateProvider } from 'hooks/useLoadingState';
-import { theme } from 'theme';
 
 const Overview = lazy(() => import('views/App/Overview'));
 const Activities = lazy(() => import('views/App/Activities'));
@@ -43,9 +42,7 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(minMax);
 
 const Container = styled.div`
-  padding-bottom: calc(
-    3.5rem + ${theme.spacings('m')} + env(safe-area-inset-bottom)
-  );
+  padding-bottom: calc(3.5rem + ${v.spacerM} + env(safe-area-inset-bottom));
 `;
 
 function AppShell() {

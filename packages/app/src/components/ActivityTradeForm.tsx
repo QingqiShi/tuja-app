@@ -10,7 +10,6 @@ import {
   RiCloseLine,
 } from 'react-icons/ri';
 import styled, { css } from 'styled-components/macro';
-import { transparentize } from 'polished';
 import {
   Button,
   DateInput,
@@ -20,6 +19,7 @@ import {
   StockListItem,
   Type,
   motion,
+  v,
 } from '@tuja/components';
 import {
   Activity,
@@ -29,7 +29,6 @@ import {
 } from '@tuja/libs';
 import CurrencyInput from './CurrencyInput';
 import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
-import { theme, getTheme } from 'theme';
 import {
   fetchStockSearch,
   fetchStockInfos,
@@ -59,32 +58,29 @@ const SuggestionRow = styled.div`
 `;
 
 const QuantitiesContainer = styled.div`
-  margin-bottom: ${theme.spacings('s')};
-  border-bottom: 1px solid
-    ${getTheme(theme.colors.textOnBackground, (color) =>
-      transparentize(0.9, color)
-    )};
+  margin-bottom: ${v.spacerS};
+  border-bottom: 1px solid ${v.textSecondary};
 `;
 
 const Row = styled.div`
-  margin-top: ${({ theme }) => theme.spacings.s};
+  margin-top: ${v.spacerS};
 
   > * {
     display: block;
   }
 
-  @media (${({ theme }) => theme.breakpoints.minTablet}) {
+  @media (${v.minTablet}) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: ${({ theme }) => theme.spacings.xs};
+    margin-top: ${v.spacerXS};
   }
 `;
 
 const EditableField = styled.div`
   text-align: right;
-  margin-top: ${({ theme }) => theme.spacings.xs};
-  @media (${({ theme }) => theme.breakpoints.minTablet}) {
+  margin-top: ${v.spacerXS};
+  @media (${v.minTablet}) {
     margin-top: 0;
     width: 60%;
   }
@@ -97,14 +93,14 @@ const ButtonRow = styled.div`
     flex-grow: 1;
   }
   button {
-    margin: 0 0 calc(${theme.spacings('s')} + 1px) ${theme.spacings('xs')};
+    margin: 0 0 calc(${v.spacerS} + 1px) ${v.spacerXS};
   }
 `;
 
 const ButtonRowCenter = styled(ButtonRow)`
   align-items: center;
   button {
-    margin: 0 0 1px ${theme.spacings('xs')};
+    margin: 0 0 1px ${v.spacerXS};
   }
 `;
 
