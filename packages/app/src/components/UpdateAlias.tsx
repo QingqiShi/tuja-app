@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import { RiCheckLine } from 'react-icons/ri';
 import styled from 'styled-components/macro';
-import { Button, TextInput } from '@tuja/components';
+import { Button, TextInput, v } from '@tuja/components';
 import { updateHoldingAlias } from 'libs/portfolioClient';
 import usePortfolio from 'hooks/usePortfolio';
-import { theme } from 'theme';
 
 const Container = styled.div`
   width: 400px;
   max-width: 100%;
-  margin: ${theme.spacings('m')} auto 0;
+  margin: ${v.spacerM} auto 0;
   text-align: center;
   position: relative;
 `;
@@ -20,17 +19,17 @@ const ActionsContainer = styled.div`
   flex-direction: row-reverse;
   justify-content: space-between;
   position: sticky;
-  background-color: ${theme.colors.backgroundRaised};
-  bottom: -${theme.spacings('s')};
-  padding: ${theme.spacings('s')};
-  margin: 0 -${theme.spacings('s')};
-  @media (${theme.breakpoints.minTablet}) {
-    bottom: -${theme.spacings('m')};
-    margin: 0 -${theme.spacings('s')};
+  background-color: ${v.backgroundRaised};
+  bottom: -${v.spacerS};
+  padding: ${v.spacerS};
+  margin: 0 -${v.spacerS};
+  @media (${v.minTablet}) {
+    bottom: -${v.spacerM};
+    margin: 0 -${v.spacerS};
   }
-  @media (${theme.breakpoints.minLaptop}) {
-    bottom: -${theme.spacings('m')};
-    margin: 0 -${theme.spacings('m')};
+  @media (${v.minLaptop}) {
+    bottom: -${v.spacerM};
+    margin: 0 -${v.spacerM};
   }
 `;
 

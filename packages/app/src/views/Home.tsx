@@ -2,34 +2,31 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { MdShowChart, MdPieChartOutlined, MdAutorenew } from 'react-icons/md';
 import styled from 'styled-components/macro';
-import { Button, Type } from '@tuja/components';
+import { Button, Type, v } from '@tuja/components';
 import { Center } from 'commonStyledComponents';
 import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
-import { theme } from 'theme';
 
 const FullHeight = styled.div`
   height: 60vh;
-  padding: ${theme.spacings('m')};
+  padding: ${v.spacerM};
 `;
 
 const Title = styled(Type)`
-  margin-bottom: ${theme.spacings('s')};
+  margin-bottom: ${v.spacerS};
   position: relative;
   display: inline-block;
 `;
 
 const SubTitle = styled(Type)`
-  margin-top: ${theme.spacings('s')};
+  margin-top: ${v.spacerS};
 `;
 
 const BetaBadge = styled.div`
-  font-size: ${theme.fonts.ctaSize};
-  font-weight: ${theme.fonts.ctaWeight};
-  line-height: ${theme.fonts.ctaHeight};
-  letter-spacing: ${theme.fonts.ctaSpacing};
+  font-size: 1rem;
+  font-weight: ${v.fontSemiBold};
   text-transform: uppercase;
   position: absolute;
-  right: -${theme.spacings('xs')};
+  right: -${v.spacerXS};
   top: 0;
   width: 0;
 `;

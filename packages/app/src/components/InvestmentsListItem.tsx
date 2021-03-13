@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { RiEdit2Line } from 'react-icons/ri';
 import styled from 'styled-components/macro';
-import { transparentize } from 'polished';
 import dayjs from 'dayjs';
-import { Button, Type, InvestmentItem, Modal } from '@tuja/components';
+import { Button, Type, InvestmentItem, Modal, v } from '@tuja/components';
 import { formatCurrency } from '@tuja/libs';
 import { PortfolioPerformance } from 'libs/portfolioClient';
 import { fetchStockLogo } from 'libs/stocksClient';
@@ -19,28 +18,22 @@ import {
 } from 'libs/cachedStocksData';
 import type { StockHistory } from 'libs/stocksClient';
 import UpdateAlias from 'components/UpdateAlias';
-import { theme, getTheme } from 'theme';
 
 const Label = styled.div`
-  font-size: ${theme.fonts.labelSize};
-  line-height: ${theme.fonts.labelHeight};
-  font-weight: ${theme.fonts.labelWeight};
-  color: ${getTheme(theme.colors.textOnBackground, (color) =>
-    transparentize(0.4, color)
-  )};
+  font-size: 0.9rem;
+  line-height: 1.2em;
+  font-weight: ${v.fontSemiBold};
+  color: ${v.textSecondary};
   margin-bottom: 0;
-  @media (${theme.breakpoints.minLaptop}) {
-    margin-bottom: 0;
-  }
 `;
 
 const DataRow = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  padding-top: ${theme.spacings('s')};
-  grid-gap: ${theme.spacings('xs')};
-  @media (${theme.breakpoints.minLaptop}) {
-    grid-gap: ${theme.spacings('s')};
+  padding-top: ${v.spacerS};
+  grid-gap: ${v.spacerXS};
+  @media (${v.minLaptop}) {
+    grid-gap: ${v.spacerS};
   }
   p {
     margin: 0;
@@ -51,7 +44,7 @@ const ActionsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: ${theme.spacings('s')};
+  margin-top: ${v.spacerS};
 `;
 
 interface InvestmentsListItemProps {

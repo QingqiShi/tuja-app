@@ -6,7 +6,7 @@ export default css`
   --background-overlay: #ffffff;
   --background-hover: rgba(0, 0, 0, 0.05);
   --text-main: #211a1d;
-  --text-secondary: #382e32;
+  --text-secondary: #7d7277;
   --text-on-accent: #ffffff;
   --text-gain: #49c569;
   --text-loss: #f74b3c;
