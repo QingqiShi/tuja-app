@@ -218,6 +218,7 @@ function Chart({
         let tooltipX = x - r;
         if (x >= xMax - 5 - r) tooltipX = xMax - 5 - w;
         if (x <= r + 5) tooltipX = 5;
+        console.log('tooltipbenchcontainer set');
         tooltipBenchContainerRef.current.style.opacity = '1';
         tooltipBenchContainerRef.current.style.transform = `translate3d(${tooltipX}px, 0, 0)`;
       }
@@ -254,6 +255,7 @@ function Chart({
       tooltipContainerRef.current.style.opacity = '0';
     }
     if (tooltipBenchContainerRef.current) {
+      console.log('tooltipcontainer opacity', tooltipBenchContainerRef.current);
       tooltipBenchContainerRef.current.style.opacity = '0';
     }
   };
@@ -465,6 +467,7 @@ function Chart({
               <g>
                 <line
                   ref={tooltipLineRef}
+                  style={{ opacity: 0 }}
                   x1="0"
                   y1="0"
                   x2="0"
@@ -477,6 +480,7 @@ function Chart({
                 />
                 <circle
                   ref={tooltipDotRef}
+                  style={{ opacity: 0 }}
                   cx={0}
                   cy={0}
                   r={5}
@@ -486,6 +490,7 @@ function Chart({
                 {benchmark && (
                   <circle
                     ref={tooltipBenchDotRef}
+                    style={{ opacity: 0 }}
                     cx={0}
                     cy={0}
                     r={3}
@@ -503,6 +508,7 @@ function Chart({
           ref={tooltipContainerRef}
           left={margin.left}
           top={margin.top + 1}
+          style={{ opacity: 0 }}
         >
           <div ref={tooltipRef}>
             <StyledTooltip primary>
@@ -519,6 +525,7 @@ function Chart({
           ref={tooltipBenchContainerRef}
           left={margin.left}
           bottom={margin.bottom + 1}
+          style={{ opacity: 0 }}
         >
           <div ref={benchTooltipRef}>
             <StyledTooltip>
