@@ -26,7 +26,7 @@ import { PortfolioPerformance } from 'libs/portfolioClient';
 
 const Container = styled.div`
   margin-top: ${v.spacerS};
-  margin-bottom: calc(env(safe-area-inset-bottom) + 5rem);
+  margin-bottom: calc(7rem);
 `;
 
 const Spacer = styled.div`
