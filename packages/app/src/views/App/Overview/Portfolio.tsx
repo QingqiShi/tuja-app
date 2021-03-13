@@ -131,8 +131,10 @@ function Portfolio({ isDemo }: PortfolioProps) {
             value: p.id,
           }))}
           onChange={(value) => {
-            resetSnapshots();
-            history.push(`/portfolio/${value}`);
+            if (history.location.pathname !== `/portfolio/${value}`) {
+              resetSnapshots();
+              history.push(`/portfolio/${value}`);
+            }
           }}
           align="left"
         />
