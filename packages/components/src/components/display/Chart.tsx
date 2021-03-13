@@ -218,7 +218,6 @@ function Chart({
         let tooltipX = x - r;
         if (x >= xMax - 5 - r) tooltipX = xMax - 5 - w;
         if (x <= r + 5) tooltipX = 5;
-        console.log('tooltipbenchcontainer set');
         tooltipBenchContainerRef.current.style.opacity = '1';
         tooltipBenchContainerRef.current.style.transform = `translate3d(${tooltipX}px, 0, 0)`;
       }
@@ -255,7 +254,6 @@ function Chart({
       tooltipContainerRef.current.style.opacity = '0';
     }
     if (tooltipBenchContainerRef.current) {
-      console.log('tooltipcontainer opacity', tooltipBenchContainerRef.current);
       tooltipBenchContainerRef.current.style.opacity = '0';
     }
   };
