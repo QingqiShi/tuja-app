@@ -47,7 +47,6 @@ export const v = {
   spacerL: '3rem',
   spacerXL: '5rem',
   spacerXXL: '8rem',
-  edgePadding: 'var(--edge-padding, 1rem)',
 
   // Shadows
   shadowPressed:
@@ -60,6 +59,11 @@ export const v = {
   // Border-radius
   radiusCard: '1rem',
   radiusMedia: '0.5rem',
+
+  // Lengths
+  maxLayoutWidth: 'var(--max-layout-width, 100%)',
+  upDownPadding: 'var(--up-down-padding, 1rem)',
+  leftRightPadding: 'var(--left-right-padding, 0.5rem)',
 };
 
 const commonTheme = {

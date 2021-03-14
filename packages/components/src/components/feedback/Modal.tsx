@@ -15,7 +15,7 @@ const Container = motion(styled.div`
   justify-content: center;
   padding: ${({ theme }) =>
     `calc(${theme.spacings.s} + env(safe-area-inset-top)) ${theme.spacings.s} calc(${theme.spacings.s} + env(safe-area-inset-bottom))`};
-  z-index: ${({ theme }) => theme.zIndex.fixed};
+  z-index: ${({ theme }) => theme.zIndex.backdrop};
 `);
 
 const Backdrop = styled.div`
