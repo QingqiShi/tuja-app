@@ -11,8 +11,10 @@ const EdgePadding = styled.div`
 export const invertEdgePadding = css`
   margin: 0
     calc(
-      (100vw - (min(${v.maxLayoutWidth}, 100vw) - (${v.leftRightPadding} * 2))) /
-        -2
+      (
+          100vw - min(${v.maxLayoutWidth}, 100%) - env(safe-area-inset-left) -
+            env(safe-area-inset-right)
+        ) / -2
     );
 `;
 
