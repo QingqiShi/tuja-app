@@ -4,18 +4,27 @@ import light from './themes/light';
 import { v } from './theme';
 
 const customProperties = css`
-  --edge-padding: 1rem;
+  --up-down-padding: 1rem;
+  --left-right-padding: 0.5rem;
+  --max-layout-width: 100%;
 
   @media (${v.minTablet}) {
-    --edge-padding: 2rem;
+    --up-down-padding: 2rem;
+    --left-right-padding: 1rem;
+    --max-layout-width: 44rem;
   }
 
   @media (${v.minLaptop}) {
-    --edge-padding: 3.5rem;
+    --up-down-padding: 3.5rem;
+    --left-right-padding: 2rem;
+
+    // TODO: make this 100% after introducing split layout
+    --max-layout-width: 70rem;
   }
 
   @media (${v.minDesktop}) {
-    --edge-padding: 4rem;
+    --up-down-padding: 4rem;
+    --max-layout-width: 90rem;
   }
 `;
 

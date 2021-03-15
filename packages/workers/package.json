@@ -8,7 +8,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "yarn dev",
-    "dev": "wrangler dev",
+    "dev": "wrangler dev --ip 0.0.0.0",
     "build": "wrangler build --env production",
     "lint": "eslint \"src/**/*.ts\""
   },

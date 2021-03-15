@@ -11,6 +11,7 @@ import {
   DateRangeTabs,
   DropdownMenu,
   Fab,
+  invertEdgePadding,
   OverviewStats,
   PageTitle,
   SectionTitle,
@@ -34,16 +35,11 @@ const Spacer = styled.div`
 `;
 
 const ChartContainer = styled.div`
+  ${invertEdgePadding}
   height: 11.5rem;
-  margin: 0 -1rem;
 
   @media (${v.minTablet}) {
     height: 22.5rem;
-    margin: 0
-      calc(
-        (100vw - env(safe-area-inset-left) - env(safe-area-inset-right) - 40rem) /
-          -2
-      );
   }
 
   @media (${v.minLaptop}) {

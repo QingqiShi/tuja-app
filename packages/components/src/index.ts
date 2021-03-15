@@ -37,5 +37,6 @@ export { default as EdgePadding } from './components/layout/EdgePadding';
 export { GlobalStyle } from './globalStyle';
 export { getTheme, v } from './theme';
 export { KeyboardFocusProvider } from './hooks/useKeyboardFocus';
+export { invertEdgePadding } from './components/layout/EdgePadding';
 
 export * from 'framer-motion';
