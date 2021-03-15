@@ -1,23 +1,24 @@
 import styled from 'styled-components';
 import { Plus } from 'phosphor-react';
+import EdgePadding from '../layout/EdgePadding';
 import ButtonBase from './ButtonBase';
 import { v } from '../../theme';
 
-const Container = styled.div`
+const Container = styled(EdgePadding)`
   position: fixed;
-  bottom: calc(${v.edgePadding} + env(safe-area-inset-bottom));
+  bottom: calc(
+    env(safe-area-inset-bottom) + min(${v.upDownPadding}, 4vh) + 5.5rem
+  );
   left: 0;
   right: 0;
   pointer-events: none;
   display: flex;
   justify-content: flex-end;
-  padding-left: calc(env(safe-area-inset-left) + ${v.edgePadding});
-  padding-right: calc(env(safe-area-inset-right) + ${v.edgePadding});
   z-index: ${v.zFixed};
+  max-width: min(100%, calc(${v.maxLayoutWidth} + 10rem));
 
-  @media (${v.minDesktop}) {
-    max-width: 90rem;
-    margin: 0 auto;
+  @media (${v.minTablet}) {
+    bottom: calc(env(safe-area-inset-bottom) + min(${v.upDownPadding}, 4vh));
   }
 `;
 
