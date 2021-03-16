@@ -7,6 +7,9 @@ export const v = {
   backgroundRaised: 'var(--background-raised, #272023)',
   backgroundOverlay: 'var(--background-overlay, #2a2728)',
   backgroundHover: 'var(--background-hover, rgba(255, 255, 255, 0.1))',
+  backgroundTranslucent: 'var(--background-translucent, rgba(42, 39, 40, 0.4))',
+  backgroundTabBarDrop:
+    'var(--background-tab-bar-drop, linear-gradient(rgba(33, 26, 29, 0), rgba(33, 26, 29, 1)))',
   textMain: 'var(--text-main, #ffffff)',
   textSecondary: 'var(--text-secondary, #9e9e9e)',
   textOnAccent: 'var(--text-on-accent, #ffffff)',

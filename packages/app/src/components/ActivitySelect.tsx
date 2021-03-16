@@ -6,8 +6,9 @@ import ActivityTradeForm from 'components/ActivityTradeForm';
 import ActivityDepositForm from 'components/ActivityDepositForm';
 import ActivityDividendForm from 'components/ActivityDividendForm';
 import ActivityStockDividendForm from 'components/ActivityStockDividendForm';
+import SetBenchmarkForm from 'components/SetBenchmarkForm';
 import usePortfolio from 'hooks/usePortfolio';
-import { addActivity } from 'libs/portfolioClient';
+import { addActivity, updatePortfolioBenchmark } from 'libs/portfolioClient';
 import { logEvent } from 'libs/analytics';
 
 const Container = styled.div`
@@ -67,6 +68,7 @@ function ActivitySelect({
   const [showSellModal, setShowSellModal] = useState(false);
   const [showDividendModal, setShowDividendModal] = useState(false);
   const [showStockDividendModal, setShowStockDividendModal] = useState(false);
+  const [showBenchmarkModal, setShowBenchmarkModal] = useState(false);
 
   if (!portfolio) {
     return (
@@ -95,6 +97,7 @@ function ActivitySelect({
           setShowSellModal(false);
           setShowDividendModal(false);
           setShowStockDividendModal(false);
+          setShowBenchmarkModal(false);
         }}
         open={showAddActivities}
       >
@@ -102,7 +105,8 @@ function ActivitySelect({
           !showDepositModal &&
           !showSellModal &&
           !showDividendModal &&
-          !showStockDividendModal && (
+          !showStockDividendModal &&
+          !showBenchmarkModal && (
             <Container>
               <Type scale="h5">Create Activity</Type>
               {!!portfolio.activitiesStartDate && (
@@ -125,6 +129,9 @@ function ActivitySelect({
                     onClick={() => setShowStockDividendModal(true)}
                   >
                     Stock Dividend
+                  </ActivityTrigger>
+                  <ActivityTrigger onClick={() => setShowBenchmarkModal(true)}>
+                    Configure Benchmark
                   </ActivityTrigger>
                 </>
               )}
@@ -192,6 +199,22 @@ function ActivitySelect({
                 setShowAddActivities(false);
               }}
               onSubmit={handleSubmit}
+            />
+          </ModalContainer>
+        )}
+        {showBenchmarkModal && (
+          <ModalContainer>
+            <Type scale="h5">Portfolio Benchmark</Type>
+            <SetBenchmarkForm
+              defaultBenchmark={portfolio.benchmark}
+              onClose={() => {
+                setShowBenchmarkModal(false);
+                setShowAddActivities(false);
+              }}
+              onSubmit={(benchmark) =>
+                updatePortfolioBenchmark(portfolio.id, benchmark)
+              }
+              onDelete={() => updatePortfolioBenchmark(portfolio.id, '')}
             />
           </ModalContainer>
         )}

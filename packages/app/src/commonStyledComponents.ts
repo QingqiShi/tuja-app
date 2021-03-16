@@ -90,7 +90,6 @@ export const ActionsContainer = styled.div`
   flex-direction: row-reverse;
   justify-content: space-between;
   position: sticky;
-  background-color: ${v.backgroundRaised};
   bottom: -${v.spacerS};
   padding: ${v.spacerS};
   margin: 0 -${v.spacerS};

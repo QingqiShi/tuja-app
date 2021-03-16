@@ -25,11 +25,6 @@ import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
 import useStartDate from 'hooks/useStartDate';
 import { PortfolioPerformance } from 'libs/portfolioClient';
 
-const Container = styled.div`
-  margin-top: ${v.spacerS};
-  margin-bottom: calc(7rem);
-`;
-
 const Spacer = styled.div`
   height: ${v.spacerL};
 `;
@@ -118,7 +113,7 @@ function Portfolio({ isDemo }: PortfolioProps) {
   const sortedHoldings = getSortedHoldings(holdings);
 
   return (
-    <Container>
+    <div>
       <PageTitle>
         <DropdownMenu
           value={portfolio.id}
@@ -127,7 +122,10 @@ function Portfolio({ isDemo }: PortfolioProps) {
             value: p.id,
           }))}
           onChange={(value) => {
-            if (history.location.pathname !== `/portfolio/${value}`) {
+            if (
+              !isDemo &&
+              history.location.pathname !== `/portfolio/${value}`
+            ) {
               resetSnapshots();
               history.push(`/portfolio/${value}`);
             }
@@ -238,7 +236,7 @@ function Portfolio({ isDemo }: PortfolioProps) {
         showAddActivities={showAddActivities}
         setShowAddActivities={setShowAddActivities}
       />
-    </Container>
+    </div>
   );
 }
 

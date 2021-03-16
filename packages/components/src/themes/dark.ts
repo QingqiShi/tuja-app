@@ -5,6 +5,11 @@ export default css`
   --background-raised: #272023;
   --background-overlay: #2a2728;
   --background-hover: rgba(255, 255, 255, 0.1);
+  --background-translucent: rgba(74, 70, 70, 0.4);
+  --background-tab-bar-drop: linear-gradient(
+    rgba(33, 26, 29, 0),
+    rgba(33, 26, 29, 1)
+  );
   --text-main: #ffffff;
   --text-secondary: #9e9e9e;
   --text-on-accent: #ffffff;
