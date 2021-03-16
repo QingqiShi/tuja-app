@@ -24,15 +24,16 @@ export * from './components/display/Table';
 export { default as TopLinearLoader } from './components/feedback/TopLinearLoader';
 export { default as LinearLoader } from './components/feedback/LinearLoader';
 export { default as Modal } from './components/feedback/Modal';
-export { default as TopBar } from './components/controls/TopBar';
 export { default as DateRangeTabs } from './components/controls/DateRangeTabs';
 export { default as ButtonBase } from './components/controls/ButtonBase';
 export { default as ButtonSecondary } from './components/controls/ButtonSecondary';
 export { default as ButtonTertiary } from './components/controls/ButtonTertiary';
 export { default as DropdownMenu } from './components/controls/DropdownMenu';
 export { default as Fab } from './components/controls/Fab';
+export { default as TabBar } from './components/controls/TabBar';
 export { default as ResponsiveSplit } from './components/layout/ResponsiveSplit';
 export { default as EdgePadding } from './components/layout/EdgePadding';
+export { default as AppLayout } from './components/layout/AppLayout';
 
 export { GlobalStyle } from './globalStyle';
 export { getTheme, v } from './theme';

@@ -25,7 +25,7 @@ const Button = styled.button<ButtonProps & React.ComponentProps<'button'>>`
   transition: box-shadow 0.2s, color 0.2s, background 0.2s;
 
   &:hover {
-    background-color: ${v.backgroundRaised};
+    background-color: ${v.backgroundHover};
   }
   &:focus {
     ${({ isTabFocused }) =>
@@ -42,7 +42,8 @@ const Button = styled.button<ButtonProps & React.ComponentProps<'button'>>`
     color: ${v.textMain};
   }
   &:disabled,
-  &:disabled:hover {
+  &:disabled:hover,
+  &[disabled] {
     color: ${v.textSecondary};
     background: transparent;
     opacity: 0.6;
@@ -72,7 +73,8 @@ function ButtonBase({
       ref={ref}
       as={!!href ? 'a' : undefined}
       onClick={(e: React.MouseEvent) => {
-        if (onClick && href) e.preventDefault();
+        if ((onClick || disabled) && href) e.preventDefault();
+
         onClick?.(e);
       }}
       href={href}

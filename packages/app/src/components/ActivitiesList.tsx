@@ -2,7 +2,7 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components/macro';
 import { ActivityItem, Modal, Select, Type } from '@tuja/components';
-import { Activity } from '@tuja/libs';
+import type { Activity } from '@tuja/libs';
 import useLoadingState from 'hooks/useLoadingState';
 import usePortfolio from 'hooks/usePortfolio';
 import { logEvent } from 'libs/analytics';
@@ -27,10 +27,7 @@ const MonthTitle = styled(Type)`
   background-color: ${({ theme }) => theme.colors.backgroundMain};
   z-index: ${({ theme }) => theme.zIndex.raised};
 
-  top: 4rem;
-  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-    top: 3.5rem;
-  }
+  top: 0;
 
   padding: ${({ theme }) => `${theme.spacings.s} ${theme.spacings.xs}`};
   margin: 0 -${({ theme }) => theme.spacings.xs};
@@ -56,10 +53,7 @@ const FilterContainer = styled.div`
   height: ${({ theme }) => theme.fonts.h6.size};
   width: 40%;
 
-  top: 4rem;
-  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-    top: 3.5rem;
-  }
+  top: 0;
 
   font-size: ${({ theme }) => theme.fonts.h6.size};
   line-height: ${({ theme }) => theme.fonts.h6.height};
