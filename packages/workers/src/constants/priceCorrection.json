@@ -18,5 +18,9 @@
   "VVAL.LSE": {
     "above": 500,
     "factor": 0.01
+  },
+  "VUSA.LSE": {
+    "above": 1000,
+    "factor": 0.01
   }
 }
