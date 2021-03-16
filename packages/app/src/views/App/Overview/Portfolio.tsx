@@ -10,8 +10,8 @@ import {
   Chart,
   DateRangeTabs,
   DropdownMenu,
+  EdgePadding,
   Fab,
-  invertEdgePadding,
   OverviewStats,
   PageTitle,
   SectionTitle,
@@ -30,7 +30,6 @@ const Spacer = styled.div`
 `;
 
 const ChartContainer = styled.div`
-  ${invertEdgePadding}
   height: 11.5rem;
 
   @media (${v.minTablet}) {
@@ -39,7 +38,10 @@ const ChartContainer = styled.div`
 
   @media (${v.minLaptop}) {
     height: 20rem;
-    margin: 0;
+    max-width: ${v.maxLayoutWidth};
+    padding-left: calc(env(safe-area-inset-left) + ${v.leftRightPadding});
+    padding-right: calc(env(safe-area-inset-right) + ${v.leftRightPadding});
+    margin: 0 auto;
   }
 `;
 
@@ -114,31 +116,33 @@ function Portfolio({ isDemo }: PortfolioProps) {
 
   return (
     <div>
-      <PageTitle>
-        <DropdownMenu
-          value={portfolio.id}
-          options={portfolios.map((p) => ({
-            label: p.name,
-            value: p.id,
-          }))}
-          onChange={(value) => {
-            if (
-              !isDemo &&
-              history.location.pathname !== `/portfolio/${value}`
-            ) {
-              resetSnapshots();
-              history.push(`/portfolio/${value}`);
-            }
-          }}
-          align="left"
+      <EdgePadding>
+        <PageTitle>
+          <DropdownMenu
+            value={portfolio.id}
+            options={portfolios.map((p) => ({
+              label: p.name,
+              value: p.id,
+            }))}
+            onChange={(value) => {
+              if (
+                !isDemo &&
+                history.location.pathname !== `/portfolio/${value}`
+              ) {
+                resetSnapshots();
+                history.push(`/portfolio/${value}`);
+              }
+            }}
+            align="left"
+          />
+        </PageTitle>
+        <OverviewStats
+          value={value}
+          gain={portfolioPerformance.portfolio.gainSeries.getLast()}
+          returns={portfolioPerformance.portfolio.twrrSeries.getLast()}
+          currency={portfolio.currency}
         />
-      </PageTitle>
-      <OverviewStats
-        value={value}
-        gain={portfolioPerformance.portfolio.gainSeries.getLast()}
-        returns={portfolioPerformance.portfolio.twrrSeries.getLast()}
-        currency={portfolio.currency}
-      />
+      </EdgePadding>
       <ChartContainer>
         {chartType === 'twrrSeries' && (
           <Chart
@@ -172,70 +176,73 @@ function Portfolio({ isDemo }: PortfolioProps) {
           />
         )}
       </ChartContainer>
-      <ChartActions>
-        <DateRangeTabs
-          maxDate={portfolio.activitiesStartDate}
-          value={startDate ?? undefined}
-          onChange={setStartDate}
-        />
-        <DropdownMenu
-          value={chartType}
-          options={[
-            { label: 'TWRR', value: 'twrrSeries' },
-            { label: 'Gains', value: 'gainSeries' },
-            { label: 'Value', value: 'valueSeries' },
-            { label: 'Dividends', value: 'monthlyDividends' },
-          ]}
-          onChange={(value: any) => setChartType(value)}
-          align="right"
-        />
-      </ChartActions>
-      <Spacer />
-      <SectionTitle>Holdings</SectionTitle>
-      {(showAllHoldings ? sortedHoldings : sortedHoldings.slice(0, 3)).map(
-        (ticker) => (
-          <InvestmentsListItem
-            key={`investments-table-${ticker}`}
-            ticker={ticker}
-            holdingPerformance={holdings[ticker]}
-            portfolioValue={value}
-            mode="TODAY"
+      <EdgePadding>
+        <ChartActions>
+          <DateRangeTabs
+            maxDate={portfolio.activitiesStartDate}
+            value={startDate ?? undefined}
+            onChange={setStartDate}
           />
-        )
-      )}
-      {sortedHoldings.length > 3 && (
-        <RevealContainer>
-          <ButtonTertiary onClick={() => setShowAllHoldings((val) => !val)}>
-            <span style={{ marginRight: v.spacerXS }}>
-              {showAllHoldings ? 'See less' : 'See all'}
-            </span>
-            {showAllHoldings ? (
-              <CaretUp weight="bold" />
-            ) : (
-              <CaretDown weight="bold" />
-            )}
-          </ButtonTertiary>
-        </RevealContainer>
-      )}
-
-      {!!sortedHoldings.length && portfolioPerformance.portfolio.lastSnapshot && (
-        <>
-          <Spacer />
-          <SectionTitle>Allocation</SectionTitle>
-          <AllocationOverview
-            cash={portfolioPerformance.portfolio.lastSnapshot?.cash}
-            holdings={portfolioPerformance.portfolio.holdings}
-            currency={portfolio.currency}
+          <DropdownMenu
+            value={chartType}
+            options={[
+              { label: 'TWRR', value: 'twrrSeries' },
+              { label: 'Gains', value: 'gainSeries' },
+              { label: 'Value', value: 'valueSeries' },
+              { label: 'Dividends', value: 'monthlyDividends' },
+            ]}
+            onChange={(value: any) => setChartType(value)}
+            align="right"
           />
-        </>
-      )}
+        </ChartActions>
+        <Spacer />
+        <SectionTitle>Holdings</SectionTitle>
+        {(showAllHoldings ? sortedHoldings : sortedHoldings.slice(0, 3)).map(
+          (ticker) => (
+            <InvestmentsListItem
+              key={`investments-table-${ticker}`}
+              ticker={ticker}
+              holdingPerformance={holdings[ticker]}
+              portfolioValue={value}
+              mode="TODAY"
+            />
+          )
+        )}
+        {sortedHoldings.length > 3 && (
+          <RevealContainer>
+            <ButtonTertiary onClick={() => setShowAllHoldings((val) => !val)}>
+              <span style={{ marginRight: v.spacerXS }}>
+                {showAllHoldings ? 'See less' : 'See all'}
+              </span>
+              {showAllHoldings ? (
+                <CaretUp weight="bold" />
+              ) : (
+                <CaretDown weight="bold" />
+              )}
+            </ButtonTertiary>
+          </RevealContainer>
+        )}
 
-      {!isDemo && <Fab onClick={() => setShowAddActivities(true)} />}
+        {!!sortedHoldings.length &&
+          portfolioPerformance.portfolio.lastSnapshot && (
+            <>
+              <Spacer />
+              <SectionTitle>Allocation</SectionTitle>
+              <AllocationOverview
+                cash={portfolioPerformance.portfolio.lastSnapshot?.cash}
+                holdings={portfolioPerformance.portfolio.holdings}
+                currency={portfolio.currency}
+              />
+            </>
+          )}
 
-      <ActivitySelect
-        showAddActivities={showAddActivities}
-        setShowAddActivities={setShowAddActivities}
-      />
+        {!isDemo && <Fab onClick={() => setShowAddActivities(true)} />}
+
+        <ActivitySelect
+          showAddActivities={showAddActivities}
+          setShowAddActivities={setShowAddActivities}
+        />
+      </EdgePadding>
     </div>
   );
 }
