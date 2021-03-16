@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components/macro';
-import { ButtonBase, EdgePadding, Type, v } from '@tuja/components';
+import { ButtonBase, EdgePadding, PageTitle, v } from '@tuja/components';
 import useAuth from 'hooks/useAuth';
 import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
 import { getDB, clearCache } from 'libs/cachedStocksData';
@@ -41,7 +41,7 @@ function Create() {
         <title>Settings | Tuja App</title>
       </Helmet>
       <EdgePadding>
-        <Type scale="h4">Settings</Type>
+        <PageTitle>Settings</PageTitle>
         <SettingOption
           href="/create-portfolio"
           onClick={() => history.push('/create-portfolio')}

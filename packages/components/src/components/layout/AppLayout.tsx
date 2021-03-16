@@ -1,11 +1,14 @@
 import styled from 'styled-components';
-import EdgePadding from './EdgePadding';
 import { v } from '../../theme';
 
-const Container = styled(EdgePadding)`
+const Container = styled.div`
   @media (${v.minDesktop}) {
     display: flex;
     align-items: flex-start;
+    max-width: ${v.maxLayoutWidth};
+    padding-left: calc(env(safe-area-inset-left) + ${v.leftRightPadding});
+    padding-right: calc(env(safe-area-inset-right) + ${v.leftRightPadding});
+    margin: 0 auto;
   }
 `;
 
