@@ -12,21 +12,20 @@ import minMax from 'dayjs/plugin/minMax';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import 'firebase/functions';
 import { House, Clock, Gear, Star, User } from 'phosphor-react';
 import { AppLayout, TabBar, TopLinearLoader } from '@tuja/components';
-import { examplePortfolio } from 'libs/portfolioClient';
-import GlobalLoader from 'components/GlobalLoader';
-import useAuth, { AuthProvider } from 'hooks/useAuth';
-import usePortfolio, { PortfolioProvider } from 'hooks/usePortfolio';
-import { StartDateProvider } from 'hooks/useStartDate';
-import { LoadingStateProvider } from 'hooks/useLoadingState';
+import { examplePortfolio } from '../libs/portfolioClient';
+import GlobalLoader from '../components/GlobalLoader';
+import useAuth, { AuthProvider } from '../hooks/useAuth';
+import usePortfolio, { PortfolioProvider } from '../hooks/usePortfolio';
+import { StartDateProvider } from '../hooks/useStartDate';
+import { LoadingStateProvider } from '../hooks/useLoadingState';
 
-const Overview = lazy(() => import('views/App/Overview'));
-const Activities = lazy(() => import('views/App/Activities'));
-const Create = lazy(() => import('views/App/Create'));
-const SignIn = lazy(() => import('views/App/SignIn'));
-const Settings = lazy(() => import('views/App/Settings'));
+const Overview = lazy(() => import('./App/Overview/index'));
+const Activities = lazy(() => import('./App/Activities'));
+const Create = lazy(() => import('./App/Create'));
+const SignIn = lazy(() => import('./App/SignIn'));
+const Settings = lazy(() => import('./App/Settings'));
 
 if (window.location.hostname === 'localhost') {
   if (!window.firestoreConfigured) {
@@ -37,7 +36,6 @@ if (window.location.hostname === 'localhost') {
     });
     window.firestoreConfigured = true;
   }
-  firebase.functions().useEmulator('localhost', 5001);
 } else {
   firebase.firestore().settings({
     ignoreUndefinedProperties: true,
@@ -142,6 +140,9 @@ function AppShell() {
             <Switch>
               <Route path="/create-portfolio" exact>
                 <Create />
+              </Route>
+              <Route path="/settings" exact>
+                <Settings />
               </Route>
               <Route>
                 <Redirect to="/create-portfolio" />

@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDebounce } from 'react-use';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { Button, TextInput } from '@tuja/components';
-import { ActionsContainer, Card, CardMedia } from 'commonStyledComponents';
-import { fetchStockSearch } from 'libs/stocksClient';
+import { ActionsContainer, Card, CardMedia } from '../commonStyledComponents';
+import { fetchStockSearch } from '../libs/stocksClient';
 
 const SearchContainer = styled.div`
   position: relative;

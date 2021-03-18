@@ -3,7 +3,7 @@
  * https://jestjs.io/docs/en/configuration.html
  */
 
-module.exports = {
+export default {
   displayName: 'app',
 
   // All imported modules in your tests should be mocked automatically

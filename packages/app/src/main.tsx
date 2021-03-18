@@ -8,16 +8,16 @@ import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/performance';
 import './index.css';
-import { setAnalyticsSupport } from './libs/analytics';
+// import { setAnalyticsSupport } from './libs/analytics';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+// import * as serviceWorker from './serviceWorker';
 
 Sentry.init({
   dsn:
     'https://de80755a62ab40938ee851877d57417e@o527329.ingest.sentry.io/5643505',
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
-  environment: process.env.NODE_ENV,
+  environment: import.meta.env.MODE,
 });
 
 firebase.initializeApp({
@@ -51,7 +51,7 @@ firebase.onLog(
 
 (async () => {
   const isAnalyticsSupported = await firebase.analytics.isSupported();
-  setAnalyticsSupport(isAnalyticsSupported);
+  // setAnalyticsSupport(isAnalyticsSupported);
   if (window.location.hostname === 'localhost') {
     if (isAnalyticsSupported) {
       firebase.analytics().setAnalyticsCollectionEnabled(false);
@@ -80,4 +80,4 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// serviceWorker.unregister();

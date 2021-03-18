@@ -1,23 +1,23 @@
 import { useState, useEffect } from 'react';
 import { RiEdit2Line } from 'react-icons/ri';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { Button, Type, InvestmentItem, Modal, v } from '@tuja/components';
 import { formatCurrency } from '@tuja/libs';
-import { PortfolioPerformance } from 'libs/portfolioClient';
-import { fetchStockLogo } from 'libs/stocksClient';
-import usePortfolio from 'hooks/usePortfolio';
-import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
-import useStartDate from 'hooks/useStartDate';
-import useAuth from 'hooks/useAuth';
+import { PortfolioPerformance } from '../libs/portfolioClient';
+import { fetchStockLogo } from '../libs/stocksClient';
+import usePortfolio from '../hooks/usePortfolio';
+import usePortfolioProcessor from '../hooks/usePortfolioProcessor';
+import useStartDate from '../hooks/useStartDate';
+import useAuth from '../hooks/useAuth';
 import {
   getDB,
   getStocksHistory,
   getStocksLivePrice,
   mergeLivePriceIntoHistory,
-} from 'libs/cachedStocksData';
-import type { StockHistory } from 'libs/stocksClient';
-import UpdateAlias from 'components/UpdateAlias';
+} from '../libs/cachedStocksData';
+import type { StockHistory } from '../libs/stocksClient';
+import UpdateAlias from './UpdateAlias';
 
 const Label = styled.div`
   font-size: 0.9rem;

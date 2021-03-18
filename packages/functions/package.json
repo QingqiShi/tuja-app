@@ -7,8 +7,6 @@
   "homepage": "https://github.com/QingqiShi/tuja-app#readme",
   "license": "MIT",
   "scripts": {
-    "start": "yarn dev",
-    "dev": "tsc -w --preserveWatchOutput -p tsconfig-build.json",
     "build": "tsc -p tsconfig-build.json",
     "lint": "eslint \"src/**/*.ts\"",
     "predeploy": "node pre-deploy",

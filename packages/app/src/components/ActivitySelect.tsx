@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { ButtonBase, Modal, Type, v } from '@tuja/components';
 import { Activity } from '@tuja/libs';
-import ActivityTradeForm from 'components/ActivityTradeForm';
-import ActivityDepositForm from 'components/ActivityDepositForm';
-import ActivityDividendForm from 'components/ActivityDividendForm';
-import ActivityStockDividendForm from 'components/ActivityStockDividendForm';
-import SetBenchmarkForm from 'components/SetBenchmarkForm';
-import usePortfolio from 'hooks/usePortfolio';
-import { addActivity, updatePortfolioBenchmark } from 'libs/portfolioClient';
-import { logEvent } from 'libs/analytics';
+import ActivityTradeForm from './ActivityTradeForm';
+import ActivityDepositForm from './ActivityDepositForm';
+import ActivityDividendForm from './ActivityDividendForm';
+import ActivityStockDividendForm from './ActivityStockDividendForm';
+import SetBenchmarkForm from './SetBenchmarkForm';
+import usePortfolio from '../hooks/usePortfolio';
+import { addActivity, updatePortfolioBenchmark } from '../libs/portfolioClient';
+import { logEvent } from '../libs/analytics';
 
 const Container = styled.div`
   width: 500px;

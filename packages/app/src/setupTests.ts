@@ -2,7 +2,7 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -19,7 +19,7 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 const TEST_API = 'http://localhost';
-(process.env as any).REACT_APP_WORKERS_URL = TEST_API;
+import.meta.env.VITE_API_URL = TEST_API;
 
 const actualFetch = fetch;
 async function mockFetch(url: string, config: any) {

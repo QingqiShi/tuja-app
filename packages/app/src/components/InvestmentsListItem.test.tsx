@@ -1,6 +1,6 @@
 import { waitFor } from '@testing-library/react';
 import InvestmentsListItem from './InvestmentsListItem';
-import { render } from 'testUtils';
+import { render } from '../testUtils';
 
 test('render live price is not the same day', async () => {
   const { getByText } = render(

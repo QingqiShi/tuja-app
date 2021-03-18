@@ -6,20 +6,18 @@ import {
   useCallback,
 } from 'react';
 import { Snapshot, TimeSeries } from '@tuja/libs';
-import usePortfolio from 'hooks/usePortfolio';
-import useStartDate from 'hooks/useStartDate';
-import useLoadingState from 'hooks/useLoadingState';
+import usePortfolio from './usePortfolio';
+import useStartDate from './useStartDate';
+import useLoadingState from './useLoadingState';
 import {
   PortfolioPerformance,
   processPerformanceSeries,
   watchSnapshots,
   exampleSnapshots,
   examplePortfolio,
-} from 'libs/portfolioClient';
-import { animationInterval } from 'libs/timer';
-
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import Processor from 'worker-loader?filename=processor.worker.js!workers/processor.worker';
+} from '../libs/portfolioClient';
+import { animationInterval } from '../libs/timer';
+import Processor from '../workers/processor.worker?worker';
 
 export const PortfolioProcessorContext = createContext({
   portfolioPerformance: null as PortfolioPerformance | null,

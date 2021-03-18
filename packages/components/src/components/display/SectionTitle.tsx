@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { v } from '../../theme';
-import React from 'react';
 
 const Title = styled.h2`
   font-size: 1.125rem;

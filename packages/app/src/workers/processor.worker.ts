@@ -10,15 +10,15 @@ import {
   Snapshot,
   StockInfo,
 } from '@tuja/libs';
-import type { PortfolioPerformance } from 'libs/portfolioClient';
-import type { StockHistory, ParsedLivePrice } from 'libs/stocksClient';
+import type { PortfolioPerformance } from '../libs/portfolioClient';
+import type { StockHistory, ParsedLivePrice } from '../libs/stocksClient';
 import {
   getDB,
   getStocksHistory,
   getStocksInfo,
   getStocksLivePrice,
   mergeLivePriceIntoHistory,
-} from 'libs/cachedStocksData';
+} from '../libs/cachedStocksData';
 import { iterateSnapshots } from './modules/snapshotsIterator';
 import {
   accumulateDailyTwrr,
@@ -75,7 +75,7 @@ addEventListener('message', async (event) => {
 
   try {
     await process(messageData.payload);
-  } catch {
+  } catch (e) {
     postMessage(null);
   }
 });

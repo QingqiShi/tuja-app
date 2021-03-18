@@ -4,8 +4,8 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import { Button, DateInput, Select } from '@tuja/components';
 import type { ActivityFormProps } from '@tuja/libs';
 import CurrencyInput from './CurrencyInput';
-import { ActionsContainer } from 'commonStyledComponents';
-import usePortfolio from 'hooks/usePortfolio';
+import { ActionsContainer } from '../commonStyledComponents';
+import usePortfolio from '../hooks/usePortfolio';
 
 function ActivityDividendForm({
   currency,

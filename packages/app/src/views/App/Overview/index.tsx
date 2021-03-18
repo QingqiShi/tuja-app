@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
-import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
-import { PortfolioProcessorProvider } from 'hooks/usePortfolioProcessor';
+import useScrollToTopOnMount from '../../../hooks/useScrollToTopOnMount';
+import { PortfolioProcessorProvider } from '../../../hooks/usePortfolioProcessor';
 import Portfolio from './Portfolio';
 
 interface OverviewProps {

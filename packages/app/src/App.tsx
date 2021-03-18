@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { useMedia } from 'react-use';
-import { ThemeProvider } from 'styled-components/macro';
+import { ThemeProvider } from 'styled-components';
 import {
   KeyboardFocusProvider,
   GlobalStyle,
@@ -9,8 +9,8 @@ import {
   getTheme,
 } from '@tuja/components';
 
-const Home = lazy(() => import('views/Home'));
-const AppShell = lazy(() => import('views/AppShell'));
+const Home = lazy(() => import('./views/Home'));
+const AppShell = lazy(() => import('./views/AppShell'));
 
 function App() {
   const isDark = useMedia('(prefers-color-scheme: dark)');

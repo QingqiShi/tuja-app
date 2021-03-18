@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { IDBPDatabase, DBSchema, openDB } from 'idb';
+import { IDBPDatabase, DBSchema, openDB } from 'idb-latest';
 import { TimeSeries, StockInfo } from '@tuja/libs';
 import {
   StockHistory,
@@ -8,7 +8,7 @@ import {
   fetchStockHistories,
   fetchStockInfos,
   getMissingStocksHistory,
-} from 'libs/stocksClient';
+} from './stocksClient';
 
 interface DBSchemaV3 extends DBSchema {
   stocksInfo: {

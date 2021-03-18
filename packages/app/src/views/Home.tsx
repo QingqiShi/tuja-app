@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { MdShowChart, MdPieChartOutlined, MdAutorenew } from 'react-icons/md';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { Button, Type, v } from '@tuja/components';
-import { Center } from 'commonStyledComponents';
-import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
+import { Center } from '../commonStyledComponents';
+import useScrollToTopOnMount from '../hooks/useScrollToTopOnMount';
 
 const FullHeight = styled.div`
   height: 60vh;
