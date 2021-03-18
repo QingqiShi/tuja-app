@@ -6,7 +6,7 @@ import {
   useCallback,
 } from 'react';
 import firebase from 'firebase/app';
-import { setAnalyticsUser } from 'libs/analytics';
+import { setAnalyticsUser } from '../libs/analytics';
 
 type AuthState = 'UNKNOWN' | 'SIGNED_OUT' | 'SIGNED_IN';
 

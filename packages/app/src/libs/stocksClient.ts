@@ -9,6 +9,8 @@ import {
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export type ParsedLivePrice = Omit<StockLivePrice, 'date'> & { date: Date };
 
 export interface StockHistory {
@@ -34,11 +36,9 @@ export async function fetchStockInfos(tickers: string[]) {
   const tickerChunks = chunkTickers(tickers);
   const data = await Promise.all(
     tickerChunks.map(async (chunk) =>
-      fetch(
-        `${process.env.REACT_APP_WORKERS_URL}/bulkInfos?tickers=${joinTickers(
-          chunk
-        )}`
-      ).then((res) => res.json())
+      fetch(`${API_URL}/bulkInfos?tickers=${joinTickers(chunk)}`).then((res) =>
+        res.json()
+      )
     )
   );
 
@@ -50,9 +50,7 @@ export async function fetchStockLivePrices(tickers: string[]) {
   const data: StockLivePrice[][] = await Promise.all(
     tickerChunks.map(async (chunk) =>
       fetch(
-        `${
-          process.env.REACT_APP_WORKERS_URL
-        }/bulkLivePrices?tickers=${joinTickers(chunk)}`
+        `${API_URL}/bulkLivePrices?tickers=${joinTickers(chunk)}`
       ).then((res) => res.json())
     )
   );
@@ -77,9 +75,7 @@ export async function fetchStockHistories(
   }[][] = await Promise.all(
     tickerChunks.map(async (chunk) => {
       const response = await fetch(
-        `${
-          process.env.REACT_APP_WORKERS_URL
-        }/bulkEods?query=${encodeURIComponent(
+        `${API_URL}/bulkEods?query=${encodeURIComponent(
           JSON.stringify(
             chunk.map(({ ticker, from, to }) => {
               const formattedFrom = dayjs(from).format(DATE_FORMAT);
@@ -121,9 +117,7 @@ export function fetchStockSearch(query: string) {
   return {
     fetch: async () => {
       const response = await fetch(
-        `${process.env.REACT_APP_WORKERS_URL}/search?query=${encodeURIComponent(
-          query
-        )}`,
+        `${API_URL}/search?query=${encodeURIComponent(query)}`,
         { signal }
       );
       return (await response.json()) as StockInfo[];
@@ -144,9 +138,7 @@ export function fetchStocksPrices(
       const data: StockPrice[] = await Promise.all(
         tickers.map(async (ticker) =>
           fetch(
-            `${
-              process.env.REACT_APP_WORKERS_URL
-            }/priceAt?ticker=${encodeURIComponent(ticker)}&at=${dayjs(
+            `${API_URL}/priceAt?ticker=${encodeURIComponent(ticker)}&at=${dayjs(
               date
             ).format(DATE_FORMAT)}&currency=${currency}`,
             { signal }
@@ -221,9 +213,7 @@ const convertBlobToBase64 = (blob: Blob) =>
 export async function fetchStockLogo(ticker: string, name?: string) {
   try {
     const result = await fetch(
-      `${
-        process.env.REACT_APP_WORKERS_URL
-      }/stockLogo?ticker=${ticker}&name=${encodeURIComponent(
+      `${API_URL}/stockLogo?ticker=${ticker}&name=${encodeURIComponent(
         name ?? ''
       )}&size=108`
     );

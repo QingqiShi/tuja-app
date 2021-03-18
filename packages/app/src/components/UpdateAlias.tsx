@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { RiCheckLine } from 'react-icons/ri';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { Button, TextInput, v } from '@tuja/components';
-import { updateHoldingAlias } from 'libs/portfolioClient';
-import usePortfolio from 'hooks/usePortfolio';
+import { updateHoldingAlias } from '../libs/portfolioClient';
+import usePortfolio from '../hooks/usePortfolio';
 
 const Container = styled.div`
   width: 400px;

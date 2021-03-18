@@ -1,16 +1,16 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { ActivityItem, Modal, Select, Type } from '@tuja/components';
 import type { Activity } from '@tuja/libs';
-import useLoadingState from 'hooks/useLoadingState';
-import usePortfolio from 'hooks/usePortfolio';
-import { logEvent } from 'libs/analytics';
+import useLoadingState from '../hooks/useLoadingState';
+import usePortfolio from '../hooks/usePortfolio';
+import { logEvent } from '../libs/analytics';
 import {
   deleteActivity,
   getActivities,
   updateActivity,
-} from 'libs/portfolioClient';
+} from '../libs/portfolioClient';
 import ActivityDepositForm from './ActivityDepositForm';
 import ActivityDividendForm from './ActivityDividendForm';
 import ActivityStockDividendForm from './ActivityStockDividendForm';

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { CaretDown, CaretUp } from 'phosphor-react';
 import {
@@ -18,12 +18,12 @@ import {
   v,
 } from '@tuja/components';
 import { formatCurrency } from '@tuja/libs';
-import InvestmentsListItem from 'components/InvestmentsListItem';
-import ActivitySelect from 'components/ActivitySelect';
-import usePortfolio from 'hooks/usePortfolio';
-import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
-import useStartDate from 'hooks/useStartDate';
-import { PortfolioPerformance } from 'libs/portfolioClient';
+import InvestmentsListItem from '../../../components/InvestmentsListItem';
+import ActivitySelect from '../../../components/ActivitySelect';
+import usePortfolio from '../../../hooks/usePortfolio';
+import usePortfolioProcessor from '../../../hooks/usePortfolioProcessor';
+import useStartDate from '../../../hooks/useStartDate';
+import { PortfolioPerformance } from '../../../libs/portfolioClient';
 
 const Spacer = styled.div`
   height: ${v.spacerL};

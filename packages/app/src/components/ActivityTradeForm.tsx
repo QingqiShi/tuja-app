@@ -9,7 +9,7 @@ import {
   RiCalendarLine,
   RiCloseLine,
 } from 'react-icons/ri';
-import styled, { css } from 'styled-components/macro';
+import styled, { css } from 'styled-components';
 import {
   Button,
   DateInput,
@@ -28,13 +28,13 @@ import {
   StockInfo,
 } from '@tuja/libs';
 import CurrencyInput from './CurrencyInput';
-import usePortfolioProcessor from 'hooks/usePortfolioProcessor';
+import usePortfolioProcessor from '../hooks/usePortfolioProcessor';
 import {
   fetchStockSearch,
   fetchStockInfos,
   fetchStocksPrices,
-} from 'libs/stocksClient';
-import { PortfolioPerformance } from 'libs/portfolioClient';
+} from '../libs/stocksClient';
+import { PortfolioPerformance } from '../libs/portfolioClient';
 
 const verticalCenter = css`
   display: flex;

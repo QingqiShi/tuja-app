@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useRef,
-  createContext,
-} from 'react';
+import { useContext, useState, useEffect, useRef, createContext } from 'react';
 
 const KeyboardFocusContext = createContext({
   allowTabFocus: { current: false },

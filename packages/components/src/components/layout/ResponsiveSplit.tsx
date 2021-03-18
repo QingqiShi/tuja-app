@@ -1,4 +1,3 @@
-import React from 'react';
 import { useMedia } from 'react-use';
 import styled from 'styled-components';
 import { v } from '../../theme';

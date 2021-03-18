@@ -2,7 +2,16 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
+import fetch from 'node-fetch';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import minMax from 'dayjs/plugin/minMax';
+
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(minMax);
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -19,9 +28,11 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 const TEST_API = 'http://localhost';
-(process.env as any).REACT_APP_WORKERS_URL = TEST_API;
+import.meta.env.VITE_API_URL = TEST_API;
 
-const actualFetch = fetch;
+// @ts-ignore
+window.fetch = fetch;
+
 async function mockFetch(url: string, config: any) {
   switch (url) {
     case `${TEST_API}/bulkInfos?tickers=IUSA.LSE`: {
@@ -105,7 +116,7 @@ async function mockFetch(url: string, config: any) {
       }
 
       // console.warn(`Unhandled request: ${url}`);
-      return actualFetch(url, config);
+      return fetch(url, config);
     }
   }
 }

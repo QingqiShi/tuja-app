@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { CaretLeft } from 'phosphor-react';
 import { v } from '../../theme';
-import React from 'react';
 
 const Title = styled.h1`
   font-size: 1.5rem;

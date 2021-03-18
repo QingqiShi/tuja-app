@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { EdgePadding, PageTitle } from '@tuja/components';
-import ActivitiesList from 'components/ActivitiesList';
-import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
+import ActivitiesList from '../../components/ActivitiesList';
+import useScrollToTopOnMount from '../../hooks/useScrollToTopOnMount';
 
 function Activities() {
   useScrollToTopOnMount();

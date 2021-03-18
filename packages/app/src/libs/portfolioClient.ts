@@ -15,8 +15,8 @@ import {
   DbSnapshotBatch,
   snapshotBatchFromDb,
 } from '@tuja/libs';
-import type { ParsedLivePrice } from 'libs/stocksClient';
-import { logEvent } from 'libs/analytics';
+import type { ParsedLivePrice } from './stocksClient';
+import { logEvent } from './analytics';
 
 const ACTIVITIES_PAGE_LIMIT = 10;
 

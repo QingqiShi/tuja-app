@@ -18,14 +18,12 @@
     "dayjs": "^1.10.4",
     "escape-string-regexp": "^4.0.0",
     "firebase-admin": "^9.5.0",
-    "node-cache": "^5.1.2",
-    "node-fetch": "^2.6.1"
+    "node-cache": "^5.1.2"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^2.2.1",
     "@types/node": "12",
     "@types/node-cache": "^4.2.5",
-    "@types/node-fetch": "^2.5.8",
     "ts-loader": "^8.0.18"
   }
 }

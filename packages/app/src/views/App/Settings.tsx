@@ -1,10 +1,10 @@
 import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { ButtonBase, EdgePadding, PageTitle, v } from '@tuja/components';
-import useAuth from 'hooks/useAuth';
-import useScrollToTopOnMount from 'hooks/useScrollToTopOnMount';
-import { getDB, clearCache } from 'libs/cachedStocksData';
+import useAuth from '../../hooks/useAuth';
+import useScrollToTopOnMount from '../../hooks/useScrollToTopOnMount';
+import { getDB, clearCache } from '../../libs/cachedStocksData';
 
 const SettingOption = styled(ButtonBase)`
   padding: ${v.spacerS} ${v.spacerM};

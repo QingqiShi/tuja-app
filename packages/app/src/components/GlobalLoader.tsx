@@ -1,4 +1,4 @@
-import useLoadingState from 'hooks/useLoadingState';
+import useLoadingState from '../hooks/useLoadingState';
 import { TopLinearLoader } from '@tuja/components';
 
 function GlobalLoader() {
