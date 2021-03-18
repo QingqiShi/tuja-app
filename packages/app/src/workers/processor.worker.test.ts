@@ -1,8 +1,7 @@
 import 'fake-indexeddb/auto';
-import type { MessageData } from './processor.worker';
 
 let listenerType: string;
-let messageHandler: (ev: { data: MessageData }) => any;
+let messageHandler: (ev: { data: any }) => any;
 const postMessage = jest.fn();
 
 beforeAll(() => {

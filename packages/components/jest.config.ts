@@ -6,10 +6,11 @@ const config: Config.InitialOptions = {
   coverageDirectory: 'coverage',
   moduleNameMapper: {
     'workers/processor\\.worker\\?worker':
-      '<rootDir>/src/workers/__mocks__/processor.mock.ts',
+      '<rootDir>/src/workers/__mocks__/mock.worker.ts',
     'idb-latest': 'idb',
-    '\\.(css|less)$': '<rootDir>/fileMock.js',
+    '\\.(css|less)$': '<rootDir>/src/__mocks__/fileMock.js',
   },
+
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
 };
 
