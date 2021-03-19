@@ -31,6 +31,8 @@ const Spacer = styled.div`
 
 const ChartContainer = styled.div`
   height: 11.5rem;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 
   @media (${v.minTablet}) {
     height: 22.5rem;
