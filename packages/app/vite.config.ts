@@ -9,7 +9,6 @@ export default defineConfig({
     reactRefresh(),
     {
       ...webWorkerLoader({
-        inline: false,
         sourcemap: true,
         outputFolder: 'assets',
         preserveFileNames: true,
