@@ -8,7 +8,7 @@ import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/performance';
 import './index.css';
-// import { setAnalyticsSupport } from './libs/analytics';
+import { setAnalyticsSupport } from './libs/analytics';
 import App from './App';
 // import * as serviceWorker from './serviceWorker';
 
@@ -51,7 +51,7 @@ firebase.onLog(
 
 (async () => {
   const isAnalyticsSupported = await firebase.analytics.isSupported();
-  // setAnalyticsSupport(isAnalyticsSupported);
+  setAnalyticsSupport(isAnalyticsSupported);
   if (window.location.hostname === 'localhost') {
     if (isAnalyticsSupported) {
       firebase.analytics().setAnalyticsCollectionEnabled(false);
