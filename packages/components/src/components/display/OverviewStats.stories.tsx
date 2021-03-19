@@ -27,13 +27,13 @@ export const Returns = Template.bind({});
 Returns.args = {
   value: 23346.14,
   gain: 417.4,
-  returns: 12.5,
+  returns: 0.125,
 };
 
 export const Negative = Template.bind({});
 Negative.args = {
   value: 23346.14,
   gain: -417.4,
-  returns: -12.5,
+  returns: -0.125,
   currency: 'GBP',
 };

@@ -52,7 +52,7 @@ function OverviewStats({ value, gain, returns, currency }: OverviewStatsProps) {
         </GainStat>
         {typeof returns !== 'undefined' && (
           <ReturnsStat val={returns}>
-            ({Math.abs(returns).toFixed(2)}%)
+            ({Math.abs(returns * 100).toFixed(2)}%)
           </ReturnsStat>
         )}
       </SecondaryRow>
