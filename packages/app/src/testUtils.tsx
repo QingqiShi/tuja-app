@@ -123,8 +123,9 @@ export const render = (ui: React.ReactElement, options?: RenderOptions) => {
   );
   return {
     ...results,
-    rerender: (ui: React.ReactElement, options?: RenderOptions) => {
-      const { portfolio, portfolioPerformance, auth } = options ?? {};
+    rerender: (ui: React.ReactElement, rerenderOptions?: RenderOptions) => {
+      const { portfolio, portfolioPerformance, auth } =
+        rerenderOptions ?? options ?? {};
       return results.rerender(
         <AuthContext.Provider value={{ ...defaultAuth, ...auth }}>
           <PortfolioContext.Provider

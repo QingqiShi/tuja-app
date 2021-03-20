@@ -36,8 +36,6 @@ export function PortfolioProvider({
 
   // Portfolio states
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
-  const portfolio =
-    portfolios.find((portfolio) => portfolio.id === portfolioId) ?? null;
 
   // Loaded state
   const [loaded, setLoaded] = useState(false);
@@ -58,14 +56,18 @@ export function PortfolioProvider({
     });
   }, [authStateKnown, setStartDate, uid]);
 
-  // Set the initial start date
-  const portfolioStartDate = portfolio?.activitiesStartDate;
-  // const portfolioId = portfolio?.id;
-  // const dateInvalid =
-  //   startDate &&
-  //   portfolioStartDate &&
-  //   dayjs(startDate).isBefore(portfolioStartDate);
+  // Set portfolio and the initial startdate
+  const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
   useEffect(() => {
+    if (!portfolioId) {
+      return;
+    }
+
+    const newSelectedPortfolio =
+      portfolios.find((portfolio) => portfolio.id === portfolioId) ?? null;
+    setPortfolio(newSelectedPortfolio);
+
+    const portfolioStartDate = newSelectedPortfolio?.activitiesStartDate;
     if (!portfolioStartDate) {
       setStartDate(null);
       return;
@@ -76,18 +78,10 @@ export function PortfolioProvider({
         ? defaultDate.toDate()
         : portfolioStartDate
     );
-
-    // depend on portfolioId - when the user switches portfolio
-  }, [portfolioStartDate, setStartDate, portfolioId]);
+  }, [setStartDate, portfolioId, portfolios]);
 
   return (
-    <PortfolioContext.Provider
-      value={{
-        portfolio,
-        portfolios,
-        loaded,
-      }}
-    >
+    <PortfolioContext.Provider value={{ portfolio, portfolios, loaded }}>
       {children}
     </PortfolioContext.Provider>
   );
