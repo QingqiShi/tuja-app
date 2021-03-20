@@ -12,6 +12,7 @@ const config: Config.InitialOptions = {
     '@tuja/components': '@tuja/components/src/index.ts',
     '@tuja/libs': '@tuja/libs/src/index.ts',
   },
+  setupFiles: ['fake-indexeddb/auto'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
 };
 
