@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import minMax from 'dayjs/plugin/minMax';
+import FDBFactory from 'fake-indexeddb/lib/FDBFactory';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
@@ -121,4 +122,7 @@ async function mockFetch(url: string, config: any) {
   }
 }
 beforeAll(() => jest.spyOn(window, 'fetch'));
-beforeEach(() => (window.fetch as any).mockImplementation(mockFetch));
+beforeEach(() => {
+  (window.fetch as any).mockImplementation(mockFetch);
+  (window.indexedDB as any) = new FDBFactory();
+});

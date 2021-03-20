@@ -1,5 +1,3 @@
-import 'fake-indexeddb/auto';
-
 let listenerType: string;
 let messageHandler: (ev: { data: any }) => any;
 const postMessage = jest.fn();
@@ -166,3 +164,6 @@ describe('happy path', () => {
     });
   });
 });
+
+const x = {};
+export default x;
