@@ -43,7 +43,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/react-hooks": "^5.1.0",
-    "@testing-library/user-event": "^13.0.3",
+    "@testing-library/user-event": "^13.0.7",
     "@types/d3-array": "^2.9.0",
     "@types/jest": "^26.0.21",
     "@types/node-fetch": "^2.5.8",
