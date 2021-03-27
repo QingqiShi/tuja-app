@@ -16,7 +16,7 @@ const Button = styled.button<ButtonProps & React.ComponentProps<'button'>>`
   padding: ${v.spacerXS} ${v.spacerS};
   margin: 0;
   cursor: pointer;
-  background: transparent;
+  background-color: transparent;
   color: ${v.textMain};
   font-weight: ${v.fontSemiBold};
   display: inline-flex;
@@ -36,17 +36,15 @@ const Button = styled.button<ButtonProps & React.ComponentProps<'button'>>`
   &:active {
     background-color: ${v.backgroundOverlay};
   }
-  &:visited {
-    background: transparent;
-    color: ${v.textMain};
-  }
   &:disabled,
   &:disabled:hover,
-  &[disabled] {
+  &[disabled],
+  &[disabled]:hover {
     color: ${v.textSecondary};
-    background: transparent;
+    background-color: transparent;
     opacity: 0.6;
     cursor: default;
+    pointer-events: none;
   }
 `;
 
