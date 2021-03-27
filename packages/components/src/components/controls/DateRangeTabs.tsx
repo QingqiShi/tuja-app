@@ -14,6 +14,7 @@ const Container = styled.div`
 `;
 
 const Item = styled(ButtonBase)`
+  color: ${v.textSecondary};
   padding: ${v.spacerXS} ${v.spacerXS};
 
   @media (${v.minLaptop}) {
@@ -24,7 +25,9 @@ const Item = styled(ButtonBase)`
   }
 
   &:disabled,
-  &:disabled:hover {
+  &:disabled:hover,
+  &[disabled],
+  &[disabled]:hover {
     color: ${v.textMain};
     opacity: 1;
     position: relative;
