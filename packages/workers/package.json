@@ -24,6 +24,6 @@
     "@cloudflare/workers-types": "^2.2.1",
     "@types/node": "12",
     "@types/node-cache": "^4.2.5",
-    "ts-loader": "^8.0.18"
+    "ts-loader": "^8.1.0"
   }
 }
