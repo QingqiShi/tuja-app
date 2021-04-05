@@ -4,7 +4,7 @@ import { handleBulkInfos } from './handleBulkInfos';
 declare const global: { [key: string]: unknown };
 
 // Setup worker globals
-beforeAll(async () => {
+beforeEach(async () => {
   global.fetch = jest.fn();
   global.Response = Response;
   global.EOD_API_KEY = 'test-api';
@@ -137,4 +137,30 @@ test('error when missing api key', async () => {
   expect(global.fetch as jest.Mock).not.toHaveBeenCalled();
   expect(await response.text()).toBe('Missing API Key');
   expect(response.status).toBe(500);
+});
+
+test('get overridden stocks infos', async () => {
+  // Given
+  const request = new Request('http://localhost/bulkInfos?tickers=VVAL.LSE');
+
+  // When
+  const response = await handleBulkInfos(request as never);
+  // console.log(await response.text());
+
+  // Then
+  expect(await response.json()).toEqual([
+    {
+      Code: 'VVAL',
+      Country: 'UK',
+      Currency: 'GBP',
+      Exchange: 'LSE',
+      ISIN: 'IE00BYYR0B57',
+      Name: 'Vanguard Global Value Factor UCITS ETF Shares USD Acc',
+      Ticker: 'VVAL.LSE',
+      Type: 'ETF',
+      previousClose: 0,
+    },
+  ]);
+  expect(response.status).toBe(200);
+  expect(global.fetch as jest.Mock).not.toHaveBeenCalled();
 });

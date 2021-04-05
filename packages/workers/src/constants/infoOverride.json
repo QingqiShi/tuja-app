@@ -1,0 +1,13 @@
+{
+  "VVAL.LSE": {
+    "Code": "VVAL",
+    "Country": "UK",
+    "Currency": "GBP",
+    "Exchange": "LSE",
+    "ISIN": "IE00BYYR0B57",
+    "Name": "Vanguard Global Value Factor UCITS ETF Shares USD Acc",
+    "Ticker": "VVAL.LSE",
+    "Type": "ETF",
+    "previousClose": 0
+  }
+}

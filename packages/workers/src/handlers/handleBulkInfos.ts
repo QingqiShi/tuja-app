@@ -1,5 +1,6 @@
-import { stocksClient } from '@tuja/libs';
+import { StockInfo, stocksClient } from '@tuja/libs';
 import { correctPrice } from '../utils/correctPrice';
+import infoOverride from '../constants/infoOverride.json';
 import priceCorrection from '../constants/priceCorrection.json';
 
 export const handleBulkInfos = async (request: Request): Promise<Response> => {
@@ -24,7 +25,10 @@ export const handleBulkInfos = async (request: Request): Promise<Response> => {
   });
   const infos = await Promise.all(
     tickers.map(async (ticker) => {
-      const info = await client.info(ticker);
+      const info =
+        ticker in infoOverride
+          ? (infoOverride[ticker as keyof typeof infoOverride] as StockInfo)
+          : await client.info(ticker);
 
       const correction =
         priceCorrection[ticker as keyof typeof priceCorrection];
