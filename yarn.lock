@@ -4869,10 +4869,10 @@
     prop-types "^15.5.10"
     react-use-measure "^2.0.4"
 
-"@visx/visx@^1.7.2":
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/@visx/visx/-/visx-1.7.2.tgz#07cf955ea1866f30a3fae22235d3e891be7102a2"
-  integrity sha512-WmNBbx8UF1reM99yGbUli2INh/ZJjWJXYwg8N/L8n8WxNli9AQRYTbOynkvbE2eSee3XcWgmyErqsE85g1cljw==
+"@visx/visx@^1.7.3":
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/@visx/visx/-/visx-1.7.3.tgz#0d674e4c105817a756d5d800a9359bb3712dacf2"
+  integrity sha512-ZWK1qVXYciZiyOqLKfEsV1t/N4ZdiWn/2v9qDtnxkoINf6TSPMzsS1huWez/CxZFL0CqMQ1fjmykPMfo2IzHsQ==
   dependencies:
     "@visx/annotation" "1.7.2"
     "@visx/axis" "1.7.0"
@@ -4901,7 +4901,7 @@
     "@visx/text" "1.7.0"
     "@visx/tooltip" "1.7.2"
     "@visx/voronoi" "1.7.0"
-    "@visx/xychart" "1.7.2"
+    "@visx/xychart" "1.7.3"
     "@visx/zoom" "1.7.0"
 
 "@visx/voronoi@1.7.0":
@@ -4916,10 +4916,10 @@
     d3-voronoi "^1.1.2"
     prop-types "^15.6.1"
 
-"@visx/xychart@1.7.2":
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.7.2.tgz#666acca923a72a81cb784da9ea42fc243139179b"
-  integrity sha512-um9P+YPf23mkWxPQtVQ3NHGIdUuW1dzGCm8xK9ZouguzEcZMuskKIxLSIN1Pq3F56h+u+perjAdXutXd80Xmcg==
+"@visx/xychart@1.7.3":
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.7.3.tgz#8a27d2819fcebc476f53c743f6ea5ed115dc0979"
+  integrity sha512-EpgvPxSn5byoGYop31PBZbClqjBFdZ3iTYQi2w09kQzSAJ3d2ZSzqQhsN5kp7HnAsWc+Ds5hpdt1Uj6wMqOd9w==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/lodash" "^4.14.146"
