@@ -11,7 +11,7 @@
     "build:functions": "lerna run build --scope @tuja/libs --scope @tuja/functions",
     "lint": "lerna run lint",
     "test": "firebase emulators:exec --only firestore --import=testData 'yarn test:dev'",
-    "test:ci": "firebase emulators:exec --only firestore --import=testData 'CI=true jest --coverage --runInBand'",
+    "test:ci": "firebase emulators:exec --only firestore --import=testData 'CI=true jest --coverage --runInBand --detectOpenHandles'",
     "test:dev": "jest --no-cache --watch --coverage",
     "emulate": "firebase emulators:start --only firestore,functions --import=testData --inspect-functions",
     "emulator:export": "firebase emulators:export ./testData",
