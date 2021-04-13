@@ -16,7 +16,7 @@
     "@tuja/libs": "^0.0.0",
     "bignumber.js": "^9.0.1",
     "d3-scale": "^3.2.4",
-    "firebase": "^8.3.3",
+    "firebase": "^8.4.1",
     "firebaseui": "^4.8.0",
     "idb": "^6.0.0",
     "phosphor-react": "^1.2.1",
