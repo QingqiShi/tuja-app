@@ -30,19 +30,19 @@ test('get stocks infos', async () => {
   expect(
     global.fetch as jest.Mock
   ).toHaveBeenCalledWith(
-    'https://eodhistoricaldata.com/api/search/C?api_token=test-api',
+    'https://eodhistoricaldata.com/api/search/C.Baz?api_token=test-api',
     { cf: { cacheEverything: true, cacheTtl: 2592000 } }
   );
   expect(
     global.fetch as jest.Mock
   ).toHaveBeenCalledWith(
-    'https://eodhistoricaldata.com/api/search/B?api_token=test-api',
+    'https://eodhistoricaldata.com/api/search/B.Bar?api_token=test-api',
     { cf: { cacheEverything: true, cacheTtl: 2592000 } }
   );
   expect(
     global.fetch as jest.Mock
   ).toHaveBeenCalledWith(
-    'https://eodhistoricaldata.com/api/search/A?api_token=test-api',
+    'https://eodhistoricaldata.com/api/search/A.Foo?api_token=test-api',
     { cf: { cacheEverything: true, cacheTtl: 2592000 } }
   );
   expect(await response.json()).toEqual([
@@ -69,7 +69,7 @@ test('correct previous close price', async () => {
   expect(
     global.fetch as jest.Mock
   ).toHaveBeenCalledWith(
-    'https://eodhistoricaldata.com/api/search/IHHG?api_token=test-api',
+    'https://eodhistoricaldata.com/api/search/IHHG.LSE?api_token=test-api',
     { cf: { cacheEverything: true, cacheTtl: 2592000 } }
   );
   expect(await response.json()).toEqual([
