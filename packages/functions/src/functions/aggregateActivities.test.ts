@@ -11,7 +11,7 @@ process.env.FIRESTORE_EMULATOR_HOST = 'localhost:5002';
 
 let firebase: ReturnType<typeof firebaseTest>;
 let aggregateActivities: Function;
-beforeEach(() => {
+beforeEach(async () => {
   firebase = firebaseTest({
     databaseURL: 'http://localhost:5002/?ns=portfolio-mango',
     projectId: 'portfolio-mango',
@@ -24,6 +24,10 @@ beforeEach(() => {
     .mockImplementation(() => {
       /* Do nothing */
     });
+
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(undefined), 2000);
+  });
 });
 
 afterEach(async () => {
