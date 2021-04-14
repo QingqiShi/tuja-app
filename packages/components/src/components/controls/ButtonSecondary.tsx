@@ -9,7 +9,7 @@ const Button = styled(ButtonBase)`
 
   &:hover {
     color: ${v.accentHover};
-    background-color: ${v.backgroundOverlay};
+    background-color: ${v.backgroundHover};
   }
   &:active {
     background-color: ${v.backgroundOverlay};
