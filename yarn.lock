@@ -4581,14 +4581,14 @@
     "@typescript-eslint/types" "4.21.0"
     eslint-visitor-keys "^2.0.0"
 
-"@visx/annotation@1.7.2":
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/@visx/annotation/-/annotation-1.7.2.tgz#8d75469926958495eca3569a84cdfbb11b74ef90"
-  integrity sha512-/XsgzSMF5ls2z6okHy71gu2uWZDTFg5yBimG34gK5cO2G0ZP7oBv7p6k4yyaGroAy7gXbiXAQqqMsAJPmKtq+Q==
+"@visx/annotation@1.7.4":
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/@visx/annotation/-/annotation-1.7.4.tgz#ae9d241265a7d6b00f4e05b88c5e1550999533cc"
+  integrity sha512-BOzvovXQDlXVeeWRg4Pi9Kax/0xbo1uVrqsVyDmYC2CxI2hakAxy1JKWhBvIVU2c4PHf0j2lSb8rB8y9J1Hpsg==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/react" "*"
-    "@visx/drag" "1.7.0"
+    "@visx/drag" "1.7.4"
     "@visx/group" "1.7.0"
     "@visx/point" "1.7.0"
     "@visx/shape" "1.7.0"
@@ -4621,12 +4621,12 @@
     "@types/react-dom" "*"
     prop-types "^15.5.10"
 
-"@visx/brush@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@visx/brush/-/brush-1.7.0.tgz#952045a99924be78f6a2e88983e9ae0611aa53af"
-  integrity sha512-h2u8bdR8wL6UPh6KK9p5R4OqSlmG2H9srsX4caww3zxwN6jwnkW8Fm8lIl0hP0zcsyac4kbWSCwo1pjQA8FfUQ==
+"@visx/brush@1.7.4":
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/@visx/brush/-/brush-1.7.4.tgz#4233a508367198f13e633b13a273cc36e2b27c54"
+  integrity sha512-XjcSupqO2tjBvGIqXRbKd8Yl/rUKJxGznPo9acv95kUN14G+JY2Jp6/yNWkNYoL6A0/khtQTlcHFtkuhwyZuMw==
   dependencies:
-    "@visx/drag" "1.7.0"
+    "@visx/drag" "1.7.4"
     "@visx/group" "1.7.0"
     "@visx/shape" "1.7.0"
     classnames "^2.2.5"
@@ -4648,10 +4648,10 @@
     "@types/d3-shape" "^1.3.1"
     d3-shape "^1.0.6"
 
-"@visx/drag@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@visx/drag/-/drag-1.7.0.tgz#b57295b852d957ae5f327c25aa2171a78ee4a71a"
-  integrity sha512-p1E5mV5gRBMzxFWJvSw6X8snwj6iKbOkuP16QS9WCnwuZwYFs22XTz4KXNdmWhYUzuvy7IVgofM1fdZ9r+DgXA==
+"@visx/drag@1.7.4":
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/@visx/drag/-/drag-1.7.4.tgz#263b487ee14bcec66eb424c04f07bf81f4608606"
+  integrity sha512-lKih9Vlrt/4DsFM1Km1xGaWViXAZ3jRxsuNpUtCfcdrD0LN9zncDg4/P+gPuFN8eVXPoJb1x5bfhIYnt5hbvlQ==
   dependencies:
     "@types/react" "*"
     "@visx/event" "1.7.0"
@@ -4888,18 +4888,18 @@
     prop-types "^15.5.10"
     react-use-measure "^2.0.4"
 
-"@visx/visx@^1.7.3":
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/@visx/visx/-/visx-1.7.3.tgz#0d674e4c105817a756d5d800a9359bb3712dacf2"
-  integrity sha512-ZWK1qVXYciZiyOqLKfEsV1t/N4ZdiWn/2v9qDtnxkoINf6TSPMzsS1huWez/CxZFL0CqMQ1fjmykPMfo2IzHsQ==
+"@visx/visx@^1.7.4":
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/@visx/visx/-/visx-1.7.4.tgz#74fa2505813a1db7420f36ece69e85eb3b3c241c"
+  integrity sha512-x5LgM5DaYycRRXJfoaFT+ts3HbrGtE/SE6vCIJ9hYrzpLKXPDW0FWe3UFvVnGhI5o8IkZ+hZceYcKHCtQ5fHVg==
   dependencies:
-    "@visx/annotation" "1.7.2"
+    "@visx/annotation" "1.7.4"
     "@visx/axis" "1.7.0"
     "@visx/bounds" "1.7.0"
-    "@visx/brush" "1.7.0"
+    "@visx/brush" "1.7.4"
     "@visx/clip-path" "1.7.0"
     "@visx/curve" "1.7.0"
-    "@visx/drag" "1.7.0"
+    "@visx/drag" "1.7.4"
     "@visx/event" "1.7.0"
     "@visx/geo" "1.7.0"
     "@visx/glyph" "1.7.0"
@@ -4920,7 +4920,7 @@
     "@visx/text" "1.7.0"
     "@visx/tooltip" "1.7.2"
     "@visx/voronoi" "1.7.0"
-    "@visx/xychart" "1.7.3"
+    "@visx/xychart" "1.7.4"
     "@visx/zoom" "1.7.0"
 
 "@visx/voronoi@1.7.0":
@@ -4935,15 +4935,15 @@
     d3-voronoi "^1.1.2"
     prop-types "^15.6.1"
 
-"@visx/xychart@1.7.3":
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.7.3.tgz#8a27d2819fcebc476f53c743f6ea5ed115dc0979"
-  integrity sha512-EpgvPxSn5byoGYop31PBZbClqjBFdZ3iTYQi2w09kQzSAJ3d2ZSzqQhsN5kp7HnAsWc+Ds5hpdt1Uj6wMqOd9w==
+"@visx/xychart@1.7.4":
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.7.4.tgz#84bd81dfa9ea47f659c843015dc69144299ab257"
+  integrity sha512-l55VIO8bkW9k2A833AYp+vcoNMLr7CijMOCzBxjr5fhICX6bqp+LWWM0gnFh5FTOpvZfP6GhrDnrgBFJ5NfG1w==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/lodash" "^4.14.146"
     "@types/react" "*"
-    "@visx/annotation" "1.7.2"
+    "@visx/annotation" "1.7.4"
     "@visx/axis" "1.7.0"
     "@visx/event" "1.7.0"
     "@visx/glyph" "1.7.0"
