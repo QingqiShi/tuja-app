@@ -89,7 +89,7 @@ const history = async (ticker: string, from: string, to: string) => {
 };
 
 const info = async (ticker: string) => {
-  const results = await search(ticker.split('.')[0]);
+  const results = await search(ticker);
   return results?.find(({ Ticker }: { Ticker: string }) => Ticker === ticker);
 };
 

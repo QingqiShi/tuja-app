@@ -123,7 +123,7 @@ test('info uses cached fetch to searche for stock symbols', async () => {
     Ticker: 'test.us',
   });
   expect(cachedFetch).toHaveBeenCalledWith(
-    'https://eodhistoricaldata.com/api/search/test?api_token=test_api_key'
+    'https://eodhistoricaldata.com/api/search/test.us?api_token=test_api_key'
   );
   expect(fetch).not.toHaveBeenCalled();
 });
