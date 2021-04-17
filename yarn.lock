@@ -4546,33 +4546,33 @@
     "@typescript-eslint/types" "4.22.0"
     eslint-visitor-keys "^2.0.0"
 
-"@visx/annotation@1.7.4":
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/@visx/annotation/-/annotation-1.7.4.tgz#ae9d241265a7d6b00f4e05b88c5e1550999533cc"
-  integrity sha512-BOzvovXQDlXVeeWRg4Pi9Kax/0xbo1uVrqsVyDmYC2CxI2hakAxy1JKWhBvIVU2c4PHf0j2lSb8rB8y9J1Hpsg==
+"@visx/annotation@1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@visx/annotation/-/annotation-1.9.0.tgz#4d8644b4b13006758c30b867ab9dbe5e40569e85"
+  integrity sha512-nGsxmNXDxY5dDh2P/Zth9AeY9j+r0u2lFxNjB1f0UzW4G3zuplPnkNbeFtjr+aUkAM0TXtyS/lWL1umppjU8Sg==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/react" "*"
     "@visx/drag" "1.7.4"
     "@visx/group" "1.7.0"
     "@visx/point" "1.7.0"
-    "@visx/shape" "1.7.0"
+    "@visx/shape" "1.8.0"
     "@visx/text" "1.7.0"
     classnames "^2.2.5"
     prop-types "^15.5.10"
     react-use-measure "^2.0.4"
 
-"@visx/axis@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@visx/axis/-/axis-1.7.0.tgz#ae3bf46bb508eca9cd61cd7dcf6a32a1facdeeef"
-  integrity sha512-C9XCszH+lMyA73lMalrdloDFI3P8E301KZqfmybU+OpwLtClqsEQmzWWpRmw5xPElgtSLztemsx8SczHFGLKuw==
+"@visx/axis@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@visx/axis/-/axis-1.8.0.tgz#6be994af9188fe889dce6dd7c61889b0ffb7a2dd"
+  integrity sha512-DSjtYiP0Hi5m4f2x8bCQQsdEg0hwa0XdeOjRpExCRdZQfYHMo1pLrRAATgRpy7TU49394V522IVGKMi5BicpmQ==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/react" "*"
     "@visx/group" "1.7.0"
     "@visx/point" "1.7.0"
     "@visx/scale" "1.7.0"
-    "@visx/shape" "1.7.0"
+    "@visx/shape" "1.8.0"
     "@visx/text" "1.7.0"
     classnames "^2.2.5"
     prop-types "^15.6.0"
@@ -4586,14 +4586,14 @@
     "@types/react-dom" "*"
     prop-types "^15.5.10"
 
-"@visx/brush@1.7.4":
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/@visx/brush/-/brush-1.7.4.tgz#4233a508367198f13e633b13a273cc36e2b27c54"
-  integrity sha512-XjcSupqO2tjBvGIqXRbKd8Yl/rUKJxGznPo9acv95kUN14G+JY2Jp6/yNWkNYoL6A0/khtQTlcHFtkuhwyZuMw==
+"@visx/brush@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@visx/brush/-/brush-1.8.0.tgz#385715a9d0c7a20f47a396ac424aa79b1a5d4b96"
+  integrity sha512-KnXI9U6sQ8V8zhT95vUR0Aryo4iU8WV94pdyeTHzD0GiZ/TFRlddHXFRFcz82jnikP1z1jnkJhNMAxOOPLhfGQ==
   dependencies:
     "@visx/drag" "1.7.4"
     "@visx/group" "1.7.0"
-    "@visx/shape" "1.7.0"
+    "@visx/shape" "1.8.0"
     classnames "^2.2.5"
     prop-types "^15.6.1"
 
@@ -4665,10 +4665,10 @@
     "@types/react" "*"
     prop-types "^15.5.7"
 
-"@visx/grid@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@visx/grid/-/grid-1.7.0.tgz#b447b09d9b409a5b41ca7e04707e08d015c18dba"
-  integrity sha512-mJQjg67JogLNh5ta8RmOgilX0TPiEJWZ0O0VggFS2onThj1Ild0xZgZxCiGEFLqM8vpfuIQxb4qR2vTe16uPQQ==
+"@visx/grid@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@visx/grid/-/grid-1.8.0.tgz#bcf9787e0eb5c6ccd0661703946b69d91cc1046a"
+  integrity sha512-ZTb2oW2ny2KHSOhaxlAD6Ps9iVz/v4qkSAYNvomwS7wRK/NtUFEznggxHc36kJdKQCUeU9MmbPfCvN4FA43BWg==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/react" "*"
@@ -4676,7 +4676,7 @@
     "@visx/group" "1.7.0"
     "@visx/point" "1.7.0"
     "@visx/scale" "1.7.0"
-    "@visx/shape" "1.7.0"
+    "@visx/shape" "1.8.0"
     classnames "^2.2.5"
     prop-types "^15.6.2"
 
@@ -4726,15 +4726,15 @@
     classnames "^2.2.5"
     prop-types "^15.5.10"
 
-"@visx/marker@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@visx/marker/-/marker-1.7.0.tgz#bf262681e807f3f35c3a7ca340830eccbbbc12ca"
-  integrity sha512-JS51AEPn9xIXjCj92qLR6vZq/toj9dpj0vR/Pdnj2FWHI9xcv1mNr/659QanvsX/+Pf7lDiNmLx1IFd5O52PhA==
+"@visx/marker@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@visx/marker/-/marker-1.8.0.tgz#cc358e3a63b7f72600e99bb3748df08945b35303"
+  integrity sha512-AsDGCz8TAccD1UdSZ9nOX/3jR3Eq5qYZgdiKuIAbzAISOsss+bFQsS9080DPJMNlfJysQ/YdJUTL5LU6sOpLmg==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/react" "*"
     "@visx/group" "1.7.0"
-    "@visx/shape" "1.7.0"
+    "@visx/shape" "1.8.0"
     classnames "^2.2.5"
     prop-types "^15.6.2"
 
@@ -4772,15 +4772,15 @@
   resolved "https://registry.yarnpkg.com/@visx/point/-/point-1.7.0.tgz#1df3c3425eae464f498473bcdda2fcae05c8ecbe"
   integrity sha512-oaoY/HXYHhmpkkeKI4rBPmFtjHWtxSrIhZCVm1ipPoyQp3voJ8L6JD5eUIVmmaUCdUGUGwL1lFLnJiQ2p1Vlwg==
 
-"@visx/react-spring@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@visx/react-spring/-/react-spring-1.7.0.tgz#dce83cc8c0e4ad9b27cf92be86d5663ba0e02667"
-  integrity sha512-WQldovnq+M5/LEkSM1qD9gLcjNkR9iRM/qtGI8A3VoUcU+RE3CniqPp7p2arhquhuqimIYEFmhMGdW1HMhkltg==
+"@visx/react-spring@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@visx/react-spring/-/react-spring-1.8.0.tgz#65aee693d5b357bebe81a88bde8cbc8fada281d0"
+  integrity sha512-/IG8JuZct64cWcE4g0qxqcskbinPSzcM4dBIKl4m3Q69/xJwUshz83hqzOSmABye7aZhIsBBL1ZDpx9pDEU+SQ==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/react" "*"
-    "@visx/axis" "1.7.0"
-    "@visx/grid" "1.7.0"
+    "@visx/axis" "1.8.0"
+    "@visx/grid" "1.8.0"
     "@visx/scale" "1.7.0"
     "@visx/text" "1.7.0"
     classnames "^2.2.5"
@@ -4809,10 +4809,10 @@
     d3-scale "^3.2.3"
     d3-time "^1.1.0"
 
-"@visx/shape@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@visx/shape/-/shape-1.7.0.tgz#2a89abf875a6925a6c969de0dc8a6beaa09d00ea"
-  integrity sha512-4tYDYDZ7Nkw+N5IzF+EJmySRkBZuH40QsGqkbg+idLppAxQfDIeS11nDZlG/sRK0FKAkkvCFtw3lPXqNvrNW+w==
+"@visx/shape@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@visx/shape/-/shape-1.8.0.tgz#e9e1d584011aabd142bf8501edf1da4b5f29dee3"
+  integrity sha512-EclCdmgfkqoAiGWsJ652dZzQIdPGKDuOkCa1qnwqPuFMjL19nSlLvI0n/yH45kWcPa5etz9iZ50LQ+6YMgvYSQ==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/d3-path" "^1.0.8"
@@ -4853,15 +4853,15 @@
     prop-types "^15.5.10"
     react-use-measure "^2.0.4"
 
-"@visx/visx@^1.7.4":
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/@visx/visx/-/visx-1.7.4.tgz#74fa2505813a1db7420f36ece69e85eb3b3c241c"
-  integrity sha512-x5LgM5DaYycRRXJfoaFT+ts3HbrGtE/SE6vCIJ9hYrzpLKXPDW0FWe3UFvVnGhI5o8IkZ+hZceYcKHCtQ5fHVg==
+"@visx/visx@^1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@visx/visx/-/visx-1.9.0.tgz#7016744c11575c468f250eb591f1dda9def2ea37"
+  integrity sha512-2DhENnfCfg0rLkvYfh6fn5xvkUvgoifFEoFLtfVuNTxFvTiLsuCd9ngXvi8EKu3of2eLWGGLPFp4pdfUy/uzcg==
   dependencies:
-    "@visx/annotation" "1.7.4"
-    "@visx/axis" "1.7.0"
+    "@visx/annotation" "1.9.0"
+    "@visx/axis" "1.8.0"
     "@visx/bounds" "1.7.0"
-    "@visx/brush" "1.7.4"
+    "@visx/brush" "1.8.0"
     "@visx/clip-path" "1.7.0"
     "@visx/curve" "1.7.0"
     "@visx/drag" "1.7.4"
@@ -4869,23 +4869,23 @@
     "@visx/geo" "1.7.0"
     "@visx/glyph" "1.7.0"
     "@visx/gradient" "1.7.0"
-    "@visx/grid" "1.7.0"
+    "@visx/grid" "1.8.0"
     "@visx/group" "1.7.0"
     "@visx/heatmap" "1.7.0"
     "@visx/hierarchy" "1.7.0"
     "@visx/legend" "1.7.0"
-    "@visx/marker" "1.7.0"
+    "@visx/marker" "1.8.0"
     "@visx/mock-data" "1.7.0"
     "@visx/network" "1.7.0"
     "@visx/pattern" "1.7.0"
     "@visx/point" "1.7.0"
     "@visx/responsive" "1.7.0"
     "@visx/scale" "1.7.0"
-    "@visx/shape" "1.7.0"
+    "@visx/shape" "1.8.0"
     "@visx/text" "1.7.0"
     "@visx/tooltip" "1.7.2"
     "@visx/voronoi" "1.7.0"
-    "@visx/xychart" "1.7.4"
+    "@visx/xychart" "1.9.0"
     "@visx/zoom" "1.7.0"
 
 "@visx/voronoi@1.7.0":
@@ -4900,23 +4900,23 @@
     d3-voronoi "^1.1.2"
     prop-types "^15.6.1"
 
-"@visx/xychart@1.7.4":
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.7.4.tgz#84bd81dfa9ea47f659c843015dc69144299ab257"
-  integrity sha512-l55VIO8bkW9k2A833AYp+vcoNMLr7CijMOCzBxjr5fhICX6bqp+LWWM0gnFh5FTOpvZfP6GhrDnrgBFJ5NfG1w==
+"@visx/xychart@1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.9.0.tgz#434cbcdc4322d683ecab8dcb81790a3e79e7fba3"
+  integrity sha512-h4yRpaOJc7n2E4Y1UC1mZJ8umV42TpO51No3qNysMbVyVHlkplGsYECCnUUPvm35771bhnQtxlIhFSha2RfvOg==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/lodash" "^4.14.146"
     "@types/react" "*"
-    "@visx/annotation" "1.7.4"
-    "@visx/axis" "1.7.0"
+    "@visx/annotation" "1.9.0"
+    "@visx/axis" "1.8.0"
     "@visx/event" "1.7.0"
     "@visx/glyph" "1.7.0"
-    "@visx/grid" "1.7.0"
-    "@visx/react-spring" "1.7.0"
+    "@visx/grid" "1.8.0"
+    "@visx/react-spring" "1.8.0"
     "@visx/responsive" "1.7.0"
     "@visx/scale" "1.7.0"
-    "@visx/shape" "1.7.0"
+    "@visx/shape" "1.8.0"
     "@visx/text" "1.7.0"
     "@visx/tooltip" "1.7.2"
     "@visx/voronoi" "1.7.0"
