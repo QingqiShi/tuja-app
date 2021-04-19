@@ -7,7 +7,6 @@ import { Integrations } from '@sentry/tracing';
 import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/performance';
-import './index.css';
 import { setAnalyticsSupport } from './libs/analytics';
 import App from './App';
 // import * as serviceWorker from './serviceWorker';
