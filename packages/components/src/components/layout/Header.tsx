@@ -26,6 +26,7 @@ const FixedHeader = styled.div<{ hasScrolled?: boolean }>`
   height: var(--header-height, 5rem);
   backdrop-filter: blur(${v.spacerS});
   transition: background-color 0.2s, box-shadow 0.2s;
+  z-index: ${v.zFixed};
 
   ${({ hasScrolled }) =>
     hasScrolled &&
