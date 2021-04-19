@@ -34,6 +34,7 @@ export { default as TabBar } from './components/controls/TabBar';
 export { default as ResponsiveSplit } from './components/layout/ResponsiveSplit';
 export { default as EdgePadding } from './components/layout/EdgePadding';
 export { default as AppLayout } from './components/layout/AppLayout';
+export { default as Header } from './components/layout/Header';
 
 export { GlobalStyle } from './globalStyle';
 export { getTheme, v } from './theme';
