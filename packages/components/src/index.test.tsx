@@ -1,11 +1,11 @@
-import { ThemeProvider } from 'styled-components';
 import { render } from '@testing-library/react';
-import { Button, getTheme } from './index';
+import { Logo, GlobalStyle } from './index';
 
 test('renders', () => {
   render(
-    <ThemeProvider theme={getTheme('light')}>
-      <Button />
-    </ThemeProvider>
+    <div>
+      <GlobalStyle />
+      <Logo />
+    </div>
   );
 });

@@ -37,6 +37,5 @@ export { default as AppLayout } from './components/layout/AppLayout';
 export { GlobalStyle } from './globalStyle';
 export { getTheme, v } from './theme';
 export { KeyboardFocusProvider } from './hooks/useKeyboardFocus';
-export { invertEdgePadding } from './components/layout/EdgePadding';
 
 export * from 'framer-motion';
