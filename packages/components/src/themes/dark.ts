@@ -12,12 +12,12 @@ export default css`
   );
   --text-main: #ffffff;
   --text-secondary: #9e9e9e;
-  --text-on-accent: #ffffff;
+  --text-on-accent: #000000;
   --text-gain: #49c569;
   --text-loss: #f74b3c;
   --text-no-change: #775d68;
-  --accent-main: #774afb;
-  --accent-hover: #aa8dff;
+  --accent-main: #f100ff;
+  --accent-hover: #f76fff;
   --ordinal-1: #5b6a87;
   --ordinal-2: #d6a59c;
   --ordinal-3: #a3b4d4;

@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import { Button, DateInput, NumberInput, Select } from '@tuja/components';
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  ButtonTertiary,
+  DateInput,
+  NumberInput,
+  Select,
+} from '@tuja/components';
 import type { ActivityFormProps } from '@tuja/libs';
 import { ActionsContainer } from '../commonStyledComponents';
 import usePortfolio from '../hooks/usePortfolio';
@@ -76,18 +83,15 @@ function ActivityStockDividendForm({
         onChange={setUnits}
       />
       <ActionsContainer>
-        <Button
-          variant="shout"
-          startIcon={<GiReceiveMoney />}
+        <ButtonPrimary
+          type="submit"
           disabled={!date || !ticker || !units || loading}
         >
-          Dividend
-        </Button>
+          <GiReceiveMoney />
+          <span>Dividend</span>
+        </ButtonPrimary>
         {initialActivity && (
-          <Button
-            type="button"
-            variant="primary"
-            icon={<RiDeleteBinLine />}
+          <ButtonSecondary
             onClick={async () => {
               setLoading(true);
               try {
@@ -102,11 +106,11 @@ function ActivityStockDividendForm({
                 setLoading(false);
               }
             }}
-          />
+          >
+            <RiDeleteBinLine />
+          </ButtonSecondary>
         )}
-        <Button type="button" onClick={onClose}>
-          Cancel
-        </Button>
+        <ButtonTertiary onClick={onClose}>Cancel</ButtonTertiary>
       </ActionsContainer>
     </form>
   );

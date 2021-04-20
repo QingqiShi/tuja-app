@@ -2,7 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { useDebounce } from 'react-use';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import styled from 'styled-components';
-import { Button, TextInput } from '@tuja/components';
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  ButtonTertiary,
+  TextInput,
+} from '@tuja/components';
 import { ActionsContainer, Card, CardMedia } from '../commonStyledComponents';
 import { fetchStockSearch } from '../libs/stocksClient';
 
@@ -148,14 +153,11 @@ function SetBenchmarkForm({
       </SearchContainer>
 
       <ActionsContainer>
-        <Button variant="shout" disabled={loading} type="submit">
+        <ButtonPrimary disabled={loading} type="submit">
           Set Benchmark
-        </Button>
+        </ButtonPrimary>
         {defaultBenchmark && onDelete && (
-          <Button
-            type="button"
-            variant="primary"
-            icon={<RiDeleteBinLine />}
+          <ButtonSecondary
             disabled={loading}
             onClick={async () => {
               setLoading(true);
@@ -169,11 +171,11 @@ function SetBenchmarkForm({
                 setLoading(false);
               }
             }}
-          />
+          >
+            <RiDeleteBinLine />
+          </ButtonSecondary>
         )}
-        <Button type="button" onClick={onClose}>
-          Cancel
-        </Button>
+        <ButtonTertiary onClick={onClose}>Cancel</ButtonTertiary>
       </ActionsContainer>
     </form>
   );
