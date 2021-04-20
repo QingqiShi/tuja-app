@@ -22,7 +22,7 @@ function useScrolled() {
   return {
     scrollEl: <ScrollEl ref={ref} />,
     hasScrolled:
-      (intersection?.intersectionRatio ?? 0) > 0 ||
+      intersection?.isIntersecting ||
       (intersection?.boundingClientRect.top ?? 0) < 0,
   };
 }
