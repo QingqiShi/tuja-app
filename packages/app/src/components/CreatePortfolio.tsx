@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { RiBriefcaseLine, RiAddLine } from 'react-icons/ri';
-import { Button, Select, TextInput, Type, v } from '@tuja/components';
+import { ButtonPrimary, Select, TextInput, Type, v } from '@tuja/components';
 import { Center } from '../commonStyledComponents';
 
 const LargeIcon = styled.div`
@@ -63,14 +63,13 @@ function CreatePortfolio({ onCreate }: CreatePortfolioProps) {
           onChange={(e) => setCurrency(e.target.value)}
           required
         />
-        <Button
-          variant="shout"
-          startIcon={<RiAddLine />}
+        <ButtonPrimary
           disabled={!name || !currency}
           onClick={() => onCreate && onCreate(name, currency)}
         >
-          Create
-        </Button>
+          <RiAddLine />
+          <span>Create</span>
+        </ButtonPrimary>
       </Center>
     </CreateContainer>
   );

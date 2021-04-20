@@ -2,7 +2,13 @@ import { useState, useEffect } from 'react';
 import { RiEdit2Line } from 'react-icons/ri';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
-import { Button, Type, InvestmentItem, Modal, v } from '@tuja/components';
+import {
+  ButtonTertiary,
+  Type,
+  InvestmentItem,
+  Modal,
+  v,
+} from '@tuja/components';
 import { formatCurrency } from '@tuja/libs';
 import { PortfolioPerformance } from '../libs/portfolioClient';
 import { fetchStockLogo } from '../libs/stocksClient';
@@ -217,14 +223,13 @@ function InvestmentsListItem({
         </DataRow>
         {state === 'SIGNED_IN' && (
           <ActionsContainer>
-            <Button onClick={() => setShowDetails(false)}>Close</Button>
-            <Button
-              variant="primary"
-              startIcon={<RiEdit2Line />}
-              onClick={() => setShowAlias(true)}
-            >
-              Set Alias
-            </Button>
+            <ButtonTertiary onClick={() => setShowDetails(false)}>
+              Close
+            </ButtonTertiary>
+            <ButtonTertiary onClick={() => setShowAlias(true)}>
+              <RiEdit2Line />
+              <span>Set Alias</span>
+            </ButtonTertiary>
           </ActionsContainer>
         )}
       </Modal>

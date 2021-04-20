@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { MdShowChart, MdPieChartOutlined, MdAutorenew } from 'react-icons/md';
 import styled from 'styled-components';
-import { Button, Type, v } from '@tuja/components';
+import { ButtonPrimary, Type, v } from '@tuja/components';
 import { Center } from '../commonStyledComponents';
 import useScrollToTopOnMount from '../hooks/useScrollToTopOnMount';
 
@@ -33,6 +33,7 @@ const BetaBadge = styled.div`
 
 function Home() {
   useScrollToTopOnMount();
+  const history = useHistory();
   return (
     <div>
       <Helmet>
@@ -45,9 +46,12 @@ function Home() {
               Tuja<BetaBadge>Beta</BetaBadge>
             </Title>
             <SubTitle scale="h4">Portfolio Tracker</SubTitle>
-            <Button variant="shout" as={Link} otherProps={{ to: '/portfolio' }}>
+            <ButtonPrimary
+              href="/portfolio"
+              onClick={() => history.push('/portfolio')}
+            >
               Try now
-            </Button>
+            </ButtonPrimary>
           </div>
         </Center>
       </FullHeight>
@@ -80,9 +84,12 @@ function Home() {
       <FullHeight>
         <Center>
           <Title scale="h1">Try Tuja now</Title>
-          <Button variant="shout" as={Link} otherProps={{ to: '/portfolio' }}>
+          <ButtonPrimary
+            href="/portfolio"
+            onClick={() => history.push('/portfolio')}
+          >
             Go to app
-          </Button>
+          </ButtonPrimary>
         </Center>
       </FullHeight>
     </div>

@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import { Button, DateInput, Select } from '@tuja/components';
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  ButtonTertiary,
+  DateInput,
+  Select,
+} from '@tuja/components';
 import type { ActivityFormProps } from '@tuja/libs';
 import CurrencyInput from './CurrencyInput';
 import { ActionsContainer } from '../commonStyledComponents';
@@ -76,18 +82,15 @@ function ActivityDividendForm({
         required
       />
       <ActionsContainer>
-        <Button
-          variant="shout"
-          startIcon={<GiReceiveMoney />}
+        <ButtonPrimary
+          type="submit"
           disabled={!date || !ticker || !amount || loading}
         >
-          Dividend
-        </Button>
+          <GiReceiveMoney />
+          <span>Dividend</span>
+        </ButtonPrimary>
         {initialActivity && (
-          <Button
-            type="button"
-            variant="primary"
-            icon={<RiDeleteBinLine />}
+          <ButtonSecondary
             onClick={async () => {
               setLoading(true);
               try {
@@ -102,11 +105,11 @@ function ActivityDividendForm({
                 setLoading(false);
               }
             }}
-          />
+          >
+            <RiDeleteBinLine />
+          </ButtonSecondary>
         )}
-        <Button type="button" onClick={onClose}>
-          Cancel
-        </Button>
+        <ButtonTertiary onClick={onClose}>Cancel</ButtonTertiary>
       </ActionsContainer>
     </form>
   );

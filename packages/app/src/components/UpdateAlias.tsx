@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { RiCheckLine } from 'react-icons/ri';
 import styled from 'styled-components';
-import { Button, TextInput, v } from '@tuja/components';
+import { ButtonPrimary, ButtonTertiary, TextInput, v } from '@tuja/components';
 import { updateHoldingAlias } from '../libs/portfolioClient';
 import usePortfolio from '../hooks/usePortfolio';
 
@@ -55,9 +55,7 @@ function UpdateAlias({ ticker, onClose }: UpdateAliasProps) {
         onChange={(e) => setAlias(e.target.value)}
       />
       <ActionsContainer>
-        <Button
-          startIcon={<RiCheckLine />}
-          variant="shout"
+        <ButtonPrimary
           onClick={() => {
             if (portfolio?.id) {
               updateHoldingAlias(portfolio.id, ticker, alias);
@@ -67,9 +65,10 @@ function UpdateAlias({ ticker, onClose }: UpdateAliasProps) {
             }
           }}
         >
-          Set Alias
-        </Button>
-        <Button
+          <RiCheckLine />
+          <span>Set Alias</span>
+        </ButtonPrimary>
+        <ButtonTertiary
           onClick={() => {
             setAlias(currentAlias);
             if (onClose) {
@@ -78,7 +77,7 @@ function UpdateAlias({ ticker, onClose }: UpdateAliasProps) {
           }}
         >
           Cancel
-        </Button>
+        </ButtonTertiary>
       </ActionsContainer>
     </Container>
   );

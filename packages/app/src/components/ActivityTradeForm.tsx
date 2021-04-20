@@ -11,7 +11,9 @@ import {
 } from 'react-icons/ri';
 import styled, { css } from 'styled-components';
 import {
-  Button,
+  ButtonPrimary,
+  ButtonSecondary,
+  ButtonTertiary,
   DateInput,
   LinearLoader,
   NumberInput,
@@ -93,7 +95,7 @@ const ButtonRow = styled.div`
     flex-grow: 1;
   }
   button {
-    margin: 0 0 calc(${v.spacerS} + 1px) ${v.spacerXS};
+    margin: 0 0 1.5rem ${v.spacerXS};
   }
 `;
 
@@ -334,15 +336,13 @@ function ActivityTradeForm({
       />
       <ActionsContainer>
         <div />
-        <Button
-          variant="shout"
+        <ButtonPrimary
           disabled={!selectedTickers.length || isLoading}
           onClick={() => setShowStep(1)}
-          endIcon={<RiArrowRightLine />}
-          compact
         >
-          Selected {selectedTickers.length}
-        </Button>
+          <span>Selected {selectedTickers.length}</span>
+          <RiArrowRightLine />
+        </ButtonPrimary>
       </ActionsContainer>
     </motion.div>,
 
@@ -365,9 +365,7 @@ function ActivityTradeForm({
                 })
               }
             />
-            <Button
-              icon={<RiDeleteBinLine />}
-              type="button"
+            <ButtonTertiary
               onClick={() => {
                 setSelectedTickers((current) =>
                   current.filter(
@@ -379,7 +377,9 @@ function ActivityTradeForm({
                   return current;
                 });
               }}
-            />
+            >
+              <RiDeleteBinLine />
+            </ButtonTertiary>
           </ButtonRow>
         ))}
       </QuantitiesContainer>
@@ -391,21 +391,20 @@ function ActivityTradeForm({
           {showDateInput ? (
             <ButtonRowCenter>
               <DateInput value={date} onChange={setDate} />
-              <Button
-                icon={<RiCloseLine />}
+              <ButtonTertiary
                 onClick={() => {
                   setShowDateInput(false);
                   setDate(new Date());
                 }}
-              />
+              >
+                <RiCloseLine />
+              </ButtonTertiary>
             </ButtonRowCenter>
           ) : (
-            <Button
-              endIcon={<RiCalendarLine />}
-              onClick={() => setShowDateInput(true)}
-            >
-              {date.toLocaleDateString()}
-            </Button>
+            <ButtonTertiary onClick={() => setShowDateInput(true)}>
+              <span>{date.toLocaleDateString()}</span>
+              <RiCalendarLine />
+            </ButtonTertiary>
           )}
         </EditableField>
       </Row>
@@ -421,35 +420,24 @@ function ActivityTradeForm({
                 onChange={setTotalValue}
                 currency={currency}
               />
-              <Button
-                icon={<RiCloseLine />}
-                onClick={() => setShowTotalValueInput(false)}
-              />
+              <ButtonTertiary onClick={() => setShowTotalValueInput(false)}>
+                <RiCloseLine />
+              </ButtonTertiary>
             </ButtonRowCenter>
           ) : (
-            <Button
-              endIcon={<RiEditLine />}
-              onClick={() => setShowTotalValueInput(true)}
-            >
-              {formatCurrency(currency, totalValue)}
-            </Button>
+            <ButtonTertiary onClick={() => setShowTotalValueInput(true)}>
+              <span>{formatCurrency(currency, totalValue)}</span>
+              <RiEditLine />
+            </ButtonTertiary>
           )}
         </EditableField>
       </Row>
       <ActionsContainer>
-        <Button
-          variant="primary"
-          disabled={!date}
-          onClick={() => setShowStep(0)}
-          compact
-        >
+        <ButtonTertiary disabled={!date} onClick={() => setShowStep(0)}>
           Back
-        </Button>
+        </ButtonTertiary>
         {!!initialActivity && (
-          <Button
-            type="button"
-            variant="primary"
-            icon={<RiDeleteBinLine />}
+          <ButtonSecondary
             onClick={async () => {
               setIsLoading(true);
               try {
@@ -464,18 +452,20 @@ function ActivityTradeForm({
                 setIsLoading(false);
               }
             }}
-          />
+          >
+            <RiDeleteBinLine />
+          </ButtonSecondary>
         )}
-        <Button
-          variant="shout"
+        <ButtonPrimary
           disabled={!date || !Object.keys(quantities).length || isLoading}
           onClick={handleSubmit}
-          endIcon={<RiCheckLine />}
-          compact
         >
-          {!initialActivity && (mode === 'buy' ? 'Buy' : 'Sell')}
-          {!!initialActivity && `Update ${mode === 'buy' ? 'Buy' : 'Sell'}`}
-        </Button>
+          <span>
+            {!initialActivity && (mode === 'buy' ? 'Buy' : 'Sell')}
+            {!!initialActivity && `Update ${mode === 'buy' ? 'Buy' : 'Sell'}`}
+          </span>
+          <RiCheckLine />
+        </ButtonPrimary>
       </ActionsContainer>
     </motion.div>,
   ];
