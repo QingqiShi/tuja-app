@@ -32,6 +32,11 @@ const Item = styled(ButtonBase)`
   font-size: 0.75rem;
   width: 5rem;
 
+  > svg:first-child:not(:last-child),
+  > svg:last-child:not(:first-child) {
+    margin: 0;
+  }
+
   &:visited {
     color: ${v.textSecondary};
   }
