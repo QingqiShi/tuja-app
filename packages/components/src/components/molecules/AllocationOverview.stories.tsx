@@ -2,7 +2,7 @@ import { Story, Meta } from '@storybook/react';
 import AllocationOverview from './AllocationOverview';
 
 export default {
-  title: 'Display/AllocationOverview',
+  title: 'Molecules/AllocationOverview',
   component: AllocationOverview,
 } as Meta;
 

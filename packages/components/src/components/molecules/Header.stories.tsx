@@ -2,7 +2,7 @@ import { Story, Meta } from '@storybook/react';
 import Header from './Header';
 
 export default {
-  title: 'Layout/Header',
+  title: 'Molecules/Header',
   component: Header,
 } as Meta;
 

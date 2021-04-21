@@ -7,7 +7,7 @@ const stock = appleStock
   .map((d) => [new Date(d.date), d.close] as const);
 
 export default {
-  title: 'Display/InvestmentItem',
+  title: 'Molecules/InvestmentItem',
   component: InvestmentItem,
 } as Meta;
 

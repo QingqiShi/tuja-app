@@ -2,7 +2,7 @@ import { Story, Meta } from '@storybook/react';
 import LinearLoader from './LinearLoader';
 
 export default {
-  title: 'Feedback/LinearLoader',
+  title: 'Molecules/LinearLoader',
   component: LinearLoader,
 } as Meta;
 

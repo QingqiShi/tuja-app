@@ -2,7 +2,7 @@ import { Story, Meta } from '@storybook/react';
 import TopLinearLoader from './TopLinearLoader';
 
 export default {
-  title: 'Feedback/TopLinearLoader',
+  title: 'Molecules/TopLinearLoader',
   component: TopLinearLoader,
 } as Meta;
 

@@ -2,7 +2,7 @@ import { Story, Meta } from '@storybook/react';
 import StockListItem from './StockListItem';
 
 export default {
-  title: 'Display/StockListItem',
+  title: 'Molecules/StockListItem',
   component: StockListItem,
 } as Meta;
 

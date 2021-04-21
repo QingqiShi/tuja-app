@@ -2,7 +2,7 @@ import { Story, Meta } from '@storybook/react';
 import DateRangeTabs from './DateRangeTabs';
 
 export default {
-  title: 'Controls/DateRangeTabs',
+  title: 'Molecules/DateRangeTabs',
   component: DateRangeTabs,
 } as Meta;
 
