@@ -3,7 +3,7 @@ import { Meta } from '@storybook/react';
 import Type from './Type';
 
 export default {
-  title: 'Display/Type',
+  title: 'Molecules/Type',
   component: Type,
 } as Meta;
 

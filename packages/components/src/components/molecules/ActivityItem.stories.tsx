@@ -2,7 +2,7 @@ import { Story, Meta } from '@storybook/react';
 import ActivityItem from './ActivityItem';
 
 export default {
-  title: 'Display/ActivityItem',
+  title: 'Molecules/ActivityItem',
   component: ActivityItem,
 } as Meta;
 

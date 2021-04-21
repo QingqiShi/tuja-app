@@ -2,7 +2,7 @@ import { Story, Meta } from '@storybook/react';
 import SearchSuggest from './SearchSuggest';
 
 export default {
-  title: 'Inputs/SearchSuggest',
+  title: 'Molecules/SearchSuggest',
   component: SearchSuggest,
 } as Meta;
 

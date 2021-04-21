@@ -3,7 +3,7 @@ import { House, Clock, Gear } from 'phosphor-react';
 import TabBar from './TabBar';
 
 export default {
-  title: 'Controls/TabBar',
+  title: 'Molecules/TabBar',
   component: TabBar,
 } as Meta;
 

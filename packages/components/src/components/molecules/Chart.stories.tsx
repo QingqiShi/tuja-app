@@ -9,7 +9,7 @@ const Container = styled.div`
 `;
 
 export default {
-  title: 'Display/Chart',
+  title: 'Molecules/Chart',
   component: Chart,
   decorators: [(storyFn) => <Container>{storyFn()}</Container>],
 } as Meta;

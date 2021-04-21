@@ -2,7 +2,7 @@ import { Story, Meta } from '@storybook/react';
 import OverviewStats from './OverviewStats';
 
 export default {
-  title: 'Display/Text/OverviewStats',
+  title: 'Molecules/OverviewStats',
   component: OverviewStats,
 } as Meta;
 

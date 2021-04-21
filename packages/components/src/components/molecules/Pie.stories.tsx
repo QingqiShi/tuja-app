@@ -8,7 +8,7 @@ const Container = styled.div`
 `;
 
 export default {
-  title: 'Display/Pie',
+  title: 'Molecules/Pie',
   component: Pie,
   decorators: [(storyFn) => <Container>{storyFn()}</Container>],
 } as Meta;

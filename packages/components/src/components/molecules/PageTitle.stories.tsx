@@ -2,7 +2,7 @@ import { Story, Meta } from '@storybook/react';
 import PageTitle from './PageTitle';
 
 export default {
-  title: 'Display/Text/PageTitle',
+  title: 'Molecules/PageTitle',
   component: PageTitle,
 } as Meta;
 
