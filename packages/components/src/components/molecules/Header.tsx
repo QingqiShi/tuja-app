@@ -28,6 +28,7 @@ const FixedHeader = styled.div<{ hasScrolled?: boolean }>`
   backdrop-filter: blur(${v.spacerS});
   transition: background-color 0.2s, box-shadow 0.2s;
   z-index: ${v.zFixed};
+  will-change: transform;
 
   ${({ hasScrolled }) =>
     hasScrolled &&
@@ -55,11 +56,7 @@ const NavigationContainer = styled.div`
 `;
 
 const ScrollEl = styled.div`
-  position: relative;
-  top: 100vh;
-  left: 0;
-  right: 0;
-  height: 2px;
+  height: 10px;
   pointer-events: none;
 `;
 
@@ -77,9 +74,7 @@ function useScrolled() {
 
   return {
     scrollRef,
-    hasScrolled:
-      intersection?.isIntersecting ||
-      (intersection?.boundingClientRect.top ?? 0) < 0,
+    hasScrolled: (intersection && !intersection.isIntersecting) ?? false,
   };
 }
 
