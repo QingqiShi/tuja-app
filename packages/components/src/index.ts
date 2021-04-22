@@ -11,6 +11,7 @@ export { default as Logo } from './components/atoms/Logo';
 export { default as NumberInput } from './components/atoms/NumberInput';
 export { default as Select } from './components/atoms/Select';
 export { default as TextInput } from './components/atoms/TextInput';
+export { default as TextLink } from './components/atoms/TextLink';
 
 export { default as ActivityItem } from './components/molecules/ActivityItem';
 export { default as AllocationOverview } from './components/molecules/AllocationOverview';
