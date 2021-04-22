@@ -63,6 +63,7 @@ const globalCss = css`
 
   html,
   body {
+    margin: 0;
     font-size: 16px;
     @media (${v.minLaptop}) {
       font-size: 18px;
