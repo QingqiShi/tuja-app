@@ -18,6 +18,7 @@ export { default as AllocationOverview } from './components/molecules/Allocation
 export { default as Bars } from './components/molecules/Bars';
 export { default as Chart } from './components/molecules/Chart';
 export { default as DateRangeTabs } from './components/molecules/DateRangeTabs';
+export { default as Footer } from './components/molecules/Footer';
 export { default as Header } from './components/molecules/Header';
 export { default as Hero } from './components/molecules/Hero';
 export { default as InvestmentItem } from './components/molecules/InvestmentItem';
