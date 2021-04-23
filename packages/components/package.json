@@ -18,7 +18,7 @@
     "@tuja/libs": "^0.0.0",
     "@visx/visx": "^1.9.0",
     "body-scroll-lock": "^3.1.5",
-    "framer-motion": "^4.1.8",
+    "framer-motion": "^4.1.9",
     "react-use": "^17.2.3",
     "use-debounce": "^6.0.1"
   },
