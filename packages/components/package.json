@@ -19,7 +19,7 @@
     "@visx/visx": "^1.9.0",
     "body-scroll-lock": "^3.1.5",
     "framer-motion": "^4.1.8",
-    "react-use": "^17.2.3",
+    "react-use": "^17.2.4",
     "use-debounce": "^6.0.1"
   },
   "devDependencies": {
@@ -31,7 +31,7 @@
     "@storybook/addons": "^6.2.8",
     "@storybook/core": "^6.2.8",
     "@storybook/react": "^6.2.8",
-    "@storybook/source-loader": "^6.2.8",
+    "@storybook/source-loader": "^6.2.9",
     "@storybook/theming": "^6.2.8",
     "babel-eslint": "^10.1.0",
     "eslint-config-react-app": "^6.0.0",
