@@ -19,13 +19,13 @@
     "@visx/visx": "^1.9.0",
     "body-scroll-lock": "^3.1.5",
     "framer-motion": "^4.1.8",
-    "react-use": "^17.2.3",
+    "react-use": "^17.2.4",
     "use-debounce": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
     "@storybook/addon-actions": "^6.2.8",
-    "@storybook/addon-essentials": "^6.2.8",
+    "@storybook/addon-essentials": "^6.2.9",
     "@storybook/addon-links": "^6.2.8",
     "@storybook/addon-storysource": "^6.2.8",
     "@storybook/addons": "^6.2.8",
