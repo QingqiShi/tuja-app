@@ -39,6 +39,8 @@ export { default as ResponsiveSplit } from './components/layout/ResponsiveSplit'
 export { default as EdgePadding } from './components/layout/EdgePadding';
 export { default as AppLayout } from './components/layout/AppLayout';
 
+export { default as EconomyAnalysis } from './components/assets/EconomyAnalysis';
+
 export { GlobalStyle } from './globalStyle';
 export { getTheme, v } from './theme';
 export { KeyboardFocusProvider } from './hooks/useKeyboardFocus';
