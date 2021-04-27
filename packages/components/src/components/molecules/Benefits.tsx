@@ -32,7 +32,7 @@ const Title = styled.h2`
 `;
 
 const BenefitsList = styled.dl`
-  margin-top: ${v.spacerM};
+  margin-top: ${v.spacerXL};
 
   @media (${v.minTablet}) {
     display: grid;
@@ -41,20 +41,25 @@ const BenefitsList = styled.dl`
   }
 
   @media (${v.minLaptop}) {
-    margin-top: ${v.spacerL};
     grid-gap: ${v.spacerM};
   }
+
   @media (${v.minDesktop}) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 `;
 
 const BenefitItem = styled.div`
-  margin-bottom: ${v.spacerS};
+  margin-bottom: ${v.spacerL};
 `;
 
 const BenefitIcon = styled.div`
   font-size: 3rem;
+  text-align: center;
+
+  @media (${v.minTablet}) {
+    text-align: left;
+  }
 `;
 
 const BenefitName = styled.dt`
@@ -62,11 +67,23 @@ const BenefitName = styled.dt`
   font-weight: ${v.fontSemiBold};
   font-size: 1.1rem;
   margin: 0 0 ${v.spacerXS};
+  text-align: center;
+
+  @media (${v.minTablet}) {
+    text-align: left;
+  }
 `;
 
 const BenefitDescription = styled.dd`
   color: ${v.textSecondary};
-  margin: 0;
+  margin: 0 auto;
+  max-width: 18rem;
+  text-align: center;
+
+  @media (${v.minTablet}) {
+    text-align: left;
+    max-width: none;
+  }
 `;
 
 interface BenefitsProps {

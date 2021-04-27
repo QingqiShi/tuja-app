@@ -6,16 +6,27 @@ import EdgePadding from '../layout/EdgePadding';
 const Container = styled(EdgePadding)`
   display: flex;
   align-items: center;
-  height: 10rem;
+  min-height: 10rem;
 `;
 
 const Wrapper = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   color: ${v.textSecondary};
   padding: ${v.spacerM} 0;
+
+  @media (${v.minTablet}) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  > :first-child {
+    margin-bottom: ${v.spacerM};
+
+    @media (${v.minTablet}) {
+      margin-bottom: 0;
+    }
+  }
 `;
 
 const Name = styled.span`
@@ -23,8 +34,17 @@ const Name = styled.span`
 `;
 
 const LinksContainer = styled.nav`
+  text-align: right;
+
   > * {
-    margin-left: ${v.spacerS};
+    display: block;
+    padding: ${v.spacerXS} 0;
+
+    @media (${v.minTablet}) {
+      display: inline-block;
+      padding: 0;
+      margin-left: ${v.spacerS};
+    }
   }
 `;
 
