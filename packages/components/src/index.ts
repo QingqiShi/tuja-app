@@ -16,6 +16,7 @@ export { default as TextLink } from './components/atoms/TextLink';
 export { default as ActivityItem } from './components/molecules/ActivityItem';
 export { default as AllocationOverview } from './components/molecules/AllocationOverview';
 export { default as Bars } from './components/molecules/Bars';
+export { default as Benefits } from './components/molecules/Benefits';
 export { default as Chart } from './components/molecules/Chart';
 export { default as DateRangeTabs } from './components/molecules/DateRangeTabs';
 export { default as Footer } from './components/molecules/Footer';
