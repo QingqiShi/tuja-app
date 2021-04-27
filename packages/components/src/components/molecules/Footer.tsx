@@ -4,15 +4,17 @@ import TextLink from '../atoms/TextLink';
 import EdgePadding from '../layout/EdgePadding';
 
 const Container = styled(EdgePadding)`
-  margin-top: ${v.spacerM};
+  display: flex;
+  align-items: center;
+  height: 10rem;
 `;
 
 const Wrapper = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: ${v.textSecondary};
-  border-top: 1px solid ${v.backgroundHover};
   padding: ${v.spacerM} 0;
 `;
 
@@ -20,7 +22,7 @@ const Name = styled.span`
   font-weight: ${v.fontBold};
 `;
 
-const LinksContainer = styled.div`
+const LinksContainer = styled.nav`
   > * {
     margin-left: ${v.spacerS};
   }
@@ -32,7 +34,7 @@ interface FooterProps {
 
 function Footer({ links }: FooterProps) {
   return (
-    <Container>
+    <Container as="footer">
       <Wrapper>
         <div>
           <Name>Tuja</Name> © {new Date().getFullYear()}
