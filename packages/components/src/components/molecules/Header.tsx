@@ -49,7 +49,7 @@ const Layout = styled(EdgePadding)`
   }
 `;
 
-const NavigationContainer = styled.div`
+const NavigationContainer = styled.nav`
   display: flex;
   align-items: center;
   height: 100%;
@@ -87,7 +87,7 @@ interface HeaderProps {
 function Header({ logoHref, navigation, onLogoClick }: HeaderProps) {
   const { scrollRef, hasScrolled } = useScrolled();
   return (
-    <Container>
+    <Container as="header">
       <FixedHeader hasScrolled={hasScrolled}>
         <Layout>
           <div>
