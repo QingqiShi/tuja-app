@@ -59,16 +59,18 @@ function AppShell() {
       {
         Icon: Star,
         label: 'Example',
-        href: '/demo',
-        isActive: portfolio ? history.location.pathname === '/demo' : undefined,
-        onClick: () => portfolio && history.push('/demo'),
+        href: '/tracker/demo',
+        isActive: portfolio
+          ? history.location.pathname === '/tracker/demo'
+          : undefined,
+        onClick: () => portfolio && history.push('/tracker/demo'),
       },
       {
         Icon: User,
         label: 'Sign in',
-        href: '/signin',
-        isActive: history.location.pathname === '/signin',
-        onClick: () => portfolio && history.push('/signin'),
+        href: '/tracker/signin',
+        isActive: history.location.pathname === '/tracker/signin',
+        onClick: () => portfolio && history.push('/tracker/signin'),
       }
     );
   } else if (portfolio || portfolios.length) {
@@ -77,16 +79,17 @@ function AppShell() {
       {
         Icon: House,
         label: 'Overview',
-        href: `/portfolio/${id}`,
-        isActive: history.location.pathname === `/portfolio/${id}`,
-        onClick: () => history.push(`/portfolio/${id}`),
+        href: `/tracker/portfolio/${id}`,
+        isActive: history.location.pathname === `/tracker/portfolio/${id}`,
+        onClick: () => history.push(`/tracker/portfolio/${id}`),
       },
       {
         Icon: Clock,
         label: 'Activities',
-        href: `/portfolio/${id}/activities`,
-        isActive: history.location.pathname === `/portfolio/${id}/activities`,
-        onClick: () => history.push(`/portfolio/${id}/activities`),
+        href: `/tracker/portfolio/${id}/activities`,
+        isActive:
+          history.location.pathname === `/tracker/portfolio/${id}/activities`,
+        onClick: () => history.push(`/tracker/portfolio/${id}/activities`),
       }
     );
   }
@@ -94,9 +97,9 @@ function AppShell() {
   tabBarLinks.push({
     Icon: Gear,
     label: 'Settings',
-    href: '/settings',
-    isActive: history.location.pathname === '/settings',
-    onClick: () => history.push('/settings'),
+    href: '/tracker/settings',
+    isActive: history.location.pathname === '/tracker/settings',
+    onClick: () => history.push('/tracker/settings'),
   });
 
   return (
@@ -104,54 +107,54 @@ function AppShell() {
       <Suspense fallback={<TopLinearLoader />}>
         {state !== 'SIGNED_IN' && state !== 'UNKNOWN' && (
           <Switch>
-            <Route path="/demo" exact>
+            <Route path="/tracker/demo" exact>
               <Overview isDemo />
             </Route>
-            <Route path="/signin" exact>
+            <Route path="/tracker/signin" exact>
               <SignIn />
             </Route>
-            <Route path="/settings" exact>
+            <Route path="/tracker/settings" exact>
               <Settings />
             </Route>
             <Route>
-              <Redirect to="/demo" />
+              <Redirect to="/tracker/demo" />
             </Route>
           </Switch>
         )}
 
         {state === 'SIGNED_IN' && portfolioLoaded && !portfolios.length && (
           <Switch>
-            <Route path="/create-portfolio" exact>
+            <Route path="/tracker/create-portfolio" exact>
               <Create />
             </Route>
-            <Route path="/settings" exact>
+            <Route path="/tracker/settings" exact>
               <Settings />
             </Route>
             <Route>
-              <Redirect to="/create-portfolio" />
+              <Redirect to="/tracker/create-portfolio" />
             </Route>
           </Switch>
         )}
 
         {state === 'SIGNED_IN' && portfolioLoaded && !!portfolios.length && (
           <Switch>
-            <Route path="/portfolio/:portfolioId" exact>
+            <Route path="/tracker/portfolio/:portfolioId" exact>
               <Overview />
             </Route>
-            <Route path="/portfolio/:portfolioId/activities" exact>
+            <Route path="/tracker/portfolio/:portfolioId/activities" exact>
               <Activities />
             </Route>
-            <Route path="/create-portfolio" exact>
+            <Route path="/tracker/create-portfolio" exact>
               <Create />
             </Route>
-            <Route path="/settings" exact>
+            <Route path="/tracker/settings" exact>
               <Settings />
             </Route>
             <Route>
               {portfolio ? (
-                <Redirect to={`/portfolio/${portfolio.id}`} />
+                <Redirect to={`/tracker/portfolio/${portfolio.id}`} />
               ) : (
-                <Redirect to={`/portfolio/${portfolios[0].id}`} />
+                <Redirect to={`/tracker/portfolio/${portfolios[0].id}`} />
               )}
             </Route>
           </Switch>
@@ -163,7 +166,9 @@ function AppShell() {
 
 function AppShellWithProviders() {
   const location = useLocation();
-  const match = useRouteMatch<{ portfolioId?: string }>('/:page/:portfolioId');
+  const match = useRouteMatch<{ portfolioId?: string }>(
+    '/tracker/:page/:portfolioId'
+  );
   const portfolioId = match?.params.portfolioId;
 
   return (
@@ -172,7 +177,9 @@ function AppShellWithProviders() {
         <StartDateProvider>
           <PortfolioProvider
             portfolioId={
-              location.pathname === '/demo' ? examplePortfolio.id : portfolioId
+              location.pathname === '/tracker/demo'
+                ? examplePortfolio.id
+                : portfolioId
             }
           >
             <GlobalLoader />

@@ -37,8 +37,8 @@ function SettingsList() {
 
       {state === 'SIGNED_IN' && (
         <SettingOption
-          href="/create-portfolio"
-          onClick={() => history.push('/create-portfolio')}
+          href="/tracker/create-portfolio"
+          onClick={() => history.push('/tracker/create-portfolio')}
         >
           Create portfolio
         </SettingOption>
