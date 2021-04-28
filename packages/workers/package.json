@@ -17,7 +17,7 @@
     "d3-array": "^2.12.1",
     "dayjs": "^1.10.4",
     "escape-string-regexp": "^4.0.0",
-    "firebase-admin": "^9.6.0",
+    "firebase-admin": "^9.7.0",
     "node-cache": "^5.1.2"
   },
   "devDependencies": {
