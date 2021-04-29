@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@sentry/react": "^6.3.4",
-    "@sentry/tracing": "^6.3.3",
+    "@sentry/tracing": "^6.3.4",
     "@tuja/components": "^0.0.0",
     "@tuja/libs": "^0.0.0",
     "bignumber.js": "^9.0.1",
