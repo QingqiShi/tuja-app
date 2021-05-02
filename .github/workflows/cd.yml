@@ -41,6 +41,7 @@ jobs:
               - 'package.json'
               - 'firebase.json'
               - '.firebaserc'
+              - '.github/workflows/cd.yml'
       - run: yarn install
       - run: yarn build
       - run: yarn test:ci
