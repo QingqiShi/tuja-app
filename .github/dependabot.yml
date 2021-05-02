@@ -11,7 +11,7 @@ updates:
     versioning-strategy: increase
     ignore:
       - dependency-name: '@types/node'
-        versions: ['>12']
+        versions: ['>14']
       - dependency-name: 'ts-loader'
         versions: ['>8']
 
