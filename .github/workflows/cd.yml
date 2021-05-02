@@ -61,23 +61,17 @@ jobs:
           sourcemaps: './packages/app/build/js'
       - name: Deploy to Firebase Hosting
         if: steps.changes.outputs.hosting == 'true' || steps.changes.outputs.root == 'true'
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting
+        run: yarn firebase deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Deploy to Firebase Functions
         if: steps.changes.outputs.functions == 'true' || steps.changes.outputs.root == 'true'
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only functions
+        run: yarn firebase deploy --only functions
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Deploy to Firebase Firestore
         if: steps.changes.outputs.firestore == 'true' || steps.changes.outputs.root == 'true'
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only firestore
+        run: yarn firebase deploy --only firestore
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Deploy to Cloudflare Workers
