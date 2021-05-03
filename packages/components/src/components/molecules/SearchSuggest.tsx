@@ -71,7 +71,10 @@ function SearchSuggest({
         }}
       />
       {!!suggestions.length && (
-        <SuggestionsContainer maxHeight={maxSuggestHeight}>
+        <SuggestionsContainer
+          maxHeight={maxSuggestHeight}
+          className="allow-scroll"
+        >
           {isLoading && <LinearLoader />}
           {suggestions.map((suggestion, i) => (
             <SuggestionItem

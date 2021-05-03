@@ -1,12 +1,7 @@
-import { useRef, useLayoutEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion';
-import {
-  disableBodyScroll,
-  enableBodyScroll,
-  clearAllBodyScrollLocks,
-} from 'body-scroll-lock';
+import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import { card } from '../../mixins';
 
 const Container = motion(styled.div`
@@ -67,30 +62,6 @@ const ModalCard = motion(styled.div<{
           max-width: 100%;
         `}
 `);
-
-/**
- * When `shouldLock` is set to `true`, lock body scroll. Returns a ref that
- * should be attached to the target element which will be allowed to scroll
- * while the body is locked.
- */
-function useBodyScrollLock(shouldLock: boolean) {
-  const targetRef = useRef<HTMLElement | SVGElement | null>(null);
-
-  useLayoutEffect(() => {
-    if (!targetRef.current) return;
-
-    if (shouldLock) {
-      disableBodyScroll(targetRef.current, {
-        allowTouchMove: (el) => targetRef.current?.contains(el),
-      });
-      return () => clearAllBodyScrollLocks();
-    } else {
-      enableBodyScroll(targetRef.current);
-    }
-  }, [shouldLock]);
-
-  return targetRef;
-}
 
 interface ModalProps {
   onClose?: () => void;
