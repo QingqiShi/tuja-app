@@ -10,11 +10,12 @@ import {
   Footer,
   Header,
   Hero,
+  v,
 } from '@tuja/components';
 import useScrollToTopOnMount from '../hooks/useScrollToTopOnMount';
 
 const ContentContainer = styled.div`
-  min-height: calc(100vh - 17rem);
+  min-height: calc(100vh - 10rem - ${v.headerHeight});
 `;
 
 function Home() {

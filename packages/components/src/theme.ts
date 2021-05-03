@@ -67,6 +67,7 @@ export const v = {
   maxLayoutWidth: 'var(--max-layout-width, 100%)',
   upDownPadding: 'var(--up-down-padding, 1rem)',
   leftRightPadding: 'var(--left-right-padding, 0.5rem)',
+  headerHeight: 'var(--header-height, 3rem)',
 };
 
 const commonTheme = {

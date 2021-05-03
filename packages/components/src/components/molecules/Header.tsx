@@ -6,17 +6,7 @@ import Logo from '../atoms/Logo';
 import EdgePadding from '../layout/EdgePadding';
 
 const Container = styled.div`
-  --header-height: 3rem;
-
-  @media (${v.minTablet}) {
-    --header-height: 4rem;
-  }
-
-  @media (${v.minLaptop}) {
-    --header-height: 4.5rem;
-  }
-
-  height: var(--header-height, 5rem);
+  height: ${v.headerHeight};
 `;
 
 const FixedHeader = styled.div<{ hasScrolled?: boolean }>`
