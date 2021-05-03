@@ -74,13 +74,15 @@ const ModalCard = motion(styled.div<{
  * while the body is locked.
  */
 function useBodyScrollLock(shouldLock: boolean) {
-  const targetRef = useRef<any>(null);
+  const targetRef = useRef<HTMLElement | SVGElement | null>(null);
 
   useLayoutEffect(() => {
     if (!targetRef.current) return;
 
     if (shouldLock) {
-      disableBodyScroll(targetRef.current);
+      disableBodyScroll(targetRef.current, {
+        allowTouchMove: (el) => targetRef.current?.contains(el),
+      });
       return () => clearAllBodyScrollLocks();
     } else {
       enableBodyScroll(targetRef.current);

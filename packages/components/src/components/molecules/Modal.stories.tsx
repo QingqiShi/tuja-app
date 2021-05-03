@@ -16,3 +16,18 @@ Default.args = {
   padding: true,
   open: true,
 };
+
+export const WithScrollableNestedElement = Template.bind({});
+WithScrollableNestedElement.args = {
+  children: (
+    <div>
+      <div style={{ maxHeight: '3rem', overflowY: 'scroll' }}>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, saepe
+        nobis. Est dignissimos neque quos animi ab molestias assumenda? Fugiat
+        sit cum minima porro perspiciatis magni ipsa hic vel pariatur!
+      </div>
+    </div>
+  ),
+  padding: true,
+  open: true,
+};
