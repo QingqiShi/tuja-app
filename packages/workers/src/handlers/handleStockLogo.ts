@@ -17,6 +17,8 @@ export const handleStockLogo = async (request: Request): Promise<Response> => {
     stockUrl = 'invesco.com';
   } else if (!stockUrl && name?.startsWith('HSBC')) {
     stockUrl = 'hsbc.com';
+  } else if (!stockUrl && name?.startsWith('SPDR')) {
+    stockUrl = 'ssga.com';
   }
 
   if (!stockUrl) {
