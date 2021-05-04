@@ -119,6 +119,24 @@ test('hsbc fallback', async () => {
   );
 });
 
+test('spdr fallback', async () => {
+  // Given
+  (global.fetch as jest.Mock).mockReturnValue({
+    blob: async () => new Blob(),
+  });
+  const request = new Request(
+    'http://localhost/stockLogo?ticker=BLAH.LSE&name=SPDRBlah'
+  );
+
+  // When
+  await handleStockLogo(request as never);
+
+  // Then
+  expect((global.fetch as jest.Mock).mock.calls[0][0]).toBe(
+    'http://logo.clearbit.com/ssga.com?size=80'
+  );
+});
+
 test('error when missing ticker', async () => {
   // Given
   const request = new Request('http://localhost/stockLogo');
