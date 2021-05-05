@@ -3,7 +3,6 @@ import { useIntersection } from 'react-use';
 import styled, { css } from 'styled-components';
 import { v } from '../../theme';
 import Logo from '../atoms/Logo';
-import EdgePadding from '../layout/EdgePadding';
 
 const Container = styled.div`
   height: ${v.headerHeight};
@@ -15,7 +14,7 @@ const FixedHeader = styled.div<{ hasScrolled?: boolean }>`
   right: 0;
   top: 0;
   height: var(--header-height, 5rem);
-  backdrop-filter: blur(${v.spacerS});
+  backdrop-filter: blur(${v.spacerM});
   transition: background-color 0.2s, box-shadow 0.2s;
   z-index: ${v.zFixed};
   will-change: transform;
@@ -24,15 +23,17 @@ const FixedHeader = styled.div<{ hasScrolled?: boolean }>`
     hasScrolled &&
     css`
       background-color: ${v.backgroundTranslucent};
-      box-shadow: ${v.shadowOverlay};
+      box-shadow: ${v.shadowRaised};
     `}
 `;
 
-const Layout = styled(EdgePadding)`
+const Layout = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
+  padding-left: calc(env(safe-area-inset-left) + ${v.leftRightPadding});
+  padding-right: calc(env(safe-area-inset-right) + ${v.leftRightPadding});
 
   > :first-child {
     flex-grow: 1;
