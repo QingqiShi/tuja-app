@@ -9,6 +9,10 @@ const config: Config.InitialOptions = {
     '!**/jest.config.ts',
   ],
   projects: ['<rootDir>/packages/*'],
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname',
+  ],
 };
 
 export default config;
