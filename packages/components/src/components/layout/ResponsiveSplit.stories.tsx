@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Story, Meta } from '@storybook/react';
+import Header from '../molecules/Header';
 import ResponsiveSplit from './ResponsiveSplit';
 import { v } from '../../theme';
 
@@ -13,21 +15,73 @@ const Template: Story<React.ComponentProps<typeof ResponsiveSplit>> = (
 
 export const Example = Template.bind({});
 Example.args = {
-  primary: (
-    <div
-      style={{
-        height: '500px',
-        backgroundColor: v.textGain,
-      }}
-    />
-  ),
   secondary: (
     <div
       style={{
         height: '1000px',
+        backgroundColor: v.textGain,
+      }}
+    />
+  ),
+  primary: (
+    <div
+      style={{
+        height: '2000px',
         backgroundColor: v.textLoss,
       }}
     />
   ),
 };
 Example.parameters = { layout: 'fullscreen' };
+
+export const WithHeader = (((args) => (
+  <div>
+    <Header logoHref="/" />
+    <ResponsiveSplit
+      {...args}
+      primary={
+        <div
+          style={{
+            height: '2000px',
+            backgroundColor: v.textLoss,
+            padding: '3rem',
+          }}
+        />
+      }
+      secondary={
+        <div
+          style={{
+            height: '1000px',
+            // backgroundColor: v.textGain,
+            padding: '3rem',
+          }}
+        >
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore quas,
+          ipsam accusamus deserunt necessitatibus sit minus iste adipisci autem
+          possimus quasi alias dolore asperiores quo nulla omnis aut voluptate
+          suscipit.
+        </div>
+      }
+      stickyOffset={v.headerHeight}
+    />
+  </div>
+)) as Story<React.ComponentProps<typeof ResponsiveSplit>>).bind({});
+WithHeader.args = {
+  secondary: (
+    <div
+      style={{
+        height: '1000px',
+        backgroundColor: v.textGain,
+      }}
+    />
+  ),
+  primary: (
+    <div
+      style={{
+        height: '2000px',
+        backgroundColor: v.textLoss,
+      }}
+    />
+  ),
+};
+WithHeader.parameters = { layout: 'fullscreen' };
