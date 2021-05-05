@@ -180,16 +180,20 @@ function ResponsiveSplit({
             onClick={closeSecondary}
             variants={{ show: { opacity: 1 }, hide: { opacity: 0 } }}
             initial="hide"
-            animate={isShowVariant ? 'show' : 'hide'}
+            animate={isLaptop || isShowVariant ? 'show' : 'hide'}
             data-testid="responsive-split-backdrop"
           />
           <SecondaryCard
             variants={{
               show: { transform: 'translate3d(0, 0vh, 0)' },
-              hide: { transform: 'translate3d(0, 100vh, 0)' },
+              hide: {
+                transform: isLaptop
+                  ? 'translate3d(0, 0vh, 0)'
+                  : 'translate3d(0, 100vh, 0)',
+              },
             }}
             initial="hide"
-            animate={isShowVariant ? 'show' : 'hide'}
+            animate={isLaptop || isShowVariant ? 'show' : 'hide'}
             onAnimationComplete={(variant) =>
               variant === 'hide' && setIsSecondaryOpen(false)
             }
