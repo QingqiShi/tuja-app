@@ -8,7 +8,7 @@ const Button = styled(ButtonBase)`
   color: ${v.textOnAccent};
   background-color: ${v.accentMain};
   box-shadow: ${v.shadowRaised};
-  padding: ${v.spacerS} ${v.spacerS};
+  padding: ${v.spacerS} ${v.spacerM};
   font-size: 1.2rem;
   font-weight: ${v.fontBold};
 
