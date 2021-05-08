@@ -5,7 +5,7 @@ export default css`
   --background-raised: #ffffff;
   --background-overlay: #ffffff;
   --background-hover: rgba(0, 0, 0, 0.05);
-  --background-translucent: rgba(255, 255, 255, 0.4);
+  --background-translucent: rgba(255, 255, 255, 0.6);
   --background-tab-bar-drop: linear-gradient(
     rgba(255, 255, 255, 0),
     rgba(255, 255, 255, 1)
