@@ -127,10 +127,10 @@ interface ResponsiveSplitProps {
   primary: React.ReactNode;
   secondary:
     | React.ReactNode
-    | ((props: { closeSecondary?: () => void }) => React.ReactNode);
+    | ((props: { closeSecondary: () => void }) => React.ReactNode);
   secondarySummary?:
     | React.ReactNode
-    | ((props: { openSecondary?: () => void }) => React.ReactNode);
+    | ((props: { openSecondary: () => void }) => React.ReactNode);
   stickyOffset?: string;
 }
 
