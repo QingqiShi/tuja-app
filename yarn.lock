@@ -4852,10 +4852,10 @@
     classnames "^2.2.5"
     prop-types "^15.6.2"
 
-"@visx/responsive@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@visx/responsive/-/responsive-1.7.0.tgz#7b6c0b028b3f0788c30fb9a823925ac5564e8f18"
-  integrity sha512-1S78uLxT1wLMz36pocON3ddZMNJH93lHRYNRC0bcWOFKJKGNTuiUL1/nKXIIm9IZCvuxgh/KuBOGXdO+WnCJkg==
+"@visx/responsive@1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@visx/responsive/-/responsive-1.10.1.tgz#87c6ec030e6817aae90a588a155ea86159b098dd"
+  integrity sha512-7FT2BBmWFkFFqynI9C1NYfVOKT1FsNOm6MwWMqXKA7TMomdBW0wdtQNB1bHvwJvWurM/sNqxcQ/CBED6t9xujQ==
   dependencies:
     "@types/lodash" "^4.14.146"
     "@types/react" "*"
@@ -4919,10 +4919,10 @@
     prop-types "^15.5.10"
     react-use-measure "^2.0.4"
 
-"@visx/visx@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@visx/visx/-/visx-1.10.0.tgz#119354f144451cfd9445894d854c606653f522d3"
-  integrity sha512-9ocKkrDE5xhaWoF35RekGSAg5ZDw5pyCStel9yn4Q8vZBvLvNnCHU+H/YGfEKhgv5SofMXAewiHRDm3bokD/rA==
+"@visx/visx@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@visx/visx/-/visx-1.10.1.tgz#5e055c948262753a0639850514a72b10ddb8920c"
+  integrity sha512-1eus+KvTFfmERvwqHfvmGBj6BReYbqmYMSEGPAt9jRhSCcBUiZcoJsfw9/zR8KWBJYwxal6rL+jTgnZVGSI2zA==
   dependencies:
     "@visx/annotation" "1.10.0"
     "@visx/axis" "1.10.0"
@@ -4945,13 +4945,13 @@
     "@visx/network" "1.7.0"
     "@visx/pattern" "1.7.0"
     "@visx/point" "1.7.0"
-    "@visx/responsive" "1.7.0"
+    "@visx/responsive" "1.10.1"
     "@visx/scale" "1.7.0"
     "@visx/shape" "1.8.0"
     "@visx/text" "1.10.0"
     "@visx/tooltip" "1.7.2"
     "@visx/voronoi" "1.7.0"
-    "@visx/xychart" "1.10.0"
+    "@visx/xychart" "1.10.1"
     "@visx/zoom" "1.7.0"
 
 "@visx/voronoi@1.7.0":
@@ -4966,10 +4966,10 @@
     d3-voronoi "^1.1.2"
     prop-types "^15.6.1"
 
-"@visx/xychart@1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.10.0.tgz#8a532efecbf66fca782b56c520886d501b8bf338"
-  integrity sha512-cIoRNNo/9ErGw+r/85gcBnwHNi40pdu8Jdq4WSsvLHbVY4O3+zAtlSnxk6/Ny0Yf6x1R5YO7bSACGJkMAgPsHw==
+"@visx/xychart@1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.10.1.tgz#ccc98e4df8e5edc86e9003c12d91e3ab49a2b1d4"
+  integrity sha512-EKoH1N9eX2zfEJC0TLVfkp264UzE24/q+XfVnMQUMq6nUpVoTFRTwKofHJt91WbClG1vN+O4tqzPCV49N6ViAw==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/lodash" "^4.14.146"
@@ -4980,7 +4980,7 @@
     "@visx/glyph" "1.7.0"
     "@visx/grid" "1.9.1"
     "@visx/react-spring" "1.10.0"
-    "@visx/responsive" "1.7.0"
+    "@visx/responsive" "1.10.1"
     "@visx/scale" "1.7.0"
     "@visx/shape" "1.8.0"
     "@visx/text" "1.10.0"
