@@ -4026,10 +4026,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/d3-array@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-2.9.0.tgz#fb6c3d7d7640259e68771cd90cc5db5ac1a1a012"
-  integrity sha512-sdBMGfNvLUkBypPMEhOcKcblTQfgHbqbYrUqRE31jOwdDHBJBxz4co2MDAq93S4Cp++phk4UiwoEg/1hK3xXAQ==
+"@types/d3-array@^2.11.0":
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-2.11.0.tgz#dad7dc585c132617cea9895689a4e0d623fe2ac1"
+  integrity sha512-Av6SK7wIOA7sXp32+wBkCwWQI5etz/WEOmJX3fQ9+tajhUVuSU2c7NScjXn+dbbcWizKIaGLIqMGQkwCQ3KTeQ==
 
 "@types/d3-color@*":
   version "1.2.2"
