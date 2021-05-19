@@ -10984,10 +10984,10 @@ idb@3.0.2:
   resolved "https://registry.yarnpkg.com/idb/-/idb-3.0.2.tgz#c8e9122d5ddd40f13b60ae665e4862f8b13fa384"
   integrity sha512-+FLa/0sTXqyux0o6C+i2lOR0VoS60LU/jzUo5xjfY6+7sEEgy4Gz1O7yFBXvjd7N0NyIGWIRg8DcQSLEG+VSPw==
 
-idb@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/idb/-/idb-6.0.0.tgz#00d6092b948138cf9bebc9dcddc4df8bf60bf0ac"
-  integrity sha512-+M367poGtpzAylX4pwcrZIa7cFQLfNkAOlMMLN2kw/2jGfJP6h+TB/unQNSVYwNtP8XqkLYrfuiVnxLQNP1tjA==
+idb@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/idb/-/idb-6.1.0.tgz#a7f41c61e8054ccd8f2b0f584f2eb345be08e6bd"
+  integrity sha512-Pd/Jv+iFtWGSWAJyRXhNarwto+D/MTuGgLH2KKet0PJLVtqayIOY+cKT1boQO85RWbMh2FMNwym0hg81Tu86lQ==
 
 ieee754@^1.1.4:
   version "1.1.13"
