@@ -1,5 +1,4 @@
-import { useMemo, useCallback, useRef, useEffect } from 'react';
-import { useMeasure } from 'react-use';
+import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
 import styled, { css, useTheme } from 'styled-components';
 import { transparentize } from 'polished';
 import { LinearGradient } from '@visx/gradient';
@@ -12,6 +11,7 @@ import { Group } from '@visx/group';
 import { localPoint } from '@visx/event';
 import { max, min, extent, bisector } from 'd3-array';
 import dayjs from 'dayjs';
+import useSize from '../../hooks/useSize';
 
 const Container = styled.div`
   width: 100%;
@@ -117,9 +117,10 @@ function Chart({
   formatValue,
 }: ChartProps) {
   // bounds
-  const [containerRef, { width = 400, height = 300 }] =
-    useMeasure<HTMLDivElement>();
-  const [leftAxisRef, leftAxisRect] = useMeasure<any>();
+  const [containerEl, setContainerEl] = useState<Element | null>(null);
+  const { width = 400, height = 300 } = useSize(containerEl);
+  const [leftAxisEl, setLeftAxisEl] = useState<Element | null>(null);
+  const leftAxisRect = useSize(leftAxisEl);
   const margin = {
     top: hideAxis ? 0 : 20,
     left: hideAxis ? 0 : leftAxisRect.width,
@@ -157,8 +158,10 @@ function Chart({
   }, [benchmark, data, hideTooltip, yMax]);
 
   // tooltip handler
-  const [tooltipRef, tooltipRect] = useMeasure<HTMLDivElement>();
-  const [benchTooltipRef, benchTooltipRect] = useMeasure<HTMLDivElement>();
+  const [tooltipEl, setTooltipEl] = useState<Element | null>(null);
+  const tooltipRect = useSize(tooltipEl);
+  const [benchTooltipEl, setBenchTooltipEl] = useState<Element | null>(null);
+  const benchTooltipRect = useSize(benchTooltipEl);
   const tooltipLineRef = useRef<SVGLineElement>(null);
   const tooltipDotRef = useRef<SVGCircleElement>(null);
   const tooltipBenchDotRef = useRef<SVGCircleElement>(null);
@@ -185,8 +188,8 @@ function Chart({
         formatValue,
       }: {
         xMax: number;
-        tooltipRect: ReturnType<typeof useMeasure>[1];
-        benchTooltipRect: ReturnType<typeof useMeasure>[1];
+        tooltipRect: DOMRect;
+        benchTooltipRect: DOMRect;
         benchmarkLabel?: string;
         formatValue?: (val: number) => string;
       }
@@ -363,7 +366,7 @@ function Chart({
   if (!id) id = defaultId;
 
   return (
-    <Container ref={containerRef} className={className}>
+    <Container ref={setContainerEl} className={className}>
       <svg width={width} height={height}>
         <defs>
           <LinearGradient
@@ -420,7 +423,7 @@ function Chart({
           )}
           {!hideAxis && (
             <>
-              <g ref={leftAxisRef}>
+              <g ref={setLeftAxisEl}>
                 <AxisLeft
                   scale={valueScale}
                   numTicks={5}
@@ -516,7 +519,7 @@ function Chart({
           top={margin.top + 1}
           style={{ opacity: 0 }}
         >
-          <div ref={tooltipRef}>
+          <div ref={setTooltipEl}>
             <StyledTooltip primary>
               <span ref={tooltipDateSpanRef} style={{ minWidth: 130 }} />
               <span ref={tooltipValueSpanRef} style={{ minWidth: 80 }}>
@@ -533,7 +536,7 @@ function Chart({
           bottom={margin.bottom + 1}
           style={{ opacity: 0 }}
         >
-          <div ref={benchTooltipRef}>
+          <div ref={setBenchTooltipEl}>
             <StyledTooltip>
               <span ref={tooltipBenchLabelSpanRef} />
               <span ref={tooltipBenchSpanRef}>0</span>

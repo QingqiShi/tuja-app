@@ -11,7 +11,7 @@ export default css`
     rgba(255, 255, 255, 1)
   );
   --text-main: #211a1d;
-  --text-secondary: #7d7277;
+  --text-secondary: #918a8d;
   --text-on-accent: #ffffff;
   --text-gain: #49c569;
   --text-loss: #f74b3c;

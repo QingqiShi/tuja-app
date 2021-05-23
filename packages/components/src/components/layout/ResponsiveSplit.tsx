@@ -101,6 +101,7 @@ const SecondaryCard = motion(styled.aside`
     position: static;
     border-radius: 0;
     box-shadow: 0;
+    background-color: transparent;
   }
 `);
 

@@ -34,9 +34,8 @@ export function KeyboardFocusProvider({
 }
 
 function useKeyboardFocus(autoFocus?: boolean) {
-  const [ref, setRef] = useState<HTMLAnchorElement | HTMLButtonElement | null>(
-    null
-  );
+  const [ref, setRef] =
+    useState<HTMLAnchorElement | HTMLButtonElement | HTMLElement | null>(null);
   const { allowTabFocus } = useContext(KeyboardFocusContext);
   const [isFocused, setIsFocused] = useState(false);
 

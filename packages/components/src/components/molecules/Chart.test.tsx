@@ -1,6 +1,8 @@
 import { fireEvent } from '@testing-library/react';
-import { render } from '../../testUtils';
+import { render, mockResizeObserver } from '../../testUtils';
 import Chart from './Chart';
+
+mockResizeObserver();
 
 test('render line chart', async () => {
   const { getByTestId, getByText, queryByText } = render(

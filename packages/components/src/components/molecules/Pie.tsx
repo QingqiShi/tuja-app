@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useMeasure } from 'react-use';
-import styled, { useTheme } from 'styled-components';
-import { lighten } from 'polished';
+import styled from 'styled-components';
 import { Group } from '@visx/group';
 import { Text } from '@visx/text';
 import PieBase, { ProvidedProps } from '@visx/shape/lib/shapes/Pie';
+import useSize from '../../hooks/useSize';
+import { v } from '../../theme';
 
 const Container = styled.div`
   width: 100%;
@@ -36,33 +36,27 @@ interface PieProps {
 
 function Pie({ className, data, primaryText, secondaryText }: PieProps) {
   // Bounds
-  const [
-    containerRef,
-    { width = 400, height = 300 },
-  ] = useMeasure<HTMLDivElement>();
+  const [containerEl, setContainerEl] = useState<Element | null>(null);
+  const { width = 400, height = 300 } = useSize(containerEl);
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
   const radius = Math.min(innerWidth, innerHeight) / 2;
   const centerY = innerHeight / 2;
   const centerX = innerWidth / 2;
-  const donutThickness = Math.min(innerWidth, innerHeight) / 15;
-
-  // Colors
-  const theme = useTheme();
-  const textColor = theme.colors.textOnBackground;
+  const donutThickness = Math.min(innerWidth, innerHeight) / 7;
 
   // Hover
   const [hoverItem, setHoverItem] = useState<PieData | null>(null);
 
   return (
-    <Container ref={containerRef} className={className}>
+    <Container ref={setContainerEl} className={className}>
       <svg width={width} height={height}>
         <Text
           x={centerX + margin.left}
           y={centerY + margin.top - 10}
           width={(radius - donutThickness) * 2}
           style={{
-            fill: textColor,
+            fill: v.textMain,
             fontSize: '1.563rem',
             fontWeight: 650,
             letterSpacing: '-0.025em',
@@ -71,14 +65,14 @@ function Pie({ className, data, primaryText, secondaryText }: PieProps) {
           textAnchor="middle"
         >
           {hoverItem
-            ? `${(hoverItem.percentage * 100).toFixed(2)}%`
+            ? `${(hoverItem.percentage * 100).toFixed(1)}%`
             : primaryText}
         </Text>
         <Text
           x={centerX + margin.left}
           y={centerY + margin.top + 20}
           width={(radius - donutThickness) * 2}
-          style={{ fill: textColor, fontSize: '0.9rem' }}
+          style={{ fill: v.textMain, fontSize: '0.9rem' }}
           verticalAnchor="middle"
           textAnchor="middle"
         >
@@ -123,10 +117,6 @@ function PiePieces({
 }: PiePieceProps) {
   const [hovering, setHovering] = useState(-1);
 
-  // Default color
-  const theme = useTheme();
-  const defaultColor = theme.colors.callToAction;
-
   return (
     <>
       {arcs.map((arc, i) => (
@@ -140,11 +130,8 @@ function PiePieces({
                 ...arc,
               }) ?? ''
             }
-            fill={
-              hovering !== i
-                ? arc.data.color ?? defaultColor
-                : lighten(0.1, arc.data.color ?? defaultColor)
-            }
+            fill={arc.data.color ?? v.accentMain}
+            style={{ filter: hovering === i ? 'brightness(1.2)' : undefined }}
             onMouseEnter={() => {
               setHovering(i);
               onHover(arc.data);

@@ -1,4 +1,4 @@
-import { render as rtlRender } from '@testing-library/react';
+import { render as rtlRender, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { getTheme } from '@tuja/components';
@@ -151,5 +151,56 @@ export const render = (ui: React.ReactElement, options?: RenderOptions) => {
         </AuthContext.Provider>
       );
     },
+  };
+};
+
+/*
+ * Utils for mocking element size
+ */
+
+export const mockResizeObserver = () => {
+  const listeners = new Map<
+    HTMLElement,
+    (entries: { contentRect: DOMRect }[]) => void
+  >();
+
+  beforeAll(() => {
+    (window as any).ResizeObserver = class ResizeObserver {
+      listener: (entries: { contentRect: DOMRect }[]) => void;
+      constructor(ls: (entries: { contentRect: DOMRect }[]) => void) {
+        this.listener = ls;
+      }
+      observe(el: HTMLElement) {
+        listeners.set(el, this.listener);
+      }
+      disconnect() {}
+    };
+  });
+
+  afterEach(() => {
+    listeners.clear();
+  });
+
+  return (el: HTMLElement, rect: Partial<DOMRect>) => {
+    act(() => {
+      listeners.get(el)?.([
+        {
+          contentRect: {
+            toJSON() {
+              return JSON.stringify(this);
+            },
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            ...rect,
+          },
+        },
+      ]);
+    });
   };
 };

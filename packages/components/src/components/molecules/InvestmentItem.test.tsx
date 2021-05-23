@@ -1,5 +1,7 @@
-import { render } from '../../testUtils';
+import { render, mockResizeObserver } from '../../testUtils';
 import InvestmentItem from './InvestmentItem';
+
+mockResizeObserver();
 
 test('render information', () => {
   const { getByText, getAllByText } = render(
