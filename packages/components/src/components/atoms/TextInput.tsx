@@ -177,9 +177,11 @@ const IconContainer = styled.div<{ isLead?: boolean }>`
   ${({ isLead }) =>
     isLead
       ? css`
+          justify-content: flex-start;
           left: 0;
         `
       : css`
+          justify-content: flex-end;
           right: 0;
         `}
 `;
@@ -215,7 +217,7 @@ function TextInput({
   const [_value, _setValue] = useState(defaultValue ?? '');
 
   const input = (
-    <InputContainer>
+    <InputContainer noMargin={noMargin}>
       <IconWrapper>
         {leadIcon && <IconContainer isLead>{leadIcon}</IconContainer>}
         <InputBase

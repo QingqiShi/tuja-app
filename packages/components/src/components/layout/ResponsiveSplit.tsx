@@ -47,6 +47,7 @@ const SecondaryContainer = styled.details<{ offset?: string }>`
 `;
 
 const SecondarySummary = styled.summary`
+  box-sizing: border-box;
   display: block;
   padding: ${v.spacerXS} 0;
   box-shadow: ${v.shadowRaised};
@@ -64,6 +65,7 @@ const SecondarySummary = styled.summary`
 `;
 
 const Secondary = styled.div<{ offset?: string }>`
+  box-sizing: border-box;
   display: block;
   position: fixed;
   z-index: ${v.zFixed};
@@ -108,6 +110,10 @@ const SecondaryCard = motion(styled.aside`
 const SecondaryScrollBox = styled.div`
   max-height: 100%;
   overflow-y: auto;
+  padding-bottom: calc(8vh + ${v.spacerM});
+  @media (${v.minLaptop}) {
+    padding-bottom: ${v.spacerM};
+  }
 `;
 
 const SecondaryBackdrop = motion(styled.div`

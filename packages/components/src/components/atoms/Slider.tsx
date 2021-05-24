@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion, PanInfo } from 'framer-motion';
 import styled from 'styled-components';
 import useKeyboardFocus from '../../hooks/useKeyboardFocus';
