@@ -116,7 +116,7 @@ function Slider({
 
   const getValue = (offset: number) => {
     const newValue =
-      startDragValue + ((max - min) * offset) / thumbContainerRect.width;
+      startDragValue + ((max - min) * offset) / (thumbContainerRect.width || 1);
     return Math.min(Math.max(newValue, min), max);
   };
 

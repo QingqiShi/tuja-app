@@ -31,10 +31,10 @@ test('update value using keyboard', () => {
 
   fireEvent.focus(getByTestId('slider-thumb'));
 
-  fireEvent.keyDown(getByTestId('slider-thumb'), { code: 'ArrowRight' });
+  fireEvent.keyDown(getByTestId('slider-thumb'), { key: 'ArrowRight' });
   expect(handleChange).toHaveBeenCalledWith(51);
 
-  fireEvent.keyDown(getByTestId('slider-thumb'), { code: 'ArrowLeft' });
+  fireEvent.keyDown(getByTestId('slider-thumb'), { key: 'ArrowLeft' });
   expect(handleChange).toHaveBeenCalledWith(49);
 });
 
@@ -46,10 +46,10 @@ test('infer step size from step count', () => {
 
   fireEvent.focus(getByTestId('slider-thumb'));
 
-  fireEvent.keyDown(getByTestId('slider-thumb'), { code: 'ArrowRight' });
+  fireEvent.keyDown(getByTestId('slider-thumb'), { key: 'ArrowRight' });
   expect(handleChange).toHaveBeenCalledWith(60);
 
-  fireEvent.keyDown(getByTestId('slider-thumb'), { code: 'ArrowLeft' });
+  fireEvent.keyDown(getByTestId('slider-thumb'), { key: 'ArrowLeft' });
   expect(handleChange).toHaveBeenCalledWith(40);
 });
 
