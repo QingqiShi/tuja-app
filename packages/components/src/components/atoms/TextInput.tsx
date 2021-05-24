@@ -112,14 +112,14 @@ const InputBase = styled.input.attrs((props) => ({
     border-color: ${v.textError};
   }
 
-  ::-webkit-calendar-picker-indicator {
-    font-size: 0.9em;
-    line-height: 0.9em;
+  ::-webkit-datetime-edit-fields-wrapper {
     padding: 0;
     margin: 0;
   }
 
-  ::-webkit-datetime-edit-fields-wrapper {
+  ::-webkit-calendar-picker-indicator {
+    font-size: 0.9em;
+    line-height: 0.9em;
     padding: 0;
     margin: 0;
   }
@@ -149,7 +149,6 @@ const HelperText = styled.div`
 
 const InputContainer = styled.div<{ noMargin?: boolean }>`
   width: 100%;
-  position: relative;
   margin-bottom: ${v.spacerS};
 
   ${({ noMargin }) =>
@@ -185,6 +184,10 @@ const IconContainer = styled.div<{ isLead?: boolean }>`
         `}
 `;
 
+const IconWrapper = styled.div`
+  position: relative;
+`;
+
 interface TextInputProps extends Omit<React.ComponentProps<'input'>, 'ref'> {
   label?: string;
   helperText?: string;
@@ -210,7 +213,36 @@ function TextInput({
   const [ref, isKeyboardFocus] = useKeyboardFocus();
   const [isFocus, setIsFocus] = useState(false);
   const [_value, _setValue] = useState(defaultValue ?? '');
-  if (label || helperText) {
+
+  const input = (
+    <InputContainer>
+      <IconWrapper>
+        {leadIcon && <IconContainer isLead>{leadIcon}</IconContainer>}
+        <InputBase
+          ref={ref}
+          isKeyboardFocus={isKeyboardFocus}
+          required={required}
+          hasLeadIcon={!!leadIcon}
+          hasEndIcon={!!endIcon}
+          value={value ?? _value}
+          onChange={onChange ?? ((e) => _setValue(e.target.value))}
+          {...rest}
+          onFocus={(e) => {
+            setIsFocus(true);
+            if (onFocus) onFocus(e);
+          }}
+          onBlur={(e) => {
+            setIsFocus(false);
+            if (onBlur) onBlur(e);
+          }}
+        />
+        {endIcon && <IconContainer>{endIcon}</IconContainer>}
+      </IconWrapper>
+      {helperText && <HelperText>{helperText}</HelperText>}
+    </InputContainer>
+  );
+
+  if (label) {
     return (
       <Label noMargin={noMargin}>
         {label && (
@@ -223,55 +255,12 @@ function TextInput({
             {required ? '*' : ''}
           </LabelLine>
         )}
-        <InputContainer>
-          {leadIcon && <IconContainer isLead>{leadIcon}</IconContainer>}
-          <InputBase
-            ref={ref}
-            isKeyboardFocus={isKeyboardFocus}
-            required={required}
-            hasLeadIcon={!!leadIcon}
-            hasEndIcon={!!endIcon}
-            value={value ?? _value}
-            onChange={onChange ?? ((e) => _setValue(e.target.value))}
-            {...rest}
-            onFocus={(e) => {
-              setIsFocus(true);
-              if (onFocus) {
-                onFocus(e);
-              }
-            }}
-            onBlur={(e) => {
-              setIsFocus(false);
-              if (onBlur) {
-                onBlur(e);
-              }
-            }}
-          />
-          {endIcon && <IconContainer>{endIcon}</IconContainer>}
-        </InputContainer>
-        {helperText && <HelperText>{helperText}</HelperText>}
+        {input}
       </Label>
     );
   }
 
-  return (
-    <InputContainer noMargin={noMargin}>
-      {leadIcon && <IconContainer isLead>{leadIcon}</IconContainer>}
-      <InputBase
-        ref={ref}
-        isKeyboardFocus={isKeyboardFocus}
-        hasLeadIcon={!!leadIcon}
-        hasEndIcon={!!endIcon}
-        required={required}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        value={value ?? _value}
-        onChange={onChange ?? ((e) => _setValue(e.target.value))}
-        {...rest}
-      />
-      {endIcon && <IconContainer>{endIcon}</IconContainer>}
-    </InputContainer>
-  );
+  return input;
 }
 
 export default TextInput;

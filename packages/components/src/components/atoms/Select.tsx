@@ -1,86 +1,113 @@
 import styled, { css } from 'styled-components';
-import { transparentize } from 'polished';
 import { RiArrowDownSLine } from 'react-icons/ri';
-import {
-  inputFont,
-  labelFont,
-  helperFont,
-  paddings,
-  inputEndPadding,
-} from '../../mixins';
+import useKeyboardFocus from '../../hooks/useKeyboardFocus';
+import { v } from '../../theme';
 
-const Label = styled.label`
+const Label = styled.label<{ noMargin?: boolean }>`
   display: block;
-  margin-bottom: ${({ theme }) => theme.spacings.s};
   text-align: left;
   width: 100%;
+  position: relative;
+  margin-bottom: ${v.spacerS};
+
   > * {
     width: 100%;
   }
+
+  ${({ noMargin }) =>
+    noMargin &&
+    css`
+      margin-bottom: 0;
+    `};
 `;
 
 const LabelLine = styled.span`
-  ${labelFont}
-  margin-bottom: ${({ theme }) => theme.spacings.xs};
+  font-family: ${v.fontFamily};
+  font-weight: ${v.fontRegular};
+  margin: 0 ${v.spacerS};
+  padding: ${v.spacerS} 0;
+  color: ${v.textSecondary};
+  font-size: 1rem;
+  line-height: 1.2em;
   display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform-origin: 0 0;
+  transition: transform 0.2s;
+  z-index: 1;
+  pointer-events: none;
+  transform: scale(0.7);
+  font-weight: ${v.fontSemiBold};
 `;
 
-const HelperText = styled.span`
-  ${helperFont}
-  margin-top: ${({ theme }) => theme.spacings.xs};
-  color: ${({ theme }) => transparentize(0.2, theme.colors.textOnBackground)};
-  display: block;
+const HelperText = styled.div`
+  font-size: 0.6rem;
+  font-weight: ${v.fontRegular};
+  padding-left: ${v.spacerS};
+  margin-top: ${v.spacerXS};
+  color: ${v.textSecondary};
 `;
 
-const SelectContainer = styled.div`
+const SelectContainer = styled.div<{ noMargin?: boolean }>`
   width: 100%;
-  position: relative;
+  margin-bottom: ${v.spacerS};
+
+  ${({ noMargin }) =>
+    noMargin &&
+    css`
+      margin-bottom: 0;
+    `};
+
+  ${Label} & {
+    margin-bottom: 0;
+  }
 `;
 
-const SelectBase = styled.select<{ compact?: boolean }>`
-  ${inputFont}
-  ${paddings}
-  ${inputEndPadding}
-  border-radius: ${({ theme }) => theme.spacings.xs};
-  border: ${({ theme }) =>
-    `2px solid ${transparentize(0.9, theme.colors.textOnBackground)}`};
-  color: ${({ theme }) => theme.colors.textOnBackground};
-  background-color: transparent;
-  transition: all 0.2s;
+const SelectBase = styled.select<{ isKeyboardFocus?: boolean }>`
+  color: ${v.textMain};
+  background-color: ${v.backgroundHover};
+  padding: ${v.spacerS} ${v.spacerS};
+  box-shadow: ${v.shadowRaised};
+  font-family: ${v.fontFamily};
+  font-weight: ${v.fontRegular};
+  font-size: 1rem;
+  line-height: 1.2em;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
   width: 100%;
   appearance: none;
-
-  ${({ compact }) =>
-    compact &&
-    css`
-      border: none;
-      padding-right: 2rem;
-      @media (${({ theme }) => theme.breakpoints.minTablet}) {
-        padding-right: 2rem;
-      }
-      @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-        padding-right: 2rem;
-      }
-    `}
+  transition: border 0.2s, box-shadow 0.2s;
+  padding-right: 3.5rem;
 
   &:focus {
-    outline: none;
-    box-shadow: ${({ theme }) =>
-      `0 0 ${theme.spacings.s} 0 ${transparentize(
-        0.9,
-        theme.colors.textOnBackground
-      )}`};
+    border-color: ${v.textSecondary};
+
+    ${({ isKeyboardFocus }) =>
+      !isKeyboardFocus &&
+      css`
+        outline: none;
+      `}
   }
 
   &:disabled {
-    opacity: 0.5;
-    color: ${({ theme }) => theme.colors.textOnBackground};
-    background-color: ${({ theme }) =>
-      transparentize(0.9, theme.colors.textOnBackground)};
+    opacity: 0.7;
+    box-shadow: none;
+    color: ${v.textSecondary};
   }
 
-  &:invalid {
-    color: ${({ theme }) => transparentize(0.5, theme.colors.textOnBackground)};
+  &:hover:not(:focus):not(:disabled) {
+    box-shadow: ${v.shadowOverlay};
+    border-color: ${v.textSecondary};
+  }
+
+  ${Label} & {
+    padding: calc(${v.spacerS} * 1.5) ${v.spacerS} calc(${v.spacerS} / 2);
   }
 
   option {
@@ -89,45 +116,29 @@ const SelectBase = styled.select<{ compact?: boolean }>`
   }
 `;
 
-type DropdownIconProps = { disabled?: boolean; compact?: boolean };
-const DropdownIcon = styled(RiArrowDownSLine).withConfig({
-  shouldForwardProp: (prop) => !['compact'].includes(prop),
-})<DropdownIconProps>`
+const IconContainer = styled.div`
   position: absolute;
   height: 100%;
-  width: 1.5em;
+  width: 3.5em;
   top: 0;
+  right: 0;
   pointer-events: none;
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      color: ${({ theme }) =>
-        transparentize(0.5, theme.colors.textOnBackground)};
-    `}
+  display: flex;
+  align-items: center;
+  padding: ${v.spacerS};
+  color: ${v.textSecondary};
+  z-index: 1;
+`;
 
-  ${({ compact }) =>
-    compact &&
-    css`
-      width: 1em;
-    `}
-
-  right: ${({ theme, compact }) =>
-    compact ? '0.2rem' : theme.leftRight.normal.mobile};
-  @media (${({ theme }) => theme.breakpoints.minTablet}) {
-    right: ${({ theme, compact }) =>
-      compact ? '0.2rem' : theme.leftRight.normal.tablet};
-  }
-  @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-    right: ${({ theme, compact }) =>
-      compact ? '0.2rem' : theme.leftRight.normal.laptop};
-  }
+const IconWrapper = styled.div`
+  position: relative;
 `;
 
 interface SelectProps extends Omit<React.ComponentProps<'select'>, 'ref'> {
   options: { label: string; value: string }[];
   label?: string;
   helperText?: string;
-  compact?: boolean;
+  noMargin?: boolean;
 }
 
 function Select({
@@ -136,34 +147,42 @@ function Select({
   helperText,
   required,
   disabled,
-  compact,
+  noMargin,
   ...props
 }: SelectProps) {
+  const [ref, isKeyboardFocus] = useKeyboardFocus();
+
   const select = (
-    <SelectContainer>
-      <SelectBase
-        required={required}
-        disabled={disabled}
-        compact={compact}
-        {...props}
-      >
-        {options.map((option) => (
-          <option
-            value={option.value}
-            key={`select-option-${option.value}`}
-            disabled={!option.value && required}
-          >
-            {option.label}
-          </option>
-        ))}
-      </SelectBase>
-      <DropdownIcon disabled={disabled} size="100%" compact={compact} />
+    <SelectContainer noMargin={noMargin}>
+      <IconWrapper>
+        <SelectBase
+          ref={ref}
+          isKeyboardFocus={isKeyboardFocus}
+          required={required}
+          disabled={disabled}
+          {...props}
+        >
+          {options.map((option) => (
+            <option
+              key={`option-${option.value}`}
+              value={option.value}
+              disabled={!option.value && required}
+            >
+              {option.label}
+            </option>
+          ))}
+        </SelectBase>
+        <IconContainer>
+          <RiArrowDownSLine size="100%" />
+        </IconContainer>
+      </IconWrapper>
+      {helperText && <HelperText>{helperText}</HelperText>}
     </SelectContainer>
   );
 
-  if (label || helperText) {
+  if (label) {
     return (
-      <Label>
+      <Label noMargin={noMargin}>
         {label && (
           <LabelLine>
             {label}
@@ -171,7 +190,6 @@ function Select({
           </LabelLine>
         )}
         {select}
-        {helperText && <HelperText>{helperText}</HelperText>}
       </Label>
     );
   }

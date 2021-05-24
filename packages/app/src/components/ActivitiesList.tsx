@@ -1,7 +1,13 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
-import { ActivityItem, Modal, Select, Type } from '@tuja/components';
+import {
+  ActivityItem,
+  DropdownMenu,
+  Modal,
+  Select,
+  Type,
+} from '@tuja/components';
 import type { Activity } from '@tuja/libs';
 import useLoadingState from '../hooks/useLoadingState';
 import usePortfolio from '../hooks/usePortfolio';
@@ -103,9 +109,8 @@ function ActivitiesList() {
   const [filterType, setFilterType] = useState<Activity['type'] | undefined>();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(false);
-  const fetchActivities = useRef<
-    (() => ReturnType<typeof getActivities>) | undefined
-  >();
+  const fetchActivities =
+    useRef<(() => ReturnType<typeof getActivities>) | undefined>();
 
   // Make an initial load of the activities
   const [loadedOnce, setLoadedOnce] = useState(false);
@@ -189,7 +194,7 @@ function ActivitiesList() {
     <div>
       {(filterType !== undefined || !!activities.length) && (
         <FilterContainer>
-          <Select
+          <DropdownMenu
             options={[
               { label: 'All', value: '' },
               { label: 'Trades', value: 'Trade' },
@@ -198,12 +203,12 @@ function ActivitiesList() {
               { label: 'Stock Dividends', value: 'StockDividend' },
             ]}
             value={filterType ?? ''}
-            onChange={(e) => {
-              setFilterType((e.target.value as any) || undefined);
+            onChange={(value) => {
+              setFilterType((value as Activity['type']) || undefined);
               setLoadedOnce(false);
               window.scrollTo(0, 0);
             }}
-            compact
+            align="right"
           />
         </FilterContainer>
       )}
