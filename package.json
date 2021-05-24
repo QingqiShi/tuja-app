@@ -55,7 +55,7 @@
     "@typescript-eslint/parser": "^4.24.0",
     "commitizen": "^4.2.4",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^7.26.0",
+    "eslint": "^7.27.0",
     "firebase": "^8.6.2",
     "firebase-tools": "^9.11.0",
     "husky": "^6.0.0",
