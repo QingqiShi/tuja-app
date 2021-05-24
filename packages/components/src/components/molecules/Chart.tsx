@@ -188,8 +188,8 @@ function Chart({
         formatValue,
       }: {
         xMax: number;
-        tooltipRect: DOMRect;
-        benchTooltipRect: DOMRect;
+        tooltipRect: Omit<DOMRect, 'toJSON'>;
+        benchTooltipRect: Omit<DOMRect, 'toJSON'>;
         benchmarkLabel?: string;
         formatValue?: (val: number) => string;
       }
