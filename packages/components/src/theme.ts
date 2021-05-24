@@ -16,6 +16,7 @@ export const v = {
   textGain: 'var(--text-gain, #49c569)',
   textLoss: 'var(--text-loss, #f74b3c)',
   textNoChange: 'var(--text-no-change, #775d68)',
+  textError: 'var(--text-error, #f74b3c)',
   accentMain: 'var(--accent-main, #774afb)',
   accentHover: 'var(--accent-hover, #aa8dff)',
   ordinal1: 'var(--ordinal-1, #5b6a87)',

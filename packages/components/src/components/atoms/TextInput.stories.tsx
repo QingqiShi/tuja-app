@@ -7,7 +7,8 @@ export default {
   component: TextInput,
   argTypes: {
     type: {
-      control: { type: 'select', options: ['email', 'password', 'text'] },
+      control: { type: 'select' },
+      options: ['email', 'password', 'text'],
     },
   },
 } as Meta;

@@ -16,6 +16,7 @@ export default css`
   --text-gain: #49c569;
   --text-loss: #f74b3c;
   --text-no-change: #775d68;
+  --text-error: #f74b3c;
   --accent-main: #d45cff;
   --accent-hover: #de83ff;
   --ordinal-1: #5b6a87;
