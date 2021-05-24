@@ -1,13 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
-import {
-  ActivityItem,
-  DropdownMenu,
-  Modal,
-  Select,
-  Type,
-} from '@tuja/components';
+import { ActivityItem, DropdownMenu, Modal, Type } from '@tuja/components';
 import type { Activity } from '@tuja/libs';
 import useLoadingState from '../hooks/useLoadingState';
 import usePortfolio from '../hooks/usePortfolio';
