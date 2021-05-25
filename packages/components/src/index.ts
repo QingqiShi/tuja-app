@@ -1,4 +1,5 @@
 export { default as ButtonBase } from './components/atoms/ButtonBase';
+export { default as ButtonIcon } from './components/atoms/ButtonIcon';
 export { default as ButtonPrimary } from './components/atoms/ButtonPrimary';
 export { default as ButtonSecondary } from './components/atoms/ButtonSecondary';
 export { default as ButtonTertiary } from './components/atoms/ButtonTertiary';
