@@ -7,8 +7,6 @@ const Primary = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  font-weight: ${v.fontBold};
-  padding-right: ${v.spacerS};
 `;
 
 const Secondary = styled.div`

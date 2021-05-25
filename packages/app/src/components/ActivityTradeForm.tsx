@@ -56,6 +56,7 @@ const SuggestionRow = styled.div`
   }
   > :last-child:not(:first-child) {
     font-size: 1.2rem;
+    margin-left: ${v.spacerS};
   }
 `;
 

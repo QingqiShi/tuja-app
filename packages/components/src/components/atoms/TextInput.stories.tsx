@@ -77,3 +77,11 @@ LeadIcon.args = {
   placeholder: 'Search',
   leadIcon: <RiSearchLine size="100%" />,
 };
+
+export const Compact = Template.bind({});
+Compact.args = {
+  type: 'text',
+  placeholder: 'Search',
+  endIcon: <RiCheckLine size="100%" />,
+  compact: true,
+};

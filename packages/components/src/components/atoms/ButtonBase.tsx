@@ -4,7 +4,7 @@ import { v } from '../../theme';
 
 type ButtonProps = {
   isTabFocused?: boolean;
-} & React.ComponentProps<'button'>;
+};
 export const StyledButton = styled.button<ButtonProps>`
   border: 0;
   border-radius: 50rem;
@@ -58,39 +58,50 @@ export const StyledButton = styled.button<ButtonProps>`
 `;
 
 interface ButtonBaseProps {
-  className?: string;
   href?: string;
-  disabled?: boolean;
-  autoFocus?: boolean;
-  type?: React.ComponentProps<'button'>['type'];
-  onClick?: (e: React.MouseEvent) => void;
 }
 
 function ButtonBase({
-  className,
   href,
   disabled,
   children,
   autoFocus,
   type,
   onClick,
-}: React.PropsWithChildren<ButtonBaseProps>) {
+  ...rest
+}: Omit<React.ComponentProps<typeof StyledButton>, 'ref'> & ButtonBaseProps) {
   const [ref, isTabFocused] = useKeyboardFocus(autoFocus);
+
+  if (!!href) {
+    return (
+      <StyledButton
+        ref={ref}
+        as="a"
+        onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+          if (onClick || disabled) e.preventDefault();
+          onClick?.(e);
+        }}
+        href={href}
+        isTabFocused={isTabFocused}
+        {...rest}
+      >
+        {children}
+      </StyledButton>
+    );
+  }
+
   return (
     <StyledButton
       ref={ref}
-      as={!!href ? 'a' : undefined}
-      onClick={(e: React.MouseEvent) => {
-        if ((onClick || disabled) && href) e.preventDefault();
-
+      onClick={(e) => {
+        if (onClick || disabled) e.preventDefault();
         onClick?.(e);
       }}
-      href={href}
-      className={className}
       isTabFocused={isTabFocused}
       disabled={disabled}
       autoFocus={autoFocus}
       type={!href ? type ?? 'button' : undefined}
+      {...rest}
     >
       {children}
     </StyledButton>

@@ -56,7 +56,12 @@ const InputBase = styled.input.attrs((props) => ({
   // Use a single space for placeholders so we can use :placeholder-shown
   // in CSS to check for empty values
   placeholder: props.placeholder || ' ',
-}))<{ hasEndIcon?: boolean; hasLeadIcon?: boolean; isKeyboardFocus?: boolean }>`
+}))<{
+  hasEndIcon?: boolean;
+  hasLeadIcon?: boolean;
+  isKeyboardFocus?: boolean;
+  compact?: boolean;
+}>`
   color: ${v.textMain};
   background-color: ${v.backgroundHover};
   padding: ${v.spacerS} ${v.spacerS};
@@ -71,15 +76,20 @@ const InputBase = styled.input.attrs((props) => ({
   appearance: none;
   transition: border 0.2s, box-shadow 0.2s;
 
-  ${({ hasLeadIcon }) =>
+  ${({ compact }) =>
+    compact &&
+    css`
+      padding: ${v.spacerXS};
+    `}
+  ${({ hasLeadIcon, compact }) =>
     hasLeadIcon &&
     css`
-      padding-left: 3.5rem;
+      padding-left: ${compact ? 2.3 : 3.5}rem;
     `}
-  ${({ hasEndIcon }) =>
+  ${({ hasEndIcon, compact }) =>
     hasEndIcon &&
     css`
-      padding-right: 3.5rem;
+      padding-right: ${compact ? 2.3 : 3.5}rem;
     `}
 
   &::placeholder {
@@ -162,25 +172,27 @@ const InputContainer = styled.div<{ noMargin?: boolean }>`
   }
 `;
 
-const IconContainer = styled.div<{ isLead?: boolean }>`
+const IconContainer = styled.div<{ isLead?: boolean; compact?: boolean }>`
   position: absolute;
   height: 100%;
-  width: 3.5em;
   top: 0;
   pointer-events: none;
   display: flex;
   align-items: center;
-  padding: ${v.spacerS};
   color: ${v.textSecondary};
   z-index: 1;
 
-  ${({ isLead }) =>
+  ${({ isLead, compact }) =>
     isLead
       ? css`
+          width: ${compact ? 2.3 : 3.5}em;
+          padding: ${compact ? v.spacerXS : v.spacerS};
           justify-content: flex-start;
           left: 0;
         `
       : css`
+          width: ${compact ? 2.3 : 3.5}em;
+          padding: ${compact ? v.spacerXS : v.spacerS};
           justify-content: flex-end;
           right: 0;
         `}
@@ -196,6 +208,7 @@ interface TextInputProps extends Omit<React.ComponentProps<'input'>, 'ref'> {
   endIcon?: React.ReactNode;
   leadIcon?: React.ReactNode;
   noMargin?: boolean;
+  compact?: boolean;
 }
 
 function TextInput({
@@ -205,6 +218,7 @@ function TextInput({
   endIcon,
   leadIcon,
   noMargin,
+  compact,
   value,
   defaultValue,
   onChange,
@@ -219,10 +233,15 @@ function TextInput({
   const input = (
     <InputContainer noMargin={noMargin}>
       <IconWrapper>
-        {leadIcon && <IconContainer isLead>{leadIcon}</IconContainer>}
+        {leadIcon && (
+          <IconContainer isLead compact={!label && compact}>
+            {leadIcon}
+          </IconContainer>
+        )}
         <InputBase
           ref={ref}
           isKeyboardFocus={isKeyboardFocus}
+          compact={!label && compact}
           required={required}
           hasLeadIcon={!!leadIcon}
           hasEndIcon={!!endIcon}
@@ -238,7 +257,9 @@ function TextInput({
             if (onBlur) onBlur(e);
           }}
         />
-        {endIcon && <IconContainer>{endIcon}</IconContainer>}
+        {endIcon && (
+          <IconContainer compact={!label && compact}>{endIcon}</IconContainer>
+        )}
       </IconWrapper>
       {helperText && <HelperText>{helperText}</HelperText>}
     </InputContainer>
