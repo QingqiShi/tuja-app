@@ -16,6 +16,12 @@ function NumberInput(props: NumberInputProps) {
       parse={(raw) => {
         const parsed = parseFloat(raw);
         if (isNaN(parsed)) return null;
+        if (typeof props.max === 'number' && parsed > props.max) {
+          return props.max;
+        }
+        if (typeof props.min === 'number' && parsed < props.min) {
+          return props.min;
+        }
         return parsed;
       }}
       inputMode="decimal"

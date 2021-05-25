@@ -18,7 +18,7 @@ test('enter number', () => {
   expect(handleChange).toHaveBeenCalledWith(123);
 });
 
-test('format date and parse invalid dates', () => {
+test('format numbers and parse invalid numbers', () => {
   const handleChange = jest.fn();
   const { getByLabelText } = render(
     <NumberInput label="Test" value={2.34} onChange={handleChange} />
@@ -28,4 +28,17 @@ test('format date and parse invalid dates', () => {
     target: { value: 'abc' },
   });
   expect(getByLabelText('Test')).toHaveValue('2.34');
+});
+
+test('clamp number between min and max', () => {
+  const handleChange = jest.fn();
+  const { getByLabelText } = render(
+    <NumberInput label="Test" onChange={handleChange} min={0} max={100} />
+  );
+
+  fireEvent.change(getByLabelText('Test'), { target: { value: '1000' } });
+  expect(handleChange).toHaveBeenCalledWith(100);
+
+  fireEvent.change(getByLabelText('Test'), { target: { value: '-50' } });
+  expect(handleChange).toHaveBeenCalledWith(0);
 });
