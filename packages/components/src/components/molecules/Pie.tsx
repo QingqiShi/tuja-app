@@ -22,10 +22,16 @@ interface PieData {
   label: string;
   percentage: number;
   color?: string;
+  isEmpty?: boolean;
 }
 
 const percentage = (d: PieData) => d.percentage;
 const margin = { top: 20, left: 20, bottom: 20, right: 20 };
+const sort = (a: PieData, b: PieData) => {
+  if (a.isEmpty) return 1;
+  if (b.isEmpty) return -1;
+  return b.percentage - a.percentage;
+};
 
 interface PieProps {
   data?: PieData[];
@@ -86,6 +92,7 @@ function Pie({ className, data, primaryText, secondaryText }: PieProps) {
             innerRadius={radius - donutThickness}
             cornerRadius={3}
             padAngle={0.005}
+            pieSort={sort}
           >
             {(pie) => (
               <PiePieces
@@ -132,22 +139,38 @@ function PiePieces({
             }
             fill={arc.data.color ?? v.accentMain}
             style={{ filter: hovering === i ? 'brightness(1.2)' : undefined }}
-            onMouseEnter={() => {
-              setHovering(i);
-              onHover(arc.data);
-            }}
-            onMouseLeave={() => {
-              setHovering(-1);
-              onHover(null);
-            }}
-            onTouchStart={() => {
-              setHovering(i);
-              onHover(arc.data);
-            }}
-            onTouchEnd={() => {
-              setHovering(-1);
-              onHover(null);
-            }}
+            onMouseEnter={
+              !arc.data.isEmpty
+                ? () => {
+                    setHovering(i);
+                    onHover(arc.data);
+                  }
+                : undefined
+            }
+            onMouseLeave={
+              !arc.data.isEmpty
+                ? () => {
+                    setHovering(-1);
+                    onHover(null);
+                  }
+                : undefined
+            }
+            onTouchStart={
+              !arc.data.isEmpty
+                ? () => {
+                    setHovering(i);
+                    onHover(arc.data);
+                  }
+                : undefined
+            }
+            onTouchEnd={
+              !arc.data.isEmpty
+                ? () => {
+                    setHovering(-1);
+                    onHover(null);
+                  }
+                : undefined
+            }
           />
         </g>
       ))}
