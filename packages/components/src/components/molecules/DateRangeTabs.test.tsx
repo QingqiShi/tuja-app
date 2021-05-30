@@ -1,4 +1,5 @@
 import { render, fireEvent } from '@testing-library/react';
+import dayjs from 'dayjs';
 import DateRangeTabs from './DateRangeTabs';
 
 test('render default', () => {
@@ -11,17 +12,12 @@ test('render default', () => {
 test('render date range options', () => {
   const handleChange = jest.fn();
 
-  const threeMonth = new Date();
-  threeMonth.setMonth(threeMonth.getMonth() - 3);
-  threeMonth.setHours(0);
-  threeMonth.setMinutes(0);
-  threeMonth.setSeconds(0);
-  threeMonth.setMilliseconds(0);
+  const threeMonth = dayjs().subtract(3, 'month');
 
   const { getByText } = render(
     <DateRangeTabs
       maxDate={new Date(1555332950299)}
-      value={threeMonth}
+      value={threeMonth.toDate()}
       onChange={handleChange}
     />
   );
