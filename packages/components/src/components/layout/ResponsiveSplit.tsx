@@ -23,9 +23,9 @@ const Container = styled.div`
 `;
 
 const Primary = styled.main`
+  min-width: 0;
   @media (${v.minLaptop}) {
     height: 100%;
-    overflow: hidden;
     grid-area: primary;
   }
 `;
@@ -55,7 +55,7 @@ const SecondarySummary = styled.summary`
   list-style-type: none;
   outline: none;
 
-  &::-webkit-details-marker {
+  &::marker {
     display: none;
   }
 
