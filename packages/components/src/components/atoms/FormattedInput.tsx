@@ -3,11 +3,12 @@ import TextInput from './TextInput';
 
 type BaseProps = Omit<
   React.ComponentProps<typeof TextInput>,
-  'value' | 'onChange'
+  'value' | 'defaultValue' | 'onChange'
 >;
 
 interface CurrencyInputProps<T> extends BaseProps {
   value?: T;
+  defaultValue?: T;
   onChange?: (num: T) => void;
   format?: (val: T) => string;
   parse?: (raw: string) => T | null;
@@ -15,6 +16,7 @@ interface CurrencyInputProps<T> extends BaseProps {
 
 function FormattedInput<T>({
   value,
+  defaultValue,
   format,
   parse,
   onChange,
@@ -23,12 +25,17 @@ function FormattedInput<T>({
   ...props
 }: CurrencyInputProps<T>) {
   const [isFocused, setIsFocused] = useState(false);
-  const [internalVal, setInternalVal] = useState(value);
-  const [inputValue, setInputValue] = useState(
-    (format && typeof value !== 'undefined' && format(value)) ||
-      (typeof value === 'string' && value) ||
-      ''
-  );
+  const [internalVal, setInternalVal] = useState(value ?? defaultValue);
+  const [inputValue, setInputValue] = useState(() => {
+    const val = value ?? defaultValue;
+    if (format && typeof val !== 'undefined') {
+      return format(val);
+    }
+    if (typeof val === 'string') {
+      return val;
+    }
+    return '';
+  });
 
   // Update input value based on value prop
   useEffect(() => {

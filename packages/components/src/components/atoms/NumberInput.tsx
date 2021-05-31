@@ -3,9 +3,10 @@ import FormattedInput from './FormattedInput';
 interface NumberInputProps
   extends Omit<
     React.ComponentProps<typeof FormattedInput>,
-    'value' | 'onChange' | 'format' | 'parse' | 'inputMode'
+    'value' | 'defaultValue' | 'onChange' | 'format' | 'parse' | 'inputMode'
   > {
   value?: number;
+  defaultValue?: number;
   onChange?: (val: number) => void;
 }
 
