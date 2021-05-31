@@ -54,11 +54,10 @@ const globalCss = css`
     font-family: ${v.fontFamily};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
 
-    * {
-      box-sizing: inherit;
-      font-size: inherit;
-    }
+  * {
+    box-sizing: inherit;
   }
 
   html,
