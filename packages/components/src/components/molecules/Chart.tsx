@@ -104,8 +104,10 @@ interface ChartProps {
   formatValue?: (val: number) => string;
 }
 
+const getDefaultId = () => (Math.random() * Number.MAX_SAFE_INTEGER).toString();
+
 function Chart({
-  id = (Math.random() * Number.MAX_SAFE_INTEGER).toString(),
+  id,
   data,
   benchmark,
   hideAxis,
@@ -115,10 +117,8 @@ function Chart({
   formatValue,
 }: ChartProps) {
   // bounds
-  const [
-    containerRef,
-    { width = 400, height = 300 },
-  ] = useMeasure<HTMLDivElement>();
+  const [containerRef, { width = 400, height = 300 }] =
+    useMeasure<HTMLDivElement>();
   const [leftAxisRef, leftAxisRect] = useMeasure<any>();
   const margin = {
     top: hideAxis ? 0 : 20,
@@ -337,7 +337,7 @@ function Chart({
   const axisBottomTickLabelProps = {
     textAnchor: 'middle' as const,
     fontFamily: theme.fontFamily,
-    fontSize: theme.fonts.helper.size,
+    fontSize: '0.7rem',
     fill: colors.text,
   };
   const axisLeftTickLabelProps = {
@@ -345,7 +345,7 @@ function Chart({
     dy: '0.25em',
     textAnchor: 'end' as const,
     fontFamily: theme.fontFamily,
-    fontSize: theme.fonts.helper.size,
+    fontSize: '0.7rem',
     fill: colors.text,
   };
 
@@ -358,6 +358,9 @@ function Chart({
   for (let i = bottomLeft; i <= bottomRight; i += bottomStep) {
     bottomTickValues.push(dateScale.invert(i));
   }
+
+  const defaultId = useMemo(getDefaultId, []);
+  if (!id) id = defaultId;
 
   return (
     <Container ref={containerRef} className={className}>
