@@ -14,6 +14,7 @@ const config: Config.InitialOptions = {
   },
   setupFiles: ['fake-indexeddb/auto'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  testEnvironment: 'jsdom',
 };
 
 export default config;

@@ -10,8 +10,8 @@ const config: Config.InitialOptions = {
     'idb-latest': 'idb',
     '\\.(css|less)$': '<rootDir>/src/__mocks__/fileMock.js',
   },
-
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  testEnvironment: 'jsdom',
 };
 
 export default config;
