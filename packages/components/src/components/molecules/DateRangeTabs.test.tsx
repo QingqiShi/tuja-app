@@ -31,11 +31,7 @@ test('render date range options', () => {
   expect(getByText('3M')).toBeDisabled();
 
   fireEvent.click(getByText('6M'));
-  const sixMonth = new Date();
-  sixMonth.setMonth(sixMonth.getMonth() - 6);
-  sixMonth.setHours(0);
-  sixMonth.setMinutes(0);
-  sixMonth.setSeconds(0);
-  sixMonth.setMilliseconds(0);
-  expect(handleChange).toHaveBeenCalledWith(sixMonth);
+  const FORMAT = 'YYYY-MM-DD';
+  const sixMonth = dayjs(dayjs().format(FORMAT), FORMAT).subtract(6, 'month');
+  expect(handleChange).toHaveBeenCalledWith(sixMonth.toDate());
 });
