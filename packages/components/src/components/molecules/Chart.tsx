@@ -359,10 +359,8 @@ function Chart({
     bottomTickValues.push(dateScale.invert(i));
   }
 
-  const defaultId = useMemo(() => getDefaultId(), []);
-  if (!id) {
-    id = defaultId;
-  }
+  const defaultId = useMemo(getDefaultId, []);
+  if (!id) id = defaultId;
 
   return (
     <Container ref={containerRef} className={className}>
