@@ -9752,10 +9752,10 @@ firebase-functions@^3.14.1:
     express "^4.17.1"
     lodash "^4.17.14"
 
-firebase-tools@^9.12.0:
-  version "9.12.0"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-9.12.0.tgz#7774ee52c69418f1a4fca235fe3e4186b3512c32"
-  integrity sha512-rPk4JyzPaSHyHQDGCh0/U63MW2nXgnZ4h0IRE2EjFHRz+KyNl/hakGX7EQKVej5HpMKFhWRjGOvDHn1PXooQgw==
+firebase-tools@^9.12.1:
+  version "9.12.1"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-9.12.1.tgz#c4676f77f95bbaba0a7399c18c15d7edc633cf7b"
+  integrity sha512-izgpgUiG36UwIV12oBu3X8ndACGsxh2cuREnGgTAoTs6P5OC2nEV3riwAak9eQpkuqHfZ6vEuw5ogSbMNqRIgA==
   dependencies:
     "@google-cloud/pubsub" "^2.7.0"
     "@types/archiver" "^5.1.0"
@@ -19435,12 +19435,7 @@ write-pkg@^4.0.0:
     type-fest "^0.4.1"
     write-json-file "^3.2.0"
 
-ws@^7.2.3:
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.3.1.tgz#d0547bf67f7ce4f12a72dfe31262c68d7dc551c8"
-  integrity sha512-D3RuNkynyHmEJIpD2qrgVkc9DQ23OrN/moAwZX4L8DfvszsJxpjQuUq3LMx6HoYji9fbIOBY18XWBsAux1ZZUA==
-
-ws@^7.4.5:
+ws@^7.2.3, ws@^7.4.5:
   version "7.4.6"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.6.tgz#5654ca8ecdeee47c33a9a4bf6d28e2be2980377c"
   integrity sha512-YmhHDO4MzaDLB+M9ym/mDA5z0naX8j7SIlT8f8z+I0VtzsRbekxEutHSme7NPS2qE8StCYQNUnfWdXta/Yu85A==
