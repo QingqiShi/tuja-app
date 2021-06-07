@@ -1,4 +1,4 @@
-import { stocksClient } from '@tuja/libs';
+import { stocksClient } from '../utils/stocksClient';
 import { correctPrice } from '../utils/correctPrice';
 import priceCorrection from '../constants/priceCorrection.json';
 
