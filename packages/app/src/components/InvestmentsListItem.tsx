@@ -11,7 +11,7 @@ import {
 } from '@tuja/components';
 import { formatCurrency } from '@tuja/libs';
 import { PortfolioPerformance } from '../libs/portfolioClient';
-import { fetchStockLogo } from '../libs/stocksClient';
+import { fetchStockLogo, StockHistory } from '../libs/apiClient';
 import usePortfolio from '../hooks/usePortfolio';
 import usePortfolioProcessor from '../hooks/usePortfolioProcessor';
 import useStartDate from '../hooks/useStartDate';
@@ -22,7 +22,6 @@ import {
   getStocksLivePrice,
   mergeLivePriceIntoHistory,
 } from '../libs/cachedStocksData';
-import type { StockHistory } from '../libs/stocksClient';
 import UpdateAlias from './UpdateAlias';
 
 const Label = styled.div`

@@ -35,7 +35,7 @@ import {
   fetchStockSearch,
   fetchStockInfos,
   fetchStocksPrices,
-} from '../libs/stocksClient';
+} from '../libs/apiClient';
 import { PortfolioPerformance } from '../libs/portfolioClient';
 
 const verticalCenter = css`

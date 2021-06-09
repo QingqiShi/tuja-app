@@ -12,7 +12,7 @@ import {
   fetchStockLivePrices,
   fetchStockHistories,
   fetchStockInfos,
-} from './stocksClient';
+} from './apiClient';
 
 interface DBSchemaV3 extends DBSchema {
   stocksInfo: {

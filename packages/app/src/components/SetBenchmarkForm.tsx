@@ -9,7 +9,7 @@ import {
   TextInput,
 } from '@tuja/components';
 import { ActionsContainer, Card, CardMedia } from '../commonStyledComponents';
-import { fetchStockSearch } from '../libs/stocksClient';
+import { fetchStockSearch } from '../libs/apiClient';
 
 const SearchContainer = styled.div`
   position: relative;

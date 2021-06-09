@@ -7,7 +7,7 @@ import {
   fetchStockLogo,
   fetchStockSearch,
   fetchStocksPrices,
-} from './stocksClient';
+} from './apiClient';
 
 describe('fetchStockInfos', () => {
   test('make network call', async () => {
