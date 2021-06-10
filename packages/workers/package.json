@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@tuja/libs": "^0.0.0",
-    "d3-array": "^2.12.1",
+    "d3-array": "^3.0.1",
     "dayjs": "^1.10.5",
     "escape-string-regexp": "^4.0.0",
     "firebase-admin": "^9.9.0",
