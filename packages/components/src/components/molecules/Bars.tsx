@@ -1,5 +1,4 @@
-import { useMemo, useCallback, useRef, useEffect } from 'react';
-import { useMeasure } from 'react-use';
+import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
 import styled, { css, useTheme } from 'styled-components';
 import { transparentize } from 'polished';
 import { LinearGradient } from '@visx/gradient';
@@ -8,6 +7,7 @@ import { scaleBand, scaleLinear } from '@visx/scale';
 import { Group } from '@visx/group';
 import { localPoint } from '@visx/event';
 import dayjs from 'dayjs';
+import useSize from '../../hooks/useSize';
 
 const Container = styled.div`
   width: 100%;
@@ -78,10 +78,8 @@ interface ChartProps {
 
 function Bars({ data, className, formatValue }: ChartProps) {
   // bounds
-  const [
-    containerRef,
-    { width = 400, height = 300 },
-  ] = useMeasure<HTMLDivElement>();
+  const [containerEl, setContainerEl] = useState<Element | null>(null);
+  const { width = 400, height = 300 } = useSize(containerEl);
   const margin = { top: 10, left: 10, bottom: 10, right: 10 };
   const xMax = Math.max(width - margin.left - margin.right, 0);
   const yMax = Math.max(height - margin.top - margin.bottom, 0);
@@ -116,7 +114,8 @@ function Bars({ data, className, formatValue }: ChartProps) {
   };
 
   // Tooltip
-  const [tooltipRef, tooltipRect] = useMeasure<HTMLDivElement>();
+  const [tooltipEl, setTooltipEl] = useState<Element | null>(null);
+  const tooltipRect = useSize(tooltipEl);
   const tooltipContainerRef = useRef<HTMLDivElement>(null);
   const tooltipDateSpanRef = useRef<HTMLSpanElement>(null);
   const tooltipValueSpanRef = useRef<HTMLSpanElement>(null);
@@ -154,15 +153,14 @@ function Bars({ data, className, formatValue }: ChartProps) {
     }
   );
   const handleTooltip = useCallback(
-    (d: DataPoint, { barX, barWidth }: { barWidth: number; barX?: number }) => (
-      event: React.TouchEvent | React.MouseEvent
-    ) => {
-      const { y } = localPoint(event) || { x: 0 };
-      const top = (y ?? 0) - margin.top;
-      const left = (barX ?? 0) + barWidth / 2;
+    (d: DataPoint, { barX, barWidth }: { barWidth: number; barX?: number }) =>
+      (event: React.TouchEvent | React.MouseEvent) => {
+        const { y } = localPoint(event) || { x: 0 };
+        const top = (y ?? 0) - margin.top;
+        const left = (barX ?? 0) + barWidth / 2;
 
-      setTooltipStylesRef.current?.(d, top, left, xMax, tooltipRect);
-    },
+        setTooltipStylesRef.current?.(d, top, left, xMax, tooltipRect);
+      },
     [margin.top, tooltipRect, xMax]
   );
   const clearTooltip = () => {
@@ -175,7 +173,7 @@ function Bars({ data, className, formatValue }: ChartProps) {
   }, []);
 
   return (
-    <Container ref={containerRef} className={className}>
+    <Container ref={setContainerEl} className={className}>
       <svg width={width} height={height}>
         <Group left={margin.left} top={margin.top}>
           <LinearGradient
@@ -217,7 +215,7 @@ function Bars({ data, className, formatValue }: ChartProps) {
         left={margin.left}
         top={margin.top + 1}
       >
-        <div ref={tooltipRef}>
+        <div ref={setTooltipEl}>
           <StyledTooltip>
             <span ref={tooltipDateSpanRef} />
             <span ref={tooltipValueSpanRef} />

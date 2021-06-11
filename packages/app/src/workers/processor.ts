@@ -8,7 +8,7 @@ import {
   StockInfo,
 } from '@tuja/libs';
 import type { PortfolioPerformance } from '../libs/portfolioClient';
-import type { StockHistory, ParsedLivePrice } from '../libs/stocksClient';
+import type { StockHistory, ParsedLivePrice } from '../libs/apiClient';
 import {
   getDB,
   getStocksHistory,

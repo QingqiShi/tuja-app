@@ -1,14 +1,18 @@
 import dayjs from 'dayjs';
 import { IDBPDatabase, DBSchema, openDB } from 'idb-latest';
-import { TimeSeries, StockInfo } from '@tuja/libs';
+import {
+  TimeSeries,
+  StockInfo,
+  normalizeForex,
+  getForexPair,
+} from '@tuja/libs';
 import {
   StockHistory,
   ParsedLivePrice,
   fetchStockLivePrices,
   fetchStockHistories,
   fetchStockInfos,
-  getMissingStocksHistory,
-} from './stocksClient';
+} from './apiClient';
 
 interface DBSchemaV3 extends DBSchema {
   stocksInfo: {
@@ -224,3 +228,101 @@ export const mergeLivePriceIntoHistory = async (
     stockHistory.adjusted = stockHistory.adjusted.mergeWith(livePriceSeries);
   }
 };
+
+export const prefetchStocksHistory = async (
+  tickers: string[],
+  baseCurrency: string
+) => {
+  const db = await getDB();
+  const stocksInfo = await getStocksInfo(db, tickers);
+  const currencyPairs = [
+    ...new Set(
+      Object.keys(stocksInfo)
+        .map((ticker) => stocksInfo[ticker])
+        .filter((x) => !!x)
+        .map((info) => {
+          const normalized = normalizeForex(info.Currency);
+          return normalized.currency !== baseCurrency
+            ? normalized.currency
+            : null;
+        })
+        .filter(<T extends {}>(x: T | null): x is T => !!x)
+        .map((normalizedCurrency) =>
+          getForexPair(normalizedCurrency, baseCurrency)
+        )
+    ),
+  ];
+
+  const startDate = dayjs('1970-01-01', 'YYYY-MM-DD').toDate();
+  const endDate = new Date();
+
+  const stocksHistory = await getStocksHistory(
+    db,
+    [...tickers, ...currencyPairs],
+    startDate,
+    endDate
+  );
+
+  const dateRange = Object.keys(stocksHistory).reduce(
+    (range, ticker) => {
+      const tickerStartDate = stocksHistory[ticker].adjusted.data[0][0];
+      if (dayjs(tickerStartDate).isAfter(range.startDate)) {
+        return { startDate: tickerStartDate, endDate: range.endDate };
+      }
+      return range;
+    },
+    { startDate, endDate }
+  );
+
+  return {
+    stocksInfo,
+    stocksHistory,
+    dateRange,
+  };
+};
+
+function getMissingStocksHistory(
+  tickers: string[],
+  stocksHistory: { [ticker: string]: StockHistory },
+  startDate: Date,
+  endDate: Date
+) {
+  const today = dayjs();
+  const actualEndDate = today.isSame(endDate, 'day')
+    ? dayjs(endDate).subtract(1, 'day').toDate()
+    : endDate;
+  return tickers.flatMap((ticker) => {
+    const existingData = stocksHistory[ticker];
+
+    if (
+      !existingData ||
+      !existingData.range ||
+      !existingData.adjusted ||
+      !existingData.close
+    ) {
+      return { ticker, startDate, endDate: actualEndDate };
+    }
+
+    const missingData = [];
+
+    if (dayjs(startDate).isBefore(existingData.range.startDate, 'date')) {
+      missingData.push({
+        ticker,
+        startDate,
+        endDate: dayjs(existingData.range.startDate)
+          .subtract(1, 'day')
+          .toDate(),
+      });
+    }
+
+    if (dayjs(actualEndDate).isAfter(existingData.range.endDate, 'date')) {
+      missingData.push({
+        ticker,
+        startDate: dayjs(existingData.range.endDate).add(1, 'day').toDate(),
+        endDate: actualEndDate,
+      });
+    }
+
+    return missingData;
+  });
+}

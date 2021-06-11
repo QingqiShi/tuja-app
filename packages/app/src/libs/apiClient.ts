@@ -49,9 +49,9 @@ export async function fetchStockLivePrices(tickers: string[]) {
   const tickerChunks = chunkTickers(tickers);
   const data: StockLivePrice[][] = await Promise.all(
     tickerChunks.map(async (chunk) =>
-      fetch(
-        `${API_URL}/bulkLivePrices?tickers=${joinTickers(chunk)}`
-      ).then((res) => res.json())
+      fetch(`${API_URL}/bulkLivePrices?tickers=${joinTickers(chunk)}`).then(
+        (res) => res.json()
+      )
     )
   );
   return data.flatMap((chunk) =>
@@ -152,52 +152,6 @@ export function fetchStocksPrices(
     },
     cancel: () => controller.abort(),
   };
-}
-
-export function getMissingStocksHistory(
-  tickers: string[],
-  stocksHistory: { [ticker: string]: StockHistory },
-  startDate: Date,
-  endDate: Date
-) {
-  const today = dayjs();
-  const actualEndDate = today.isSame(endDate, 'day')
-    ? dayjs(endDate).subtract(1, 'day').toDate()
-    : endDate;
-  return tickers.flatMap((ticker) => {
-    const existingData = stocksHistory[ticker];
-
-    if (
-      !existingData ||
-      !existingData.range ||
-      !existingData.adjusted ||
-      !existingData.close
-    ) {
-      return { ticker, startDate, endDate: actualEndDate };
-    }
-
-    const missingData = [];
-
-    if (dayjs(startDate).isBefore(existingData.range.startDate, 'date')) {
-      missingData.push({
-        ticker,
-        startDate,
-        endDate: dayjs(existingData.range.startDate)
-          .subtract(1, 'day')
-          .toDate(),
-      });
-    }
-
-    if (dayjs(actualEndDate).isAfter(existingData.range.endDate, 'date')) {
-      missingData.push({
-        ticker,
-        startDate: dayjs(existingData.range.endDate).add(1, 'day').toDate(),
-        endDate: actualEndDate,
-      });
-    }
-
-    return missingData;
-  });
 }
 
 const convertBlobToBase64 = (blob: Blob) =>

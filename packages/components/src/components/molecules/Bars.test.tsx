@@ -1,6 +1,8 @@
 import { fireEvent } from '@testing-library/react';
-import { render } from '../../testUtils';
+import { render, mockResizeObserver } from '../../testUtils';
 import Bars from './Bars';
+
+mockResizeObserver();
 
 test('render', async () => {
   const { getByTestId, getByText } = render(

@@ -116,3 +116,14 @@ test('blur out to reformat value', () => {
   fireEvent.blur(getByLabelText('Number'));
   expect(getByLabelText('Number')).toHaveValue('5.4');
 });
+
+test('format default value', () => {
+  const { getByLabelText } = render(
+    <FormattedInput
+      label="Number"
+      defaultValue={123.45}
+      format={(x: number) => x.toString()}
+    />
+  );
+  expect(getByLabelText('Number')).toHaveValue('123.45');
+});

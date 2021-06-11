@@ -4,10 +4,11 @@ import { formatCurrency, parseCurrency } from '@tuja/libs';
 interface CurrencyInputProps
   extends Omit<
     React.ComponentProps<typeof FormattedInput>,
-    'value' | 'onChange' | 'format' | 'parse'
+    'value' | 'defualtValue' | 'onChange' | 'format' | 'parse'
   > {
   currency: string;
   value?: number;
+  defaultValue?: number;
   onChange?: (val: number) => void;
 }
 

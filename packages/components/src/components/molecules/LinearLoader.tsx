@@ -1,5 +1,5 @@
 import styled, { keyframes } from 'styled-components';
-import { transparentize } from 'polished';
+import { v } from '../../theme';
 
 const Container = styled.div`
   position: absolute;
@@ -9,8 +9,7 @@ const Container = styled.div`
   height: 4px;
   overflow: hidden;
   z-index: 900;
-  background-color: ${({ theme }) =>
-    transparentize(0.7, theme.colors.callToActionText)};
+  background-color: ${v.accentMain};
 `;
 
 const barAnimationSlow = keyframes`
@@ -49,7 +48,7 @@ const Bar = styled.div`
   left: 0;
   bottom: 0;
   width: auto;
-  background-color: ${({ theme }) => theme.colors.callToActionText};
+  background-color: ${v.textOnAccent};
 `;
 
 const SlowBar = styled(Bar)`

@@ -7,7 +7,8 @@ export default {
   component: TextInput,
   argTypes: {
     type: {
-      control: { type: 'select', options: ['email', 'password', 'text'] },
+      control: { type: 'select' },
+      options: ['email', 'password', 'text'],
     },
   },
 } as Meta;
@@ -75,4 +76,12 @@ LeadIcon.args = {
   type: 'text',
   placeholder: 'Search',
   leadIcon: <RiSearchLine size="100%" />,
+};
+
+export const Compact = Template.bind({});
+Compact.args = {
+  type: 'text',
+  placeholder: 'Search',
+  endIcon: <RiCheckLine size="100%" />,
+  compact: true,
 };

@@ -27,7 +27,7 @@ function Create() {
           // Analytics
           logEvent('create_portfolio', { currency });
 
-          history.push(`/portfolio/${id}`);
+          history.push(`/tracker/portfolio/${id}`);
         }}
       />
     </>

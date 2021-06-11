@@ -2,10 +2,10 @@ import styled, { css } from 'styled-components';
 import useKeyboardFocus from '../../hooks/useKeyboardFocus';
 import { v } from '../../theme';
 
-interface ButtonProps {
+type ButtonProps = {
   isTabFocused?: boolean;
-}
-const Button = styled.button<ButtonProps & React.ComponentProps<'button'>>`
+};
+export const StyledButton = styled.button<ButtonProps>`
   border: 0;
   border-radius: 50rem;
   font-family: inherit;
@@ -22,6 +22,7 @@ const Button = styled.button<ButtonProps & React.ComponentProps<'button'>>`
   display: inline-flex;
   align-items: center;
   transition: box-shadow 0.2s, color 0.2s, background 0.2s;
+  outline-offset: 0.2rem;
 
   &:hover {
     background-color: ${v.backgroundHover};
@@ -57,42 +58,55 @@ const Button = styled.button<ButtonProps & React.ComponentProps<'button'>>`
 `;
 
 interface ButtonBaseProps {
-  className?: string;
   href?: string;
-  disabled?: boolean;
-  autoFocus?: boolean;
-  type?: React.ComponentProps<'button'>['type'];
-  onClick?: (e: React.MouseEvent) => void;
 }
 
 function ButtonBase({
-  className,
   href,
   disabled,
   children,
   autoFocus,
   type,
   onClick,
-}: React.PropsWithChildren<ButtonBaseProps>) {
+  ...rest
+}: Omit<React.ComponentProps<typeof StyledButton>, 'ref'> & ButtonBaseProps) {
   const [ref, isTabFocused] = useKeyboardFocus(autoFocus);
-  return (
-    <Button
-      ref={ref}
-      as={!!href ? 'a' : undefined}
-      onClick={(e: React.MouseEvent) => {
-        if ((onClick || disabled) && href) e.preventDefault();
 
+  if (!!href) {
+    return (
+      <StyledButton
+        ref={ref}
+        as="a"
+        onClick={
+          ((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+            if (onClick || disabled) e.preventDefault();
+            onClick?.(e);
+          }) as any
+        }
+        href={href}
+        isTabFocused={isTabFocused}
+        {...rest}
+      >
+        {children}
+      </StyledButton>
+    );
+  }
+
+  return (
+    <StyledButton
+      ref={ref}
+      onClick={(e) => {
+        if (onClick || disabled) e.preventDefault();
         onClick?.(e);
       }}
-      href={href}
-      className={className}
       isTabFocused={isTabFocused}
       disabled={disabled}
       autoFocus={autoFocus}
       type={!href ? type ?? 'button' : undefined}
+      {...rest}
     >
       {children}
-    </Button>
+    </StyledButton>
   );
 }
 

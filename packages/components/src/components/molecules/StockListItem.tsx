@@ -1,19 +1,17 @@
 import styled from 'styled-components';
-import Type from './Type';
 import { v } from '../../theme';
 
-const Name = styled.div`
+const Primary = styled.div`
   min-width: 100%;
   width: 0;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  font-size: 0.9rem;
-  color: ${v.textSecondary};
 `;
 
-const Ticker = styled.span`
-  font-weight: ${v.fontBold};
+const Secondary = styled.div`
+  font-size: 0.9rem;
+  color: ${v.textSecondary};
 `;
 
 const Seperator = styled.span`
@@ -27,24 +25,25 @@ function decodeHtml(html: string) {
 }
 
 interface StockListItemProps {
+  name: string;
   code: string;
   exchange?: string;
-  name: string;
 }
 
-function StockListItem({ code, exchange, name }: StockListItemProps) {
+function StockListItem({ name, code, exchange }: StockListItemProps) {
+  const decodedName = decodeHtml(name);
   return (
     <div>
-      <div>
-        <Ticker>{code}</Ticker>
+      <Primary title={decodedName}>{decodedName}</Primary>
+      <Secondary>
+        <span>{code}</span>
         {exchange && (
           <>
             <Seperator>·</Seperator>
             <span>{exchange}</span>
           </>
         )}
-      </div>
-      <Name>{decodeHtml(name)}</Name>
+      </Secondary>
     </div>
   );
 }

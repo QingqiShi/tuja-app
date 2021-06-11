@@ -44,12 +44,7 @@ test('use external state', () => {
   expect(handleChange).toHaveBeenCalledWith('a');
 });
 
-test('render compact', () => {
-  const { getByRole } = render(<Select options={[]} compact />);
-  expect(getByRole('combobox')).toHaveStyle('padding: 1rem 2rem 1rem 1.2rem;');
-});
-
 test('render disabled', () => {
   const { getByRole } = render(<Select options={[]} disabled />);
-  expect(getByRole('combobox')).toHaveStyle('opacity: 0.5;');
+  expect(getByRole('combobox')).toBeDisabled();
 });

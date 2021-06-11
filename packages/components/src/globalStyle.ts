@@ -7,16 +7,19 @@ const customProperties = css`
   --up-down-padding: 1rem;
   --left-right-padding: 0.5rem;
   --max-layout-width: 100%;
+  --header-height: 3rem;
 
   @media (${v.minTablet}) {
     --up-down-padding: 2rem;
     --left-right-padding: 1rem;
     --max-layout-width: 44rem;
+    --header-height: 4rem;
   }
 
   @media (${v.minLaptop}) {
     --up-down-padding: 3.5rem;
     --left-right-padding: 2rem;
+    --header-height: 4.5rem;
 
     // TODO: make this 100% after introducing split layout
     --max-layout-width: 70rem;

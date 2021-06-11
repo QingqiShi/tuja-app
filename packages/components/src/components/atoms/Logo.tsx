@@ -29,7 +29,7 @@ const BetaBadge = styled.span`
 function Logo() {
   return (
     <Title>
-      Tuja <BetaBadge>beta</BetaBadge>
+      Tuja <BetaBadge>demo</BetaBadge>
     </Title>
   );
 }

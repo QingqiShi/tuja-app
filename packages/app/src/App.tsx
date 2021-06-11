@@ -10,6 +10,7 @@ import {
 } from '@tuja/components';
 
 const Home = lazy(() => import('./views/Home'));
+const Analytics = lazy(() => import('./views/Analytics'));
 const AppShell = lazy(() => import('./views/AppShell'));
 
 function App() {
@@ -26,9 +27,16 @@ function App() {
             <Route path="/" exact>
               <Home />
             </Route>
-            <Route>
+
+            <Route path="/analytics">
+              <Analytics />
+            </Route>
+
+            <Route path="/tracker">
               <AppShell />
             </Route>
+
+            <Route>404</Route>
           </Switch>
         </Suspense>
       </ThemeProvider>

@@ -1,60 +1,125 @@
+import { useState } from 'react';
 import styled, { css } from 'styled-components';
-import { transparentize } from 'polished';
-import {
-  inputFont,
-  labelFont,
-  helperFont,
-  paddings,
-  border,
-  inputEndPadding,
-  inputLeadPadding,
-} from '../../mixins';
+import useKeyboardFocus from '../../hooks/useKeyboardFocus';
+import { v } from '../../theme';
+
+const Label = styled.label<{ noMargin?: boolean }>`
+  display: block;
+  text-align: left;
+  width: 100%;
+  position: relative;
+  margin-bottom: ${v.spacerS};
+
+  > * {
+    width: 100%;
+  }
+
+  ${({ noMargin }) =>
+    noMargin &&
+    css`
+      margin-bottom: 0;
+    `};
+`;
+
+const LabelLine = styled.span<{ isFocus?: boolean }>`
+  font-family: ${v.fontFamily};
+  font-weight: ${v.fontRegular};
+  margin: 0 ${v.spacerS};
+  padding: ${v.spacerS} 0;
+  color: ${v.textSecondary};
+  font-size: 1rem;
+  line-height: 1.2em;
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform-origin: 0 0;
+  transition: transform 0.2s;
+  z-index: 1;
+  pointer-events: none;
+
+  ${({ isFocus }) =>
+    isFocus &&
+    css`
+      transform: scale(0.7);
+      font-weight: ${v.fontSemiBold};
+    `}
+`;
 
 const InputBase = styled.input.attrs((props) => ({
   ...props,
   // Use a single space for placeholders so we can use :placeholder-shown
   // in CSS to check for empty values
   placeholder: props.placeholder || ' ',
-}))<{ hasEndIcon?: boolean; hasLeadIcon?: boolean }>`
-  ${inputFont}
-  ${paddings}
-  ${border}
-  color: ${({ theme }) => theme.colors.textOnBackground};
-  background-color: transparent;
-  transition: all 0.2s;
+}))<{
+  hasEndIcon?: boolean;
+  hasLeadIcon?: boolean;
+  isKeyboardFocus?: boolean;
+  compact?: boolean;
+}>`
+  color: ${v.textMain};
+  background-color: ${v.backgroundHover};
+  padding: ${v.spacerS} ${v.spacerS};
+  box-shadow: ${v.shadowRaised};
+  font-family: ${v.fontFamily};
+  font-weight: ${v.fontRegular};
+  font-size: 1rem;
+  line-height: 1.2em;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
   width: 100%;
   appearance: none;
+  transition: border 0.2s, box-shadow 0.2s;
 
-  ${({ hasLeadIcon }) => hasLeadIcon && inputLeadPadding}
-  ${({ hasEndIcon }) => hasEndIcon && inputEndPadding}
+  ${({ compact }) =>
+    compact &&
+    css`
+      padding: ${v.spacerXS};
+    `}
+  ${({ hasLeadIcon, compact }) =>
+    hasLeadIcon &&
+    css`
+      padding-left: ${compact ? 2.3 : 3.5}rem;
+    `}
+  ${({ hasEndIcon, compact }) =>
+    hasEndIcon &&
+    css`
+      padding-right: ${compact ? 2.3 : 3.5}rem;
+    `}
 
   &::placeholder {
-    color: ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
+    color: ${v.textSecondary};
     opacity: 1;
   }
 
   &:focus {
-    outline: none;
-    box-shadow: 0 0 ${({ theme }) => theme.spacings.s} 0
-      ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
+    border-color: ${v.textSecondary};
+
+    ${({ isKeyboardFocus }) =>
+      !isKeyboardFocus &&
+      css`
+        outline: none;
+      `}
+  }
+
+  &:hover:not(:focus):not(:disabled) {
+    box-shadow: ${v.shadowOverlay};
+    border-color: ${v.textSecondary};
   }
 
   &:disabled {
-    opacity: 0.5;
-    color: ${({ theme }) => theme.colors.textOnBackground};
-    background-color: ${({ theme }) =>
-      transparentize(0.9, theme.colors.textOnBackground)};
+    opacity: 0.7;
+    box-shadow: none;
+    color: ${v.textSecondary};
   }
 
-  &:not(:placeholder-shown):invalid {
-    border-color: ${({ theme }) => theme.colors.error};
-  }
-
-  ::-webkit-calendar-picker-indicator {
-    font-size: 1em;
-    line-height: 1em;
-    padding: 0;
-    margin: 0;
+  &:invalid:not(:placeholder-shown) {
+    border-color: ${v.textError};
   }
 
   ::-webkit-datetime-edit-fields-wrapper {
@@ -62,72 +127,79 @@ const InputBase = styled.input.attrs((props) => ({
     margin: 0;
   }
 
-  ${({ theme }) =>
-    theme.mode === 'dark' &&
-    css`
-      ::-webkit-calendar-picker-indicator {
-        filter: invert(1);
-      }
-    `};
-`;
+  ::-webkit-calendar-picker-indicator {
+    font-size: 0.9em;
+    line-height: 0.9em;
+    padding: 0;
+    margin: 0;
+  }
 
-const Label = styled.label`
-  display: block;
-  margin-bottom: ${({ theme }) => theme.spacings.s};
-  text-align: left;
-  width: 100%;
-  > * {
-    width: 100%;
+  &[data-theme='dark'] {
+    ::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+    }
+  }
+
+  ${Label} & {
+    padding: calc(${v.spacerS} * 1.5) ${v.spacerS} calc(${v.spacerS} / 2);
+
+    ::-webkit-calendar-picker-indicator {
+      transform: translateY(calc(${v.spacerS} / -2));
+    }
   }
 `;
 
-const LabelLine = styled.span`
-  ${labelFont}
-  margin-bottom: ${({ theme }) => theme.spacings.xs};
-  display: block;
-`;
-
 const HelperText = styled.div`
-  ${helperFont}
-  margin-top: ${({ theme }) => theme.spacings.xs};
-  color: ${({ theme }) => transparentize(0.2, theme.colors.textOnBackground)};
+  font-size: 0.6rem;
+  font-weight: ${v.fontRegular};
+  padding-left: ${v.spacerS};
+  margin-top: ${v.spacerXS};
+  color: ${v.textSecondary};
 `;
 
-const InputContainer = styled.div`
+const InputContainer = styled.div<{ noMargin?: boolean }>`
   width: 100%;
-  position: relative;
+  margin-bottom: ${v.spacerS};
+
+  ${({ noMargin }) =>
+    noMargin &&
+    css`
+      margin-bottom: 0;
+    `};
+
+  ${Label} & {
+    margin-bottom: 0;
+  }
 `;
 
-const IconContainer = styled.div<{ isLead?: boolean }>`
+const IconContainer = styled.div<{ isLead?: boolean; compact?: boolean }>`
   position: absolute;
   height: 100%;
-  width: 1.5em;
   top: 0;
   pointer-events: none;
   display: flex;
   align-items: center;
-  color: ${({ theme }) => transparentize(0.9, theme.colors.textOnBackground)};
+  color: ${v.textSecondary};
+  z-index: 1;
 
-  ${({ isLead }) =>
+  ${({ isLead, compact }) =>
     isLead
       ? css`
-          left: ${({ theme }) => theme.leftRight.normal.mobile};
-          @media (${({ theme }) => theme.breakpoints.minTablet}) {
-            left: ${({ theme }) => theme.leftRight.normal.tablet};
-          }
-          @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-            left: ${({ theme }) => theme.leftRight.normal.laptop};
-          }
+          width: ${compact ? 2.3 : 3.5}em;
+          padding: ${compact ? v.spacerXS : v.spacerS};
+          justify-content: flex-start;
+          left: 0;
         `
       : css`
-          right: ${({ theme }) => theme.leftRight.normal.mobile};
-          @media (${({ theme }) => theme.breakpoints.minTablet}) {
-            right: ${({ theme }) => theme.leftRight.normal.tablet};
-          }
-          @media (${({ theme }) => theme.breakpoints.minLaptop}) {
-            right: ${({ theme }) => theme.leftRight.normal.laptop};
-          }
+          width: ${compact ? 2.3 : 3.5}em;
+          padding: ${compact ? v.spacerXS : v.spacerS};
+          justify-content: flex-end;
+          right: 0;
         `}
+`;
+
+const IconWrapper = styled.div`
+  position: relative;
 `;
 
 interface TextInputProps extends Omit<React.ComponentProps<'input'>, 'ref'> {
@@ -135,6 +207,8 @@ interface TextInputProps extends Omit<React.ComponentProps<'input'>, 'ref'> {
   helperText?: string;
   endIcon?: React.ReactNode;
   leadIcon?: React.ReactNode;
+  noMargin?: boolean;
+  compact?: boolean;
 }
 
 function TextInput({
@@ -143,44 +217,73 @@ function TextInput({
   helperText,
   endIcon,
   leadIcon,
+  noMargin,
+  compact,
+  value,
+  defaultValue,
+  onChange,
+  onFocus,
+  onBlur,
   ...rest
 }: TextInputProps) {
-  if (label || helperText) {
+  const [ref, isKeyboardFocus] = useKeyboardFocus();
+  const [isFocus, setIsFocus] = useState(false);
+  const [_value, _setValue] = useState(defaultValue ?? '');
+
+  const input = (
+    <InputContainer noMargin={noMargin}>
+      <IconWrapper>
+        {leadIcon && (
+          <IconContainer isLead compact={!label && compact}>
+            {leadIcon}
+          </IconContainer>
+        )}
+        <InputBase
+          ref={ref}
+          isKeyboardFocus={isKeyboardFocus}
+          compact={!label && compact}
+          required={required}
+          hasLeadIcon={!!leadIcon}
+          hasEndIcon={!!endIcon}
+          value={value ?? _value}
+          onChange={onChange ?? ((e) => _setValue(e.target.value))}
+          {...rest}
+          onFocus={(e) => {
+            setIsFocus(true);
+            if (onFocus) onFocus(e);
+          }}
+          onBlur={(e) => {
+            setIsFocus(false);
+            if (onBlur) onBlur(e);
+          }}
+        />
+        {endIcon && (
+          <IconContainer compact={!label && compact}>{endIcon}</IconContainer>
+        )}
+      </IconWrapper>
+      {helperText && <HelperText>{helperText}</HelperText>}
+    </InputContainer>
+  );
+
+  if (label) {
     return (
-      <Label>
+      <Label noMargin={noMargin}>
         {label && (
-          <LabelLine>
+          <LabelLine
+            isFocus={
+              isFocus || !!value || !!_value || !!rest.placeholder?.trim()
+            }
+          >
             {label}
             {required ? '*' : ''}
           </LabelLine>
         )}
-        <InputContainer>
-          {leadIcon && <IconContainer isLead>{leadIcon}</IconContainer>}
-          <InputBase
-            required={required}
-            hasLeadIcon={!!leadIcon}
-            hasEndIcon={!!endIcon}
-            {...rest}
-          />
-          {endIcon && <IconContainer>{endIcon}</IconContainer>}
-        </InputContainer>
-        {helperText && <HelperText>{helperText}</HelperText>}
+        {input}
       </Label>
     );
   }
 
-  return (
-    <InputContainer>
-      {leadIcon && <IconContainer isLead>{leadIcon}</IconContainer>}
-      <InputBase
-        hasLeadIcon={!!leadIcon}
-        hasEndIcon={!!endIcon}
-        required={required}
-        {...rest}
-      />
-      {endIcon && <IconContainer>{endIcon}</IconContainer>}
-    </InputContainer>
-  );
+  return input;
 }
 
 export default TextInput;

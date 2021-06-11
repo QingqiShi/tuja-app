@@ -1,4 +1,4 @@
-import { stocksClient } from '@tuja/libs';
+import { stocksClient } from '../utils/stocksClient';
 
 export const handleSearch = async (request: Request): Promise<Response> => {
   const params = new URL(request.url).searchParams;

@@ -145,7 +145,6 @@ test('get overridden stocks infos', async () => {
 
   // When
   const response = await handleBulkInfos(request as never);
-  // console.log(await response.text());
 
   // Then
   expect(await response.json()).toEqual([

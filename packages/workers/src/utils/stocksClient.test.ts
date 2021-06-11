@@ -1,4 +1,4 @@
-import { stocksClient } from './stocksData';
+import { stocksClient } from './stocksClient';
 
 const API_KEY = 'test_api_key';
 
@@ -51,17 +51,16 @@ test('returns undefined if apiKey not provided', async () => {
 test('search uses cached fetch and returns with Ticker', async () => {
   const fetch = jest.fn();
   const cachedFetch = jest.fn(async () => ({
-    json: async () =>
-      [
-        {
-          Code: 'AAPL',
-          Exchange: 'US',
-          Name: 'Apple',
-          Type: 'Stock',
-          Country: 'US',
-          Currency: 'USD',
-        },
-      ] as any,
+    json: async () => [
+      {
+        Code: 'AAPL',
+        Exchange: 'US',
+        Name: 'Apple',
+        Type: 'Stock',
+        Country: 'US',
+        Currency: 'USD',
+      },
+    ],
   }));
   const { search } = stocksClient({ fetch, cachedFetch, apiKey: API_KEY });
 

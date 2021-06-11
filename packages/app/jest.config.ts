@@ -5,12 +5,15 @@ const config: Config.InitialOptions = {
   clearMocks: true,
   coverageDirectory: 'coverage',
   moduleNameMapper: {
-    'workers/processor\\.worker\\?worker':
-      '<rootDir>/src/workers/__mocks__/processor.mock.ts',
+    '(.*)\\?worker$': '$1',
     'idb-latest': 'idb',
     '\\.(css|less)$': '<rootDir>/fileMock.js',
     '@tuja/components': '@tuja/components/src/index.ts',
     '@tuja/libs': '@tuja/libs/src/index.ts',
+  },
+  transform: {
+    '\\.worker\\.ts': '<rootDir>/jestWorkerTransformer/index.js',
+    '\\.[jt]sx?$': 'babel-jest',
   },
   setupFiles: ['fake-indexeddb/auto'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],

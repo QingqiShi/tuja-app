@@ -35,7 +35,7 @@ import {
   fetchStockSearch,
   fetchStockInfos,
   fetchStocksPrices,
-} from '../libs/stocksClient';
+} from '../libs/apiClient';
 import { PortfolioPerformance } from '../libs/portfolioClient';
 
 const verticalCenter = css`
@@ -56,6 +56,7 @@ const SuggestionRow = styled.div`
   }
   > :last-child:not(:first-child) {
     font-size: 1.2rem;
+    margin-left: ${v.spacerS};
   }
 `;
 

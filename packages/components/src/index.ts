@@ -1,4 +1,5 @@
 export { default as ButtonBase } from './components/atoms/ButtonBase';
+export { default as ButtonIcon } from './components/atoms/ButtonIcon';
 export { default as ButtonPrimary } from './components/atoms/ButtonPrimary';
 export { default as ButtonSecondary } from './components/atoms/ButtonSecondary';
 export { default as ButtonTertiary } from './components/atoms/ButtonTertiary';
@@ -14,7 +15,9 @@ export { default as TextInput } from './components/atoms/TextInput';
 export { default as TextLink } from './components/atoms/TextLink';
 
 export { default as ActivityItem } from './components/molecules/ActivityItem';
+export { default as AllocationItem } from './components/molecules/AllocationItem';
 export { default as AllocationOverview } from './components/molecules/AllocationOverview';
+export { default as AnalysisContainer } from './components/molecules/AnalysisContainer';
 export { default as Bars } from './components/molecules/Bars';
 export { default as Benefits } from './components/molecules/Benefits';
 export { default as Chart } from './components/molecules/Chart';
