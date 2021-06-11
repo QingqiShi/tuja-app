@@ -1,7 +1,8 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { v } from '../../theme';
 
 const Container = styled.article`
+  position: relative;
   background-color: ${v.backgroundRaised};
   box-shadow: ${v.shadowRaised};
   border-radius: ${v.radiusCard};
@@ -65,22 +66,47 @@ const Chart = styled.div`
 
   @media (${v.minDesktop}) {
     height: 30vw;
+    max-height: 70vh;
   }
+`;
+
+const flash = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const LoadingIndicator = styled.div`
+  position: absolute;
+  right: ${v.spacerS};
+  top: ${v.spacerS};
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: ${v.accentMain};
+  animation: 1s linear 0s infinite alternate ${flash};
 `;
 
 interface AnalysisContainerProps {
   title: string;
   configuration?: React.ReactNode;
   chart?: React.ReactNode;
+  isLoading?: boolean;
 }
 
 function AnalysisContainer({
   title,
   configuration,
   chart,
+  isLoading,
 }: AnalysisContainerProps) {
   return (
     <Container>
+      {isLoading && <LoadingIndicator />}
       <TopRow>
         <Title>{title}</Title>
         {configuration && <Configuration>{configuration}</Configuration>}

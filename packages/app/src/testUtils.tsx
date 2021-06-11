@@ -2,10 +2,12 @@ import { render as rtlRender, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { getTheme } from '@tuja/components';
-import { TimeSeries } from '@tuja/libs';
+import { TimeSeries, StockInfo } from '@tuja/libs';
 import { PortfolioContext } from './hooks/usePortfolio';
 import { PortfolioProcessorContext } from './hooks/usePortfolioProcessor';
 import { AuthContext } from './hooks/useAuth';
+import { getDB } from './libs/cachedStocksData';
+import type { StockHistory } from './libs/apiClient';
 
 interface RenderOptions {
   portfolio?: Partial<React.ContextType<typeof PortfolioContext>>;
@@ -157,7 +159,6 @@ export const render = (ui: React.ReactElement, options?: RenderOptions) => {
 /*
  * Utils for mocking element size
  */
-
 export const mockResizeObserver = () => {
   const listeners = new Map<
     HTMLElement,
@@ -203,4 +204,29 @@ export const mockResizeObserver = () => {
       ]);
     });
   };
+};
+
+/**
+ * Utility function for injecting data into the fake indexedDb.
+ */
+export const mockCachedData = async (opts: {
+  stocksInfo?: StockInfo[];
+  stocksHistory?: StockHistory[];
+}) => {
+  const { stocksInfo, stocksHistory } = opts;
+  const db = await getDB();
+
+  if (stocksInfo) {
+    const writeTx = db.transaction(['stocksInfo'], 'readwrite');
+    const writeStore = writeTx.objectStore('stocksInfo');
+    await Promise.all(stocksInfo.map((stockInfo) => writeStore.put(stockInfo)));
+    await writeTx.done;
+  }
+
+  if (stocksHistory) {
+    const writeTx = db.transaction('stocksHistory', 'readwrite');
+    const writeStore = writeTx.objectStore('stocksHistory');
+    await Promise.all(stocksHistory.map((history) => writeStore.put(history)));
+    await writeTx.done;
+  }
 };

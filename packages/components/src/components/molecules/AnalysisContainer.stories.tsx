@@ -26,3 +26,10 @@ Example.args = {
   ),
   chart: <Chart data={stock} />,
 };
+
+export const Loading = Template.bind({});
+Loading.args = {
+  title: 'Backtest',
+  chart: <Chart data={[]} />,
+  isLoading: true,
+};
