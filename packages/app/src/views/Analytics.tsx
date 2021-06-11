@@ -16,7 +16,6 @@ import {
   Pie,
   ResponsiveSplit,
   Select,
-  TopLinearLoader,
   v,
 } from '@tuja/components';
 import { prefetchStocksHistory } from '../libs/cachedStocksData';
@@ -161,7 +160,7 @@ function Analytics(_props: AnalyticsProps) {
   return (
     <div>
       <Helmet>
-        <title>Tuja App | Portfolio Tracker</title>
+        <title>Tuja App | Portfolio analytics</title>
       </Helmet>
 
       <Header logoHref="/" onLogoClick={() => history.push('/')} />

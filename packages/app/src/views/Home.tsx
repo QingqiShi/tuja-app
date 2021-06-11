@@ -24,7 +24,7 @@ function Home() {
   return (
     <div>
       <Helmet>
-        <title>Tuja App | Portfolio Tracker</title>
+        <title>Tuja App | Understand your investments</title>
       </Helmet>
       <Header
         logoHref="/"
