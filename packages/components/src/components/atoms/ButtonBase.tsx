@@ -77,10 +77,12 @@ function ButtonBase({
       <StyledButton
         ref={ref}
         as="a"
-        onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-          if (onClick || disabled) e.preventDefault();
-          onClick?.(e);
-        }}
+        onClick={
+          ((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+            if (onClick || disabled) e.preventDefault();
+            onClick?.(e);
+          }) as any
+        }
         href={href}
         isTabFocused={isTabFocused}
         {...rest}
