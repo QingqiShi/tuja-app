@@ -6,7 +6,8 @@ const config: Config.InitialOptions = {
     '!**/*.stories.tsx',
     '!**/*.d.ts',
     '!**/*.test.{ts,tsx}',
-    '!**/jest.config.ts',
+    '!**/*.config.ts',
+    '!**/jestWorkerTransformer/*',
   ],
   projects: ['<rootDir>/packages/*'],
   watchPlugins: [
