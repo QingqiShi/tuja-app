@@ -48,7 +48,7 @@ const SecondaryContainer = styled.details<{ offset?: string }>`
 
 const SecondarySummary = styled.summary`
   box-sizing: border-box;
-  display: block;
+  display: flex;
   padding: ${v.spacerXS} 0;
   box-shadow: ${v.shadowRaised};
   background-color: ${v.backgroundRaised};

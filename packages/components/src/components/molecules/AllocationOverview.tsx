@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { formatCurrency } from '@tuja/libs';
 import { v } from '../../theme';
-import { ordinalBackgroundColor } from '../../mixins';
+import HorizontalBars from './HorizontalBars';
 
 const Card = styled.div`
   background-color: ${v.backgroundRaised};
@@ -32,26 +32,6 @@ const HoldingValue = styled.div`
   margin-top: 0.2rem;
 `;
 
-const Chart = styled.div`
-  display: flex;
-`;
-
-const Segment = styled.div<{ width: number; index: number }>`
-  ${ordinalBackgroundColor}
-
-  border-radius: ${v.spacerXS};
-  width: ${({ width }) => `${(width * 100).toFixed(2)}%`};
-  height: ${v.spacerM};
-
-  &:hover {
-    filter: brightness(1.2);
-  }
-
-  &:not(:last-child) {
-    margin-right: 2px;
-  }
-`;
-
 interface AllocationOverviewProps {
   cash: number;
   holdings: {
@@ -68,7 +48,7 @@ function AllocationOverview({
   currency,
 }: AllocationOverviewProps) {
   const [hovering, setHovering] = useState<{
-    ticker: string;
+    id: string;
     value: number;
   } | null>(null);
 
@@ -85,7 +65,7 @@ function AllocationOverview({
         )}
         {hovering !== null && (
           <div>
-            <div>{hovering.ticker}</div>
+            <div>{hovering.id}</div>
             <HoldingValue>
               {formatCurrency(currency, hovering.value)} (
               {((hovering.value / totalValue) * 100).toFixed(2)}%)
@@ -97,26 +77,17 @@ function AllocationOverview({
           <CashValue>+ {formatCurrency(currency, cash)} cash</CashValue>
         </ValueContainer>
       </FirstRow>
-      <Chart>
-        {[
+      <HorizontalBars
+        data={[
           ...Object.keys(holdings).map((ticker) => ({
-            ticker,
+            id: ticker,
             value: holdings[ticker].value,
           })),
-          { ticker: 'Cash', value: cash },
-        ]
-          .sort((a, b) => b.value - a.value)
-          .map((holding, i) => (
-            <Segment
-              key={`${i}`}
-              data-testid={`segment-${holding.ticker}`}
-              width={holding.value / totalValue}
-              index={i}
-              onMouseEnter={() => setHovering(holding)}
-              onMouseLeave={() => setHovering(null)}
-            />
-          ))}
-      </Chart>
+          { id: 'Cash', value: cash },
+        ].sort((a, b) => b.value - a.value)}
+        onEnter={setHovering}
+        onLeave={() => setHovering(null)}
+      />
     </Card>
   );
 }
