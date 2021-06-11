@@ -55,7 +55,7 @@ const SecondarySummary = styled.summary`
   list-style-type: none;
   outline: none;
 
-  &::marker {
+  &::-webkit-details-marker {
     display: none;
   }
 
