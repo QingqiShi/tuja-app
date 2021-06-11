@@ -53,7 +53,9 @@ function AllocationItem({
   return (
     <div>
       <Row>
-        <StockListItem {...stockInfo} />
+        <label htmlFor={`${stockInfo.code}-allocation`}>
+          <StockListItem {...stockInfo} />
+        </label>
         <IconContainer>
           <ButtonIcon data-testid="allocation-remove-btn" onClick={onRemove}>
             <XCircle />
@@ -64,6 +66,7 @@ function AllocationItem({
         <Slider value={allocation} onChange={onChange} />
         <InputContainer>
           <NumberInput
+            id={`${stockInfo.code}-allocation`}
             data-testid="allocation-input"
             value={Math.round((allocation ?? 0) * 10) / 10}
             onChange={onChange}
