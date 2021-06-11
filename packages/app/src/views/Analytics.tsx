@@ -152,7 +152,7 @@ function Analytics(_props: AnalyticsProps) {
     setSelections(
       selections.map((s) => ({
         ...s,
-        percentage: s.percentage / totalPercentage,
+        percentage: totalPercentage && s.percentage / totalPercentage,
       }))
     );
   };
@@ -187,9 +187,12 @@ function Analytics(_props: AnalyticsProps) {
                   secondaryText={'Assets'}
                   data={[...selections, empty]}
                 />
-                {totalPercentage !== 1 && (
+                {totalPercentage !== 1 && !!totalPercentage && (
                   <AutoAdjust>
-                    <ButtonIcon onClick={adjustAllocation}>
+                    <ButtonIcon
+                      onClick={adjustAllocation}
+                      data-testid="auto-adjust"
+                    >
                       <Lightning />
                     </ButtonIcon>
                   </AutoAdjust>
