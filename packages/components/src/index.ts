@@ -25,6 +25,7 @@ export { default as DateRangeTabs } from './components/molecules/DateRangeTabs';
 export { default as Footer } from './components/molecules/Footer';
 export { default as Header } from './components/molecules/Header';
 export { default as Hero } from './components/molecules/Hero';
+export { default as HorizontalBars } from './components/molecules/HorizontalBars';
 export { default as InvestmentItem } from './components/molecules/InvestmentItem';
 export { default as LinearLoader } from './components/molecules/LinearLoader';
 export { default as Modal } from './components/molecules/Modal';

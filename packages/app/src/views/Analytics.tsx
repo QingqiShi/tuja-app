@@ -10,8 +10,11 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import {
   AllocationItem,
   ButtonIcon,
+  ButtonPrimary,
+  EdgePadding,
   Footer,
   Header,
+  HorizontalBars,
   NumberInput,
   Pie,
   ResponsiveSplit,
@@ -86,6 +89,16 @@ const ComingSoon = styled.div`
   font-family: ${v.fontFamily};
   font-weight: ${v.fontSemiBold};
   color: ${v.textSecondary};
+`;
+
+const Summary = styled(EdgePadding)`
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  > :not(:last-child) {
+    margin-right: ${v.spacerXS};
+  }
 `;
 
 const assets = [
@@ -244,6 +257,20 @@ function Analytics(_props: AnalyticsProps) {
                 </Assets>
               </ConfigContainer>
             </div>
+          )}
+          secondarySummary={({ openSecondary }) => (
+            <Summary>
+              <HorizontalBars
+                data={selections
+                  .filter((selection) => !!selection.ticker)
+                  .map((selection) => ({
+                    id: selection.ticker,
+                    value: selection.percentage,
+                  }))}
+                total={1}
+              />
+              <ButtonPrimary onClick={openSecondary}>Edit</ButtonPrimary>
+            </Summary>
           )}
         />
       </ContentContainer>
