@@ -1,5 +1,5 @@
-import { fireEvent } from '@testing-library/react';
-import { render, mockResizeObserver } from '../../testUtils';
+import { render, fireEvent } from '@testing-library/react';
+import { mockResizeObserver } from '../../testUtils';
 import Chart from './Chart';
 
 mockResizeObserver();

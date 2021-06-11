@@ -1,6 +1,5 @@
 import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
-import styled, { css, useTheme } from 'styled-components';
-import { transparentize } from 'polished';
+import styled, { css } from 'styled-components';
 import { LinearGradient } from '@visx/gradient';
 import { AreaClosed, LinePath, Bar } from '@visx/shape';
 import { scaleTime, scaleLinear } from '@visx/scale';
@@ -12,6 +11,7 @@ import { localPoint } from '@visx/event';
 import { max, min, extent, bisector } from 'd3-array';
 import dayjs from 'dayjs';
 import useSize from '../../hooks/useSize';
+import { v } from '../../theme';
 
 const Container = styled.div`
   width: 100%;
@@ -26,7 +26,7 @@ const StyledTooltip = styled.div<{ primary?: boolean }>`
   font-size: 14px;
   line-height: 1em;
   font-weight: 600;
-  padding: ${({ theme }) => theme.spacings.xs};
+  padding: ${v.spacerXS};
   pointer-events: none;
   position: absolute;
   min-width: 200px;
@@ -34,23 +34,21 @@ const StyledTooltip = styled.div<{ primary?: boolean }>`
   position: static;
   display: flex;
   justify-content: space-between;
-  border-radius: ${({ theme }) => theme.spacings.xs};
-  background-color: ${({ theme }) => theme.colors.backgroundRaised};
-  ${({ primary, theme }) =>
+  border-radius: ${v.spacerXS};
+  background-color: ${v.backgroundRaised};
+  ${({ primary }) =>
     primary
       ? css`
-          color: ${theme.colors.textOnBackground};
-          box-shadow: 0 0 0 1px
-            ${transparentize(0.7, theme.colors.textOnBackground)};
+          color: ${v.textMain};
+          box-shadow: ${v.shadowRaised};
         `
       : css`
-          color: ${transparentize(0.5, theme.colors.textOnBackground)};
-          box-shadow: 0 0 0 1px
-            ${transparentize(0.9, theme.colors.textOnBackground)};
+          color: ${v.textSecondary};
+          box-shadow: ${v.shadowRaised};
         `}
 
   > :first-child {
-    margin-right: ${({ theme }) => theme.spacings.xs};
+    margin-right: ${v.spacerXS};
   }
 
   > * {
@@ -329,17 +327,16 @@ function Chart({
   );
 
   // Theme related styles
-  const theme = useTheme();
   const colors = {
-    chartLine: theme.colors.callToActionText,
-    benchmarkLine: transparentize(0.4, theme.colors.textOnBackground),
-    gridLine: transparentize(0.9, theme.colors.textOnBackground),
-    text: transparentize(0.6, theme.colors.textOnBackground),
-    chartGradientTo: theme.colors.backgroundRaised,
+    chartLine: v.accentMain,
+    benchmarkLine: v.textSecondary,
+    gridLine: v.backgroundHover,
+    text: v.textSecondary,
+    chartGradientTo: v.backgroundRaised,
   };
   const axisBottomTickLabelProps = {
     textAnchor: 'middle' as const,
-    fontFamily: theme.fontFamily,
+    fontFamily: v.fontFamily,
     fontSize: '0.7rem',
     fill: colors.text,
   };
@@ -347,7 +344,7 @@ function Chart({
     dx: '-0.25em',
     dy: '0.25em',
     textAnchor: 'end' as const,
-    fontFamily: theme.fontFamily,
+    fontFamily: v.fontFamily,
     fontSize: '0.7rem',
     fill: colors.text,
   };
