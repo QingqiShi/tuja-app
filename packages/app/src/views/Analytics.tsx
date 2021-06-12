@@ -91,13 +91,14 @@ const ComingSoon = styled.div`
   color: ${v.textSecondary};
 `;
 
-const Summary = styled(EdgePadding)`
+const Summary = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
 
   > :not(:last-child) {
     margin-right: ${v.spacerXS};
+    flex-grow: 1;
   }
 `;
 
@@ -259,18 +260,20 @@ function Analytics(_props: AnalyticsProps) {
             </div>
           )}
           secondarySummary={({ openSecondary }) => (
-            <Summary>
-              <HorizontalBars
-                data={selections
-                  .filter((selection) => !!selection.ticker)
-                  .map((selection) => ({
-                    id: selection.ticker,
-                    value: selection.percentage,
-                  }))}
-                total={1}
-              />
-              <ButtonPrimary onClick={openSecondary}>Edit</ButtonPrimary>
-            </Summary>
+            <EdgePadding>
+              <Summary>
+                <HorizontalBars
+                  data={selections
+                    .filter((selection) => !!selection.ticker)
+                    .map((selection) => ({
+                      id: selection.ticker,
+                      value: selection.percentage,
+                    }))}
+                  total={1}
+                />
+                <ButtonPrimary onClick={openSecondary}>Edit</ButtonPrimary>
+              </Summary>
+            </EdgePadding>
           )}
         />
       </ContentContainer>
