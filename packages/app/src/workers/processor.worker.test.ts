@@ -10,7 +10,9 @@ describe('handle invalid inputs', () => {
     ${'no payload'}    | ${{ type: 'process-portfolio' }}
     ${'empty payload'} | ${{ type: 'process-portfolio', payload: {} }}
   `('handle invalid input - $name', async ({ payload }) => {
-    const { result, waitFor } = renderHook(() => useWorker(Worker, payload));
+    const { result, waitFor } = renderHook(() =>
+      useWorker(Worker, { payload })
+    );
 
     await waitFor(() => {
       expect(result.current).toBe(null);
@@ -29,7 +31,9 @@ describe('happy path', () => {
         endDate: new Date(),
       },
     };
-    const { result, waitFor } = renderHook(() => useWorker(Worker, payload));
+    const { result, waitFor } = renderHook(() =>
+      useWorker(Worker, { payload })
+    );
 
     await waitFor(() => {
       expect(result.current).toEqual({
@@ -76,7 +80,9 @@ describe('happy path', () => {
         portfolioId: 'xxx',
       },
     };
-    const { result, waitFor } = renderHook(() => useWorker(Worker, payload));
+    const { result, waitFor } = renderHook(() =>
+      useWorker(Worker, { payload })
+    );
 
     const valueSeries = {
       data: [

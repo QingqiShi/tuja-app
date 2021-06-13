@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react';
 
-function useWorker(Worker: new () => Worker, payload: any) {
+function useWorker(
+  Worker: new () => Worker,
+  { payload, skip }: { payload?: any; skip?: boolean }
+) {
   const [result, setResult] = useState<any>(null);
 
   useEffect(() => {
+    if (skip) return;
+
     const worker = new Worker();
 
     const handler = (e: MessageEvent) => {
@@ -20,7 +25,7 @@ function useWorker(Worker: new () => Worker, payload: any) {
         worker.terminate();
       } catch {}
     };
-  }, [Worker, payload]);
+  }, [Worker, payload, skip]);
 
   return result;
 }
