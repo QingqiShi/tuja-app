@@ -153,6 +153,7 @@ function Portfolio({ isDemo }: PortfolioProps) {
             benchmark={portfolioPerformance?.portfolio.benchmarkSeries?.data}
             benchmarkLabel={portfolio.benchmark}
             hideAxis
+            resampleData
           />
         )}
         {chartType === 'gainSeries' && (
@@ -160,6 +161,7 @@ function Portfolio({ isDemo }: PortfolioProps) {
             data={portfolioPerformance.portfolio.gainSeries.data}
             formatValue={(val) => formatCurrency(portfolio.currency, val)}
             hideAxis
+            resampleData
           />
         )}
         {chartType === 'valueSeries' && (
@@ -169,6 +171,7 @@ function Portfolio({ isDemo }: PortfolioProps) {
             benchmark={portfolioPerformance?.portfolio.cashFlowSeries?.data}
             benchmarkLabel="Invested"
             hideAxis
+            resampleData
           />
         )}
         {chartType === 'monthlyDividends' && (

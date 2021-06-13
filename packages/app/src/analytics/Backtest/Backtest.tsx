@@ -25,6 +25,7 @@ function Backtest({
         <Chart
           data={isLoading || !result ? [] : backtestSeries.data}
           formatValue={(val: number) => `${Math.round(val * 10000) / 100}%`}
+          resampleData
         />
       }
       isLoading={isLoading || !result}

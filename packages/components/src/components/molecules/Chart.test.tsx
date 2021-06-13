@@ -45,3 +45,22 @@ test('render with benchmark', async () => {
   fireEvent.touchEnd(getByTestId('chart-tooltip-events'));
   expect(queryByText('56.00')).not.toBeVisible();
 });
+
+test('resample data', async () => {
+  const { getByTestId, getByText, queryByText } = render(
+    <Chart
+      data={[
+        [new Date(1612558309355), 12],
+        [new Date(1612644733880), 24],
+      ]}
+      resampleData
+    />
+  );
+
+  fireEvent.mouseMove(getByTestId('chart-tooltip-events'));
+  expect(getByText('2021-02-05 Fri')).toBeVisible();
+  expect(getByText('12.00')).toBeVisible();
+
+  fireEvent.mouseLeave(getByTestId('chart-tooltip-events'));
+  expect(queryByText('12.00')).not.toBeVisible();
+});
