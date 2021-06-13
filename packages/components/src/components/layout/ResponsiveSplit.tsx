@@ -5,7 +5,6 @@ import styled, { css } from 'styled-components';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import { v } from '../../theme';
 import ButtonPrimary from '../atoms/ButtonPrimary';
-import EdgePadding from './EdgePadding';
 
 const Container = styled.div`
   display: flex;
@@ -24,9 +23,13 @@ const Container = styled.div`
 
 const Primary = styled.main`
   min-width: 0;
+  padding-left: calc(env(safe-area-inset-left) + ${v.leftRightPadding});
+  padding-right: calc(env(safe-area-inset-right) + ${v.leftRightPadding});
   @media (${v.minLaptop}) {
     height: 100%;
     grid-area: primary;
+    padding-left: calc(${v.leftRightPadding} / 2);
+    padding-right: ${v.leftRightPadding};
   }
 `;
 
@@ -49,11 +52,13 @@ const SecondaryContainer = styled.details<{ offset?: string }>`
 const SecondarySummary = styled.summary`
   box-sizing: border-box;
   display: flex;
-  padding: ${v.spacerXS} 0;
   box-shadow: ${v.shadowRaised};
   background-color: ${v.backgroundRaised};
   list-style-type: none;
   outline: none;
+  padding: ${v.spacerXS} 0;
+  padding-left: calc(env(safe-area-inset-left) + ${v.leftRightPadding});
+  padding-right: calc(env(safe-area-inset-right) + ${v.leftRightPadding});
 
   &::-webkit-details-marker {
     display: none;
@@ -89,14 +94,14 @@ const SecondaryCard = motion(styled.aside`
   overflow: hidden;
   position: fixed;
   top: 8vh;
-  left: ${v.spacerXS};
-  right: ${v.spacerXS};
+  left: calc(env(safe-area-inset-left) + ${v.leftRightPadding});
+  right: calc(env(safe-area-inset-right) + ${v.leftRightPadding});
   bottom: -8vh;
   z-index: ${v.zModal};
 
   @media (${v.minTablet}) {
-    left: 10vw;
-    right: 10vw;
+    left: calc(env(safe-area-inset-left) + 10vw);
+    right: calc(env(safe-area-inset-right) + 10vw);
   }
 
   @media (${v.minLaptop}) {
@@ -177,9 +182,7 @@ function ResponsiveSplit({
           {(typeof secondarySummary === 'function'
             ? secondarySummary({ openSecondary })
             : secondarySummary) ?? (
-            <EdgePadding>
-              <ButtonPrimary onClick={openSecondary}>View</ButtonPrimary>
-            </EdgePadding>
+            <ButtonPrimary onClick={openSecondary}>View</ButtonPrimary>
           )}
         </SecondarySummary>
         <Secondary offset={stickyOffset}>

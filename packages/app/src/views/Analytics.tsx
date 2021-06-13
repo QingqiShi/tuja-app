@@ -11,7 +11,6 @@ import {
   AllocationItem,
   ButtonIcon,
   ButtonPrimary,
-  EdgePadding,
   Footer,
   Header,
   HorizontalBars,
@@ -72,12 +71,6 @@ const Assets = styled.div`
 
 const Results = styled.div`
   margin-top: ${v.spacerS};
-  padding-left: ${v.leftRightPadding};
-  padding-right: ${v.leftRightPadding};
-
-  @media (${v.minLaptop}) {
-    padding-left: calc(${v.leftRightPadding} / 2);
-  }
 `;
 
 const ComingSoon = styled.div`
@@ -260,20 +253,18 @@ function Analytics(_props: AnalyticsProps) {
             </div>
           )}
           secondarySummary={({ openSecondary }) => (
-            <EdgePadding>
-              <Summary>
-                <HorizontalBars
-                  data={selections
-                    .filter((selection) => !!selection.ticker)
-                    .map((selection) => ({
-                      id: selection.ticker,
-                      value: selection.percentage,
-                    }))}
-                  total={1}
-                />
-                <ButtonPrimary onClick={openSecondary}>Edit</ButtonPrimary>
-              </Summary>
-            </EdgePadding>
+            <Summary>
+              <HorizontalBars
+                data={selections
+                  .filter((selection) => !!selection.ticker)
+                  .map((selection) => ({
+                    id: selection.ticker,
+                    value: selection.percentage,
+                  }))}
+                total={1}
+              />
+              <ButtonPrimary onClick={openSecondary}>Edit</ButtonPrimary>
+            </Summary>
           )}
         />
       </ContentContainer>
