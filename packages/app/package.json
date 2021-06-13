@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn dev",
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc -p tsconfig-build.json && vite build",
     "lint": "eslint \"src/**/*.ts?\"",
     "serve": "vite preview"
