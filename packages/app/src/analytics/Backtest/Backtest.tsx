@@ -14,7 +14,7 @@ function Backtest({
     () => ({ assets, baseCurrency, inflationRate }),
     [assets, baseCurrency, inflationRate]
   );
-  const result = useWorker(BacktestWorker, payload);
+  const result = useWorker(BacktestWorker, { payload, skip: isLoading });
 
   const backtestSeries = useMemo(() => new TimeSeries(result), [result]);
 
@@ -23,7 +23,7 @@ function Backtest({
       title="Backtest"
       chart={
         <Chart
-          data={backtestSeries.data}
+          data={isLoading || !result ? [] : backtestSeries.data}
           formatValue={(val: number) => `${Math.round(val * 10000) / 100}%`}
         />
       }
