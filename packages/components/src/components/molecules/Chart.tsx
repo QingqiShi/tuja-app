@@ -90,6 +90,17 @@ const bisectDate = bisector<DataPoint, Date>((d, x) => {
 }).left;
 const axisDateFormat = 'YYYY-MM-DD';
 const formatTooltipDate = (d: Date) => dayjs(d).format('YYYY-MM-DD ddd');
+const resample = (width: number, data?: DataPoint[]) => {
+  if (!data || data.length < width) {
+    return data;
+  }
+  const samplingRate = width ? Math.floor(data.length / width) : 1;
+  return samplingRate
+    ? data.filter((_, i) => i % samplingRate === 0 || i === data.length - 1)
+    : data;
+};
+
+const getDefaultId = () => (Math.random() * Number.MAX_SAFE_INTEGER).toString();
 
 interface ChartProps {
   id?: string;
@@ -99,19 +110,19 @@ interface ChartProps {
   hideTooltip?: boolean;
   className?: string;
   benchmarkLabel?: string;
+  resampleData?: boolean;
   formatValue?: (val: number) => string;
 }
 
-const getDefaultId = () => (Math.random() * Number.MAX_SAFE_INTEGER).toString();
-
 function Chart({
   id,
-  data,
-  benchmark,
+  data: dataRaw,
+  benchmark: benchmarkRaw,
   hideAxis,
   hideTooltip,
   className,
   benchmarkLabel,
+  resampleData,
   formatValue,
 }: ChartProps) {
   // bounds
@@ -129,6 +140,14 @@ function Chart({
   const yMax = Math.max(height - margin.top - margin.bottom, 0);
 
   // scales
+  const data = useMemo(
+    () => (resampleData ? resample(width, dataRaw) : dataRaw),
+    [dataRaw, resampleData, width]
+  );
+  const benchmark = useMemo(
+    () => (resampleData ? resample(width, benchmarkRaw) : benchmarkRaw),
+    [benchmarkRaw, resampleData, width]
+  );
   const dateScale = useMemo(
     () =>
       scaleTime({
