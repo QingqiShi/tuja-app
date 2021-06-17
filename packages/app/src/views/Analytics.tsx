@@ -22,6 +22,7 @@ import {
 } from '@tuja/components';
 import { prefetchStocksHistory } from '../libs/cachedStocksData';
 import Backtest from '../analytics/Backtest';
+import AnnualReturns from '../analytics/AnnualReturns';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(minMax);
@@ -178,6 +179,12 @@ function Analytics(_props: AnalyticsProps) {
           primary={
             <Results>
               <Backtest
+                assets={isLoading ? [] : debouncedSelections}
+                baseCurrency={baseCurrency}
+                inflationRate={inflation}
+                isLoading={isLoading}
+              />
+              <AnnualReturns
                 assets={isLoading ? [] : debouncedSelections}
                 baseCurrency={baseCurrency}
                 inflationRate={inflation}

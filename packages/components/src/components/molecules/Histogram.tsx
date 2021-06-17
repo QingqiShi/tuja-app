@@ -87,8 +87,10 @@ function Histogram({
         range: [innerHeight, 0],
         domain: [
           0,
-          yMax ??
-            Math.max(...bins.map((bin) => bin.length / (data?.length ?? 1))),
+          Math.max(
+            yMax ?? 0,
+            Math.max(...bins.map((bin) => bin.length / (data?.length ?? 1)))
+          ),
         ],
         nice: true,
       }),
