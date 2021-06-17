@@ -144,8 +144,8 @@ function Histogram({
             scale={yScale}
             numTicks={5}
             tickFormat={(tick) => `${Math.round(tick.valueOf() * 100)}%`}
-            stroke={v.textSecondary}
-            tickStroke={v.textSecondary}
+            stroke={v.backgroundHover}
+            tickStroke={v.backgroundHover}
             tickLabelProps={() => axisLeftTickLabelProps}
           />
           <AxisBottom
@@ -157,8 +157,8 @@ function Histogram({
                 i === thresholds.length - 1 ? '>' : ''
               }`
             }
-            stroke={v.textSecondary}
-            tickStroke={v.textSecondary}
+            stroke={v.backgroundHover}
+            tickStroke={v.backgroundHover}
             tickLabelProps={() => axisBottomTickLabelProps}
           />
           {bins.map((bin) => (
