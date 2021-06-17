@@ -17,7 +17,7 @@
     "node": "14"
   },
   "dependencies": {
-    "@google-cloud/pubsub": "^2.13.0",
+    "@google-cloud/pubsub": "^2.14.0",
     "@tuja/libs": "^0.0.0",
     "bignumber.js": "^9.0.1",
     "d3-array": "^2.12.1",
