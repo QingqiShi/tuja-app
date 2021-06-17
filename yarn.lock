@@ -4831,10 +4831,10 @@
     "@types/react" "*"
     "@visx/point" "1.7.0"
 
-"@visx/geo@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@visx/geo/-/geo-1.7.0.tgz#2b66dac6c2f47aee81b20626dd4c8a2dc2a8a2b7"
-  integrity sha512-VSXtJ7L5DmMw8hNUDQIsK5vxrnChWhrVk8RYvhuZiyNWfKijH7jnup2BGvzbJjFNoqnRG0hArYsjs7sN7EnOAA==
+"@visx/geo@1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@visx/geo/-/geo-1.13.0.tgz#a1cf5a7108d4bbe75c9bfee95f36fe9cd990c559"
+  integrity sha512-Oipj1nRv3/qbDqu6ap80eJkvzQGSHwvRhFYb70+enWyGFxlS5s39gdQY1O00ob1DiyXLXhJ6H3ZzMz2WeRulvg==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/d3-geo" "^1.11.1"
@@ -5054,10 +5054,10 @@
     prop-types "^15.5.10"
     react-use-measure "^2.0.4"
 
-"@visx/visx@^1.12.0":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@visx/visx/-/visx-1.12.0.tgz#80e0b2c2b090db5f92cd085fc30b83cccda6bd76"
-  integrity sha512-RWOh7hptH8HufqyXSsJdk6jjNwh8mcN5akTum2jihQroOLnLtPqPzswS0d9LvUJ6+KLi+2jrn5HoQl/43wjM4w==
+"@visx/visx@^1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@visx/visx/-/visx-1.13.0.tgz#4fef026ca9681b76fc248af0baf353a90b0e72a9"
+  integrity sha512-LCFNvixfHBPb+yp55MEqPp857UZchTKGt8TGA7Z9WELIIlfZ9wMXMmMFkHKAg2ly3r+4GgReuGGh4G7CfKGtyg==
   dependencies:
     "@visx/annotation" "1.12.0"
     "@visx/axis" "1.12.0"
@@ -5067,7 +5067,7 @@
     "@visx/curve" "1.7.0"
     "@visx/drag" "1.7.4"
     "@visx/event" "1.7.0"
-    "@visx/geo" "1.7.0"
+    "@visx/geo" "1.13.0"
     "@visx/glyph" "1.7.0"
     "@visx/gradient" "1.7.0"
     "@visx/grid" "1.12.0"
@@ -5086,7 +5086,7 @@
     "@visx/text" "1.10.0"
     "@visx/tooltip" "1.7.2"
     "@visx/voronoi" "1.7.0"
-    "@visx/xychart" "1.12.0"
+    "@visx/xychart" "1.13.0"
     "@visx/zoom" "1.11.0"
 
 "@visx/voronoi@1.7.0":
@@ -5101,10 +5101,10 @@
     d3-voronoi "^1.1.2"
     prop-types "^15.6.1"
 
-"@visx/xychart@1.12.0":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.12.0.tgz#11d29961d24fe94eefdad97155321776fa0533dc"
-  integrity sha512-NnzKE+ZmoJvL0qaCC8aY5nDmtKPgte5/EWgPLvtbkiFOom0zoM0mo838+eThDGVxb3yDrOFNzpRVRJLKq0Nfhg==
+"@visx/xychart@1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@visx/xychart/-/xychart-1.13.0.tgz#1ada5ae66aacd0f29672cfb7ab10182d0d0bd196"
+  integrity sha512-51A3wiZBokbDmBVHKoBH/RYAWHCtvfhMGxZz9ReZLZINmgHtJqTyWJxTLslEgjGY4agMjj/wQzWqkPsiZHS4Sw==
   dependencies:
     "@types/classnames" "^2.2.9"
     "@types/lodash" "^4.14.146"
