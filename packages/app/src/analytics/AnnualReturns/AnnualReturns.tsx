@@ -21,10 +21,10 @@ function AnnualReturns({
       chart={
         <Histogram
           data={result}
-          xMin={-0.5}
-          xMax={0.5}
+          xMin={-0.4}
+          xMax={0.4}
           yMax={0.6}
-          binCount={10}
+          binCount={8}
           formatValue={(val: number) => `${Math.round(val * 10000) / 100}%`}
         />
       }
