@@ -16,6 +16,8 @@ updates:
         versions: ['>8']
       - dependency-name: 'd3-array'
         versions: ['>2']
+      - dependency-name: '@types/d3-array'
+        versions: ['>2']
 
   - package-ecosystem: 'github-actions'
     directory: '/'
