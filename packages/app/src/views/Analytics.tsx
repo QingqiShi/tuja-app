@@ -98,14 +98,14 @@ const Summary = styled.div`
 
 const assets = [
   {
-    ticker: 'VFIAX.US',
-    label: 'USA Large Cap Balance',
+    ticker: 'VTSMX.US',
+    label: 'US Total Stock Market',
     percentage: 0.6,
     color: '#556480',
   },
   {
-    ticker: 'VFITX.US',
-    label: 'US Intermediate Treasury Bond',
+    ticker: 'VBMFX.US',
+    label: 'US Total Bond Market',
     percentage: 0.4,
     color: '#CF9F97',
   },

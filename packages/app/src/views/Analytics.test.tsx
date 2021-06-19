@@ -12,29 +12,31 @@ const endDate = new Date();
 const stocksData = {
   stocksInfo: [
     {
-      Code: 'VFIAX',
-      Exchange: 'US',
-      Name: 'VANGUARD 500 INDEX FUND ADMIRAL SHARES',
-      Type: 'FUND',
+      Code: 'VTSMX',
       Country: 'USA',
       Currency: 'USD',
-      previousClose: 392.35,
-      Ticker: 'VFIAX.US',
+      Exchange: 'US',
+      ISIN: 'US9229083061',
+      Name: 'VANGUARD TOTAL STOCK MARKET INDEX FUND INVESTOR SHARES',
+      Ticker: 'VTSMX.US',
+      Type: 'FUND',
+      previousClose: 105.39,
     },
     {
-      Code: 'VFITX',
-      Exchange: 'US',
-      Name: 'VANGUARD INTERMEDIATE-TERM TREASURY FUND INVESTOR SHARES',
-      Type: 'FUND',
+      Code: 'VBMFX',
       Country: 'USA',
       Currency: 'USD',
-      previousClose: 11.52,
-      Ticker: 'VFITX.US',
+      Exchange: 'US',
+      ISIN: 'US9219371088',
+      Name: 'VANGUARD TOTAL BOND MARKET INDEX FUND INVESTOR SHARES',
+      Ticker: 'VBMFX.US',
+      Type: 'FUND',
+      previousClose: 11.33,
     },
   ],
   stocksHistory: [
     {
-      ticker: 'VFIAX.US',
+      ticker: 'VTSMX.US',
       range: { startDate, endDate },
       adjusted: new TimeSeries({
         data: [
@@ -50,7 +52,7 @@ const stocksData = {
       }),
     },
     {
-      ticker: 'VFITX.US',
+      ticker: 'VBMFX.US',
       range: { startDate, endDate },
       adjusted: new TimeSeries({
         data: [
@@ -80,15 +82,15 @@ describe('auto adjust allocation', () => {
     const { getByLabelText, getByTestId } = render(<Analytics />);
     await act(async () => {});
 
-    expect(getByLabelText(/USA Large Cap Balance/)).toHaveValue('60');
-    expect(getByLabelText(/US Intermediate Treasury Bond/)).toHaveValue('40');
+    expect(getByLabelText(/US Total Stock Market/)).toHaveValue('60');
+    expect(getByLabelText(/US Total Bond Market/)).toHaveValue('40');
 
-    userEvent.clear(getByLabelText(/USA Large Cap Balance/));
-    userEvent.type(getByLabelText(/USA Large Cap Balance/), '70');
+    userEvent.clear(getByLabelText(/US Total Stock Market/));
+    userEvent.type(getByLabelText(/US Total Stock Market/), '70');
     userEvent.click(getByTestId('auto-adjust'));
 
-    expect(getByLabelText(/USA Large Cap Balance/)).toHaveValue('63.6');
-    expect(getByLabelText(/US Intermediate Treasury Bond/)).toHaveValue('36.4');
+    expect(getByLabelText(/US Total Stock Market/)).toHaveValue('63.6');
+    expect(getByLabelText(/US Total Bond Market/)).toHaveValue('36.4');
   });
 
   test('prevents auto adjust if all zero', async () => {
@@ -96,13 +98,13 @@ describe('auto adjust allocation', () => {
     const { getByLabelText, queryByTestId } = render(<Analytics />);
     await act(async () => {});
 
-    expect(getByLabelText(/USA Large Cap Balance/)).toHaveValue('60');
-    expect(getByLabelText(/US Intermediate Treasury Bond/)).toHaveValue('40');
+    expect(getByLabelText(/US Total Stock Market/)).toHaveValue('60');
+    expect(getByLabelText(/US Total Bond Market/)).toHaveValue('40');
 
-    userEvent.clear(getByLabelText(/USA Large Cap Balance/));
-    userEvent.type(getByLabelText(/USA Large Cap Balance/), '0');
-    userEvent.clear(getByLabelText(/US Intermediate Treasury Bond/));
-    userEvent.type(getByLabelText(/US Intermediate Treasury Bond/), '0');
+    userEvent.clear(getByLabelText(/US Total Stock Market/));
+    userEvent.type(getByLabelText(/US Total Stock Market/), '0');
+    userEvent.clear(getByLabelText(/US Total Bond Market/));
+    userEvent.type(getByLabelText(/US Total Bond Market/), '0');
 
     expect(queryByTestId('auto-adjust')).toBeNull();
   });
