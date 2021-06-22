@@ -20,7 +20,7 @@
     "body-scroll-lock": "^3.1.5",
     "framer-motion": "^4.1.17",
     "react-use": "^17.2.4",
-    "use-debounce": "^6.0.1"
+    "use-debounce": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
