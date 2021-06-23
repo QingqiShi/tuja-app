@@ -2,7 +2,7 @@ import { fireEvent, act } from '@testing-library/react';
 import { render } from '../../testUtils';
 import SearchSuggest from './SearchSuggest';
 
-jest.useFakeTimers('modern');
+jest.useFakeTimers();
 
 test('fire search callback', async () => {
   const handleSearch = jest.fn(async () => {});
