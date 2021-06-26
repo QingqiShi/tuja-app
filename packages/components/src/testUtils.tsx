@@ -71,8 +71,14 @@ export const drag = (element: any, triggerElement?: any) => {
   return controls;
 };
 
-export const MockDrag = ({ children }: { children: React.ReactNode }) => (
+export const MockDrag = ({ children }: React.PropsWithChildren<{}>) => (
   <MotionConfig transformPagePoint={() => pos}>{children}</MotionConfig>
+);
+
+export const NoMotion = ({ children }: React.PropsWithChildren<{}>) => (
+  <MotionConfig transition={{ type: 'tween', duration: 0 }}>
+    {children}
+  </MotionConfig>
 );
 
 /*

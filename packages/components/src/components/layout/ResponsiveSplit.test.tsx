@@ -1,32 +1,39 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
+import { NoMotion } from '../../testUtils';
 import ResponsiveSplit from './ResponsiveSplit';
 
 test('render primary', () => {
   const { getByText } = render(
-    <ResponsiveSplit
-      primary={<div>primary</div>}
-      secondary={<div>secondary</div>}
-    />
+    <NoMotion>
+      <ResponsiveSplit
+        primary={<div>primary</div>}
+        secondary={<div>secondary</div>}
+      />
+    </NoMotion>
   );
   expect(getByText('primary')).toBeInTheDocument();
 });
 
 test('render secondary', () => {
   const { getByText } = render(
-    <ResponsiveSplit
-      primary={<div>primary</div>}
-      secondary={<div>secondary</div>}
-    />
+    <NoMotion>
+      <ResponsiveSplit
+        primary={<div>primary</div>}
+        secondary={<div>secondary</div>}
+      />
+    </NoMotion>
   );
   expect(getByText('secondary')).toBeInTheDocument();
 });
 
 test('toggle secondary', async () => {
   const { getByText, getByTestId } = render(
-    <ResponsiveSplit
-      primary={<div>primary</div>}
-      secondary={<div>secondary</div>}
-    />
+    <NoMotion>
+      <ResponsiveSplit
+        primary={<div>primary</div>}
+        secondary={<div>secondary</div>}
+      />
+    </NoMotion>
   );
   expect(getByText('secondary')).not.toBeVisible();
 
@@ -48,15 +55,17 @@ test('toggle secondary', async () => {
 
 test('provides render prop to secondary for self closing', async () => {
   const { getByText, getByTestId } = render(
-    <ResponsiveSplit
-      primary={<div>primary</div>}
-      secondary={({ closeSecondary }) => (
-        <div>
-          <span>secondary</span>
-          <button onClick={closeSecondary}>close self</button>
-        </div>
-      )}
-    />
+    <NoMotion>
+      <ResponsiveSplit
+        primary={<div>primary</div>}
+        secondary={({ closeSecondary }) => (
+          <div>
+            <span>secondary</span>
+            <button onClick={closeSecondary}>close self</button>
+          </div>
+        )}
+      />
+    </NoMotion>
   );
 
   fireEvent.click(getByText('View'));
@@ -72,11 +81,13 @@ test('provides render prop to secondary for self closing', async () => {
 
 test('supports offset', async () => {
   const { getByTestId } = render(
-    <ResponsiveSplit
-      primary={<div>primary</div>}
-      secondary={<div>secondary</div>}
-      stickyOffset="10vh"
-    />
+    <NoMotion>
+      <ResponsiveSplit
+        primary={<div>primary</div>}
+        secondary={<div>secondary</div>}
+        stickyOffset="10vh"
+      />
+    </NoMotion>
   );
 
   expect(getByTestId('responsive-split-secondary-container')).toHaveStyle(
