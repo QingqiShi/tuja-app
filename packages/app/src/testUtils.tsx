@@ -230,3 +230,5 @@ export const mockCachedData = async (opts: {
     await writeTx.done;
   }
 };
+
+export const nextTick = () => new Promise((resolve) => setTimeout(resolve, 0));

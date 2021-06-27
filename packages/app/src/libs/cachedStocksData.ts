@@ -266,10 +266,19 @@ export const prefetchStocksHistory = async (
   const dateRange = Object.keys(stocksHistory).reduce(
     (range, ticker) => {
       const tickerStartDate = stocksHistory[ticker].adjusted.data[0][0];
-      if (dayjs(tickerStartDate).isAfter(range.startDate)) {
-        return { startDate: tickerStartDate, endDate: range.endDate };
-      }
-      return range;
+      const tickerEndDate =
+        stocksHistory[ticker].adjusted.data[
+          stocksHistory[ticker].adjusted.data.length - 1
+        ][0];
+
+      return {
+        startDate: dayjs(tickerStartDate).isAfter(range.startDate)
+          ? tickerStartDate
+          : range.startDate,
+        endDate: dayjs(tickerEndDate).isBefore(range.endDate)
+          ? tickerEndDate
+          : range.endDate,
+      };
     },
     { startDate, endDate }
   );
