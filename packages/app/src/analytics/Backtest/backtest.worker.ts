@@ -2,6 +2,7 @@
 
 import { exchangeCurrency, TimeSeries } from '@tuja/libs';
 import dayjs from 'dayjs';
+import BigNumber from 'bignumber.js';
 import { prefetchStocksHistory } from '../../libs/cachedStocksData';
 
 self.addEventListener('message', async (event) =>
@@ -14,7 +15,9 @@ async function handler({
   inflationRate,
 }: AnalyticsProps) {
   const tickers = assets.map((a) => a.ticker);
-  const dailyInflation = inflationRate / 365;
+  const dailyDepreciation = new BigNumber(1).minus(
+    new BigNumber(inflationRate).dividedBy(365)
+  );
 
   const { stocksInfo, stocksHistory, dateRange } = await prefetchStocksHistory(
     tickers,
@@ -26,46 +29,51 @@ async function handler({
   const prev = assets.reduce(
     (obj, asset) => ({
       ...obj,
-      [asset.ticker]: { percentage: asset.percentage },
+      [asset.ticker]: { percentage: new BigNumber(asset.percentage) },
     }),
     {} as {
       [ticker: string]: {
-        prevPrice?: number;
-        prevValue?: number;
-        percentage: number;
+        prevPrice?: BigNumber;
+        prevValue?: BigNumber;
+        percentage: BigNumber;
       };
     }
   );
   for (
     let i = dayjs(dateRange.startDate);
-    i.isBefore(dateRange.endDate);
+    !i.isAfter(dateRange.endDate);
     i = i.add(1, 'day')
   ) {
     const date = i.toDate();
 
     const newValue = assets.reduce((sum, { ticker }) => {
-      const currentPrice = exchangeCurrency(
-        stocksHistory[ticker].adjusted.get(date),
-        stocksInfo[ticker].Currency ?? baseCurrency,
-        baseCurrency,
-        (forexPair) => stocksHistory[forexPair]?.close.get(date)
+      const currentPrice = new BigNumber(
+        exchangeCurrency(
+          stocksHistory[ticker].adjusted.get(date),
+          stocksInfo[ticker].Currency ?? baseCurrency,
+          baseCurrency,
+          (forexPair) => stocksHistory[forexPair]?.close.get(date)
+        )
       );
       const prevPrice = prev[ticker].prevPrice ?? currentPrice;
       const prevAssetValue = prev[ticker].prevValue ?? prev[ticker].percentage;
       const prevAssetValueInflationAdjusted =
-        prevAssetValue * (1 - dailyInflation);
+        prev[ticker].prevValue === undefined
+          ? prevAssetValue
+          : prevAssetValue.multipliedBy(dailyDepreciation);
 
-      const assetValue =
-        prevAssetValueInflationAdjusted +
-        prevAssetValueInflationAdjusted *
-          ((currentPrice - prevPrice) / prevPrice);
+      const assetValue = prevAssetValueInflationAdjusted.plus(
+        prevAssetValueInflationAdjusted.multipliedBy(
+          currentPrice.minus(prevPrice).dividedBy(prevPrice)
+        )
+      );
 
       prev[ticker].prevValue = assetValue;
       prev[ticker].prevPrice = currentPrice;
-      return sum + assetValue;
-    }, 0);
+      return sum.plus(assetValue);
+    }, new BigNumber(0));
 
-    result.data.push([date, newValue]);
+    result.data.push([date, newValue.toNumber()]);
   }
 
   return result;
