@@ -15,9 +15,6 @@ async function handler({
   inflationRate,
 }: AnalyticsProps) {
   const tickers = assets.map((a) => a.ticker);
-  const dailyDepreciation = new BigNumber(1).minus(
-    new BigNumber(inflationRate).dividedBy(365)
-  );
 
   const { stocksInfo, stocksHistory, dateRange } = await prefetchStocksHistory(
     tickers,
@@ -33,16 +30,20 @@ async function handler({
     }),
     {} as {
       [ticker: string]: {
-        prevPrice?: BigNumber;
-        prevValue?: BigNumber;
+        quantity?: BigNumber;
         percentage: BigNumber;
       };
     }
   );
+
+  const numDays = dayjs(dateRange.endDate).diff(dateRange.startDate, 'day');
+  const maxDays = 2000;
+  const samplingRate = maxDays < numDays ? Math.floor(numDays / maxDays) : 1;
+
   for (
     let i = dayjs(dateRange.startDate);
     !i.isAfter(dateRange.endDate);
-    i = i.add(1, 'day')
+    i = i.add(samplingRate, 'day')
   ) {
     const date = i.toDate();
 
@@ -55,21 +56,22 @@ async function handler({
           (forexPair) => stocksHistory[forexPair]?.close.get(date)
         )
       );
-      const prevPrice = prev[ticker].prevPrice ?? currentPrice;
-      const prevAssetValue = prev[ticker].prevValue ?? prev[ticker].percentage;
-      const prevAssetValueInflationAdjusted =
-        prev[ticker].prevValue === undefined
-          ? prevAssetValue
-          : prevAssetValue.multipliedBy(dailyDepreciation);
+      const assetQuantity =
+        prev[ticker].quantity ??
+        prev[ticker].percentage.multipliedBy(1).dividedBy(currentPrice);
 
-      const assetValue = prevAssetValueInflationAdjusted.plus(
-        prevAssetValueInflationAdjusted.multipliedBy(
-          currentPrice.minus(prevPrice).dividedBy(prevPrice)
-        )
-      );
+      const years = i.diff(dateRange.startDate, 'year');
+      const cumulatedInflation = new BigNumber(1)
+        .minus(inflationRate)
+        .pow(years);
+      const assetValue = assetQuantity
+        .multipliedBy(currentPrice)
+        .multipliedBy(cumulatedInflation);
 
-      prev[ticker].prevValue = assetValue;
-      prev[ticker].prevPrice = currentPrice;
+      if (prev[ticker].quantity === undefined) {
+        prev[ticker].quantity = assetQuantity;
+      }
+
       return sum.plus(assetValue);
     }, new BigNumber(0));
 

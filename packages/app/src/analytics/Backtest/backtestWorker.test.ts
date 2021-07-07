@@ -82,7 +82,7 @@ test('calculate backtest result', async () => {
   });
 });
 
-test('adjust for inflation', async () => {
+test('inflation does not occur for same year', async () => {
   await mockCachedData(stocksData);
 
   const handleMessage = jest.fn();
@@ -102,8 +102,8 @@ test('adjust for inflation', async () => {
     data: {
       data: [
         [dayjs('2021-06-09', 'YYYY-MM-DD').toDate(), 1],
-        [dayjs('2021-06-10', 'YYYY-MM-DD').toDate(), 1.11276],
-        [dayjs('2021-06-11', 'YYYY-MM-DD').toDate(), 1.038984408],
+        [dayjs('2021-06-10', 'YYYY-MM-DD').toDate(), 1.124],
+        [dayjs('2021-06-11', 'YYYY-MM-DD').toDate(), 1.06008],
       ],
     },
   });
