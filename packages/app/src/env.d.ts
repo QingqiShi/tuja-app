@@ -20,5 +20,5 @@ interface AnalyticsProps {
   }[];
   baseCurrency: string;
   inflationRate: number;
-  isLoading?: boolean;
+  shouldSkip?: boolean;
 }

@@ -7,8 +7,10 @@ test('run worker', async () => {
     useWorker(Worker, { payload: 5 })
   );
 
+  expect(result.current.isLoading).toBeTruthy();
   await waitFor(() => {
-    expect(result.current).toBe(5 * 4 * 3 * 2);
+    expect(result.current.isLoading).toBeFalsy();
+    expect(result.current.result).toBe(5 * 4 * 3 * 2);
   });
 });
 
@@ -18,6 +20,7 @@ test('skip worker', async () => {
   );
 
   await waitFor(() => {
-    expect(result.current).toBeNull();
+    expect(result.current.isLoading).toBeFalsy();
+    expect(result.current.result).toBeNull();
   });
 });

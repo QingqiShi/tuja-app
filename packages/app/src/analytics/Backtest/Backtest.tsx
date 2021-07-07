@@ -8,13 +8,16 @@ function Backtest({
   assets,
   baseCurrency,
   inflationRate,
-  isLoading,
+  shouldSkip,
 }: AnalyticsProps) {
   const payload = useMemo(
     () => ({ assets, baseCurrency, inflationRate }),
     [assets, baseCurrency, inflationRate]
   );
-  const result = useWorker(BacktestWorker, { payload, skip: isLoading });
+  const { result, isLoading } = useWorker(BacktestWorker, {
+    payload,
+    skip: shouldSkip,
+  });
 
   const backtestSeries = useMemo(() => new TimeSeries(result), [result]);
 
@@ -23,12 +26,12 @@ function Backtest({
       title="Backtest"
       chart={
         <Chart
-          data={isLoading || !result ? [] : backtestSeries.data}
+          data={shouldSkip || !result ? [] : backtestSeries.data}
           formatValue={(val: number) => `${Math.round(val * 10000) / 100}%`}
           resampleData
         />
       }
-      isLoading={isLoading || !result}
+      isLoading={shouldSkip || isLoading}
     />
   );
 }
