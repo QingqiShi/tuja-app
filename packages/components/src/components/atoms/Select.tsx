@@ -112,7 +112,8 @@ const SelectBase = styled.select<{ isKeyboardFocus?: boolean }>`
 
   option {
     font-size: 1rem;
-    color: initial;
+    color: ${v.textMain};
+    background-color: ${v.backgroundMain};
   }
 `;
 
