@@ -33,8 +33,7 @@ async function handler({
     }),
     {} as {
       [ticker: string]: {
-        prevPrice?: BigNumber;
-        prevValue?: BigNumber;
+        quantity?: BigNumber;
         percentage: BigNumber;
       };
     }
@@ -56,21 +55,22 @@ async function handler({
           (forexPair) => stocksHistory[forexPair]?.close.get(date)
         )
       );
-      const prevPrice = prev[ticker].prevPrice ?? currentPrice;
-      const prevAssetValue = prev[ticker].prevValue ?? prev[ticker].percentage;
-      const prevAssetValueInflationAdjusted =
-        prev[ticker].prevValue === undefined
-          ? prevAssetValue
-          : prevAssetValue.multipliedBy(dailyDepreciation);
+      const assetQuantity =
+        prev[ticker].quantity ??
+        prev[ticker].percentage.multipliedBy(1).dividedBy(currentPrice);
 
-      const assetValue = prevAssetValueInflationAdjusted.plus(
-        prevAssetValueInflationAdjusted.multipliedBy(
-          currentPrice.minus(prevPrice).dividedBy(prevPrice)
-        )
-      );
+      const years = i.diff(dateRange.startDate, 'year');
+      const cumulatedInflation = new BigNumber(1)
+        .minus(inflationRate)
+        .pow(years);
+      const assetValue = assetQuantity
+        .multipliedBy(currentPrice)
+        .multipliedBy(cumulatedInflation);
 
-      prev[ticker].prevValue = assetValue;
-      prev[ticker].prevPrice = currentPrice;
+      if (prev[ticker].quantity === undefined) {
+        prev[ticker].quantity = assetQuantity;
+      }
+
       return sum.plus(assetValue);
     }, new BigNumber(0));
 
