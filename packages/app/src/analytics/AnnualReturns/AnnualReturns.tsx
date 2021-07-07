@@ -7,13 +7,16 @@ function AnnualReturns({
   assets,
   baseCurrency,
   inflationRate,
-  isLoading,
+  shouldSkip,
 }: AnalyticsProps) {
   const payload = useMemo(
     () => ({ assets, baseCurrency, inflationRate }),
     [assets, baseCurrency, inflationRate]
   );
-  const result = useWorker(AnnualReturnsWorker, { payload, skip: isLoading });
+  const { result, isLoading } = useWorker(AnnualReturnsWorker, {
+    payload,
+    skip: shouldSkip,
+  });
 
   return (
     <AnalysisContainer
@@ -28,7 +31,7 @@ function AnnualReturns({
           formatValue={(val: number) => `${Math.round(val * 10000) / 100}%`}
         />
       }
-      isLoading={isLoading || !result}
+      isLoading={shouldSkip || isLoading}
     />
   );
 }

@@ -182,13 +182,13 @@ function Analytics(_props: AnalyticsProps) {
                 assets={isLoading ? [] : debouncedSelections}
                 baseCurrency={baseCurrency}
                 inflationRate={inflation}
-                isLoading={isLoading}
+                shouldSkip={isLoading}
               />
               <AnnualReturns
                 assets={isLoading ? [] : debouncedSelections}
                 baseCurrency={baseCurrency}
                 inflationRate={inflation}
-                isLoading={isLoading}
+                shouldSkip={isLoading}
               />
               <ComingSoon>More analytics coming soon!</ComingSoon>
             </Results>

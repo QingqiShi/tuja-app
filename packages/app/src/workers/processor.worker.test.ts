@@ -15,7 +15,7 @@ describe('handle invalid inputs', () => {
     );
 
     await waitFor(() => {
-      expect(result.current).toBe(null);
+      expect(result.current.result).toBe(null);
     });
   });
 });
@@ -36,7 +36,7 @@ describe('happy path', () => {
     );
 
     await waitFor(() => {
-      expect(result.current).toEqual({
+      expect(result.current.result).toEqual({
         type: 'process-portfolio',
         payload: {
           valueSeries: { data: [] },
@@ -105,7 +105,7 @@ describe('happy path', () => {
     const monthlyDividends = { data: [] };
 
     await waitFor(() => {
-      expect(result.current).toEqual({
+      expect(result.current.result).toEqual({
         type: 'process-portfolio',
         payload: {
           valueSeries,
