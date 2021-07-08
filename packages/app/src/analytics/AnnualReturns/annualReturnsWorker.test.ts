@@ -88,12 +88,12 @@ test('adjust for inflation', async () => {
       { ticker: 'VBMFX.US', label: 'Total bond market', percentage: 0.4 },
     ],
     baseCurrency: 'USD',
-    inflationRate: 0.02, // 1% per day
+    inflationRate: 0.02,
   });
   await nextTick();
 
   expect(handleMessage).toHaveBeenCalledWith({
-    data: [0.1368, -0.07406896551724138],
+    data: [0.1372549019607843, -0.07369844489519943],
   });
 });
 

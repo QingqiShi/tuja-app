@@ -15,6 +15,7 @@ async function handler({
   inflationRate,
 }: AnalyticsProps) {
   const tickers = assets.map((a) => a.ticker);
+  const inflationFactor = new BigNumber(1).plus(inflationRate);
 
   const { stocksInfo, stocksHistory, dateRange } = await prefetchStocksHistory(
     tickers,
@@ -61,13 +62,10 @@ async function handler({
         prev[ticker].percentage.multipliedBy(1).dividedBy(currentPrice);
 
       const years = i.diff(dateRange.startDate, 'year', true);
-      const cumulatedInflation = Math.pow(
-        new BigNumber(1).minus(inflationRate).toNumber(),
-        years
-      );
+      const cumulatedInflation = Math.pow(inflationFactor.toNumber(), years);
       const assetValue = assetQuantity
         .multipliedBy(currentPrice)
-        .multipliedBy(cumulatedInflation);
+        .dividedBy(cumulatedInflation);
 
       if (prev[ticker].quantity === undefined) {
         prev[ticker].quantity = assetQuantity;
