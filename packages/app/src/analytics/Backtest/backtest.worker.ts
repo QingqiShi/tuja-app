@@ -61,9 +61,10 @@ async function handler({
         prev[ticker].percentage.multipliedBy(1).dividedBy(currentPrice);
 
       const years = i.diff(dateRange.startDate, 'year');
-      const cumulatedInflation = new BigNumber(1)
-        .minus(inflationRate)
-        .pow(years);
+      const cumulatedInflation = Math.pow(
+        new BigNumber(1).minus(inflationRate).toNumber(),
+        years
+      );
       const assetValue = assetQuantity
         .multipliedBy(currentPrice)
         .multipliedBy(cumulatedInflation);
