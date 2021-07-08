@@ -57,7 +57,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.30.0",
     "firebase": "^8.7.0",
-    "firebase-tools": "^9.14.0",
+    "firebase-tools": "^9.15.0",
     "framesync": "^5.3.0",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
