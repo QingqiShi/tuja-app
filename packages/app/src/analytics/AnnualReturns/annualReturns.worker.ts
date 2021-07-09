@@ -15,9 +15,7 @@ async function handler({
   inflationRate,
 }: AnalyticsProps) {
   const tickers = assets.map((a) => a.ticker);
-  const dailyDepreciation = new BigNumber(1).minus(
-    new BigNumber(inflationRate).dividedBy(365)
-  );
+  const inflationFactor = new BigNumber(1).plus(inflationRate);
 
   const { stocksInfo, stocksHistory, dateRange } = await prefetchStocksHistory(
     tickers,
@@ -59,13 +57,11 @@ async function handler({
         prev[ticker].quantity ??
         prev[ticker].percentage.multipliedBy(1).dividedBy(currentPrice);
 
-      const years = i.diff(dateRange.startDate, 'year');
-      const cumulatedInflation = new BigNumber(1)
-        .minus(inflationRate)
-        .pow(years);
+      const years = i.diff(dateRange.startDate, 'year', true);
+      const cumulatedInflation = Math.pow(inflationFactor.toNumber(), years);
       const assetValue = assetQuantity
         .multipliedBy(currentPrice)
-        .multipliedBy(cumulatedInflation);
+        .dividedBy(cumulatedInflation);
 
       if (prev[ticker].quantity === undefined) {
         prev[ticker].quantity = assetQuantity;
@@ -79,7 +75,7 @@ async function handler({
 
   const annualReturns = [];
   const start = dayjs(dateRange.startDate).add(1, 'year').startOf('year');
-  const end = dayjs(dateRange.endDate).startOf('year');
+  const end = dayjs(dateRange.endDate);
 
   for (let i = start; !i.isAfter(end); i = i.add(1, 'year')) {
     const prev = returns.get(i.subtract(1, 'year').toDate());

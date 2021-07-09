@@ -82,7 +82,7 @@ test('calculate backtest result', async () => {
   });
 });
 
-test('inflation does not occur for same year', async () => {
+test('adjust for inflation', async () => {
   await mockCachedData(stocksData);
 
   const handleMessage = jest.fn();
@@ -94,7 +94,7 @@ test('inflation does not occur for same year', async () => {
       { ticker: 'VBMFX.US', label: 'Total bond market', percentage: 0.4 },
     ],
     baseCurrency: 'USD',
-    inflationRate: 3.65, // 1% per day
+    inflationRate: 3.65, // roughly 1% per day
   });
   await nextTick();
 
@@ -102,8 +102,8 @@ test('inflation does not occur for same year', async () => {
     data: {
       data: [
         [dayjs('2021-06-09', 'YYYY-MM-DD').toDate(), 1],
-        [dayjs('2021-06-10', 'YYYY-MM-DD').toDate(), 1.124],
-        [dayjs('2021-06-11', 'YYYY-MM-DD').toDate(), 1.06008],
+        [dayjs('2021-06-10', 'YYYY-MM-DD').toDate(), 1.1193659265454607],
+        [dayjs('2021-06-11', 'YYYY-MM-DD').toDate(), 1.051356936151896],
       ],
     },
   });
