@@ -15,7 +15,7 @@
   "dependencies": {
     "@tuja/libs": "^0.0.0",
     "dayjs": "^1.10.6",
-    "firebase-admin": "^9.10.0",
+    "firebase-admin": "^9.11.0",
     "node-cache": "^5.1.2"
   },
   "devDependencies": {
