@@ -3433,16 +3433,16 @@
     storybook-addon-outline "^1.4.1"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-links@^6.3.5":
-  version "6.3.5"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-6.3.5.tgz#df935367ab5332f4b6972338cc51daff9cd14c91"
-  integrity sha512-nWSVjYUrsNifUfs0mreh9oQJGUmvJwn/71WD50iTsb6tnoJ4yk7423seEFrYbMp6VQ0qg+d0B4NAAUJ320iZWg==
+"@storybook/addon-links@^6.3.6":
+  version "6.3.6"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-6.3.6.tgz#dc410d5b4a0d222b6b8d0ef03da7a4c16919c092"
+  integrity sha512-PaeAJTjwtPlhrLZlaSQ1YIFA8V0C1yI0dc351lPbTiE7fJ7DwTE03K6xIF/jEdTo+xzhi2PM1Fgvi/SsSecI8w==
   dependencies:
-    "@storybook/addons" "6.3.5"
-    "@storybook/client-logger" "6.3.5"
-    "@storybook/core-events" "6.3.5"
+    "@storybook/addons" "6.3.6"
+    "@storybook/client-logger" "6.3.6"
+    "@storybook/core-events" "6.3.6"
     "@storybook/csf" "0.0.1"
-    "@storybook/router" "6.3.5"
+    "@storybook/router" "6.3.6"
     "@types/qs" "^6.9.5"
     core-js "^3.8.2"
     global "^4.4.0"
@@ -3915,7 +3915,7 @@
     util-deprecate "^1.0.2"
     webpack "4"
 
-"@storybook/core-events@6.3.2", "@storybook/core-events@^6.3.0":
+"@storybook/core-events@6.3.2":
   version "6.3.2"
   resolved "https://registry.yarnpkg.com/@storybook/core-events/-/core-events-6.3.2.tgz#7d1eb4f889b809d851e48d2daed5fbf43244d624"
   integrity sha512-Mqxp2au4djPC9j8Wc97oM1iJQLAS8ZsW8CqcPxDmhl38cMfcMQiQXTk+2GDQbMxD2An2b73EU5hMMBAvNzYjog==
@@ -3929,7 +3929,7 @@
   dependencies:
     core-js "^3.8.2"
 
-"@storybook/core-events@6.3.6":
+"@storybook/core-events@6.3.6", "@storybook/core-events@^6.3.0":
   version "6.3.6"
   resolved "https://registry.yarnpkg.com/@storybook/core-events/-/core-events-6.3.6.tgz#c4a09e2c703170995604d63e46e45adc3c9cd759"
   integrity sha512-Ut1dz96bJ939oSn5t1ckPXd3WcFejK96Sb3+R/z23vEHUWGBFtygGyw8r/SX/WNDVzGmQU8c+mzJJTZwCBJz8A==
@@ -4822,12 +4822,7 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
-"@types/qs@*":
-  version "6.9.4"
-  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.4.tgz#a59e851c1ba16c0513ea123830dd639a0a15cb6a"
-  integrity sha512-+wYo+L6ZF6BMoEjtf8zB2esQsqdV6WsjRK/GP9WOgLPrq87PbNWgIxS76dS5uvl/QXtHGakZmwTznIfcPXcKlQ==
-
-"@types/qs@^6.9.5":
+"@types/qs@*", "@types/qs@^6.9.5":
   version "6.9.6"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.6.tgz#df9c3c8b31a247ec315e6996566be3171df4b3b1"
   integrity sha512-0/HnwIfW4ki2D8L8c9GVcG5I72s9jP5GSLVF0VIXDW00kmIpA6O33G7a8n59Tmh7Nz0WUC3rSb7PTY/sdW2JzA==
@@ -16108,17 +16103,12 @@ qs@6.7.0:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
 
-qs@^6.10.0:
+qs@^6.10.0, qs@^6.6.0:
   version "6.10.1"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.1.tgz#4931482fa8d647a5aab799c5271d2133b981fb6a"
   integrity sha512-M528Hph6wsSVOBiYUnGf+K/7w0hNshs/duGsNXPUCLH5XAqjEtiPGwNONLV0tBH8NoGb0mvD5JubnUTrujKDTg==
   dependencies:
     side-channel "^1.0.4"
-
-qs@^6.6.0:
-  version "6.9.4"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.4.tgz#9090b290d1f91728d3c22e54843ca44aea5ab687"
-  integrity sha512-A1kFqHekCTM7cz0udomYUoYNWjBebHm/5wzU/XqrBRBNWectVH0QIiN+NEcZ0Dte5hvzHwbr8+XQmguPhJ6WdQ==
 
 qs@~6.5.2:
   version "6.5.2"
@@ -18645,12 +18635,7 @@ trough@^1.0.0:
   resolved "https://registry.yarnpkg.com/trough/-/trough-1.0.5.tgz#b8b639cefad7d0bb2abd37d433ff8293efa5f406"
   integrity sha512-rvuRbTarPXmMb79SmzEp8aqXNKcK+y0XaB298IXueQ8I2PsrATcPBCSPyK/dDNa2iWOhKlfNnOjdAOTBU/nkFA==
 
-ts-dedent@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/ts-dedent/-/ts-dedent-2.0.0.tgz#47c5eb23d9096f3237cc413bc82d387d36dbe690"
-  integrity sha512-DfxKjSFQfw9+uf7N9Cy8Ebx9fv5fquK4hZ6SD3Rzr+1jKP6AVA6H8+B5457ZpUs0JKsGpGqIevbpZ9DMQJDp1A==
-
-ts-dedent@^2.1.1:
+ts-dedent@^2.0.0, ts-dedent@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ts-dedent/-/ts-dedent-2.1.1.tgz#6dd56870bb5493895171334fa5d7e929107e5bbc"
   integrity sha512-riHuwnzAUCfdIeTBNUq7+Yj+ANnrMXo/7+Z74dIdudS7ys2k8aSGMzpJRMFDF7CLwUTbtvi1ZZff/Wl+XxmqIA==
