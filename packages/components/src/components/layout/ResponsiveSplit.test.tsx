@@ -96,7 +96,7 @@ test('supports offset', async () => {
 });
 
 test('render sticky actions', async () => {
-  const { getByText } = render(
+  const { getAllByText } = render(
     <NoMotion>
       <ResponsiveSplit
         primary={<div>primary</div>}
@@ -106,5 +106,5 @@ test('render sticky actions', async () => {
     </NoMotion>
   );
 
-  expect(getByText('sticky actions')).toBeInTheDocument();
+  expect(getAllByText('sticky actions')).toHaveLength(2);
 });
