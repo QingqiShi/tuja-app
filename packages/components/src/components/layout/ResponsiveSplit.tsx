@@ -89,7 +89,7 @@ const Secondary = styled.div<{ offset?: string }>`
 const SecondaryCard = motion(styled.aside`
   box-shadow: ${v.shadowOverlay};
   border-radius: ${v.radiusCard};
-  background-color: ${v.backgroundOverlay};
+  background-color: ${v.backgroundRaised};
   max-height: 100%;
   overflow: hidden;
   position: fixed;
@@ -107,7 +107,7 @@ const SecondaryCard = motion(styled.aside`
   @media (${v.minLaptop}) {
     position: static;
     border-radius: 0;
-    box-shadow: 0;
+    box-shadow: none;
     background-color: transparent;
   }
 `);
@@ -115,7 +115,7 @@ const SecondaryCard = motion(styled.aside`
 const SecondaryScrollBox = styled.div`
   max-height: 100%;
   overflow-y: auto;
-  padding-bottom: calc(8vh + ${v.spacerM});
+  padding-bottom: calc(8vh + 6rem + ${v.spacerM});
   @media (${v.minLaptop}) {
     padding-bottom: ${v.spacerM};
   }
@@ -135,6 +135,46 @@ const SecondaryBackdrop = motion(styled.div`
   }
 `);
 
+const commonStickyContainerStyles = css`
+  position: sticky;
+  bottom: 0;
+  padding: ${v.spacerS} ${v.spacerS}
+    calc(${v.spacerS} + env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: stretch;
+  background-color: ${v.backgroundTranslucent};
+  backdrop-filter: blur(${v.spacerM});
+
+  > * {
+    flex-grow: 1;
+    justify-content: center;
+    &:not(:last-child) {
+      margin-right: ${v.spacerXS};
+    }
+  }
+`;
+
+const MobileStickyContainer = styled.div`
+  ${commonStickyContainerStyles}
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding-bottom: calc(${v.spacerS} + env(safe-area-inset-bottom) + 8vh);
+  z-index: ${v.zFixed};
+
+  @media (${v.minLaptop}) {
+    display: none;
+  }
+`;
+
+const LaptopStickyContainer = styled.div`
+  display: none;
+
+  @media (${v.minLaptop}) {
+    ${commonStickyContainerStyles}
+  }
+`;
+
 interface ResponsiveSplitProps {
   primary: React.ReactNode;
   secondary:
@@ -143,6 +183,7 @@ interface ResponsiveSplitProps {
   secondarySummary?:
     | React.ReactNode
     | ((props: { openSecondary: () => void }) => React.ReactNode);
+  secondarySticky?: React.ReactNode;
   stickyOffset?: string;
 }
 
@@ -150,6 +191,7 @@ function ResponsiveSplit({
   primary,
   secondary,
   secondarySummary,
+  secondarySticky,
   stickyOffset,
 }: ResponsiveSplitProps) {
   const isLaptop = useMedia(`(${v.minLaptop})`);
@@ -213,8 +255,14 @@ function ResponsiveSplit({
               {typeof secondary === 'function'
                 ? secondary({ closeSecondary })
                 : secondary}
+              {secondarySticky && (
+                <MobileStickyContainer>{secondarySticky}</MobileStickyContainer>
+              )}
             </SecondaryScrollBox>
           </SecondaryCard>
+          {secondarySticky && (
+            <LaptopStickyContainer>{secondarySticky}</LaptopStickyContainer>
+          )}
         </Secondary>
       </SecondaryContainer>
     </Container>
