@@ -4163,7 +4163,7 @@
     util-deprecate "^1.0.2"
     webpack "4"
 
-"@storybook/core@6.3.6", "@storybook/core@^6.3.5":
+"@storybook/core@6.3.6":
   version "6.3.6"
   resolved "https://registry.yarnpkg.com/@storybook/core/-/core-6.3.6.tgz#604419d346433103675901b3736bfa1ed9bc534f"
   integrity sha512-y71VvVEbqCpG28fDBnfNg3RnUPnicwFYq9yuoFVRF0LYcJCy5cYhkIfW3JG8mN2m0P+LzH80mt2Rj6xlSXrkdQ==
@@ -4171,7 +4171,7 @@
     "@storybook/core-client" "6.3.6"
     "@storybook/core-server" "6.3.6"
 
-"@storybook/core@6.3.7":
+"@storybook/core@6.3.7", "@storybook/core@^6.3.7":
   version "6.3.7"
   resolved "https://registry.yarnpkg.com/@storybook/core/-/core-6.3.7.tgz#482228a270abc3e23fed10c7bc4df674da22ca19"
   integrity sha512-YTVLPXqgyBg7TALNxQ+cd+GtCm/NFjxr/qQ1mss1T9GCMR0IjE0d0trgOVHHLAO8jCVlK8DeuqZCCgZFTXulRw==
