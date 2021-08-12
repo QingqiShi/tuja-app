@@ -1841,17 +1841,17 @@
   resolved "https://registry.yarnpkg.com/@google-cloud/promisify/-/promisify-2.0.2.tgz#81d654b4cb227c65c7ad2f9a7715262febd409ed"
   integrity sha512-EvuabjzzZ9E2+OaYf+7P9OAiiwbTxKYL0oGLnREQd+Su2NTQBpomkdlkBowFvyWsaV0d1sSGxrKpSNcrhPqbxg==
 
-"@google-cloud/pubsub@^2.16.1", "@google-cloud/pubsub@^2.7.0":
-  version "2.16.1"
-  resolved "https://registry.yarnpkg.com/@google-cloud/pubsub/-/pubsub-2.16.1.tgz#e003d3a041c5f746f6565f7de2dbc9e26545c360"
-  integrity sha512-+uO7r9uRfD/x0BzBI67clbIu0VIdqYLZ5NINuGEsMiAXIGWQWmceuLMixMEb/JOxeaqKygH1mL2rshkDisUmGg==
+"@google-cloud/pubsub@^2.16.3", "@google-cloud/pubsub@^2.7.0":
+  version "2.16.3"
+  resolved "https://registry.yarnpkg.com/@google-cloud/pubsub/-/pubsub-2.16.3.tgz#76020b39adbac48fdf7ad030f2d4a3d0e01b2c7e"
+  integrity sha512-KkH0IH1PUzgWBquUhWfSG//R/8K3agYRyrqqeNtLjbr2lnehrOVllPtdnroO4q2lxoul3WrK+esPvtVywkb4Ag==
   dependencies:
     "@google-cloud/paginator" "^3.0.0"
     "@google-cloud/precise-date" "^2.0.0"
     "@google-cloud/projectify" "^2.0.0"
     "@google-cloud/promisify" "^2.0.0"
     "@opentelemetry/api" "^1.0.0"
-    "@opentelemetry/semantic-conventions" "^0.22.0"
+    "@opentelemetry/semantic-conventions" "^0.24.0"
     "@types/duplexify" "^3.6.0"
     "@types/long" "^4.0.0"
     arrify "^2.0.0"
@@ -3120,10 +3120,10 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/api/-/api-1.0.0.tgz#cc7712009095697f8a9492ee375daa08588ba263"
   integrity sha512-TcdhrGy+ehLIFs79/TcWiHiPujishrhSgQ7wxvWvk8WY2YT8Np/pYXmRP94voG3N8GJ/5nIVyzacfViwhN50AQ==
 
-"@opentelemetry/semantic-conventions@^0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-0.22.0.tgz#e91751bd2eb4f49344172bac62ba87c9390f93e9"
-  integrity sha512-t4fKikazahwNKmwD+CE/icHyuZldWvNMupJhjxdk9T/KxHFx3zCGjHT3MKavwYP6abzgAAm5WwzD1oHlmj7dyg==
+"@opentelemetry/semantic-conventions@^0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-0.24.0.tgz#1028ef0e0923b24916158d80d2ddfd67ea8b6740"
+  integrity sha512-a/szuMQV0Quy0/M7kKdglcbRSoorleyyOwbTNNJ32O+RBN766wbQlMTvdimImTmwYWGr+NJOni1EcC242WlRcA==
 
 "@panva/asn1.js@^1.0.0":
   version "1.0.0"
