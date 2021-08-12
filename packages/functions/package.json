@@ -18,7 +18,7 @@
   },
   "//": "NOTE: some deps may not seem nessesary to be here, but when everything used in the functions code need to be defined here",
   "dependencies": {
-    "@google-cloud/pubsub": "^2.16.1",
+    "@google-cloud/pubsub": "^2.16.3",
     "@tuja/libs": "^0.0.0",
     "bignumber.js": "^9.0.1",
     "d3-array": "^2.12.1",
