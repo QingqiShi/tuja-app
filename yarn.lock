@@ -5169,10 +5169,10 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
 
-"@types/styled-components@^5.1.12":
-  version "5.1.12"
-  resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.12.tgz#1a3679942746adecd1e736bfc47aea2c938a7d9a"
-  integrity sha512-sTjc0+gMl08JvOHchQKgEGbbiSexSvWg5khUNSH4kosb7Tl4782AtfWMkAhQmeXMg2vIn6PthGVHFW+U/Dpihg==
+"@types/styled-components@^5.1.13":
+  version "5.1.13"
+  resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.13.tgz#a2906b68c2c6c811996216983b74ca02e22c6c34"
+  integrity sha512-nIIsiQ+Ag/4xnYf9mhzO3zIZ/zOmKN6HImEZifKh2TLibYz8OudzJbvzDu1uvMfX/+bs0B0RDPB2OIcbrrptVQ==
   dependencies:
     "@types/hoist-non-react-statics" "*"
     "@types/react" "*"
@@ -10327,10 +10327,10 @@ firebase-functions@^3.15.3:
     express "^4.17.1"
     lodash "^4.17.14"
 
-firebase-tools@^9.16.3:
-  version "9.16.3"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-9.16.3.tgz#db17fa57d5ff7db512efc1bc0262d402ca7fdfc1"
-  integrity sha512-I60LPd0iBgIvULvxL0yCZCM2t827RBDViMVT+Lm3QKKpFroxEgNBrEOfy1GgLe63g20SnJUC9qTy5b27QQDX4A==
+firebase-tools@^9.16.6:
+  version "9.16.6"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-9.16.6.tgz#9b46c62cba7499fd17d4f44003f9bb05529b1dad"
+  integrity sha512-bW4rT+pTE6n8892rXd5ier9H1snXUZIXrL3WKzuVWXSUqDjUbx6SIgXhjp1++GIdkiMGnfDY5EJR4nV/YrTO5A==
   dependencies:
     "@google-cloud/pubsub" "^2.7.0"
     "@types/archiver" "^5.1.0"
