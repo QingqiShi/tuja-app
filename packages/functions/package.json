@@ -33,6 +33,6 @@
     "@types/node-cache": "^4.2.5",
     "@types/node-fetch": "^2.5.12",
     "eslint-plugin-import": "^2.24.2",
-    "firebase-functions-test": "^0.3.1"
+    "firebase-functions-test": "^0.3.2"
   }
 }
