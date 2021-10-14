@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@tuja/libs": "^0.0.0",
-    "@visx/visx": "^1.18.1",
+    "@visx/visx": "^2.2.1",
     "body-scroll-lock": "^3.1.5",
     "framer-motion": "^4.1.17",
     "react-use": "^17.2.4",
