@@ -42,7 +42,7 @@
     "@commitlint/config-conventional": "^13.1.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
-    "@testing-library/react-hooks": "^7.0.1",
+    "@testing-library/react-hooks": "^8.0.0",
     "@testing-library/user-event": "^13.2.1",
     "@types/d3-array": "^2.12.1",
     "@types/jest": "^27.0.1",
