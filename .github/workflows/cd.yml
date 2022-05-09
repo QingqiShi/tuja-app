@@ -69,7 +69,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Deploy to Cloudflare Workers
         if: steps.changes.outputs.workers == 'true' || steps.changes.outputs.root == 'true'
-        uses: cloudflare/wrangler-action@1.3.0
+        uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: 'production'
