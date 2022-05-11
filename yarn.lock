@@ -9898,13 +9898,14 @@ firebase-admin@^9.11.1:
     "@google-cloud/firestore" "^4.5.0"
     "@google-cloud/storage" "^5.3.0"
 
-firebase-functions-test@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/firebase-functions-test/-/firebase-functions-test-0.3.1.tgz#34cd02f2527e17808cf0fd33efa1d0164f336d74"
-  integrity sha512-xqzzbW+qzG7uT4XQpwbOhxq3LwsJB0NvYs5+Du0vPGwI7viP9KKc8BvxnexTIhxzRZQf7ZJjVbhRBlavK3JA8w==
+firebase-functions-test@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/firebase-functions-test/-/firebase-functions-test-2.0.2.tgz#ae4d6ae39f5df13db85a916900e2aa4ca19592ca"
+  integrity sha512-6yzfCuCMw7DajR7ED1LWFiY2S8+F8U33myPX5vmJR5mpgoga4ny6BHCncGKM+IeAARAyQpYxKjZcdJHrMUbHbA==
   dependencies:
     "@types/lodash" "^4.14.104"
     lodash "^4.17.5"
+    ts-deepmerge "^2.0.1"
 
 firebase-functions@^3.15.4:
   version "3.15.4"
@@ -18483,6 +18484,11 @@ ts-dedent@^2.0.0, ts-dedent@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ts-dedent/-/ts-dedent-2.1.1.tgz#6dd56870bb5493895171334fa5d7e929107e5bbc"
   integrity sha512-riHuwnzAUCfdIeTBNUq7+Yj+ANnrMXo/7+Z74dIdudS7ys2k8aSGMzpJRMFDF7CLwUTbtvi1ZZff/Wl+XxmqIA==
+
+ts-deepmerge@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/ts-deepmerge/-/ts-deepmerge-2.0.1.tgz#cd24f52b17e34baeac7867477cc0cefe5d0d291b"
+  integrity sha512-2RpGIE0YVW6blKY756MP74czemC9x4XThhNCxq0A14Owm3ac8tZvigPbpZyZZQSyfOc7Qba5kG5xKBq74ihZfA==
 
 ts-easing@^0.2.0:
   version "0.2.0"
